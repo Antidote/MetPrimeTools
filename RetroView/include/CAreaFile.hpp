@@ -24,6 +24,7 @@ public:
 
 
     void draw();
+    void drawBoundingBox();
 
     glm::mat3x4 transformMatrix() const;
 

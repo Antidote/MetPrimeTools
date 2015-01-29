@@ -15,6 +15,11 @@ void CModelFile::draw()
     CModelData::draw(currentMaterialSet());
 }
 
+void CModelFile::drawBoundingBox()
+{
+    CModelData::drawBoundingBoxes();
+}
+
 CMaterialSet& CModelFile::currentMaterialSet()
 {
     return m_materialSets[0];

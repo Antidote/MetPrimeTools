@@ -57,6 +57,7 @@ public:
     void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff);
 
     void draw(CMaterialSet& materialSet);
+    void drawBoundingBoxes();
 
     void indexIBOs(CMaterialSet& materialSet);
 

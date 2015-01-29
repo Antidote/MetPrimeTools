@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include "CModelData.hpp"
+#include "GXCommon.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 CModelData::CModelData()
@@ -233,6 +234,13 @@ void CModelData::draw(CMaterialSet& materialSet)
 
     for (int i = 0; i <= 10; i++)
         glDisableVertexAttribArray(i);
+}
+
+void CModelData::drawBoundingBoxes()
+{
+    drawBoundingBox(m_boundingBox);
+    for (const CMesh& mesh : m_meshes)
+        drawBoundingBox(mesh.boundingBox());
 }
 
 void CModelData::indexIBOs(CMaterialSet& materialSet)

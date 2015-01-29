@@ -18,3 +18,8 @@ atUint16 CMesh::mantissa() const
     return m_mantissa;
 }
 
+SBoundingBox CMesh::boundingBox() const
+{
+    return m_boundingBox;
+}
+

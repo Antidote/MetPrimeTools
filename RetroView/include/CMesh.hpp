@@ -4,6 +4,7 @@
 #include <Athena/Types.hpp>
 #include <vector>
 #include <glm/glm.hpp>
+#include "SBoundingBox.hpp"
 #include "GXTypes.hpp"
 
 struct VertexDescriptor
@@ -40,6 +41,8 @@ public:
     void setMantissa(atUint16 mantissa);
     atUint16 mantissa() const;
 
+    SBoundingBox boundingBox() const;
+
     std::vector<CPrimitive>& primitives();
     std::vector<CPrimitive>& primitives() const;
 private:
@@ -49,6 +52,7 @@ private:
     friend class CAreaReader;
     friend class CModelReader;
 
+    SBoundingBox           m_boundingBox;
     glm::vec3              m_pivot;
     atUint32               m_materialID;
     atUint16               m_mantissa;

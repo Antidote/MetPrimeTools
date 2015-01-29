@@ -27,6 +27,7 @@ unix:LIBS += \
 
 
 include(../Athena/AthenaCore.pri)
+include(../PakLib/PakLib.pri)
 
 TARGET    = RetroView
 CONFIG   += console

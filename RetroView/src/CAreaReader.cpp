@@ -400,10 +400,21 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Binary
                 in.readFloat(); // Normalized vector
         }
 
-        for (atUint32 v = 0; v < 6; v++)
-            in.readFloat();
+        if (ret->m_version == CAreaFile::MetroidPrime2)
+        {
+            in.readUint16();
+            in.readUint16();
+        }
 
-        base::seek(extraDataSize);
+        if (extraDataSize > 0)
+        {
+            mesh.m_boundingBox.min.x = in.readFloat();
+            mesh.m_boundingBox.min.y = in.readFloat();
+            mesh.m_boundingBox.min.z = in.readFloat();
+            mesh.m_boundingBox.max.x = in.readFloat();
+            mesh.m_boundingBox.max.y = in.readFloat();
+            mesh.m_boundingBox.max.z = in.readFloat();
+        }
     }
 
     in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);

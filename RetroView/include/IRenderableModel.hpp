@@ -16,6 +16,7 @@ public:
     atUint64 assetId() { return m_assetId; }
     virtual ~IRenderableModel() {}
     virtual void draw()       =0;
+    virtual void drawBoundingBox() =0;
     virtual void exportToObj(const std::string&) {}
     virtual bool canExport() const {return false;}
     virtual void invalidate() {}

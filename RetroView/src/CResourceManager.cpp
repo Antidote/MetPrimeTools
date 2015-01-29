@@ -3,31 +3,31 @@
 
 namespace
 {
-struct concrete_ResourceManager : public ResourceManager
+struct concrete_ResourceManager : public CResourceManager
 {
 };
 
 }
 
-ResourceManager::~ResourceManager()
+CResourceManager::~CResourceManager()
 {
 
 }
 
-void ResourceManager::initialize(const std::string& baseDirectory)
+void CResourceManager::initialize(const std::string& baseDirectory)
 {
     m_baseDirectory = baseDirectory;
 
     std::cout << "ResourceManager initialized @ " << m_baseDirectory << std::endl;
 }
 
-IResource* ResourceManager::loadResource(const atUint64& assetID)
+IResource* CResourceManager::loadResource(const atUint64& assetID)
 {
 }
 
-std::shared_ptr<ResourceManager> ResourceManager::instance()
+std::shared_ptr<CResourceManager> CResourceManager::instance()
 {
-    static std::shared_ptr<ResourceManager> instance = std::make_shared<concrete_ResourceManager>();
+    static std::shared_ptr<CResourceManager> instance = std::make_shared<concrete_ResourceManager>();
 
     return instance;
 }

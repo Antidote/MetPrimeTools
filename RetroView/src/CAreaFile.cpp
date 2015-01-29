@@ -1,4 +1,5 @@
 #include "CAreaFile.hpp"
+#include "GXCommon.hpp"
 #include <GL/gl.h>
 #include <iostream>
 
@@ -67,6 +68,13 @@ void CAreaFile::draw()
     CMaterialSet materialSet = currentMaterial();
     for (CModelData& m : m_models)
         m.draw(materialSet);
+}
+
+void CAreaFile::drawBoundingBox()
+{
+    ::drawBoundingBox(m_boundingBox);
+    for (CModelData& m : m_models)
+        m.drawBoundingBoxes();
 }
 
 glm::mat3x4 CAreaFile::transformMatrix() const

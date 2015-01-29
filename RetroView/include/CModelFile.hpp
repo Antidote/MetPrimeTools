@@ -20,6 +20,7 @@ public:
     SBoundingBox& boundingBox();
 
     void draw();
+    void drawBoundingBox();
 
     CMaterialSet& currentMaterialSet();
     CMaterialSet& currentMaterialSet() const;

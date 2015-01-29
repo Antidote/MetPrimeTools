@@ -40,7 +40,7 @@ CGLViewer::CGLViewer(QWidget* parent)
 {
     grabKeyboard();
 
-    ResourceManager* resourceManager = ResourceManager::instance().get();
+    CResourceManager* resourceManager = CResourceManager::instance().get();
     resourceManager->initialize("/media/Storage/WiiImages/games/Metroid Prime 1.iso_dir");
 
     QGLWidget::setMouseTracking(true);
