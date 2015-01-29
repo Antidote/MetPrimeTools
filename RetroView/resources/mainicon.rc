@@ -1,0 +1,57 @@
+﻿// This file is part of Sakura Suite.
+//
+// Sakura Suite is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Sakura Suite is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Sakura Suite.  If not, see <http://www.gnu.org/licenses/>
+
+#include "winver.h"
+
+IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
+
+// Only ONE of these may be defined
+//#define CMDL_PREVIEW
+//#define CMDL_INTERNAL
+
+#if !defined(CMDL_DEBUG) && !defined(CMDL_INTERNAL) && !defined(CMDL_PREVIEW)
+
+#warning Set version in release mode
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGS 0x0L
+ FILEFLAGSMASK 0x3fL
+ FILEOS 0x00040004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "Wiiking2.com"
+            VALUE "FileDescription", "MPxViewer"
+            VALUE "FileVersion", "1.0.0" 
+            VALUE "LegalCopyright", "Copyright (C) 2014 Wiiking2.com"
+            VALUE "InternalName", "mpxviewer"
+            VALUE "OriginalFilename", "mpxviewer.exe"
+            VALUE "ProductName", "Sakura Suite"
+            VALUE "ProductVersion", "1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif
