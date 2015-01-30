@@ -1,7 +1,7 @@
 #include "CModelFile.hpp"
+#include "CMaterialCache.hpp"
 
 CModelFile::CModelFile()
-    : IRenderableModel(0)
 {
 }
 
@@ -12,6 +12,14 @@ CModelFile::~CModelFile()
 
 void CModelFile::draw()
 {
+    QColor amb = QColor(128, 128, 128);
+
+    if (m_format & 0x2000)
+        amb = QColor(0, 0, 0);
+
+    for (CMaterialSet& ms : m_materialSets)
+        CMaterialCache::instance()->setAmbientOnMaterials(ms.materials(), amb);
+
     CModelData::draw(currentMaterialSet());
 }
 

@@ -8,7 +8,7 @@
 #include <memory.h>
 #include <cstring>
 
-struct PakResource
+struct SPakResource
 {
     atUint32 compressed;
     char     tag[4];
@@ -17,14 +17,14 @@ struct PakResource
     atUint32 offset;
 };
 
-struct PakNamedResource
+struct SPakNamedResource
 {
     char        tag[4];
     atUint64    id;
     std::string name;
 };
 
-namespace PakVersion
+namespace EPakVersion
 {
 enum
 {
@@ -34,16 +34,16 @@ enum
 };
 }
 
-class PakFile final
+class CPakFile final
 {
 public:
-    typedef std::vector<PakResource     >::iterator       ResourceIterator;
-    typedef std::vector<PakResource     >::const_iterator ConstResourceIterator;
-    typedef std::vector<PakNamedResource>::iterator       NamedResourceIterator;
-    typedef std::vector<PakNamedResource>::const_iterator ConstNamedResourceIterator;
+    typedef std::vector<SPakResource     >::iterator       ResourceIterator;
+    typedef std::vector<SPakResource     >::const_iterator ConstResourceIterator;
+    typedef std::vector<SPakNamedResource>::iterator       NamedResourceIterator;
+    typedef std::vector<SPakNamedResource>::const_iterator ConstNamedResourceIterator;
 
-    PakFile(const std::string& filename, atUint32 version);
-    ~PakFile();
+    CPakFile(const std::string& filename, atUint32 version);
+    ~CPakFile();
 
 
     std::string filename();
@@ -52,7 +52,9 @@ public:
 
     atUint8* loadData(atUint64 assetID, const std::string& type = std::string());
 
-    std::vector<PakResource> resourcesByType(const std::string& type);
+    std::vector<SPakResource> resourcesByType(const std::string& type);
+
+    std::vector<SPakResource> resources() const;
 
     std::string resourceName(const atUint64& assetID);
     void dumpPak(const std::string& path, bool decompress=true);
@@ -60,20 +62,20 @@ public:
     bool isWorldPak();
 
     bool resourceExists(const atUint64& assetID);
-    bool resourceExists(const PakResource& resource);
+    bool resourceExists(const SPakResource& resource);
 
 private:
-    friend class PakFileReader;
+    friend class CPakFileReader;
 
     std::string m_filename;
     atUint32    m_version;
     atUint32    m_dataStart;
 
-    std::vector<PakNamedResource> m_namedResources;
-    std::vector<PakResource>      m_resources;
+    std::vector<SPakNamedResource> m_namedResources;
+    std::vector<SPakResource>      m_resources;
 };
 
-bool operator ==(const PakNamedResource& left, const PakNamedResource& right);
-bool operator ==(const PakResource& left, const PakResource& right);
+bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right);
+bool operator ==(const SPakResource& left, const SPakResource& right);
 
 #endif // PAKFILE_HPP

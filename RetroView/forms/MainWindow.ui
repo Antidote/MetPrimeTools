@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="GLViewer" name="glView" native="true"/>
+     <widget class="CGLViewer" name="glView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -215,9 +215,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>GLViewer</class>
+   <class>CGLViewer</class>
    <extends>QWidget</extends>
-   <header>GLViewer.hpp</header>
+   <header>CGLViewer.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

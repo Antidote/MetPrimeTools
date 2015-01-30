@@ -28,6 +28,7 @@ unix:LIBS += \
 
 include(../Athena/AthenaCore.pri)
 include(../PakLib/PakLib.pri)
+include(../TXTRLoader/TXTRLoader.pri)
 
 TARGET    = RetroView
 CONFIG   += console
@@ -49,7 +50,6 @@ SOURCES += \
     src/RetroCommon.cpp \
     src/MREADecompress.cpp \
     src/CCamera.cpp \
-    src/CTEVStage.cpp \
     src/CGLViewer.cpp \
     src/CMaterialReader.cpp \
     src/CMaterialCache.cpp \
@@ -58,14 +58,15 @@ SOURCES += \
     src/CMesh.cpp \
     src/CMainWindow.cpp \
     src/CModelData.cpp \
-    src/CModelLoader.cpp \
-    src/CModelLoaderThead.cpp \
     src/CResourceManager.cpp \
     src/CScene.cpp \
     src/CModelFile.cpp \
     src/CModelReader.cpp \
     src/CAreaFile.cpp \
-    src/CAreaReader.cpp
+    src/CAreaReader.cpp \
+    src/CResourceLoaderThead.cpp \
+    src/CTexture.cpp \
+    src/STEVStage.cpp
 
 !contains(DEFINES, NO_MAIN): {
     SOURCES += src/main.cpp
@@ -80,7 +81,6 @@ HEADERS += \
     include/MREADecompress.hpp \
     include/CCamera.hpp \
     include/CScene.hpp \
-    include/CTEVStage.hpp \
     include/CGLViewer.hpp \
     include/CMesh.hpp \
     include/CAreaReader.hpp \
@@ -90,13 +90,15 @@ HEADERS += \
     include/CMaterialReader.hpp \
     include/CMaterialCache.hpp \
     include/CMainWindow.hpp \
-    include/CModelLoader.hpp \
     include/CMaterial.hpp \
-    include/CModelLoaderThead.hpp \
     include/CResourceManager.hpp \
     include/SBoundingBox.hpp \
     include/CModelFile.hpp \
-    include/CModelReader.hpp
+    include/CModelReader.hpp \
+    include/IResource.hpp \
+    include/CResourceLoaderThead.hpp \
+    include/CTexture.hpp \
+    include/STEVStage.hpp
 
 FORMS += \
     forms/MainWindow.ui

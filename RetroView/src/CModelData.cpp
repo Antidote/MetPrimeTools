@@ -1,6 +1,9 @@
 #include <GL/glew.h>
+#include "CResourceManager.hpp"
 #include "CModelData.hpp"
 #include "GXCommon.hpp"
+#include "CTexture.hpp"
+#include "CGLViewer.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 CModelData::CModelData()
@@ -202,34 +205,65 @@ void CModelData::draw(CMaterialSet& materialSet)
         glVertexAttribPointer(i+4, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     }
 
+    glm::mat4 model = CGLViewer::instance()->modelMatrix();
+
+    for (atUint32 i = 0; i < 2; i++)
+    {
+        bool firstPass = (i == 0);
+        if (firstPass)
+            continue;
+
+        for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : m_indexedIbos)
+        {
+            CMaterial& mat = materialSet.material(iboPair.first);
+            if (mat.isTransparent() && firstPass)
+                continue;
+
+            if (!mat.isTransparent() && !firstPass)
+                continue;
+
+            if (!mat.bind())
+                continue;
+
+            atUint32 modelLoc = mat.program()->uniformLocation("model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+            for (atUint32 i = 0; i < mat.textureIndices().size(); i++)
+            {
+                CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(materialSet.textureID(mat.textureIndices()[i]), "txtr"));
+
+                if (texture)
+                {
+                    if (texture->textureID() == 0)
+                        texture->create();
+                    glActiveTexture(GL_TEXTURE0 + i);
+                    glBindTexture(GL_TEXTURE_2D, texture->textureID());
+                }
+            }
+
+
+            for (SIndexBufferObject ibo : iboPair.second)
+            {
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo.bufferID);
+                glDrawElements(ibo.primitiveType, ibo.indexBuffer.size(), GL_UNSIGNED_INT, (void*)0);
+            }
+
+            mat.release();
+            for (int i = 0; i < 7; i++)
+            {
+                glActiveTexture(GL_TEXTURE0+i);
+                glBindTexture(GL_TEXTURE_2D, 0);
+            }
+        }
+    }
+
     for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : m_indexedIbos)
     {
         CMaterial& mat = materialSet.material(iboPair.first);
-        //        if ((mat.isTransparent() && firstPass) || (!mat.isTransparent() && !firstPass))
-        //            continue;
-
-        //        if (!mat.bind())
-        //            continue;
-
-        //        atUint32 projectionLoc = mat.program()->uniformLocation("projectionMatrix");
-        //        atUint32 modelLoc = mat.program()->uniformLocation("modelMatrix");
-        //        atUint32 viewLoc = mat.program()->uniformLocation("viewMatrix");
-        //        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &GLViewer::instance()->projectionMatrix()[0][0]);
-        //        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &GLViewer::instance()->modelMatrix()[0][0]);
-        //        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &GLViewer::instance()->viewMatrix()[0][0]);
-        /*
-        for (atUint32 i = 0; i < mat.textureIndices().size(); i++)
-        {
-            glActiveTexture(GL_TEXTURE0 + i);
-            glBindTexture(GL_TEXTURE_2D, GLViewer::instance()->texture(mc.texture(mat.TextureIndices[i]), this));
-        }
-*/
+        if (!mat.isTransparent())
+            continue;
 
         for (SIndexBufferObject ibo : iboPair.second)
-        {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo.bufferID);
-            glDrawElements(ibo.primitiveType, ibo.indexBuffer.size(), GL_UNSIGNED_INT, (void*)0);
-        }
+            drawBoundingBox(ibo.boundingBox);
     }
 
     for (int i = 0; i <= 10; i++)
@@ -256,8 +290,8 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
         CMaterial material = materialSet.material(mesh.m_materialID);
 
         // If it's not drawn don't even bother indexing it
-        //            if (material.materialFlags() & 0x200)
-        //                continue;
+        if (material.materialFlags() & 0x200)
+            continue;
 
         atUint32 vertStartIndex = m_vertexBuffer.size();
         atUint32 iboStartIndex = m_ibos.size();
@@ -332,6 +366,7 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
                         break;
                 }
             }
+            m_ibos[iboID].boundingBox = mesh.boundingBox();
             m_ibos[iboID].indexBuffer.push_back(0xFFFFFFFF);
         }
     }
@@ -380,7 +415,22 @@ void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& m
 {
     SVertex vert;
     if (material.hasPosition())
+    {
         vert.pos = m_vertices[desc.position];
+        if (mesh.m_boundingBox.min.x > vert.pos.x)
+            mesh.m_boundingBox.min.x = vert.pos.x;
+        if (mesh.m_boundingBox.min.y > vert.pos.y)
+            mesh.m_boundingBox.min.y = vert.pos.y;
+        if (mesh.m_boundingBox.min.z > vert.pos.z)
+            mesh.m_boundingBox.min.z = vert.pos.z;
+        if (mesh.m_boundingBox.max.x < vert.pos.x)
+            mesh.m_boundingBox.max.x = vert.pos.x;
+        if (mesh.m_boundingBox.max.y < vert.pos.y)
+            mesh.m_boundingBox.max.y = vert.pos.y;
+        if (mesh.m_boundingBox.max.z < vert.pos.z)
+            mesh.m_boundingBox.max.z = vert.pos.z;
+    }
+
     if (material.hasNormal())
     {
         vert.norm = m_normals[desc.normal];
@@ -398,7 +448,7 @@ void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& m
         {
             glm::vec2 tex;
 
-            if (((material.materialFlags() & 0x6000) & 3) && t == 0)
+            if ((material.materialFlags() & 0x2000) && t == 0 && m_lightmapCoords.size() > 0)
                 tex = m_lightmapCoords[desc.texCoord[t]];
             else
                 tex = m_texCoords[desc.texCoord[t]];

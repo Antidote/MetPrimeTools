@@ -18,6 +18,11 @@ CPakFile::~CPakFile()
 {
 }
 
+std::string CPakFile::filename() const
+{
+    return m_filename;
+}
+
 atUint8* CPakFile::loadData(atUint64 assetID, const std::string& type)
 {
     ConstResourceIterator iter = std::find_if(m_resources.begin(), m_resources.end(),
@@ -26,9 +31,9 @@ atUint8* CPakFile::loadData(atUint64 assetID, const std::string& type)
     if (iter == m_resources.end())
         return nullptr;
 
-    SPakResource resource = m_resources[assetID];
+    SPakResource resource = *iter;
 
-    if (!type.empty() && strcmp(resource.tag, type.c_str()) != 0)
+    if (!type.empty() && strncasecmp(resource.tag, type.c_str(), 4) != 0)
         return nullptr;
 
     atUint8* data = nullptr;
@@ -53,11 +58,16 @@ std::vector<SPakResource> CPakFile::resourcesByType(const std::string& type)
     std::vector<SPakResource> ret;
     for (SPakResource& res : m_resources)
     {
-        if (!strcmp(res.tag, type.c_str()))
+        if (!strncasecmp(res.tag, type.c_str(), 4))
             ret.push_back(res);
     }
 
     return ret;
+}
+
+std::vector<SPakResource> CPakFile::resources() const
+{
+    return m_resources;
 }
 
 std::string CPakFile::resourceName(const atUint64& assetID)
@@ -131,12 +141,7 @@ void CPakFile::dumpPak(const std::string& path, bool decompress)
 
 bool CPakFile::isWorldPak()
 {
-    if (m_filename.empty() || m_resources.size() == 0)
-        return false;
-
-    static const bool isWorldPak = resourcesByType("MLVL").size() > 0 && resourcesByType("MREA").size() > 0;
-
-    return isWorldPak;
+    return m_isWorldPak;
 }
 
 bool CPakFile::resourceExists(const atUint64& assetID)

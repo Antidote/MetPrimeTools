@@ -1,9 +1,9 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
-#include <cstdint>
+#include <Athena/Types.hpp>
 #include <string>
 
-enum class GXTextureFormat : uint32_t
+enum class GXTextureFormat : atUint32
 {
     I4,
     I8,
@@ -17,7 +17,7 @@ enum class GXTextureFormat : uint32_t
     CMPR
 };
 
-enum class GXPaletteFormat : uint32_t
+enum class GXPaletteFormat : atUint32
 {
     IA8,
     RGB565,
@@ -27,7 +27,7 @@ enum class GXPaletteFormat : uint32_t
 class Texture
 {
 public:
-    enum class Format : uint32_t
+    enum class Format : atUint32
     {
         Luminance,
         LuminanceAlpha,
@@ -40,25 +40,25 @@ public:
     ~Texture();
 
     bool     isNull()     const;
-    uint8_t* bits()       const;
-    uint32_t linearSize() const;
-    uint32_t dataSize()   const;
+    atUint8* bits()       const;
+    atUint32 linearSize() const;
+    atUint32 dataSize()   const;
 
-    uint16_t width()   const;
-    uint16_t height()  const;
-    uint32_t mipmaps() const;
+    atUint16 width()   const;
+    atUint16 height()  const;
+    atUint32 mipmaps() const;
 
     Format   format()  const;
     void exportDDS(const std::string& path);
     void exportPNG(const std::string& path);
 private:
     friend class TextureReader;
-    uint8_t* m_bits;
-    uint32_t m_linearSize;
-    uint32_t m_dataSize;
-    uint16_t m_width;
-    uint16_t m_height;
-    uint32_t m_mipmaps;
+    atUint8* m_bits;
+    atUint32 m_linearSize;
+    atUint32 m_dataSize;
+    atUint16 m_width;
+    atUint16 m_height;
+    atUint32 m_mipmaps;
     Format   m_format;
 };
 

@@ -8,12 +8,6 @@
 class IRenderableModel
 {
 public:
-    IRenderableModel(atUint64 assetId)
-        : m_assetId(assetId)
-    {
-    }
-
-    atUint64 assetId() { return m_assetId; }
     virtual ~IRenderableModel() {}
     virtual void draw()       =0;
     virtual void drawBoundingBox() =0;
@@ -22,8 +16,6 @@ public:
     virtual void invalidate() {}
     virtual void rebuildShaders() {}
     virtual SBoundingBox& boundingBox()=0;
-protected:
-    atUint64 m_assetId;
 };
 
 #endif // IRENDERABLE_HPP

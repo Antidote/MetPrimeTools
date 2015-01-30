@@ -2,7 +2,7 @@
 #define MREAREADER_HPP
 
 #include <Athena/BinaryReader.hpp>
-#include "CModelLoader.hpp"
+#include "CResourceManager.hpp"
 
 struct SAreaSectionIndex final
 {
@@ -19,7 +19,7 @@ class IRenderableModel;
 class CAreaReader final : protected Athena::io::BinaryReader
 {
     BINARYREADER_BASE();
-    DEFINE_MODEL_LOADER();
+    DEFINE_RESOURCE_LOADER();
 public:
     CAreaReader(const atUint8* data, atUint64 length);
     CAreaReader(const std::string& filepath);
@@ -27,7 +27,8 @@ public:
 
     CAreaFile* read();
 
-    static IRenderableModel* load(const std::string& filepath);
+    static IResource*        loadByFile(const std::string& filepath);
+    static IResource*        loadByData(const atUint8* data, atUint64 length);
 
 private:
     void readSections(CAreaFile* ret);

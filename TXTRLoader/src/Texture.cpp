@@ -21,27 +21,27 @@ bool Texture::isNull() const
     return !m_bits;
 }
 
-uint8_t* Texture::bits() const
+atUint8* Texture::bits() const
 {
     return m_bits;
 }
 
-uint32_t Texture::linearSize() const
+atUint32 Texture::linearSize() const
 {
     return m_linearSize;
 }
 
-uint32_t Texture::dataSize() const
+atUint32 Texture::dataSize() const
 {
     return m_dataSize;
 }
 
-uint16_t Texture::width() const
+atUint16 Texture::width() const
 {
     return m_width;
 }
 
-uint32_t Texture::mipmaps() const
+atUint32 Texture::mipmaps() const
 {
     return m_mipmaps;
 }
@@ -60,7 +60,7 @@ void Texture::exportDDS(const std::string& path)
     header.dwHeight = m_height;
     header.dwWidth = m_width;
     header.dwMipMapCount = m_mipmaps;
-    memset(header.dwReserved1, 0, sizeof(uint32_t) * 11);
+    memset(header.dwReserved1, 0, sizeof(atUint32) * 11);
     header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
 
     if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
@@ -84,9 +84,9 @@ void Texture::exportDDS(const std::string& path)
         header.ddspf.dwFlags    = DDSF_RGBA;
         header.ddspf.dwFourCC   = 0;
         header.ddspf.dwRGBBitCount = 32;
-        header.ddspf.dwRBitMask = 0x00FF0000;
+        header.ddspf.dwRBitMask = 0x000000FF;
         header.ddspf.dwGBitMask = 0x0000FF00;
-        header.ddspf.dwBBitMask = 0x000000FF;
+        header.ddspf.dwBBitMask = 0x00FF0000;
         header.ddspf.dwABitMask = 0xFF000000;
     }
     else if (m_format == Format::DXT1)
@@ -94,15 +94,15 @@ void Texture::exportDDS(const std::string& path)
         header.dwFlags |= DDSF_LINEARSIZE;
         header.dwPitchOrLinearSize = m_linearSize;
         header.ddspf.dwFlags = DDSF_FOURCC;
-        header.ddspf.dwFourCC = *(uint32_t*)("DXT1");
+        header.ddspf.dwFourCC = *(atUint32*)("DXT1");
         header.ddspf.dwRGBBitCount = 32;
     }
 
     header.dwCaps1 = DDSF_TEXTURE | DDSF_MIPMAP;
 
     Athena::io::BinaryWriter writer(path);
-    writer.writeUint32(*(uint32_t*)("DDS\x20"));
-    writer.writeUBytes((uint8_t*)&header, sizeof(DDS_HEADER));
+    writer.writeUint32(*(atUint32*)("DDS\x20"));
+    writer.writeUBytes((atUint8*)&header, sizeof(DDS_HEADER));
     writer.writeUBytes(m_bits, m_dataSize);
     writer.save();
 }
@@ -111,42 +111,42 @@ void Texture::exportPNG(const std::string& path)
 {
     // Temporary
     png::image<png::rgba_pixel> output(m_width, m_height);
-    uint8_t* rgba = nullptr;
+    atUint8* rgba = nullptr;
 
 
     if (m_format == Format::RGBA8 || m_format == Format::RGB565)
         rgba = m_bits;
     else if (m_format == Format::DXT1)
     {
-        rgba = new uint8_t[m_width * m_height * 4];
+        rgba = new atUint8[m_width * m_height * 4];
         squish::DecompressImage(rgba, m_width, m_height, m_bits, squish::kDxt1);
     }
 
 
-    uint32_t i = 0;
-    for (uint32_t y = 0; y < m_height; ++y)
+    atUint32 i = 0;
+    for (atUint32 y = 0; y < m_height; ++y)
     {
-        for (uint32_t x = 0; x < m_width; ++x)
+        for (atUint32 x = 0; x < m_width; ++x)
         {
             if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
             {
-                uint8_t l, a;
+                atUint8 l, a;
                 if (m_format == Format::LuminanceAlpha)
                 {
-                    a = *(uint8_t*)(m_bits + i);
+                    a = *(atUint8*)(m_bits + i);
                     i++;
                 }
                 else
                     a = 0xFF;
-                l = *(uint8_t*)(m_bits + i);
+                l = *(atUint8*)(m_bits + i);
                 i++;
 
                 output.set_pixel(x, y, png::rgba_pixel(l, l, l, a));
             }
             else if (m_format == Format::RGB565)
             {
-                uint16_t rgb = *(uint16_t*)(rgba + i);
-                uint8_t r, g, b;
+                atUint16 rgb = *(atUint16*)(rgba + i);
+                atUint8 r, g, b;
                 r = ((rgb & 0xF800) >> 11) << 3;
                 g = ((rgb & 0x07E0) >>  5) << 2;
                 b = ((rgb & 0x001F) >>  0) << 3;

@@ -1,9 +1,12 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
-#include "CTEVStage.hpp"
+#include "STEVStage.hpp"
 #include "GXTypes.hpp"
+#include <QOpenGLShader>
+#include <QOpenGLShaderProgram>
 #include <vector>
+#include <QColor>
 
 class CMaterial
 {
@@ -19,7 +22,6 @@ public:
     ~CMaterial();
 
 
-    bool isValid() const;
     atUint32 materialFlags() const;
     atUint32 vertexAttributes() const;
 
@@ -29,14 +31,23 @@ public:
     bool hasNormal();
     bool hasColor(atUint8 slot);
     bool hasUV(atUint8 slot);
+    bool isTransparent();
+    void setAmbient(const QColor& ambient);
 
+    bool bind();
+    void release();
+    QOpenGLShaderProgram* program();
+    bool operator==(const CMaterial& right);
 private:
     friend class CMaterialReader;
 
     bool hasAttribute(atUint32 index);
-
+    QString getSource(QString Filename);
+    QOpenGLShader* buildVertex();
+    QOpenGLShader* buildFragment();
+    QOpenGLShaderProgram*  m_program;
+    QColor                m_ambient;
     Version               m_version;
-    bool                  m_isValid;
     atUint32              m_materialFlags;
     std::vector<atUint32> m_textureIndices;
     atUint32              m_vertexAttributes;
@@ -54,5 +65,6 @@ private:
     std::vector<atUint32> m_texGenFlags;
     std::vector<atUint8>  m_animationData;
 };
+
 
 #endif // MATERIAL_HPP

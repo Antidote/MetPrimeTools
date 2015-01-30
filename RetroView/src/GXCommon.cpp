@@ -309,15 +309,13 @@ void GXSetBlendMode(EBlendMode src, EBlendMode dst)
 atUint64 assetIdFromPath(const std::string& filepath)
 {
     QString baseName = QFileInfo(QString::fromStdString(filepath)).baseName();
-    std::cout << baseName.toStdString() << std::endl;
 
     if (baseName.at(1) == '_')
         baseName = baseName.remove(0, 2);
 
-    std::cout << baseName.toStdString() << std::endl;
     bool ok = false;
     atUint64 id = QString("0x" + baseName).toULongLong(&ok, 16);
-    std::cout << std::hex << id << std::endl;
+
     if (ok)
         return id;
 

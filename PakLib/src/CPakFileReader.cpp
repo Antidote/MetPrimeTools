@@ -4,7 +4,7 @@
 #include <memory.h>
 #include <cstring>
 
-struct MP1_2_Resource
+struct SMP1_2_Resource
 {
     atUint32 compressed;
     char tag[4];
@@ -13,7 +13,7 @@ struct MP1_2_Resource
     atUint32 offset;
 };
 
-struct SectionEntry
+struct SSectionEntry
 {
     char tag[4];
     atUint32 dataLen;
@@ -54,9 +54,9 @@ CPakFile* CPakFileReader::read()
                 atUint32 headerLen = base::readUint32();
                 base::seek(headerLen, Athena::SeekOrigin::Begin);
 
-                std::vector<SectionEntry> sections = loadSectionTable();
+                std::vector<SSectionEntry> sections = loadSectionTable();
 
-                for (SectionEntry sectionEntry : sections)
+                for (SSectionEntry sectionEntry : sections)
                 {
                     base::seek((base::position() + 0x3F) & ~0x3F, Athena::SeekOrigin::Begin);
                     if (!strncmp(sectionEntry.tag, "STRG", 4))
@@ -70,6 +70,7 @@ CPakFile* CPakFileReader::read()
             }
                 break;
         }
+        ret->m_isWorldPak = ret->resourcesByType("MLVL").size() > 0 && ret->resourcesByType("MREA").size() > 0;
     }
     catch(...)
     {
@@ -145,10 +146,10 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
         // and then assign it to a temporary vector via memcpy so we can pass it on to PakFile::m_resources,
         // after that we just swap the necessary values, and voila complete entry table, this is a bit more involved
         // than MP3 and MP3Beta.
-        std::vector<MP1_2_Resource> tmpResources;
+        std::vector<SMP1_2_Resource> tmpResources;
         tmpResources.resize(resourceCount);
-        atUint8* data = base::readUBytes(sizeof(MP1_2_Resource) * resourceCount);
-        memcpy((char*)tmpResources.data(), data, sizeof(MP1_2_Resource) * resourceCount);
+        atUint8* data = base::readUBytes(sizeof(SMP1_2_Resource) * resourceCount);
+        memcpy((char*)tmpResources.data(), data, sizeof(SMP1_2_Resource) * resourceCount);
 
         delete[] data;
         for (atUint32 i = 0; i < resourceCount; i++)
@@ -180,16 +181,16 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
     }
 }
 
-std::vector<SectionEntry> CPakFileReader::loadSectionTable()
+std::vector<SSectionEntry> CPakFileReader::loadSectionTable()
 {
     atUint32 sectionCount = base::readUint32();
 
-    std::vector<SectionEntry> sections;
+    std::vector<SSectionEntry> sections;
     sections.resize(sectionCount);
 
-    atUint8* data = base::readUBytes(sizeof(SectionEntry) * sectionCount);
+    atUint8* data = base::readUBytes(sizeof(SSectionEntry) * sectionCount);
 
-    memcpy(sections.data(), data, sizeof(SectionEntry) * sectionCount);
+    memcpy(sections.data(), data, sizeof(SSectionEntry) * sectionCount);
     delete[] data;
 
     return sections;

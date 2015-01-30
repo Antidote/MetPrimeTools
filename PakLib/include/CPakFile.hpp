@@ -46,13 +46,14 @@ public:
     ~CPakFile();
 
 
-    std::string filename();
+    std::string filename() const;
 
     void loadTable();
 
     atUint8* loadData(atUint64 assetID, const std::string& type = std::string());
 
     std::vector<SPakResource> resourcesByType(const std::string& type);
+    std::vector<SPakResource> resources() const;
 
     std::string resourceName(const atUint64& assetID);
     void dumpPak(const std::string& path, bool decompress=true);
@@ -65,6 +66,7 @@ public:
 private:
     friend class CPakFileReader;
 
+    bool        m_isWorldPak;
     std::string m_filename;
     atUint32    m_version;
     atUint32    m_dataStart;

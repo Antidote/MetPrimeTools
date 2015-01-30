@@ -165,9 +165,15 @@ CModelFile* CModelReader::read()
     return m_result;
 }
 
-IRenderableModel* CModelReader::load(const std::string& filename)
+IResource* CModelReader::loadByFile(const std::string& filename)
 {
     CModelReader reader(filename);
+    return reader.read();
+}
+
+IResource* CModelReader::loadByData(const atUint8* data, atUint64 length)
+{
+    CModelReader reader(data, length);
     return reader.read();
 }
 
@@ -281,4 +287,4 @@ void CModelReader::readMesh(Athena::io::BinaryReader& in)
     m_result->m_meshes.push_back(mesh);
 }
 
-REGISTER_MODEL_LOADER(CModelReader, "cmdl", "Metroid Prime Model Data (*.cmdl *.CMDL)", load);
+REGISTER_RESOURCE_LOADER(CModelReader, "cmdl", loadByFile, loadByData);

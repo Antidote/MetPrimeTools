@@ -14,6 +14,7 @@
 #include "SBoundingBox.hpp"
 
 class QListWidgetItem;
+class IResource;
 class IRenderableModel;
 
 class CGLViewer : public QGLWidget
@@ -22,7 +23,7 @@ class CGLViewer : public QGLWidget
 public:
     explicit CGLViewer(QWidget* parent = 0);
     ~CGLViewer();
-    void openModels(const QStringList& files);
+    void openModels(QStringList files);
     void openSkeleton(const QString& file);
     void openMap(const QString& file);
     void exportFile(const QString& file);
@@ -42,7 +43,6 @@ public:
     // Assumes the filepath is already properly formatted (lowercase on windows)
     bool hasFile(const QString& file);
 
-    QOpenGLShaderProgram* defaultShader();
 public slots:
     void stopUpdates();
     void startUpdates();
@@ -59,7 +59,7 @@ signals:
 
 private slots:
     void onError(QString message);
-    void onNewFile(IRenderableModel* renderable, QString path);
+    void onNewFile(IResource* renderable, QString path);
     void onFinished();
 protected :
     void paintGL();
@@ -80,17 +80,14 @@ private:
     void updateCamera();
     float                            m_cameraSpeed;
     QTime                            m_frameTimer;
-    SBoundingBox                      m_sceneBounds;
-    QOpenGLShader*                   m_defaultVertexShader;
-    QOpenGLShader*                   m_defaultFragmentShader;
-    QOpenGLShaderProgram*            m_defaultShaderProgram;
+    SBoundingBox                     m_sceneBounds;
     glm::vec3                        m_position;
     glm::mat4                        m_projectionMatrix;
     glm::mat4                        m_viewMatrix;
     QMap<QString, IRenderableModel*> m_renderables;
     IRenderableModel*                m_currentRenderable;
-    static CGLViewer*                 m_instance;
-    CCamera                           m_camera;
+    static CGLViewer*                m_instance;
+    CCamera                          m_camera;
     QTimer                           m_updateTimer;
     bool                             m_mouseEnabled;
     QMap<Qt::Key, bool>              m_keys;

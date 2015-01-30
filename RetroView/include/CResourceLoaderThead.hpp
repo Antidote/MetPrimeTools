@@ -5,13 +5,13 @@
 #include <QStringList>
 #include <QMutex>
 static QMutex globalMutex;
-class IRenderableModel;
-class ModelLoaderThread : public QObject
+class IResource;
+class CResourceLoaderThread : public QObject
 {
     Q_OBJECT
 public:
-    ModelLoaderThread(const QStringList& paths, QObject* parent=0);
-    ~ModelLoaderThread() {}
+    CResourceLoaderThread(const QStringList& paths, QObject* parent=0);
+    ~CResourceLoaderThread() {}
 
     void addFiles(const QStringList& paths);
 public slots:
@@ -19,7 +19,7 @@ public slots:
 
 signals:
     void error(QString);
-    void newFile(IRenderableModel*,QString);
+    void newFile(IResource*,QString);
     void finished();
 private:
     QStringList m_files;

@@ -21,9 +21,9 @@ private:
     void decode(Athena::io::BinaryReader& in, Athena::io::BinaryWriter& dst);
     Texture* createTexture(Athena::io::BinaryWriter& buf);
     Athena::io::BinaryReader* m_paletteStream;
-    uint16_t             m_width;
-    uint16_t             m_height;
-    uint32_t             m_mipmaps;
+    atUint16             m_width;
+    atUint16             m_height;
+    atUint32             m_mipmaps;
     GXTextureFormat      m_format;
     GXPaletteFormat      m_palFormat;
     bool                 m_hasPalette;
@@ -39,10 +39,10 @@ private:
     void readPixelRGBA8  (Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out);
     void readCMPRSubBlock(Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out);
 
-    uint8_t extend3To8(uint8_t in);
-    uint8_t extend4To8(uint8_t in);
-    uint8_t extend5To8(uint8_t in);
-    uint8_t extend6To8(uint8_t in);
+    atUint8 extend3To8(atUint8 in);
+    atUint8 extend4To8(atUint8 in);
+    atUint8 extend5To8(atUint8 in);
+    atUint8 extend6To8(atUint8 in);
 };
 
 #endif // TEXTUREDECODER_HPP

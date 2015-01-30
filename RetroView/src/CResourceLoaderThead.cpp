@@ -1,25 +1,25 @@
-#include "CModelLoaderThead.hpp"
-#include "CModelLoader.hpp"
+#include "CResourceLoaderThead.hpp"
+#include "CResourceManager.hpp"
 #include "IRenderableModel.hpp"
 #include <Athena/Exception.hpp>
 #include "CGLViewer.hpp"
 #include <QFileInfo>
 #include <QMutexLocker>
 
-ModelLoaderThread::ModelLoaderThread(const QStringList& paths, QObject* parent)
+CResourceLoaderThread::CResourceLoaderThread(const QStringList& paths, QObject* parent)
     : QObject(parent),
       m_files(paths)
 {
 }
 
-void ModelLoaderThread::addFiles(const QStringList& paths)
+void CResourceLoaderThread::addFiles(const QStringList& paths)
 {
     QMutexLocker locker(&globalMutex);
     m_files << paths;
     locker.unlock();
 }
 
-void ModelLoaderThread::process()
+void CResourceLoaderThread::process()
 {
     QMutexLocker locker(&globalMutex);
     while (!m_files.isEmpty())
@@ -34,27 +34,16 @@ void ModelLoaderThread::process()
             return;
         }
 
-
         QString tmpFilename = file;
-    #ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN32
         tmpFilename = tmpFilename.toLower();
-    #endif
-
+#endif
         if (CGLViewer::instance()->hasFile(tmpFilename))
             continue;
 
-        IRenderableModel* ret = nullptr;
-//        try
-//        {
-            ret = SModelLoader::instance().get()->loadFile(tmpFilename.toStdString());
+        IResource* ret = CResourceManager::instance().get()->loadResource(tmpFilename.toStdString());
+        if (ret)
             emit newFile(ret, tmpFilename);
-//        }
-//        catch(const Athena::error::Exception& e)
-//        {
-//            delete ret;
-//            emit error(QString::fromStdString(e.message()));
-//        }
-
     }
 
     locker.unlock();

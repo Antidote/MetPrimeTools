@@ -1,4 +1,5 @@
 #include "CMaterialReader.hpp"
+#include "CMaterialCache.hpp"
 #include <memory.h>
 
 CMaterialReader::CMaterialReader(const atUint8 *data, atUint64 length)
@@ -20,11 +21,11 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
         if (version == CMaterial::MetroidPrime3 || version == CMaterial::DKCR)
         {
             atUint32 materialCount = base::readUint32();
-            ret.m_materials.resize(materialCount);
 
             for (atUint32 i = 0; i < materialCount; i++)
             {
-                CMaterial& mat = ret.m_materials[i];
+                CMaterial mat;
+                mat.m_version = version;
                 atUint32 dataSize = base::readUint32();
                 atUint64 materialStart = base::position();
 
@@ -33,8 +34,8 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 base::readUint32();
                 mat.m_version = version;
                 mat.m_vertexAttributes = base::readUint32();
-                mat.m_isValid = true;
                 base::seek(materialStart + dataSize, Athena::SeekOrigin::Begin);
+                ret.m_materials.push_back(CMaterialCache::instance()->addMaterial(mat));
             }
         }
         else
@@ -46,7 +47,6 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
 
             atUint32 materialCount = base::readUint32();
 
-            ret.m_materials.resize(materialCount);
             std::vector<atUint32> materialOffsets;
             materialOffsets.resize(materialCount);
 
@@ -57,7 +57,7 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
 
             for (atUint32 m = 0; m < materialCount; m++)
             {
-                CMaterial& mat = ret.m_materials[m];
+                CMaterial mat;
                 mat.m_version = version;
 
                 mat.m_materialFlags = base::readUint32();
@@ -120,17 +120,18 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                     mat.m_texGenFlags[i] = base::readUint32();
 
                 atUint32 animationSize = base::readUint32();
-                if (animationSize > 0)
-                {
+//                if (animationSize > 0)
+//                {
 //                    mat.m_animationData.resize(animationSize);
-
 //                    atUint8* data = base::readUBytes(animationSize);
 //                    memcpy(&mat.m_animationData[0], data, animationSize);
 //                    delete[] data;
-                }
-                mat.m_isValid = true;
+//                }
+
                 if (m < materialCount)
                     base::seek(materialStart + materialOffsets[m], Athena::SeekOrigin::Begin);
+
+                ret.m_materials.push_back(CMaterialCache::instance()->addMaterial(mat));
             }
         }
     }

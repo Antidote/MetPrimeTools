@@ -139,9 +139,15 @@ CAreaFile* CAreaReader::read()
     return ret;
 }
 
-IRenderableModel* CAreaReader::load(const std::string& filepath)
+IResource* CAreaReader::loadByFile(const std::string& filepath)
 {
     CAreaReader reader(filepath);
+    return reader.read();
+}
+
+IResource* CAreaReader::loadByData(const atUint8* data, atUint64 length)
+{
+    CAreaReader reader(data, length);
     return reader.read();
 }
 
@@ -346,8 +352,8 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::BinaryReader& in,
         while ((texCoordCount--) > 0)
         {
             glm::vec2 texCoord;
-            texCoord.s = in.readUint16() / 32768.f; // really shouldn't do this here
-            texCoord.s = in.readUint16() / 32768.f; // but it's constant enough to be reliable
+            texCoord.s = (float)(in.readUint16() / 32768.f); // really shouldn't do this here
+            texCoord.t = (float)(in.readUint16() / 32768.f); // but it's constant enough to be reliable
             model.m_lightmapCoords.push_back(texCoord);
         }
     }
@@ -358,8 +364,8 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::BinaryReader& in,
         while ((texCoordCount--) > 0)
         {
             glm::vec2 texCoord;
-            texCoord.x = in.readFloat();
-            texCoord.y = in.readFloat();
+            texCoord.s = in.readFloat();
+            texCoord.t = in.readFloat();
             model.m_texCoords.push_back(texCoord);
         }
     }
@@ -440,4 +446,4 @@ void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectio
     }
 }
 
-REGISTER_MODEL_LOADER(CAreaReader, "mrea", "Metroid Prime Level Data (*.mrea *.MREA)", load);
+REGISTER_RESOURCE_LOADER(CAreaReader, "mrea", loadByFile, loadByData);

@@ -6,11 +6,12 @@
 #include "CMainWindow.hpp"
 #include "ui_MainWindow.h"
 #include "CGLViewer.hpp"
-#include "CModelLoader.hpp"
+#include "CResourceManager.hpp"
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
 #include <QThread>
+#include <QShowEvent>
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,6 +19,14 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->glView, SIGNAL(initialized()), this, SLOT(onViewerInitialized()));
+
+    CResourceManager* resourceManager = CResourceManager::instance().get();
+    QString basePath = QFileDialog::getExistingDirectory(this, "Specify Basepath");
+
+    if (!basePath.isEmpty())
+        resourceManager->initialize(basePath.toStdString());
+    else
+        QTimer::singleShot(10, qApp, SLOT(quit()));
 }
 
 CMainWindow::~CMainWindow()
@@ -25,31 +34,16 @@ CMainWindow::~CMainWindow()
     delete ui;
 }
 
+bool CMainWindow::canShow()
+{
+    return ui != nullptr;
+}
+
 void CMainWindow::onOpenFile()
 {
     ui->glView->stopUpdates();
-    if (m_filters.count() < (int)SModelLoader::instance().get()->filters().size())
-    {
-        for (std::string filter : SModelLoader::instance().get()->filters())
-        {
-            QString realFilt = QString::fromStdString(filter);
-            if (m_filters.contains(realFilt))
-                continue;
-            m_filters.append(realFilt);
-        }
 
-        m_allSupportedFilter = "All Supported ";
-
-        QString extList;
-        for (std::string extension : SModelLoader::instance().get()->extensions())
-        {
-            extList += " *." + QString::fromStdString(extension) + " *." + QString::fromStdString(extension).toUpper();
-        }
-        m_allSupportedFilter += " (" + extList + ");;";
-    }
-
-    QStringList files = QFileDialog::getOpenFileNames(this, "Open model", QString(),
-                                                      m_allSupportedFilter + m_filters.join(";;"));
+    QStringList files = QFileDialog::getOpenFileNames(this, "Open Model", QString(), "All Supported (*.CMDL *.MREA)");
 
     ui->glView->startUpdates();
 

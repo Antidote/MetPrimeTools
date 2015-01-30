@@ -1,4 +1,5 @@
 #include "CMaterialSet.hpp"
+#include "CMaterialCache.hpp"
 
 CMaterialSet::CMaterialSet()
 {
@@ -22,11 +23,16 @@ CMaterial& CMaterialSet::material(const atUint32& index)
     if (index > m_materials.size())
         return invalid;
 
-    return m_materials[index];
+    return CMaterialCache::instance()->material(m_materials[index]);
 }
 
 CMaterial& CMaterialSet::material(const atUint32& index) const
 {
     return material(index);
+}
+
+std::vector<atUint32> CMaterialSet::materials() const
+{
+    return m_materials;
 }
 

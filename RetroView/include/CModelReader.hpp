@@ -3,20 +3,21 @@
 
 
 #include <Athena/BinaryReader.hpp>
-#include "CModelLoader.hpp"
+#include "CResourceManager.hpp"
 
 class CModelFile;
 class CModelReader final : protected Athena::io::BinaryReader
 {
     BINARYREADER_BASE();
-    DEFINE_MODEL_LOADER();
+    DEFINE_RESOURCE_LOADER();
 public:
     CModelReader(const atUint8* data, atUint64 length);
     CModelReader(const std::string& filepath);
     virtual ~CModelReader();
 
     CModelFile* read();
-    static IRenderableModel* load(const std::string& filename);
+    static IResource* loadByFile(const std::string& filename);
+    static IResource* loadByData(const atUint8* data, atUint64 length);
 
 private:
     void readVertices   (Athena::io::BinaryReader& in);

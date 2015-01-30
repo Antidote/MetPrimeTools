@@ -2,6 +2,7 @@
 #define TEVSTAGE_HPP
 
 #include <Athena/Types.hpp>
+#include <memory.h>
 #include <string>
 
 struct STEVStage
@@ -15,5 +16,7 @@ struct STEVStage
     atUint8  KonstColorIn;
     atUint8  RasterizedIn;
 };
+
+bool operator==(const STEVStage& left, const STEVStage& right);
 
 #endif // TEVSTAGE_HPP

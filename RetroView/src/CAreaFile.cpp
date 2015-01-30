@@ -1,10 +1,10 @@
 #include "CAreaFile.hpp"
 #include "GXCommon.hpp"
+#include "CMaterialCache.hpp"
 #include <GL/gl.h>
 #include <iostream>
 
 CAreaFile::CAreaFile()
-    : IRenderableModel(0)
 {
 }
 
@@ -63,6 +63,9 @@ void CAreaFile::buildBBox()
 
 void CAreaFile::draw()
 {
+    for (CMaterialSet& ms : m_materialSets)
+        CMaterialCache::instance()->setAmbientOnMaterials(ms.materials(), QColor(0, 0, 0));
+
     buildBBox();
     indexIBOs();
     CMaterialSet materialSet = currentMaterial();

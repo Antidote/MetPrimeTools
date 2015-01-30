@@ -3,8 +3,9 @@
 
 #include "CModelData.hpp"
 #include "IRenderableModel.hpp"
+#include "IResource.hpp"
 
-class CModelFile : public CModelData, public IRenderableModel
+class CModelFile : public CModelData, public IRenderableModel, public IResource
 {
 public:
     enum Version

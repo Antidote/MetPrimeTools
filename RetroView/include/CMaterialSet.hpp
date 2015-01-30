@@ -14,11 +14,12 @@ public:
 
     CMaterial& material(const atUint32& index);
     CMaterial& material(const atUint32& index) const;
+    std::vector<atUint32> materials() const;
 private:
     friend class CMaterialReader;
 
     std::vector<atUint32> m_textureIds;
-    std::vector<CMaterial> m_materials;
+    std::vector<atUint32> m_materials;
 };
 
 #endif // MATERIALCONTAINER_HPP

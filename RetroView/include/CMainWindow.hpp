@@ -20,6 +20,7 @@ public:
     explicit CMainWindow(QWidget *parent = 0);
     ~CMainWindow();
 
+    bool canShow();
 signals:
     void closing();
 private slots:
@@ -30,7 +31,6 @@ private slots:
     void onCloseFile();
     void onCloseAll();
     void onExport();
-protected:
 private:
     Ui::MainWindow *ui;
     QStringList    m_filters;

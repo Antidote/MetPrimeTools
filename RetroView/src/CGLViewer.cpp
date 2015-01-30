@@ -18,11 +18,11 @@
 #include <Athena/BinaryWriter.hpp>
 
 #include "CResourceManager.hpp"
+#include "CMaterialCache.hpp"
 #include "CGLViewer.hpp"
-#include "CModelLoader.hpp"
-#include "CModelLoaderThead.hpp"
 #include "IRenderableModel.hpp"
 #include "GXCommon.hpp"
+#include "CResourceLoaderThead.hpp"
 
 //TODO: Remove this
 #include "CAreaFile.hpp"
@@ -33,15 +33,9 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_currentRenderable(nullptr),
       m_camera(glm::vec3(0.0f, 0.0f, 3.0f)),
       m_mouseEnabled(false),
-      m_isInitialized(false),
-      m_defaultVertexShader(nullptr),
-      m_defaultFragmentShader(nullptr),
-      m_defaultShaderProgram(nullptr)
+      m_isInitialized(false)
 {
     grabKeyboard();
-
-    CResourceManager* resourceManager = CResourceManager::instance().get();
-    resourceManager->initialize("/media/Storage/WiiImages/games/Metroid Prime 1.iso_dir");
 
     QGLWidget::setMouseTracking(true);
     m_instance = this;
@@ -58,33 +52,18 @@ CGLViewer::CGLViewer(QWidget* parent)
 
 CGLViewer::~CGLViewer()
 {
-    foreach (IRenderableModel* file, m_renderables)
-    {
-        delete file;
-        file = NULL;
-    }
-
+    m_updateTimer.stop();
     m_renderables.clear();
-
-
     std::cout << "I'M DYING!!!" << std::endl;
-
     releaseKeyboard();
 }
 
 void CGLViewer::paintGL()
 {
     QGLWidget::paintGL();
-    if (!m_defaultShaderProgram)
-        return;
 
-    //gLight.position = glm::vec4(m_camera.position(), 0.0);
-    //lights[0].coneDirection = m_camera.front();
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
-
 
     //lights[2].coneDirection = m_camera.front();
     glMatrixMode(GL_PROJECTION);
@@ -94,6 +73,8 @@ void CGLViewer::paintGL()
     glm::mat4 projectionMat = projectionMatrix();
     glm::mat4 mvp = projectionMat * viewMat * modelMat;
     glLoadMatrixf(&mvp[0][0]);
+
+    CMaterialCache::instance()->updateViewProjectionUniforms(viewMat, projectionMat);
 
     // Cull triangles which normal is not towards the camera
     //glEnable(GL_CULL_FACE);
@@ -172,32 +153,7 @@ void CGLViewer::paintGL()
 
 
     if (m_currentRenderable)
-    {
-        m_defaultShaderProgram->bind();
-        m_defaultShaderProgram->setUniformValue("backfaceCulling", (int)true);
-        atUint32 modelLoc = m_defaultShaderProgram->uniformLocation("model");
-        CAreaFile* test = dynamic_cast<CAreaFile*>(m_currentRenderable);
-        if (test)
-        {
-            glm::mat4 tmpMat = glm::mat4(test->transformMatrix());
-            modelMat = glm::inverse(glm::transpose(tmpMat));
-        }
-
-        atUint32 viewLoc = m_defaultShaderProgram->uniformLocation("view");
-        atUint32 projectionLoc = m_defaultShaderProgram->uniformLocation("projection");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &modelMat[0][0]);
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projectionMat[0][0]);
-
-        GLint camPosLoc = glGetUniformLocation(m_defaultShaderProgram->programId(), "cameraPosition");
-        glUniform3fv(camPosLoc, 1, &m_camera.position()[0]);
         m_currentRenderable->draw();
-
-        m_defaultShaderProgram->setUniformValue("backfaceCulling", (int)false);
-        if (QSettings().value("drawBoundingBox").toBool())
-            drawBoundingBox(m_currentRenderable->boundingBox());
-        m_defaultShaderProgram->release();
-    }
 
     drawBoundingBox(m_sceneBounds);
 }
@@ -218,21 +174,10 @@ void CGLViewer::initializeGL()
         glewExperimental = true;
         glewInit();
 
-        if ((GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader))
-        {
-            m_defaultVertexShader = new QOpenGLShader(QOpenGLShader::Vertex, this);
-            m_defaultVertexShader->compileSourceFile(":/shaders/default_vertex.glsl");
-            m_defaultFragmentShader = new QOpenGLShader(QOpenGLShader::Fragment, this);
-            m_defaultFragmentShader->compileSourceFile(":/shaders/default_fragment.glsl");
-            m_defaultShaderProgram = new QOpenGLShaderProgram(this);
-            m_defaultShaderProgram->addShader(m_defaultVertexShader);
-            m_defaultShaderProgram->addShader(m_defaultFragmentShader);
-            m_defaultShaderProgram->link();
-        }
-
-        qglClearColor(QColor(128, 128, 128).darker());
+        qglClearColor(QColor(128, 128, 128).darker(300));
         emit initialized();
     }
+
     m_frameTimer.start();
 }
 
@@ -306,11 +251,6 @@ bool CGLViewer::hasFile(const QString& file)
     return m_renderables.keys().contains(file);
 }
 
-QOpenGLShaderProgram* CGLViewer::defaultShader()
-{
-    return m_defaultShaderProgram;
-}
-
 void CGLViewer::updateCamera()
 {
     if (m_keys[Qt::Key_W])
@@ -323,34 +263,41 @@ void CGLViewer::updateCamera()
         m_camera.processKeyboard(CCamera::RIGHT, 1.0f);
 }
 
-void CGLViewer::openModels(const QStringList& files)
+void CGLViewer::openModels(QStringList files)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
-    QThread* thread = new QThread;
-    ModelLoaderThread* worker = new ModelLoaderThread(files);
-    worker->moveToThread(thread);
-    connect(worker, SIGNAL(error(QString)), this, SLOT(onError(QString)));
-    connect(worker, SIGNAL(newFile(IRenderableModel*,QString)), this, SLOT(onNewFile(IRenderableModel*,QString)));
-    connect(worker, SIGNAL(finished()), this, SLOT(onFinished()));
-    connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    thread->start();
-}
-
-IRenderableModel* CGLViewer::renderable(const atUint64 assetId)
-{
-    if (assetId == 0 || (atInt64)assetId == -1)
-        return nullptr;
-
-    foreach (IRenderableModel* model, m_renderables)
+    while (!files.isEmpty())
     {
-        if (model->assetId() == assetId)
-            return model;
+        QString file = files.takeFirst();
+
+        if (QFileInfo(file).isDir())
+            continue;
+        if (file.isEmpty())
+        {
+            continue;
+        }
+
+        QString tmpFilename = file;
+#ifdef Q_OS_WIN32
+        tmpFilename = tmpFilename.toLower();
+#endif
+        if (CGLViewer::instance()->hasFile(tmpFilename))
+            continue;
+
+        IResource* ret = CResourceManager::instance().get()->loadResource(tmpFilename.toStdString());
+        if (ret)
+        {
+            IRenderableModel* rend = dynamic_cast<IRenderableModel*>(ret);
+            if (rend)
+            {
+                m_renderables[tmpFilename] = rend;
+            }
+        }
+
+        emit fileAdded(file);
     }
 
-    return nullptr;
+    qApp->restoreOverrideCursor();
 }
 
 void CGLViewer::addRenderable(const QString& path, IRenderableModel* renderable)
@@ -475,9 +422,13 @@ void CGLViewer::onError(QString message)
     QMessageBox::warning(this, "Error loading model", message);
 }
 
-void CGLViewer::onNewFile(IRenderableModel* renderable, QString path)
+void CGLViewer::onNewFile(IResource* resource, QString path)
 {
     QMutexLocker lock(&globalMutex);
+    IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(resource);
+    if (!renderable)
+        return;
+
     QString tmpFilename = path;
 #ifdef Q_OS_WIN32
     tmpFilename = tmpFilename.toLower();

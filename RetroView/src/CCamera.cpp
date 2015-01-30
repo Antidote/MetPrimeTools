@@ -102,8 +102,8 @@ void CCamera::increaseSpeed()
 void CCamera::decreaseSpeed()
 {
     m_movementSpeed -= 0.25f;
-    if (m_movementSpeed < 0.25f)
-        m_movementSpeed = 0.25f;
+    if (m_movementSpeed < 0.05f)
+        m_movementSpeed = 0.05f;
 }
 
 

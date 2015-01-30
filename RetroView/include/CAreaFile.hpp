@@ -5,8 +5,9 @@
 #include <vector>
 #include <string>
 #include "IRenderableModel.hpp"
+#include "IResource.hpp"
 
-class CAreaFile : public IRenderableModel
+class CAreaFile : public IRenderableModel, public IResource
 {
 public:
     enum Version

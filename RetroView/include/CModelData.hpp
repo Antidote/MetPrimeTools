@@ -28,6 +28,7 @@ struct SIndexBufferObject
     atUint32              primitiveType;
     atUint32              materialId;
     std::vector<atUint32> indexBuffer;
+    SBoundingBox          boundingBox;
 };
 
 struct SVertex
