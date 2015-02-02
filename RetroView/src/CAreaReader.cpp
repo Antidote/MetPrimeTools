@@ -390,7 +390,7 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Binary
         {
             in.readUint32();
             in.readUint32();
-            in.readUint32();
+            extraDataSize = in.readUint32();
             in.readUint32();
             in.readUint32();
             in.readUint32();

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <Athena/Utility.hpp>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <QMessageBox>
 
@@ -47,9 +49,12 @@ void CResourceManager::initialize(const std::string& baseDirectory)
 
         while((dp = readdir(dir)) != NULL)
         {
-            if (dp->d_type == DT_REG)
+            struct stat64 st;
+            std::string filepath = m_baseDirectory + "/" + std::string(dp->d_name);
+            stat64(filepath.c_str(), &st);
+            if(S_ISREG(st.st_mode))
             {
-                std::string filename = (dp->d_name);
+                std::string filename = dp->d_name;
                 std::string ext = filename.substr(filename.rfind('.') + 1, filename.size());
                 Athena::utility::tolower(ext);
                 if (!ext.compare("pak"))
@@ -58,7 +63,7 @@ void CResourceManager::initialize(const std::string& baseDirectory)
                     CPakFile* pak = nullptr;
                     try
                     {
-                        CPakFileReader reader(m_baseDirectory + "/" + filename);
+                        CPakFileReader reader(filepath);
                         pak = reader.read();
                         if (pak->isWorldPak())
                         {
@@ -79,6 +84,7 @@ void CResourceManager::initialize(const std::string& baseDirectory)
                 }
             }
         }
+        closedir(dir);
     }
 }
 
@@ -99,11 +105,7 @@ IResource* CResourceManager::loadResource(const atUint64& assetID, const std::st
         std::vector<SPakResource>::iterator iter = std::find_if(pakResources.begin(), pakResources.end(),
                                                                 [&assetID](const SPakResource& r)->bool{return r.id == assetID; });
         if (iter != pakResources.end())
-        {
-            std::cout << "Found resource " << std::hex << assetID << "." << std::string((const char*)((SPakResource)*iter).tag, 4) << std::dec
-                      << " in pack " << pak->filename() << std::endl;
             return attemptLoad(*iter, pak);
-        }
     }
 
     return attemptLoadFromFile(assetID, type);
@@ -113,8 +115,8 @@ IResource* CResourceManager::loadResource(const std::string& filepath)
 {
     IResource* ret = nullptr;
 
-    try
-    {
+//    try
+//    {
         std::string tag = filepath.substr(filepath.rfind(".") + 1, filepath.length());
         Athena::utility::tolower(tag);
         if (m_loaders.find(tag) == m_loaders.end())
@@ -123,13 +125,13 @@ IResource* CResourceManager::loadResource(const std::string& filepath)
         ret = m_loaders[tag].byFile(filepath);
         ret->m_assetID = assetIdFromPath(filepath);
         m_cachedResources[ret->assetId()] = ret;
-    }
-    catch(const Athena::error::Exception& e)
-    {
-        std::cout << e.message() << std::endl;
-        delete ret;
-        ret = nullptr;
-    }
+//    }
+//    catch(const Athena::error::Exception& e)
+//    {
+//        std::cout << e.message() << std::endl;
+//        delete ret;
+//        ret = nullptr;
+//    }
 
     return ret;
 }

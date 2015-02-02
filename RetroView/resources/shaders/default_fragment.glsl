@@ -19,7 +19,7 @@ uniform vec4 konst[4];
 
 uniform bool punchThrough;
 // input
-smooth in vec3 norm;
+in vec3 norm;
 in vec4 color0;
 in vec4 color1;
 in vec3 texCoord0;

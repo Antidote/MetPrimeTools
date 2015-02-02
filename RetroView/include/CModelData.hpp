@@ -57,11 +57,14 @@ public:
 
     void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff);
 
-    void draw(CMaterialSet& materialSet);
+    void preDraw(CMaterialSet& materialSet);
     void drawBoundingBoxes();
 
     void indexIBOs(CMaterialSet& materialSet);
 
+    void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
+    void drawTransparentBoxes();
+    void doneDraw();
 protected:
     friend class CAreaFile;
     friend class CAreaReader;
@@ -69,7 +72,7 @@ protected:
 
     atUint32 getIbo(atUint32 prim, atUint32 matId, atUint32 start);
     void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboID, atUint32 vertStartIndex);
-    void loadIbos();
+    void loadIbos(CMaterialSet& ms);
 
     atUint32                 m_format;
     glm::mat3x4              m_transform;
@@ -79,7 +82,7 @@ protected:
     std::vector<atUint32>    m_colors;
     std::vector<glm::vec2>   m_texCoords;
     std::vector<glm::vec2>   m_lightmapCoords;
-    std::vector<CMesh>        m_meshes;
+    std::vector<CMesh>       m_meshes;
 
 
     // GL specific code
@@ -95,7 +98,8 @@ protected:
     std::vector<glm::vec3> m_normBuf;
     std::vector<atUint32>  m_clrBufs[2];
     std::vector<glm::vec2> m_texCoordBuf[7];
-    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_indexedIbos;
+    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_transparents;
+    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_opaques;
     std::vector<SIndexBufferObject> m_ibos;
     std::vector<SVertex>            m_vertexBuffer;
 };

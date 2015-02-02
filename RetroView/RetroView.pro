@@ -15,6 +15,7 @@ win32:LIBS += \
     -lopengl32 \
     -lglu32 \
     -L../External/glew/lib/win32 \
+    -L../External/lzo/lib \
     -lglew32 \
     -lz
 
@@ -26,6 +27,7 @@ unix:LIBS += \
     -lz
 
 
+DEFINES += _LARGEFILE64_SOURCE _FILE_OFFSET_BITS
 include(../Athena/AthenaCore.pri)
 include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
@@ -43,7 +45,7 @@ unix {
 }
 
 INCLUDEPATH += include
-win32:INCLUDEPATH += ../External/glm ../External/glew/include
+win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
 
 SOURCES += \
     src/GXCommon.cpp \

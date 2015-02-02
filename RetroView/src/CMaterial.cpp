@@ -283,6 +283,8 @@ QOpenGLShader* CMaterial::buildFragment()
 
         source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
     }
+    else
+        source = source.replace("//{TEVSTAGES}", "prev = clamp(normalize(vec4(norm, 1.0)), 0.0, 1.0) - color0;");
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Fragment);
 }
@@ -338,28 +340,27 @@ bool CMaterial::bind()
         m_program->link();
         m_program->bind();
 
+        if (m_version != MetroidPrime3 && m_version != DKCR)
+            m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
 
-        m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
         m_program->release();
     }
 
     m_program->bind();
-
-    for (atUint32 i = 0; i < m_konstCount; i++)
+    if (m_version != MetroidPrime3 && m_version != DKCR)
     {
-        const char* name = QString("konst[%1]").arg(i).toStdString().c_str();
-        QColor konstColor = QColor::fromRgba(m_konstColor[i]);
+        for (atUint32 i = 0; i < m_konstCount; i++)
+        {
+            const char* name = QString("konst[%1]").arg(i).toStdString().c_str();
+            QColor konstColor = QColor::fromRgba(m_konstColor[i]);
 
-        m_program->setUniformValue(name, konstColor);
+            m_program->setUniformValue(name, konstColor);
+        }
+        m_program->setUniformValue("ambientLight", m_ambient);
+        if (!(m_materialFlags & 0x80))
+            glDepthMask(GL_FALSE);
+        GXSetBlendMode(m_blendSrcFactor, m_blendDstFactor);
     }
-
-    m_program->setUniformValue("ambientLight", m_ambient);
-
-    if (!(m_materialFlags & 0x80))
-        glDepthMask(GL_FALSE);
-
-    glDepthFunc(GL_LESS);
-    GXSetBlendMode(m_blendSrcFactor, m_blendDstFactor);
 
     return true;
 }
@@ -369,7 +370,7 @@ void CMaterial::release()
     if (!m_program)
         return;
 
-    if (!(m_materialFlags & 0x80))
+    if (!(m_materialFlags & 0x80) && (m_version != MetroidPrime3 && m_version != DKCR))
         glDepthMask(GL_TRUE);
 
     m_program->release();

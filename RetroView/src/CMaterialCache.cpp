@@ -74,10 +74,7 @@ QOpenGLShader* CMaterialCache::shaderFromSource(const QString& source, QOpenGLSh
     if (type == QOpenGLShader::Vertex)
     {
         if (m_vertexShaders.find(hash) != m_vertexShaders.end())
-        {
-            qDebug() << "Using stored vtx shader for hash " << hex << hash;
             return m_vertexShaders[hash];
-        }
 
         qDebug() << "Building vtx shader for hash " << hex << hash;
         QOpenGLShader* sh = new QOpenGLShader(type, this);
@@ -91,10 +88,7 @@ QOpenGLShader* CMaterialCache::shaderFromSource(const QString& source, QOpenGLSh
     else
     {
         if (m_fragmentShaders.find(hash) != m_fragmentShaders.end())
-        {
-            qDebug() << "Using stored px shader for hash " << hex << hash;
             return m_fragmentShaders[hash];
-        }
 
         qDebug() << "Building px shader for hash " << hex << hash;
         QOpenGLShader* sh = new QOpenGLShader(type, this);

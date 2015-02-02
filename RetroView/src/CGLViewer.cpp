@@ -64,6 +64,7 @@ void CGLViewer::paintGL()
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 
     //lights[2].coneDirection = m_camera.front();
     glMatrixMode(GL_PROJECTION);

@@ -1,5 +1,6 @@
 #include "CModelFile.hpp"
 #include "CMaterialCache.hpp"
+#include "CGLViewer.hpp"
 
 CModelFile::CModelFile()
 {
@@ -20,7 +21,11 @@ void CModelFile::draw()
     for (CMaterialSet& ms : m_materialSets)
         CMaterialCache::instance()->setAmbientOnMaterials(ms.materials(), amb);
 
-    CModelData::draw(currentMaterialSet());
+    glm::mat4 model = CGLViewer::instance()->modelMatrix();
+    CModelData::preDraw(currentMaterialSet());
+    CModelData::drawIbos(false, currentMaterialSet(), model);
+    CModelData::drawIbos(true,  currentMaterialSet(), model);
+    CModelData::doneDraw();
 }
 
 void CModelFile::drawBoundingBox()

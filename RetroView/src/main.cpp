@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     // initialize settings info so that default QSettings() access works
     a.setWindowIcon(QIcon(":/MPxViewer.png"));
     a.setOrganizationName("MetPrimeTools");
-    a.setApplicationName("cmdlreader");
+    a.setApplicationName("RetroView");
 
     CMainWindow w;
     w.show();

@@ -31,8 +31,8 @@ public:
 
     SBoundingBox& boundingBox();
 
-    CMaterialSet& currentMaterial();
-    CMaterialSet& currentMaterial() const;
+    CMaterialSet& currentMaterialSet();
+    CMaterialSet& currentMaterialSet() const;
 
     bool canExport() const { return true; }
 private:

@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include "CResourceManager.hpp"
 #include "CModelData.hpp"
+#include "CMaterialCache.hpp"
 #include "GXCommon.hpp"
 #include "CTexture.hpp"
 #include "CGLViewer.hpp"
@@ -174,9 +175,69 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
     texOff    += m_texCoords.size();
 }
 
-void CModelData::draw(CMaterialSet& materialSet)
+void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model)
 {
-    loadIbos();
+    std::unordered_map<atUint32, std::vector<SIndexBufferObject>> ibos;
+    if (transparents)
+        ibos = m_transparents;
+    else
+        ibos = m_opaques;
+
+    for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : ibos)
+    {
+        CMaterial& mat = materialSet.material(iboPair.first);
+        if (!mat.bind())
+            continue;
+
+        atUint32 modelLoc = mat.program()->uniformLocation("model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+        for (atUint32 i = 0; i < mat.textureIndices().size(); i++)
+        {
+            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(materialSet.textureID(mat.textureIndices()[i]), "txtr"));
+
+            if (texture)
+            {
+                if (texture->textureID() == 0)
+                    texture->create();
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, texture->textureID());
+            }
+        }
+
+
+        for (SIndexBufferObject ibo : iboPair.second)
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo.bufferID);
+            glDrawElements(ibo.primitiveType, ibo.indexBuffer.size(), GL_UNSIGNED_INT, (void*)0);
+        }
+
+        mat.release();
+        for (int i = 0; i < 7; i++)
+        {
+            glActiveTexture(GL_TEXTURE0+i);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+    }
+}
+
+void CModelData::drawTransparentBoxes()
+{
+    for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : m_transparents)
+    {
+        for (SIndexBufferObject ibo : iboPair.second)
+            drawBoundingBox(ibo.boundingBox);
+    }
+}
+
+void CModelData::doneDraw()
+{
+    for (atUint32 i = 0; i < 12; i++)
+        glDisableVertexAttribArray(i);
+}
+
+void CModelData::preDraw(CMaterialSet& ms)
+{
+    loadIbos(ms);
     glEnable(GL_PRIMITIVE_RESTART);
     glEnable(GL_COLOR_MATERIAL);
     glPrimitiveRestartIndex(0xFFFFFFFF);
@@ -204,70 +265,6 @@ void CModelData::draw(CMaterialSet& materialSet)
         glBindBuffer(GL_ARRAY_BUFFER, m_texCoordObjs[i]);
         glVertexAttribPointer(i+4, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     }
-
-    glm::mat4 model = CGLViewer::instance()->modelMatrix();
-
-    for (atUint32 i = 0; i < 2; i++)
-    {
-        bool firstPass = (i == 0);
-        if (firstPass)
-            continue;
-
-        for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : m_indexedIbos)
-        {
-            CMaterial& mat = materialSet.material(iboPair.first);
-            if (mat.isTransparent() && firstPass)
-                continue;
-
-            if (!mat.isTransparent() && !firstPass)
-                continue;
-
-            if (!mat.bind())
-                continue;
-
-            atUint32 modelLoc = mat.program()->uniformLocation("model");
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
-            for (atUint32 i = 0; i < mat.textureIndices().size(); i++)
-            {
-                CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(materialSet.textureID(mat.textureIndices()[i]), "txtr"));
-
-                if (texture)
-                {
-                    if (texture->textureID() == 0)
-                        texture->create();
-                    glActiveTexture(GL_TEXTURE0 + i);
-                    glBindTexture(GL_TEXTURE_2D, texture->textureID());
-                }
-            }
-
-
-            for (SIndexBufferObject ibo : iboPair.second)
-            {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo.bufferID);
-                glDrawElements(ibo.primitiveType, ibo.indexBuffer.size(), GL_UNSIGNED_INT, (void*)0);
-            }
-
-            mat.release();
-            for (int i = 0; i < 7; i++)
-            {
-                glActiveTexture(GL_TEXTURE0+i);
-                glBindTexture(GL_TEXTURE_2D, 0);
-            }
-        }
-    }
-
-    for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : m_indexedIbos)
-    {
-        CMaterial& mat = materialSet.material(iboPair.first);
-        if (!mat.isTransparent())
-            continue;
-
-        for (SIndexBufferObject ibo : iboPair.second)
-            drawBoundingBox(ibo.boundingBox);
-    }
-
-    for (int i = 0; i <= 10; i++)
-        glDisableVertexAttribArray(i);
 }
 
 void CModelData::drawBoundingBoxes()
@@ -481,7 +478,7 @@ void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& m
     m_ibos[iboID].indexBuffer.push_back(index);
 }
 
-void CModelData::loadIbos()
+void CModelData::loadIbos(CMaterialSet& ms)
 {
     if (m_ibosLoaded)
         return;
@@ -515,6 +512,10 @@ void CModelData::loadIbos()
         glGenBuffers(1, &m_ibos[ibo].bufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibos[ibo].bufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_ibos[ibo].indexBuffer.size() * sizeof(atUint32), &m_ibos[ibo].indexBuffer[0], GL_STATIC_DRAW);
-        m_indexedIbos[m_ibos[ibo].materialId].push_back(m_ibos[ibo]);
+        CMaterial& mat = ms.material(m_ibos[ibo].materialId);
+        if (mat.isTransparent())
+            m_transparents[m_ibos[ibo].materialId].push_back(m_ibos[ibo]);
+        else
+            m_opaques[m_ibos[ibo].materialId].push_back(m_ibos[ibo]);
     }
 }

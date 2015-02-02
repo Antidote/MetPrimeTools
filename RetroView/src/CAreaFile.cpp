@@ -1,6 +1,7 @@
 #include "CAreaFile.hpp"
 #include "GXCommon.hpp"
 #include "CMaterialCache.hpp"
+#include "CGLViewer.hpp"
 #include <GL/gl.h>
 #include <iostream>
 
@@ -63,14 +64,31 @@ void CAreaFile::buildBBox()
 
 void CAreaFile::draw()
 {
+    QColor clr = (m_version != MetroidPrime3 || m_version != DKCR) ? QColor(0, 0, 0) : QColor(128, 128, 128);
+
     for (CMaterialSet& ms : m_materialSets)
-        CMaterialCache::instance()->setAmbientOnMaterials(ms.materials(), QColor(0, 0, 0));
+        CMaterialCache::instance()->setAmbientOnMaterials(ms.materials(), clr);
 
     buildBBox();
     indexIBOs();
-    CMaterialSet materialSet = currentMaterial();
+    CMaterialSet materialSet = currentMaterialSet();
+    glm::mat4 model = CGLViewer::instance()->modelMatrix();
+
+    // our opaques go first
     for (CModelData& m : m_models)
-        m.draw(materialSet);
+    {
+        m.preDraw(materialSet);
+        m.drawIbos(false, materialSet, model);
+        m.doneDraw();
+    }
+
+    // then our transparents
+    for (CModelData& m : m_models)
+    {
+        m.preDraw(materialSet);
+        m.drawIbos(true, materialSet, model);
+        m.doneDraw();
+    }
 }
 
 void CAreaFile::drawBoundingBox()
@@ -90,7 +108,7 @@ SBoundingBox& CAreaFile::boundingBox()
     return m_boundingBox;
 }
 
-CMaterialSet& CAreaFile::currentMaterial()
+CMaterialSet& CAreaFile::currentMaterialSet()
 {
     return m_materialSets[0];
 }

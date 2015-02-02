@@ -21,7 +21,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     connect(ui->glView, SIGNAL(initialized()), this, SLOT(onViewerInitialized()));
 
     CResourceManager* resourceManager = CResourceManager::instance().get();
-    QString basePath = QFileDialog::getExistingDirectory(this, "Specify Basepath");
+    QString basePath = QFileDialog::getExistingDirectory(nullptr, "Specify Basepath");
 
     if (!basePath.isEmpty())
         resourceManager->initialize(basePath.toStdString());
