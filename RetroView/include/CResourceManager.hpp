@@ -1,6 +1,7 @@
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
 
+#include <QObject>
 #include <string>
 #include <Athena/Types.hpp>
 
@@ -29,8 +30,10 @@ struct SResourceLoaderRegistrator
 };
 
 class CPakFile;
-class CResourceManager
+class CPakTreeWidget;
+class CResourceManager : public QObject
 {
+    Q_OBJECT
 public:
     virtual ~CResourceManager();
     typedef std::unordered_map<atUint64, IResource*>::iterator         CachedResourceIterator;
@@ -47,6 +50,10 @@ public:
     void registerLoader(std::string tag, ResourceFileLoaderCallback byFile, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();
 
+    std::vector<CPakTreeWidget*> pakWidgets() const;
+
+signals:
+    void newPak(CPakTreeWidget*);
 protected:
     CResourceManager();
     CResourceManager(const CResourceManager&) = delete;
@@ -58,8 +65,10 @@ private:
     IResource* attemptLoadFromFile(atUint64 assetID, const std::string& type);
     std::unordered_map<atUint64, IResource*> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
+    std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
     std::string                              m_baseDirectory;
 };
+
 
 #ifndef DEFINE_RESOURCE_LOADER
 #define DEFINE_RESOURCE_LOADER() \

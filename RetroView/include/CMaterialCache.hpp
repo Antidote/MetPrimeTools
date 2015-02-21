@@ -20,7 +20,7 @@ public:
     ~CMaterialCache();
 
 
-    void updateViewProjectionUniforms(glm::mat4 view, glm::mat4 proj);
+    void initialize();
     static std::shared_ptr<CMaterialCache> instance();
     atUint32 addMaterial(CMaterial mat);
     CMaterial& material(atUint32 index);

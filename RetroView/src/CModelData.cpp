@@ -27,14 +27,26 @@ CModelData::~CModelData()
     }
 }
 
-void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff)
+atUint32 CModelData::exportUVIdx(atUint32 texOff, VertexDescriptor desc, CMaterial& mat)
+{
+    atUint32 ret;
+    if ((mat.materialFlags() & 0x2000))
+        ret = desc.texCoord[1] + texOff;
+    else
+        ret = desc.texCoord[0] + texOff;
+
+    return ret;
+}
+
+void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms)
 {
     glm::mat4 rotMat = glm::rotate(glm::mat4(1), glm::radians(90.0f), glm::vec3(-1, 0, 0));
+    glm::mat4 inverseTransform = glm::inverse(glm::transpose(glm::mat4(m_transform)));
 
     of << "# vertex positions" << std::endl;
     for (glm::vec3 v : m_vertices)
     {
-        glm::vec3 rv(glm::vec4(rotMat * glm::vec4(v, 1)));
+        glm::vec3 rv = glm::vec3(glm::vec4(rotMat * inverseTransform * glm::vec4(v, 1)));
         of << "v " << rv.x << " " << rv.y << " " << rv.z << std::endl;
     }
     of << std::endl << std::endl;
@@ -58,9 +70,11 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
 
     for (CMesh m : m_meshes)
     {
+        CMaterial& mat = ms.material(m.m_materialID);
+
         of << "o mesh_" << meshIndex << std::endl;
         meshIndex++;
-        //of << "s 1" << std::endl;
+        of << "s 1" << std::endl;
 
         for (CPrimitive s : m.m_primitives)
         {
@@ -74,8 +88,8 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f1 = s.indices[i - 0];
 
                         of << "l "
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat)
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << std::endl;
                     }
                 }
                     break;
@@ -87,8 +101,8 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f1 = s.indices[i - 0];
 
                         of << "l"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat)
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << std::endl;
                     }
                 }
                     break;
@@ -101,9 +115,9 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f2 = s.indices[i - 0];
 
                         of << "f"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff << "/" << f0.normal + normalOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << "/" << f1.normal + normalOff
-                           << " " << f2.position + vertexOff << "/" << f2.texCoord[0] + texOff << "/" << f2.normal + normalOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat) << "/" << f0.normal + normalOff
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << "/" << f1.normal + normalOff
+                           << " " << f2.position + vertexOff << "/" << exportUVIdx(texOff, f2, mat) << "/" << f2.normal + normalOff << std::endl;
                     }
                 }
                     break;
@@ -116,9 +130,9 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f2 = s.indices[i - ((i & 1) - 0)];
 
                         of << "f"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff << "/" << f0.normal + normalOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << "/" << f1.normal + normalOff
-                           << " " << f2.position + vertexOff << "/" << f2.texCoord[0] + texOff << "/" << f2.normal + normalOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat) << "/" << f0.normal + normalOff
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << "/" << f1.normal + normalOff
+                           << " " << f2.position + vertexOff << "/" << exportUVIdx(texOff, f2, mat) << "/" << f2.normal + normalOff << std::endl;
                     }
                 }
                     break;
@@ -131,9 +145,9 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f2 = s.indices[i - 0];
 
                         of << "f"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff << "/" << f0.normal + normalOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << "/" << f1.normal + normalOff
-                           << " " << f2.position + vertexOff << "/" << f2.texCoord[0] + texOff << "/" << f2.normal + normalOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat) << "/" << f0.normal + normalOff
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << "/" << f1.normal + normalOff
+                           << " " << f2.position + vertexOff << "/" << exportUVIdx(texOff, f2, mat) << "/" << f2.normal + normalOff << std::endl;
                     }
                 }
                     break;
@@ -147,13 +161,13 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
                         VertexDescriptor& f3 = s.indices[i - 0];
 
                         of << "f"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff << "/" << f0.normal + normalOff
-                           << " " << f1.position + vertexOff << "/" << f1.texCoord[0] + texOff << "/" << f1.normal + normalOff
-                           << " " << f2.position + vertexOff << "/" << f2.texCoord[0] + texOff << "/" << f2.normal + normalOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat) << "/" << f0.normal + normalOff
+                           << " " << f1.position + vertexOff << "/" << exportUVIdx(texOff, f1, mat) << "/" << f1.normal + normalOff
+                           << " " << f2.position + vertexOff << "/" << exportUVIdx(texOff, f2, mat) << "/" << f2.normal + normalOff << std::endl;
                         of << "f"
-                           << " " << f0.position + vertexOff << "/" << f0.texCoord[0] + texOff << "/" << f0.normal + normalOff
-                           << " " << f2.position + vertexOff << "/" << f2.texCoord[0] + texOff << "/" << f2.normal + normalOff
-                           << " " << f3.position + vertexOff << "/" << f3.texCoord[0] + texOff << "/" << f3.normal + normalOff << std::endl;
+                           << " " << f0.position + vertexOff << "/" << exportUVIdx(texOff, f0, mat) << "/" << f0.normal + normalOff
+                           << " " << f2.position + vertexOff << "/" << exportUVIdx(texOff, f2, mat) << "/" << f2.normal + normalOff
+                           << " " << f3.position + vertexOff << "/" << exportUVIdx(texOff, f3, mat) << "/" << f3.normal + normalOff << std::endl;
                     }
                 }
                     break;
@@ -186,6 +200,7 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
     for (std::pair<atUint32, std::vector<SIndexBufferObject> > iboPair : ibos)
     {
         CMaterial& mat = materialSet.material(iboPair.first);
+        mat.setModelMatrix(model);
         if (!mat.bind())
             continue;
 
@@ -197,10 +212,10 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
 
             if (texture)
             {
-                if (texture->textureID() == 0)
-                    texture->create();
                 glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, texture->textureID());
+                texture->bind();
+
+                //mat.program()->setUniformValue(QString("tex%1").arg(i).toStdString().c_str(), i);
             }
         }
 

@@ -86,6 +86,11 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 mat.m_blendDstFactor = (EBlendMode)base::readUint16();
                 mat.m_blendSrcFactor = (EBlendMode)base::readUint16();
 
+                if (mat.m_blendDstFactor == EBlendMode::SrcClr)
+                    mat.m_blendDstFactor = EBlendMode::DstClr;
+                else if (mat.m_blendDstFactor == EBlendMode::InvSrcClr)
+                    mat.m_blendDstFactor = EBlendMode::InvDstClr;
+
                 if (mat.m_materialFlags & 0x400)
                     mat.m_unknown2 = base::readUint32();
 
@@ -120,13 +125,33 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                     mat.m_texGenFlags[i] = base::readUint32();
 
                 atUint32 animationSize = base::readUint32();
-//                if (animationSize > 0)
-//                {
-//                    mat.m_animationData.resize(animationSize);
-//                    atUint8* data = base::readUBytes(animationSize);
-//                    memcpy(&mat.m_animationData[0], data, animationSize);
-//                    delete[] data;
-//                }
+                if (animationSize > 0)
+                {
+                    atUint32 animationCount = base::readUint32();
+                    mat.m_animations.resize(animationCount);
+
+                    for (atUint32 i = 0; i < animationCount; i++)
+                    {
+                        SAnimation& anim = mat.m_animations[i];
+
+                        anim.mode = base::readUint32();
+                        atUint32 parmCount = 0;
+                        switch(anim.mode)
+                        {
+                            case 5:
+                            case 4:
+                            case 2:
+                                parmCount = 4;
+                                break;
+                            case 7:
+                            case 3:
+                                parmCount = 2;
+                                break;
+                        }
+                        for (atUint32 p = 0; p < parmCount; p++)
+                            anim.parms[p] = base::readFloat();
+                    }
+                }
 
                 if (m < materialCount)
                     base::seek(materialStart + materialOffsets[m], Athena::SeekOrigin::Begin);

@@ -1,5 +1,6 @@
 #include "CResourceManager.hpp"
 #include "CPakFileReader.hpp"
+#include "CPakTreeWidget.hpp"
 #include "GXCommon.hpp"
 #include <iostream>
 #include <algorithm>
@@ -65,16 +66,14 @@ void CResourceManager::initialize(const std::string& baseDirectory)
                     {
                         CPakFileReader reader(filepath);
                         pak = reader.read();
-                        if (pak->isWorldPak())
-                        {
-                            m_pakFiles.push_back(pak);
-                            std::cout << " loaded" << std::endl;
-                        }
-                        else
-                        {
-                            std::cout << " not a world pak, ignored" << std::endl;
-                            delete pak;
-                        }
+                        m_pakFiles.push_back(pak);
+                        CPakTreeWidget* widget = new CPakTreeWidget(pak);
+
+                        m_pakTreeWidgets.push_back(widget);
+
+                        emit newPak(widget);
+
+                        std::cout << " loaded" << std::endl;
                     }
                     catch(...)
                     {
@@ -115,8 +114,8 @@ IResource* CResourceManager::loadResource(const std::string& filepath)
 {
     IResource* ret = nullptr;
 
-//    try
-//    {
+    try
+    {
         std::string tag = filepath.substr(filepath.rfind(".") + 1, filepath.length());
         Athena::utility::tolower(tag);
         if (m_loaders.find(tag) == m_loaders.end())
@@ -125,13 +124,13 @@ IResource* CResourceManager::loadResource(const std::string& filepath)
         ret = m_loaders[tag].byFile(filepath);
         ret->m_assetID = assetIdFromPath(filepath);
         m_cachedResources[ret->assetId()] = ret;
-//    }
-//    catch(const Athena::error::Exception& e)
-//    {
-//        std::cout << e.message() << std::endl;
-//        delete ret;
-//        ret = nullptr;
-//    }
+    }
+    catch(const Athena::error::Exception& e)
+    {
+        std::cout << e.message() << std::endl;
+        delete ret;
+        ret = nullptr;
+    }
 
     return ret;
 }
@@ -142,6 +141,11 @@ std::shared_ptr<CResourceManager> CResourceManager::instance()
     static std::shared_ptr<CResourceManager> instance = std::make_shared<concrete_ResourceManager>();
 
     return instance;
+}
+
+std::vector<CPakTreeWidget*> CResourceManager::pakWidgets() const
+{
+    return m_pakTreeWidgets;
 }
 
 IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
@@ -259,4 +263,5 @@ SResourceLoaderRegistrator::SResourceLoaderRegistrator(std::string tag, Resource
 {
     CResourceManager::instance().get()->registerLoader(tag, byFile, byData);
 }
+
 

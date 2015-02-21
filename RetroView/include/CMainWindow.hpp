@@ -7,11 +7,13 @@
 
 #include <QMainWindow>
 #include "CGLViewer.hpp"
+#include <CPakFileModel.hpp>
 
 namespace Ui {
-class MainWindow;
+class CMainWindow;
 }
 
+class CPakTreeWidget;
 class CMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,7 +25,11 @@ public:
     bool canShow();
 signals:
     void closing();
+protected:
+    bool event(QEvent *event);
+
 private slots:
+    void onModeToggled(bool value);
     void onOpenFile();
     void onToggled(bool);
     void onViewerInitialized();
@@ -31,8 +37,9 @@ private slots:
     void onCloseFile();
     void onCloseAll();
     void onExport();
+    void onNewPak(CPakTreeWidget* pak);
 private:
-    Ui::MainWindow *ui;
+    Ui::CMainWindow *ui;
     QStringList    m_filters;
     QString        m_allSupportedFilter;
 };

@@ -1,10 +1,28 @@
+#include <GL/glew.h>
+#include "CGLViewer.hpp"
 #include "CMaterial.hpp"
 #include "CMaterialCache.hpp"
 #include <QStringList>
 #include <QFile>
 #include <QDebug>
 #include <QColor>
+#include <chrono>
+#include <ctime>
+#include <QSettings>
 #include "GXCommon.hpp"
+
+typedef std::chrono::high_resolution_clock hrClock_t;
+typedef std::chrono::duration<float> fsec;
+
+static auto start = hrClock_t::now();
+
+float secondsMod900()
+{
+    auto now = hrClock_t::now();
+
+    float result = fsec(now - start).count();
+    return fmod(result, 900.f);
+}
 
 static const char *tevKSelTableC[] =
 {
@@ -93,6 +111,11 @@ CMaterial::~CMaterial()
 
 }
 
+void CMaterial::setModelMatrix(const glm::mat4& modelMatrix)
+{
+    m_modelMatrix = modelMatrix;
+}
+
 atUint32 CMaterial::materialFlags() const
 {
     return m_materialFlags;
@@ -132,7 +155,7 @@ QString CMaterial::getSource(QString Filename){
 static const char* texcoordTransform[] =
 {
     "in_Position",
-    "vec3((0.5 * transformedNormal.x + 0.5),(0.5 * transformedNormal.y + 0.5), 1)",
+    "in_Normal",
     "in_Color0.rgb",
     "in_Color1.rgb",
     "vec3(in_TexCoord0, 1)",
@@ -156,8 +179,20 @@ QOpenGLShader* CMaterial::buildVertex()
         vertSource << "    // Texgen";
         for (atUint32 i = 0; i < m_texGenFlags.size(); i++)
         {
-            atUint32 transformSource = ((m_texGenFlags[i] & 0xF0) >> 4);
-            vertSource << QString("    texCoord%1 = %2;").arg(i).arg(QString::fromLatin1(texcoordTransform[transformSource]));
+            atUint32 texcoordSource = ((m_texGenFlags[i] & 0xF0) >> 4);
+            atUint32 texMtxSource = textureMatrixIdx(((m_texGenFlags[i] >> 9) & 0x1F) + 30);
+            atUint32 postMtxSource = postTransformMatrixIdx(((m_texGenFlags[i] >> 15) & 0x1F) + 64);
+            QString source = QString("texCoord%1").arg(i);
+            vertSource << QString("    %1 = vec3(vec4(%2, 1.0f) * texMtx[%3]);")
+                          .arg(source)
+                          .arg(QString::fromLatin1(texcoordTransform[texcoordSource]))
+                          .arg(texMtxSource);
+
+            if ((m_texGenFlags[i] >> 14) & 1)
+                vertSource << QString("%1 = normalize(%1);").arg(source);
+
+            vertSource << QString("%1 = vec3(vec4(%1, 1.0) * postMtx[%2]);").arg(source).arg(postMtxSource);
+
         }
         source = source.replace("//{GXSHADERINFO}", QString("// %1 TEV Stages %2 TexGens").arg(m_tevStages.size()).arg(m_texGenFlags.size()));
         source = source.replace("//{TEXGEN}", vertSource.join("\n"));
@@ -343,12 +378,33 @@ bool CMaterial::bind()
         if (m_version != MetroidPrime3 && m_version != DKCR)
             m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
 
+        for (atUint32 i = 0; i < 11; i++)
+        {
+            std::string texMtxName = QString("texMtx[%1]").arg(i).toStdString();
+            atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
+            glUniformMatrix4fv(texMtxLoc, 1, GL_FALSE, &g_texMtx[i][0][0]);
+        }
+
+        for (atUint32 i = 0; i < 21; i++)
+        {
+            std::string postMtxName = QString("postMtx[%1]").arg(i).toStdString();
+            atUint32 postMtxLoc = m_program->uniformLocation(postMtxName.c_str());
+            glUniformMatrix4fv(postMtxLoc, 1, GL_FALSE, &g_postMtx[i][0][0]);
+        }
+
         m_program->release();
     }
+
+    for (atUint32 i = 0; i < 11; i++)
+        g_texMtx[i] = glm::mat4(1);
+    for (atUint32 i = 0; i < 21; i++)
+        g_postMtx[i] = glm::mat4(1);
 
     m_program->bind();
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
+        updateAnimations();
+
         for (atUint32 i = 0; i < m_konstCount; i++)
         {
             const char* name = QString("konst[%1]").arg(i).toStdString().c_str();
@@ -361,6 +417,8 @@ bool CMaterial::bind()
             glDepthMask(GL_FALSE);
         GXSetBlendMode(m_blendSrcFactor, m_blendDstFactor);
     }
+    else
+        glBlendFunc(GL_ONE, GL_ZERO);
 
     return true;
 }
@@ -372,6 +430,8 @@ void CMaterial::release()
 
     if (!(m_materialFlags & 0x80) && (m_version != MetroidPrime3 && m_version != DKCR))
         glDepthMask(GL_TRUE);
+
+    glBlendFunc(GL_ONE, GL_ZERO);
 
     m_program->release();
 }
@@ -390,5 +450,160 @@ bool CMaterial::operator==(const CMaterial& right)
             !memcmp(m_konstColor, right.m_konstColor, sizeof(m_konstColor)) && m_blendDstFactor == right.m_blendDstFactor &&
             m_unknown2 == right.m_unknown2 && m_unkFlags == right.m_unkFlags &&
             m_tevStages == right.m_tevStages && m_texTEVIn == right.m_texTEVIn &&
-            m_texGenFlags == right.m_texGenFlags && m_animationData == right.m_animationData);
+            m_texGenFlags == right.m_texGenFlags && m_animations == right.m_animations);
+}
+
+void CMaterial::updateAnimations()
+{
+    float s = secondsMod900();
+    for (atUint32 i = 0; i < m_animations.size(); i++)
+    {
+        glm::mat4& texMtx = g_texMtx[i];
+        glm::mat4& postMtx = g_postMtx[i];
+
+        switch (m_animations[i].mode)
+        {
+            case 0:
+            case 1:
+            {
+                if ((m_animations[i].mode == 0 && !QSettings().value("mode0").toBool()) ||
+                        (m_animations[i].mode == 1 && !QSettings().value("mode1").toBool()))
+                    break;
+
+                texMtx = glm::inverse(CGLViewer::instance()->viewMatrix()) * m_modelMatrix;
+                postMtx = glm::mat4(glm::mat3x4(
+                                        0.5, 0.0, 0.0, 0.5,
+                                        0.0, 0.0, 0.5, 0.5,
+                                        0.0, 0.0, 0.0, 1.0));
+
+                if (m_animations[i].mode == 0)
+                    texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
+            }
+                break;
+            case 2:
+            {
+                if (!QSettings().value("mode2").toBool())
+                    break;
+                glm::vec2 texCoordBias;
+                texCoordBias.s = (s * m_animations[i].parms[2]) + m_animations[i].parms[0];
+                texCoordBias.t = (s * m_animations[i].parms[3]) + m_animations[i].parms[1];
+
+                texMtx = glm::mat4(1);
+                texMtx[0][3] = texCoordBias.s;
+                texMtx[1][3] = texCoordBias.t;
+                //postMtx = texMtx;
+            }
+                break;
+            case 3:
+            {
+                if (!QSettings().value("mode3").toBool())
+                    break;
+
+                float angle = (s * m_animations[i].parms[1]) + m_animations[i].parms[0];
+                float acos = cos(angle);
+                float asin = sin(angle);
+                float translateX = (1.0 - (acos - asin)) * 0.5;
+                float translateY = (1.0 - (asin + acos)) * 0.5;
+
+                texMtx = glm::mat4(glm::mat3x4(acos, -asin, 0.0, translateX,
+                                               asin, acos, 0.0, translateY,
+                                               0.0, 0.0, 1.0, 0.0));
+            }
+                break;
+            case 4:
+            case 5:
+            {
+                if (!QSettings().value("mode4And5").toBool())
+                    break;
+
+                float scale = m_animations[i].parms[0];
+                float numFrames = m_animations[i].parms[1];
+                float step = m_animations[i].parms[2];
+                float offset  = m_animations[i].parms[3];
+
+                texMtx = glm::mat4(1);
+                float value = scale * step * (offset + s);
+
+                float uvOffset = (float)(short)(float)(numFrames * fmod(value, 1.0f)) * step;
+                if (m_animations[i].mode == 4)
+                    texMtx[0][3] = uvOffset;
+                else
+                    texMtx[1][3] = uvOffset;
+            }
+                break;
+            case 6:
+            {
+                if (!QSettings().value("mode6").toBool())
+                    break;
+
+                texMtx = m_modelMatrix;
+                texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
+                postMtx = glm::mat4(glm::mat3x4(
+                                        0.5, 0.0, 0.0, m_modelMatrix[0][3] * 0.50000001,
+                        0.0, 0.0, 0.5, m_modelMatrix[1][3] * 0.50000001,
+                        0.0, 0.0, 0.0, 1.0));
+            }
+                break;
+        }
+        std::string texMtxName = QString("texMtx[%1]").arg(i).toStdString();
+        atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
+        glUniformMatrix4fv(texMtxLoc, 1, GL_FALSE, &g_texMtx[i][0][0]);
+        std::string postMtxName = QString("postMtx[%1]").arg(i).toStdString();
+        atUint32 postMtxLoc = m_program->uniformLocation(postMtxName.c_str());
+        glUniformMatrix4fv(postMtxLoc, 1, GL_FALSE, &g_postMtx[i][0][0]);
+    }
+}
+
+atUint32 CMaterial::textureMatrixIdx(atUint32 id)
+{
+    switch((ETextureMatrix)id)
+    {
+        case ETextureMatrix::TextureMatrix0:  return 0;
+        case ETextureMatrix::TextureMatrix1:  return 1;
+        case ETextureMatrix::TextureMatrix2:  return 2;
+        case ETextureMatrix::TextureMatrix3:  return 3;
+        case ETextureMatrix::TextureMatrix4:  return 4;
+        case ETextureMatrix::TextureMatrix5:  return 5;
+        case ETextureMatrix::TextureMatrix6:  return 6;
+        case ETextureMatrix::TextureMatrix7:  return 7;
+        case ETextureMatrix::TextureMatrix8:  return 8;
+        case ETextureMatrix::TextureMatrix9:  return 9;
+        case ETextureMatrix::TextureIdentity:
+        default: return 10;
+    }
+}
+
+atUint32 CMaterial::postTransformMatrixIdx(atUint32 id)
+{
+    switch((EPostTransformMatrix)id)
+    {
+        case EPostTransformMatrix::PostTransformMatrix0:  return 0;
+        case EPostTransformMatrix::PostTransformMatrix1:  return 1;
+        case EPostTransformMatrix::PostTransformMatrix2:  return 2;
+        case EPostTransformMatrix::PostTransformMatrix3:  return 3;
+        case EPostTransformMatrix::PostTransformMatrix4:  return 4;
+        case EPostTransformMatrix::PostTransformMatrix5:  return 5;
+        case EPostTransformMatrix::PostTransformMatrix6:  return 6;
+        case EPostTransformMatrix::PostTransformMatrix7:  return 7;
+        case EPostTransformMatrix::PostTransformMatrix8:  return 8;
+        case EPostTransformMatrix::PostTransformMatrix9:  return 9;
+        case EPostTransformMatrix::PostTransformMatrix10: return 10;
+        case EPostTransformMatrix::PostTransformMatrix11: return 11;
+        case EPostTransformMatrix::PostTransformMatrix12: return 12;
+        case EPostTransformMatrix::PostTransformMatrix13: return 13;
+        case EPostTransformMatrix::PostTransformMatrix14: return 14;
+        case EPostTransformMatrix::PostTransformMatrix15: return 15;
+        case EPostTransformMatrix::PostTransformMatrix16: return 16;
+        case EPostTransformMatrix::PostTransformMatrix17: return 17;
+        case EPostTransformMatrix::PostTransformMatrix18: return 18;
+        case EPostTransformMatrix::PostTransformMatrix19: return 19;
+        case EPostTransformMatrix::PostTransformIdentity:
+        default: return 20;
+    }
+}
+
+
+bool operator==(const SAnimation& left, const SAnimation& right)
+{
+    return !memcmp(&left, &right, sizeof(SAnimation));
 }

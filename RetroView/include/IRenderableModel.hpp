@@ -12,6 +12,7 @@ public:
     virtual void draw()       =0;
     virtual void drawBoundingBox() =0;
     virtual void exportToObj(const std::string&) {}
+    virtual void updateViewProjectionUniforms(const glm::mat4&, const glm::mat4&) = 0;
     virtual bool canExport() const {return false;}
     virtual void invalidate() {}
     virtual void rebuildShaders() {}

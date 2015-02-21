@@ -157,6 +157,11 @@ bool CPakFile::resourceExists(const SPakResource& resource)
     return std::find(m_resources.begin(), m_resources.end(), resource) != m_resources.end();
 }
 
+int CPakFile::version() const
+{
+    return m_version;
+}
+
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right)
 {
     return (!strncmp(left.tag, right.tag, 4) && right.id == left.id && !left.name.compare(right.name));

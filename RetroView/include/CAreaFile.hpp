@@ -26,6 +26,7 @@ public:
 
     void draw();
     void drawBoundingBox();
+    void updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj);
 
     glm::mat3x4 transformMatrix() const;
 

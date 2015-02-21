@@ -44,18 +44,18 @@ void drawWireSphere(float radius, atUint32 longs, atUint32 lats)
 // TODO: Make a Color class
 void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, const glm::vec4& outlineColor, const glm::vec3& scale)
 {
-    static float cubeCoords[8][3] =
+    static float cubeCoords[] =
     {
-        {-1.f, -1.f,  1.f},
-        {-1.f, -1.f, -1.f},
-        { 1.f, -1.f, -1.f},
-        { 1.f, -1.f,  1.f},
-        {-1.f,  1.f,  1.f},
-        {-1.f,  1.f, -1.f},
-        { 1.f,  1.f, -1.f},
-        { 1.f,  1.f,  1.f}
+        -1.f, -1.f,  1.f,
+        -1.f, -1.f, -1.f,
+         1.f, -1.f, -1.f,
+         1.f, -1.f,  1.f,
+        -1.f,  1.f,  1.f,
+        -1.f,  1.f, -1.f,
+         1.f,  1.f, -1.f,
+         1.f,  1.f,  1.f
     };
-#if 0
+
     static GLuint cubeIndices[6*4] = {
         4, 5, 1, 0,
         5, 6, 2, 1,
@@ -65,12 +65,11 @@ void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, con
         7, 6, 5, 4
     };
 
-    static GLuint bufferObjs[2] = {~0, ~0};
-    if (bufferObjs[0] == ~0)
+    static GLuint bufferObjs[2] = {0, 0};
+    if (bufferObjs[0] == 0)
     {
         glGenBuffers(2, bufferObjs);
         glBindBuffer(GL_ARRAY_BUFFER, bufferObjs[0]);
-        std::cout << sizeof(cubeCoords) << std::endl;
         glBufferData(GL_ARRAY_BUFFER, sizeof(cubeCoords), cubeCoords, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
@@ -79,74 +78,12 @@ void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, con
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, bufferObjs[0]);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
     glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
 
     glDisableVertexAttribArray(0);
-#else
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_TEXTURE_2D);
-    glPushMatrix();
-    glTranslatef(position.x, position.y, position.z);
-    glScalef(scale.x, scale.y, scale.z);
-    for (int i = 0; i < 2; i++)
-    {
-        if (i == 1)
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            glLineWidth(2.5f);
-            glColor4f(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a);
-        }
-        else
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            glLineWidth(1.f);
-            glColor4f(mainColor.r, mainColor.g, mainColor.b, mainColor.a);
-        }
-        glBegin(GL_QUADS);
-        {
-            // top
-            glVertex3fv(cubeCoords[4]);
-            glVertex3fv(cubeCoords[5]);
-            glVertex3fv(cubeCoords[1]);
-            glVertex3fv(cubeCoords[0]);
-            // front
-            glVertex3fv(cubeCoords[5]);
-            glVertex3fv(cubeCoords[6]);
-            glVertex3fv(cubeCoords[2]);
-            glVertex3fv(cubeCoords[1]);
-            // right
-            glVertex3fv(cubeCoords[6]);
-            glVertex3fv(cubeCoords[7]);
-            glVertex3fv(cubeCoords[3]);
-            glVertex3fv(cubeCoords[2]);
-            // left
-            glVertex3fv(cubeCoords[7]);
-            glVertex3fv(cubeCoords[4]);
-            glVertex3fv(cubeCoords[0]);
-            glVertex3fv(cubeCoords[3]);
-            // bottom
-            glVertex3fv(cubeCoords[0]);
-            glVertex3fv(cubeCoords[1]);
-            glVertex3fv(cubeCoords[2]);
-            glVertex3fv(cubeCoords[3]);
-            // back
-            glVertex3fv(cubeCoords[7]);
-            glVertex3fv(cubeCoords[6]);
-            glVertex3fv(cubeCoords[5]);
-            glVertex3fv(cubeCoords[4]);
-        }
-        glEnd();
-        if (i == 1)
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            glLineWidth(1.f);
-        }
-    }
-    glPopMatrix();
-    glPopAttrib();
-#endif
 }
 
 
@@ -288,6 +225,8 @@ void GXSetBlendMode(EBlendMode src, EBlendMode dst)
         case EBlendMode::InvSrcAlpha: glSrc = GL_ONE_MINUS_SRC_ALPHA; break;
         case EBlendMode::DstAlpha: glSrc = GL_DST_ALPHA; break;
         case EBlendMode::InvDstAlpha: glSrc = GL_ONE_MINUS_DST_ALPHA; break;
+        default:
+            break;
     }
 
     atUint32 glDst = GL_ONE;
@@ -295,12 +234,14 @@ void GXSetBlendMode(EBlendMode src, EBlendMode dst)
     {
         case EBlendMode::Zero: glDst = GL_ZERO; break;
         case EBlendMode::One: glDst = GL_ONE; break;
-        case EBlendMode::SrcClr: glDst = GL_SRC_COLOR; break;
-        case EBlendMode::InvSrcClr: glDst = GL_ONE_MINUS_SRC_COLOR; break;
+        case EBlendMode::DstClr: glDst = GL_SRC_COLOR; break;
+        case EBlendMode::InvDstClr: glDst = GL_ONE_MINUS_SRC_COLOR; break;
         case EBlendMode::SrcAlpha: glDst = GL_SRC_ALPHA; break;
         case EBlendMode::InvSrcAlpha: glDst = GL_ONE_MINUS_SRC_ALPHA; break;
         case EBlendMode::DstAlpha: glDst = GL_DST_ALPHA; break;
         case EBlendMode::InvDstAlpha: glDst = GL_ONE_MINUS_DST_ALPHA; break;
+        default:
+            break;
     }
     glBlendFunc(glSrc, glDst);
 }

@@ -11,6 +11,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QMAKE_CXXFLAGS += -std=c++11 -fopenmp
 QMAKE_LFLAGS += -fopenmp
 
+unix:{
+    CONFIG += link_pkgconfig
+    PKGCONFIG += collada-dom-141
+    LIBS += -lboost_system -lboost_filesystem
+}
+
 win32:LIBS += \
     -lopengl32 \
     -lglu32 \
@@ -68,7 +74,11 @@ SOURCES += \
     src/CAreaReader.cpp \
     src/CResourceLoaderThead.cpp \
     src/CTexture.cpp \
-    src/STEVStage.cpp
+    src/STEVStage.cpp \
+    src/CKeyboardManager.cpp \
+    src/CPakFileModel.cpp \
+    src/CResourceTreeItem.cpp \
+    src/CPakTreeWidget.cpp
 
 !contains(DEFINES, NO_MAIN): {
     SOURCES += src/main.cpp
@@ -100,10 +110,15 @@ HEADERS += \
     include/IResource.hpp \
     include/CResourceLoaderThead.hpp \
     include/CTexture.hpp \
-    include/STEVStage.hpp
+    include/STEVStage.hpp \
+    include/CKeyboardManager.hpp \
+    include/CPakFileModel.hpp \
+    include/CResourceTreeItem.hpp \
+    include/CPakTreeWidget.hpp
 
 FORMS += \
-    forms/MainWindow.ui
+    forms/CPakTreeWidget.ui \
+    forms/CMainWindow.ui
 
 RESOURCES += \
     resources/resources.qrc

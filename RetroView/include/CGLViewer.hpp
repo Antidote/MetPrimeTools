@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "CCamera.hpp"
+#include "CKeyboardManager.hpp"
 #include "SBoundingBox.hpp"
 
 class QListWidgetItem;
@@ -68,14 +69,11 @@ protected :
     virtual void initializeGL();
 
 protected:
-    void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
     void closeEvent(QCloseEvent *);
     void mouseMoveEvent(QMouseEvent* e);
     void mousePressEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);
     void wheelEvent(QWheelEvent* e);
-    void focusOutEvent(QFocusEvent *e);
 private:
     void updateCamera();
     float                            m_cameraSpeed;
@@ -90,7 +88,6 @@ private:
     CCamera                          m_camera;
     QTimer                           m_updateTimer;
     bool                             m_mouseEnabled;
-    QMap<Qt::Key, bool>              m_keys;
     bool                             m_isInitialized;
 };
 

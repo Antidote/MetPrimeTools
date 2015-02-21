@@ -2,12 +2,12 @@
 #define MREADECOMPRESS_HPP
 
 #include <Athena/BinaryReader.hpp>
-#include <Athena/BinaryWriter.hpp>
+#include <Athena/FileWriter.hpp>
 
 namespace RetroCommon
 {
 
-bool MREADecompress(Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out);
+bool MREADecompress(Athena::io::BinaryReader& in, Athena::io::FileWriter& out);
 
 }
 

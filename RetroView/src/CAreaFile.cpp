@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "CAreaFile.hpp"
 #include "GXCommon.hpp"
 #include "CMaterialCache.hpp"
@@ -21,7 +22,7 @@ void CAreaFile::exportToObj(const std::string& filename)
     atUint32 texOff = 1;
     for (CModelData& model : m_models)
     {
-        model.exportModel(of, vertOff, normOff, texOff);
+        model.exportModel(of, vertOff, normOff, texOff, currentMaterialSet());
     }
 }
 
@@ -72,7 +73,7 @@ void CAreaFile::draw()
     buildBBox();
     indexIBOs();
     CMaterialSet materialSet = currentMaterialSet();
-    glm::mat4 model = CGLViewer::instance()->modelMatrix();
+    glm::mat4 model = glm::inverse(glm::transpose(glm::mat4(m_transformMatrix)));
 
     // our opaques go first
     for (CModelData& m : m_models)
@@ -96,6 +97,22 @@ void CAreaFile::drawBoundingBox()
     ::drawBoundingBox(m_boundingBox);
     for (CModelData& m : m_models)
         m.drawBoundingBoxes();
+}
+
+void CAreaFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj)
+{
+    for (atUint32 materialIdx : currentMaterialSet().materials())
+    {
+        CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
+        if (!mat.bind())
+            continue;
+
+        atUint32 projectionLoc = mat.program()->uniformLocation("projection");
+        atUint32 viewLoc = mat.program()->uniformLocation("view");
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &proj[0][0]);
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+        mat.release();
+    }
 }
 
 glm::mat3x4 CAreaFile::transformMatrix() const

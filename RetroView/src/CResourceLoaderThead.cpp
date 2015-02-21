@@ -45,7 +45,6 @@ void CResourceLoaderThread::process()
         if (ret)
             emit newFile(ret, tmpFilename);
     }
-
     locker.unlock();
     emit finished();
 }

@@ -22,6 +22,7 @@ public:
 
     void draw();
     void drawBoundingBox();
+    void updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj);
 
     CMaterialSet& currentMaterialSet();
     CMaterialSet& currentMaterialSet() const;

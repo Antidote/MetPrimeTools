@@ -4,16 +4,14 @@
 //{GXSHADERINFO}
 
 // Uniforms
-uniform mat4 model;
-
-layout(binding = 0) uniform sampler2D tex0;
-layout(binding = 1) uniform sampler2D tex1;
-layout(binding = 2) uniform sampler2D tex2;
-layout(binding = 3) uniform sampler2D tex3;
-layout(binding = 4) uniform sampler2D tex4;
-layout(binding = 5) uniform sampler2D tex5;
-layout(binding = 6) uniform sampler2D tex6;
-layout(binding = 7) uniform sampler2D tex7;
+layout (binding = 0) uniform sampler2D tex0;
+layout (binding = 1) uniform sampler2D tex1;
+layout (binding = 2) uniform sampler2D tex2;
+layout (binding = 3) uniform sampler2D tex3;
+layout (binding = 4) uniform sampler2D tex4;
+layout (binding = 5) uniform sampler2D tex5;
+layout (binding = 6) uniform sampler2D tex6;
+layout (binding = 7) uniform sampler2D tex7;
 
 uniform vec4 konst[4];
 
@@ -32,6 +30,8 @@ in vec3 texCoord6;
 in vec3 texCoord7;
 
 // output
+
+
 out vec4 colorOut;
 void main() {
     vec4 tevin_a  = vec4(0, 0, 0, 1), tevin_b = tevin_a, tevin_c = tevin_a, tevin_d = tevin_a;

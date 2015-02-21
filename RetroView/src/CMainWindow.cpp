@@ -4,23 +4,35 @@
 
 #include "GL/glew.h"
 #include "CMainWindow.hpp"
-#include "ui_MainWindow.h"
+#include "ui_CMainWindow.h"
 #include "CGLViewer.hpp"
 #include "CResourceManager.hpp"
+#include "CPakTreeWidget.hpp"
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
 #include <QThread>
 #include <QShowEvent>
+#include <iostream>
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::CMainWindow)
 {
     ui->setupUi(this);
     connect(ui->glView, SIGNAL(initialized()), this, SLOT(onViewerInitialized()));
-
     CResourceManager* resourceManager = CResourceManager::instance().get();
+
+    connect(resourceManager, SIGNAL(newPak(CPakTreeWidget*)), this, SLOT(onNewPak(CPakTreeWidget*)));
+
+    installEventFilter(CKeyboardManager::instance());
+    ui->actionMode0->setChecked(QSettings().value("mode0").toBool());
+    ui->actionMode1->setChecked(QSettings().value("mode1").toBool());
+    ui->actionMode2->setChecked(QSettings().value("mode2").toBool());
+    ui->actionMode3->setChecked(QSettings().value("mode3").toBool());
+    ui->actionMode4And5->setChecked(QSettings().value("mode4And5").toBool());
+    ui->actionMode6->setChecked(QSettings().value("mode6").toBool());
+
     QString basePath = QFileDialog::getExistingDirectory(nullptr, "Specify Basepath");
 
     if (!basePath.isEmpty())
@@ -39,11 +51,46 @@ bool CMainWindow::canShow()
     return ui != nullptr;
 }
 
+bool CMainWindow::event(QEvent* e)
+{
+    switch(e->type())
+    {
+
+        case QEvent::WindowActivate:
+            ui->glView->startUpdates();
+            break;
+
+        case QEvent::WindowDeactivate:
+            ui->glView->stopUpdates();
+            break;
+        default:
+            break;
+
+    }
+    return QMainWindow::event(e);
+}
+
+void CMainWindow::onModeToggled(bool value)
+{
+    if (sender() == ui->actionMode0)
+        QSettings().setValue("mode0", value);
+    else if (sender() == ui->actionMode1)
+        QSettings().setValue("mode1", value);
+    else if (sender() == ui->actionMode2)
+        QSettings().setValue("mode2", value);
+    else if (sender() == ui->actionMode3)
+        QSettings().setValue("mode3", value);
+    else if (sender() == ui->actionMode4And5)
+        QSettings().setValue("mode4And5", value);
+    else if (sender() == ui->actionMode6)
+        QSettings().setValue("mode6", value);
+}
+
 void CMainWindow::onOpenFile()
 {
     ui->glView->stopUpdates();
 
-    QStringList files = QFileDialog::getOpenFileNames(this, "Open Model", QString(), "All Supported (*.CMDL *.MREA)");
+    QStringList files = QFileDialog::getOpenFileNames(this, "Open Model", QString(), "All Supported (*.CMDL *.MREA);;Models (*.CMDL);;Areas (*.MREA)");
 
     ui->glView->startUpdates();
 
@@ -82,6 +129,10 @@ void CMainWindow::onToggled(bool checked)
     else if (sender() == ui->transActors)
     {
         QSettings().setValue("drawTranslucent", checked);
+    }
+    else if (sender() == ui->wireframeCheckBox)
+    {
+        QSettings().setValue("wireframe", checked);
     }
     ui->glView->update();
 }
@@ -159,4 +210,10 @@ void CMainWindow::onExport()
         ui->glView->exportFile(item->data(Qt::UserRole).toString());
     }
     ui->glView->startUpdates();
+}
+
+void CMainWindow::onNewPak(CPakTreeWidget* pak)
+{
+    QString tabTitle = QFileInfo(pak->filepath()).fileName();
+    ui->tabWidget->addTab(pak, tabTitle);
 }

@@ -15,7 +15,7 @@ public:
     static IResource* loadByData(const atUint8* data, atUint64 length);
     static IResource* loadByFile(const std::string& file);
 
-    void create();
+    void bind();
 
     atUint32 textureID() const;
 private:

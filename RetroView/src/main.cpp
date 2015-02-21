@@ -8,6 +8,7 @@
 #include <QApplication>
 #include "CMainWindow.hpp"
 #include <QMessageBox>
+#include <glm/glm.hpp>
 
 int main(int argc, char *argv[])
 {

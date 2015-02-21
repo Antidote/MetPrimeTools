@@ -24,11 +24,11 @@ IResource* CTexture::loadByData(const atUint8* data, atUint64 length)
     {
         TextureReader reader(data, length);
         tex = reader.read();
-        tex->exportDDS("tmp.dds");
+        tex->exportPNG("tmp.png");
 
-        ret = new CTexture(QImage("tmp.dds"));
+        ret = new CTexture(QImage("tmp.png"));
 
-        QDir().remove("tmp.dds");
+        QDir().remove("tmp.png");
     }
     catch(...)
     {
@@ -66,7 +66,7 @@ IResource* CTexture::loadByFile(const std::string& file)
     return ret;
 }
 
-void CTexture::create()
+void CTexture::bind()
 {
     if (m_textureID == 0)
     {
@@ -80,11 +80,13 @@ void CTexture::create()
         glGenTextures(1, &m_textureID);
         glBindTexture(GL_TEXTURE_2D, m_textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_texture.width(), m_texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_texture.bits());
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_REPEAT); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT); // Linear Filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Linear Filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Linear Filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
+
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 atUint32 CTexture::textureID() const

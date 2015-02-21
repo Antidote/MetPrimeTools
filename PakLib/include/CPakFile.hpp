@@ -63,6 +63,8 @@ public:
     bool resourceExists(const atUint64& assetID);
     bool resourceExists(const SPakResource& resource);
 
+    int version() const;
+
 private:
     friend class CPakFileReader;
 

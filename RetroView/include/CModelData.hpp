@@ -5,6 +5,7 @@
 #include "CMesh.hpp"
 #include "SBoundingBox.hpp"
 
+#include <dae.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <fstream>
@@ -55,7 +56,7 @@ public:
     CModelData();
     ~CModelData();
 
-    void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff);
+    void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms);
 
     void preDraw(CMaterialSet& materialSet);
     void drawBoundingBoxes();
@@ -70,6 +71,7 @@ protected:
     friend class CAreaReader;
     friend class CModelReader;
 
+    atUint32 exportUVIdx(atUint32 texOff, VertexDescriptor desc, CMaterial& mat);
     atUint32 getIbo(atUint32 prim, atUint32 matId, atUint32 start);
     void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboID, atUint32 vertStartIndex);
     void loadIbos(CMaterialSet& ms);

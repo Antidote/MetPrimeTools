@@ -35,19 +35,16 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_mouseEnabled(false),
       m_isInitialized(false)
 {
-    grabKeyboard();
+    //grabKeyboard();
 
     QGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_updateTimer.start();
+    m_updateTimer.start(0);
 
     // Set our scene bounds
     m_sceneBounds.min = glm::vec3(-100.f);
     m_sceneBounds.max = glm::vec3( 100.f);
-
-    for (int i = Qt::Key_A; i < Qt::Key_Z; i++)
-        m_keys[(Qt::Key)i] = false;
 }
 
 CGLViewer::~CGLViewer()
@@ -55,7 +52,6 @@ CGLViewer::~CGLViewer()
     m_updateTimer.stop();
     m_renderables.clear();
     std::cout << "I'M DYING!!!" << std::endl;
-    releaseKeyboard();
 }
 
 void CGLViewer::paintGL()
@@ -64,9 +60,8 @@ void CGLViewer::paintGL()
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
 
-    //lights[2].coneDirection = m_camera.front();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glm::mat4 modelMat = modelMatrix();
@@ -75,22 +70,12 @@ void CGLViewer::paintGL()
     glm::mat4 mvp = projectionMat * viewMat * modelMat;
     glLoadMatrixf(&mvp[0][0]);
 
-    CMaterialCache::instance()->updateViewProjectionUniforms(viewMat, projectionMat);
-
-    // Cull triangles which normal is not towards the camera
-    //glEnable(GL_CULL_FACE);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glEnable(GL_PRIMITIVE_RESTART);
     glEnable(GL_COLOR_MATERIAL);
     glPrimitiveRestartIndex(0xFFFFFFFF);
     glEnable(GL_BLEND);
     glShadeModel(GL_SMOOTH);
-    //    glEnable(GL_CULL_FACE);
-    if (QSettings().value("wireframe").toBool())
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    else
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 
     if (QSettings().value("drawTextures").toBool())
         glEnable(GL_FRAGMENT_PROGRAM_ARB);
@@ -154,9 +139,19 @@ void CGLViewer::paintGL()
 
 
     if (m_currentRenderable)
-        m_currentRenderable->draw();
+    {
+        m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
 
-    drawBoundingBox(m_sceneBounds);
+        if (QSettings().value("drawBoundingBox").toBool())
+            m_currentRenderable->drawBoundingBox();
+
+        if (QSettings().value("wireframe").toBool())
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        m_currentRenderable->draw();
+    }
+
 }
 
 void CGLViewer::resizeGL(int w, int h)
@@ -174,6 +169,8 @@ void CGLViewer::initializeGL()
         m_isInitialized = true;
         glewExperimental = true;
         glewInit();
+        CMaterialCache::instance()->initialize();
+
 
         qglClearColor(QColor(128, 128, 128).darker(300));
         emit initialized();
@@ -226,27 +223,6 @@ void CGLViewer::wheelEvent(QWheelEvent* e)
     QGLWidget::wheelEvent(e);
 }
 
-void CGLViewer::focusOutEvent(QFocusEvent* e)
-{
-    for (int i = Qt::Key_A; i < Qt::Key_Z; i++)
-        m_keys[(Qt::Key)i] = false;
-    QGLWidget::focusOutEvent(e);
-}
-
-void CGLViewer::keyPressEvent(QKeyEvent* e)
-{
-    m_keys[(Qt::Key)e->key()] = true;
-
-    QGLWidget::keyPressEvent(e);
-}
-
-void CGLViewer::keyReleaseEvent(QKeyEvent* e)
-{
-    m_keys[(Qt::Key)e->key()] = false;
-
-    QGLWidget::keyReleaseEvent(e);
-}
-
 bool CGLViewer::hasFile(const QString& file)
 {
     return m_renderables.keys().contains(file);
@@ -254,51 +230,31 @@ bool CGLViewer::hasFile(const QString& file)
 
 void CGLViewer::updateCamera()
 {
-    if (m_keys[Qt::Key_W])
+    CKeyboardManager* km = CKeyboardManager::instance();
+    if (km->isKeyPressed(Qt::Key_W))
         m_camera.processKeyboard(CCamera::FORWARD, 1.0f);
-    if (m_keys[Qt::Key_S])
+    if (km->isKeyPressed(Qt::Key_S))
         m_camera.processKeyboard(CCamera::BACKWARD, 1.0f);
-    if (m_keys[Qt::Key_A])
+    if (km->isKeyPressed(Qt::Key_A))
         m_camera.processKeyboard(CCamera::LEFT, 1.0f);
-    if (m_keys[Qt::Key_D])
+    if (km->isKeyPressed(Qt::Key_D))
         m_camera.processKeyboard(CCamera::RIGHT, 1.0f);
 }
 
 void CGLViewer::openModels(QStringList files)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
-    while (!files.isEmpty())
-    {
-        QString file = files.takeFirst();
-
-        if (QFileInfo(file).isDir())
-            continue;
-        if (file.isEmpty())
-        {
-            continue;
-        }
-
-        QString tmpFilename = file;
-#ifdef Q_OS_WIN32
-        tmpFilename = tmpFilename.toLower();
-#endif
-        if (CGLViewer::instance()->hasFile(tmpFilename))
-            continue;
-
-        IResource* ret = CResourceManager::instance().get()->loadResource(tmpFilename.toStdString());
-        if (ret)
-        {
-            IRenderableModel* rend = dynamic_cast<IRenderableModel*>(ret);
-            if (rend)
-            {
-                m_renderables[tmpFilename] = rend;
-            }
-        }
-
-        emit fileAdded(file);
-    }
-
-    qApp->restoreOverrideCursor();
+    QThread* thread = new QThread;
+    CResourceLoaderThread* worker = new CResourceLoaderThread(files);
+    worker->moveToThread(thread);
+    connect(worker, SIGNAL(error(QString)), this, SLOT(onError(QString)));
+    connect(worker, SIGNAL(newFile(IResource*,QString)), this, SLOT(onNewFile(IResource*,QString)));
+    connect(worker, SIGNAL(finished()), this, SLOT(onFinished()));
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    thread->start();
 }
 
 void CGLViewer::addRenderable(const QString& path, IRenderableModel* renderable)

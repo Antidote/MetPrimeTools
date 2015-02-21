@@ -1,5 +1,7 @@
 #include <GL/glew.h>
 #include "CMaterialCache.hpp"
+#include "CResourceLoaderThead.hpp"
+#include <iostream>
 #include <QCryptographicHash>
 #include <QDataStream>
 #include <GL/gl.h>
@@ -22,17 +24,9 @@ CMaterialCache::~CMaterialCache()
 {
 }
 
-void CMaterialCache::updateViewProjectionUniforms(glm::mat4 view, glm::mat4 proj)
+void CMaterialCache::initialize()
 {
-    for (CMaterial& mat : m_cachedMaterials)
-    {
-        mat.bind();
-        atUint32 projectionLoc = mat.program()->uniformLocation("projection");
-        atUint32 viewLoc = mat.program()->uniformLocation("view");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &proj[0][0]);
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        mat.release();
-    }
+    std::cout << "Material cache initialized" << std::endl;
 }
 
 std::shared_ptr<CMaterialCache> CMaterialCache::instance()
@@ -76,12 +70,17 @@ QOpenGLShader* CMaterialCache::shaderFromSource(const QString& source, QOpenGLSh
         if (m_vertexShaders.find(hash) != m_vertexShaders.end())
             return m_vertexShaders[hash];
 
-        qDebug() << "Building vtx shader for hash " << hex << hash;
+        std::cout << "Building vtx shader for hash " << std::hex << hash << std::endl;
         QOpenGLShader* sh = new QOpenGLShader(type, this);
         if (sh->compileSourceCode(source))
         {
             m_vertexShaders[hash] = sh;
             return sh;
+        }
+        else
+        {
+            std::cout << sh->log().toStdString() << std::endl;
+            std::cout << sh->sourceCode().toStdString() << std::endl;
         }
         delete sh;
     }
@@ -90,13 +89,18 @@ QOpenGLShader* CMaterialCache::shaderFromSource(const QString& source, QOpenGLSh
         if (m_fragmentShaders.find(hash) != m_fragmentShaders.end())
             return m_fragmentShaders[hash];
 
-        qDebug() << "Building px shader for hash " << hex << hash;
+        std::cout << "Building px shader for hash " << std::hex << hash << std::endl;
         QOpenGLShader* sh = new QOpenGLShader(type, this);
         if (sh->compileSourceCode(source))
         {
             m_fragmentShaders[hash] = sh;
             return sh;
         }
+        else
+        {
+            std::cout << sh->log().toStdString() << std::endl;
+        }
+
         delete sh;
     }
 
