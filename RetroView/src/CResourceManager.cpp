@@ -36,6 +36,36 @@ CResourceManager::~CResourceManager()
     std::cout << "ResourceManager destroyed" << std::endl;
 }
 
+void CResourceManager::loadPak(std::string filepath)
+{
+
+    std::vector<CPakFile*>::iterator iter = std::find_if(m_pakFiles.begin(), m_pakFiles.end(),
+                                                            [&filepath](const CPakFile* r)->bool{return r->filename() == filepath; });
+
+    if (iter != m_pakFiles.end())
+        return;
+
+    CPakFile* pak = nullptr;
+    try
+    {
+        CPakFileReader reader(filepath);
+        pak = reader.read();
+        m_pakFiles.push_back(pak);
+        CPakTreeWidget* widget = new CPakTreeWidget(pak);
+
+        m_pakTreeWidgets.push_back(widget);
+
+        emit newPak(widget);
+
+        std::cout << " loaded" << std::endl;
+    }
+    catch(...)
+    {
+        delete pak;
+        std::cout << " failed to load" << std::endl;
+    }
+}
+
 void CResourceManager::initialize(const std::string& baseDirectory)
 {
     m_baseDirectory = baseDirectory;
@@ -61,25 +91,7 @@ void CResourceManager::initialize(const std::string& baseDirectory)
                 if (!ext.compare("pak"))
                 {
                     std::cout << "Found pak " << filename << " ...";
-                    CPakFile* pak = nullptr;
-                    try
-                    {
-                        CPakFileReader reader(filepath);
-                        pak = reader.read();
-                        m_pakFiles.push_back(pak);
-                        CPakTreeWidget* widget = new CPakTreeWidget(pak);
-
-                        m_pakTreeWidgets.push_back(widget);
-
-                        emit newPak(widget);
-
-                        std::cout << " loaded" << std::endl;
-                    }
-                    catch(...)
-                    {
-                        delete pak;
-                        std::cout << " failed to load" << std::endl;
-                    }
+                    loadPak(filepath);
                 }
             }
         }
@@ -150,12 +162,12 @@ std::vector<CPakTreeWidget*> CResourceManager::pakWidgets() const
 
 IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
 {
-    std::string tag = std::string((const char*)res.tag, 4);
+    std::string tag = res.tag.toString();
     Athena::utility::tolower(tag);
     if (m_loaders.find(tag) == m_loaders.end())
         return nullptr;
 
-    atUint8* data = pak->loadData(res.id, std::string((const char*)res.tag, 4));
+    atUint8* data = pak->loadData(res.id, res.tag.toString());
     if (data == nullptr)
         return nullptr;
 

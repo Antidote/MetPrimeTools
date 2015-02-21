@@ -217,3 +217,19 @@ void CMainWindow::onNewPak(CPakTreeWidget* pak)
     QString tabTitle = QFileInfo(pak->filepath()).fileName();
     ui->tabWidget->addTab(pak, tabTitle);
 }
+
+void CMainWindow::onLoadPak()
+{
+    CResourceManager* resourceManager = CResourceManager::instance().get();
+    ui->glView->stopUpdates();
+
+    QStringList files = QFileDialog::getOpenFileNames(this, "Load Pak(s)", QString(), "PAK Files (*.pak *.Pak)");
+
+    ui->glView->startUpdates();
+
+    if (files.count() == 0)
+        return;
+
+    foreach(QString file, files)
+        resourceManager->loadPak(file.toStdString());
+}

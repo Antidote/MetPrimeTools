@@ -33,7 +33,12 @@ atUint8* CPakFile::loadData(atUint64 assetID, const std::string& type)
 
     SPakResource resource = *iter;
 
-    if (!type.empty() && strncasecmp(resource.tag, type.c_str(), 4) != 0)
+    std::string lowTag = resource.tag.toString();
+    std::string lowType = type;
+    Athena::utility::tolower(lowTag);
+    Athena::utility::tolower(lowType);
+
+    if (!type.empty() && lowTag.compare(lowType) != 0)
         return nullptr;
 
     atUint8* data = nullptr;
@@ -56,9 +61,13 @@ atUint8* CPakFile::loadData(atUint64 assetID, const std::string& type)
 std::vector<SPakResource> CPakFile::resourcesByType(const std::string& type)
 {
     std::vector<SPakResource> ret;
+    std::string lowType = type;
+    Athena::utility::tolower(lowType);
     for (SPakResource& res : m_resources)
     {
-        if (!strncasecmp(res.tag, type.c_str(), 4))
+        std::string lowTag = res.tag.toString();
+        Athena::utility::tolower(lowTag);
+        if (!lowTag.compare(lowType))
             ret.push_back(res);
     }
 
@@ -96,16 +105,16 @@ void CPakFile::dumpPak(const std::string& path, bool decompress)
         if (decompress)
         {
             if(m_version == EPakVersion::MetroidPrime1_2)
-                outName = Athena::utility::sprintf("%.8" PRIX64 ".%s", resource.id, std::string(resource.tag, 4).c_str());
+                outName = Athena::utility::sprintf("%.8" PRIX64 ".%s", resource.id, resource.tag.toString().c_str());
             else
-                outName = Athena::utility::sprintf("%.16" PRIX64 ".%s", resource.id, std::string(resource.tag, 4).c_str());
+                outName = Athena::utility::sprintf("%.16" PRIX64 ".%s", resource.id, resource.tag.toString().c_str());
         }
         else
         {
             if(m_version == EPakVersion::MetroidPrime1_2)
-                outName = Athena::utility::sprintf("%i_%.8" PRIX64 ".%s", resource.compressed, resource.id, std::string(resource.tag, 4).c_str());
+                outName = Athena::utility::sprintf("%i_%.8" PRIX64 ".%s", resource.compressed, resource.id, resource.tag.toString().c_str());
             else
-                outName = Athena::utility::sprintf("%i_%.16" PRIX64 ".%s", resource.compressed, resource.id, std::string(resource.tag, 4).c_str());
+                outName = Athena::utility::sprintf("%i_%.16" PRIX64 ".%s", resource.compressed, resource.id, resource.tag.toString().c_str());
         }
 
         if (decompress && resource.compressed)
@@ -125,7 +134,7 @@ void CPakFile::dumpPak(const std::string& path, bool decompress)
         writer.writeUBytes(data, len);
         writer.save();
 
-        if (!strncmp(resource.tag, "MREA", 4))
+        if (!resource.tag.toString().compare("MREA"))
         {
             Athena::io::BinaryReader  in(data, len);
             Athena::io::BinaryWriter out(outPath);
@@ -164,7 +173,7 @@ int CPakFile::version() const
 
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right)
 {
-    return (!strncmp(left.tag, right.tag, 4) && right.id == left.id && !left.name.compare(right.name));
+    return (left.tag == right.tag && right.id == left.id && !left.name.compare(right.name));
 
 }
 
@@ -172,5 +181,5 @@ bool operator ==(const SPakResource& left, const SPakResource& right)
 {
     // We only check up to the data size, since resources can be stored multiple times
     // Eventually we should add a CRC and check that as well....
-    return (left.compressed == right.compressed && !strncmp(left.tag, right.tag, 4) && right.id == left.id && left.size == right.size);
+    return (left.compressed == right.compressed && left.tag == right.tag && right.id == left.id && left.size == right.size);
 }

@@ -8,10 +8,12 @@
 #include <memory.h>
 #include <cstring>
 
+#include "CFourCC.hpp"
+
 struct SPakResource
 {
     atUint32 compressed;
-    char     tag[4];
+    CFourCC  tag;
     atUint64 id;
     atUint32 size;
     atUint32 offset;
@@ -19,7 +21,7 @@ struct SPakResource
 
 struct SPakNamedResource
 {
-    char        tag[4];
+    CFourCC     tag;
     atUint64    id;
     std::string name;
 };

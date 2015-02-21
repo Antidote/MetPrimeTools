@@ -2,6 +2,7 @@
 #define CPAKTREEWIDGET_HPP
 
 #include <QWidget>
+#include <QModelIndex>
 
 namespace Ui {
 class CPakTreeWidget;
@@ -21,6 +22,8 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private slots:
+    void onItemClicked(QModelIndex idx);
 private:
     Ui::CPakTreeWidget *ui;
     CPakFileModel* m_model;

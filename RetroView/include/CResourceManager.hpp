@@ -52,6 +52,8 @@ public:
 
     std::vector<CPakTreeWidget*> pakWidgets() const;
 
+    void loadPak(std::string filepath);
+
 signals:
     void newPak(CPakTreeWidget*);
 protected:

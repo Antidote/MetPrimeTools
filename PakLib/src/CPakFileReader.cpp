@@ -89,9 +89,7 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
         while ((namedResourceCount--) > 0)
         {
             SPakNamedResource res;
-            atUint8* tag = base::readUBytes(4);
-            memcpy(res.tag, tag, 4);
-            delete[] tag;
+            res.tag = CFourCC(*this);
             atUint64 id = base::readUint32();
             atUint32 nameLength = base::readUint32();
             if (nameLength > 1024) // While the engine doesn't cap it to 1024, it's a reasonable to assume nobody will be using names this long
@@ -115,12 +113,8 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
         {
             SPakNamedResource name;
             name.name = base::readString();
-            atUint8* tag = base::readUBytes(4);
-            memcpy(name.tag, tag, 4);
+            name.tag = CFourCC(*this);
             name.id = base::readUint64();
-
-            delete[] tag;
-
             ret->m_namedResources.push_back(name);
         }
     }
@@ -155,7 +149,7 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
         for (atUint32 i = 0; i < resourceCount; i++)
         {
             ret->m_resources[i].compressed = Athena::utility::BigUint32(tmpResources[i].compressed);
-            memcpy(ret->m_resources[i].tag, tmpResources[i].tag, 4);
+            ret->m_resources[i].tag        = tmpResources[i].tag;
             ret->m_resources[i].id         = Athena::utility::BigUint32(tmpResources[i].id);
             ret->m_resources[i].size       = Athena::utility::BigUint32(tmpResources[i].size);
             ret->m_resources[i].offset     = Athena::utility::BigUint32(tmpResources[i].offset);

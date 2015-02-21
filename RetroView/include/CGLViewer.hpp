@@ -39,6 +39,7 @@ public:
     glm::mat4 viewMatrix();
 
     IRenderableModel* renderable(const atUint64 assetId);
+    void setCurrent(IRenderableModel* renderable);
 
     // Returns true if the path alreadys exists
     // Assumes the filepath is already properly formatted (lowercase on windows)

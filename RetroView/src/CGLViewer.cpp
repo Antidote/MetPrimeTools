@@ -289,6 +289,11 @@ glm::mat4 CGLViewer::viewMatrix()
     return m_camera.viewMatrix();
 }
 
+void CGLViewer::setCurrent(IRenderableModel* renderable)
+{
+    m_currentRenderable = renderable;
+}
+
 void CGLViewer::stopUpdates()
 {
     m_updateTimer.stop();

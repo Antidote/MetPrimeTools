@@ -38,6 +38,7 @@ private slots:
     void onCloseAll();
     void onExport();
     void onNewPak(CPakTreeWidget* pak);
+    void onLoadPak();
 private:
     Ui::CMainWindow *ui;
     QStringList    m_filters;

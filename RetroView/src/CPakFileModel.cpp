@@ -116,7 +116,7 @@ void CPakFileModel::setupModelData()
         int idLen = ((m_pakFile->version() == EPakVersion::MetroidPrime1_2) ? 8 : 16);
         QList<QVariant> tmpData;
         tmpData << QString("%1").arg(res.id, idLen, 16, QChar('0'));
-        QString parentNodeTag = QString::fromLatin1((const char*)res.tag, 4);
+        QString parentNodeTag = QString::fromStdString(res.tag.toString());
         if (parents[parentNodeTag] == nullptr)
         {
             QList<QVariant> nodeTag;
