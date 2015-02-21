@@ -16,7 +16,6 @@ public:
     virtual ~CModelReader();
 
     CModelFile* read();
-    static IResource* loadByFile(const std::string& filename);
     static IResource* loadByData(const atUint8* data, atUint64 length);
 
 private:

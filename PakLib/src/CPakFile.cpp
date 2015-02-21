@@ -7,6 +7,11 @@
 #include <cinttypes>
 #include <string.h>
 
+bool offsetGreater(const SPakResource& left, const SPakResource& right)
+{
+    return (left.offset < right.offset);
+}
+
 CPakFile::CPakFile(const std::string& filename, atUint32 version)
     : m_filename(filename),
       m_version(version),
@@ -171,6 +176,13 @@ int CPakFile::version() const
     return m_version;
 }
 
+void CPakFile::removeDuplicates()
+{
+    std::sort(m_resources.begin(), m_resources.end());
+    m_resources.erase(std::unique(m_resources.begin(), m_resources.end()), m_resources.end());
+    std::sort(m_resources.begin(), m_resources.end(), offsetGreater);
+}
+
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right)
 {
     return (left.tag == right.tag && right.id == left.id && !left.name.compare(right.name));
@@ -182,4 +194,9 @@ bool operator ==(const SPakResource& left, const SPakResource& right)
     // We only check up to the data size, since resources can be stored multiple times
     // Eventually we should add a CRC and check that as well....
     return (left.compressed == right.compressed && left.tag == right.tag && right.id == left.id && left.size == right.size);
+}
+
+bool operator <(const SPakResource& left, const SPakResource& right)
+{
+    return (left.id < right.id);
 }

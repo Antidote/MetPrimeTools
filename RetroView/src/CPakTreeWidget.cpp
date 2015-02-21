@@ -14,7 +14,8 @@ CPakTreeWidget::CPakTreeWidget(CPakFile* pak, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->treeView->setModel(m_model);
-    connect(ui->treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
+    QItemSelectionModel* selectionModel = ui->treeView->selectionModel();
+    connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onSelectionChanged(QItemSelection,QItemSelection)));
 }
 
 CPakTreeWidget::~CPakTreeWidget()
@@ -43,15 +44,20 @@ void CPakTreeWidget::onItemClicked(QModelIndex idx)
 {
     bool ok = false;
     QString text = m_model->data(idx, Qt::DisplayRole).toString();
-    std::cout << text.toStdString() << std::endl;
     text = "0x" + text.toUpper();
     quint64 id = text.toULongLong(&ok, 16);
 
     if (ok)
     {
-        std::cout << std::hex << id << std::dec << std::endl;
         IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResource(id));
         if (renderable)
             CGLViewer::instance()->setCurrent(renderable);
     }
+}
+
+void CPakTreeWidget::onSelectionChanged(QItemSelection, QItemSelection)
+{
+    QModelIndex idx = ui->treeView->selectionModel()->selectedIndexes().first();
+
+    onItemClicked(idx);
 }

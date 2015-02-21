@@ -24,6 +24,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     CResourceManager* resourceManager = CResourceManager::instance().get();
 
     connect(resourceManager, SIGNAL(newPak(CPakTreeWidget*)), this, SLOT(onNewPak(CPakTreeWidget*)));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabChanged()));
 
     installEventFilter(CKeyboardManager::instance());
     ui->actionMode0->setChecked(QSettings().value("mode0").toBool());
@@ -84,20 +85,6 @@ void CMainWindow::onModeToggled(bool value)
         QSettings().setValue("mode4And5", value);
     else if (sender() == ui->actionMode6)
         QSettings().setValue("mode6", value);
-}
-
-void CMainWindow::onOpenFile()
-{
-    ui->glView->stopUpdates();
-
-    QStringList files = QFileDialog::getOpenFileNames(this, "Open Model", QString(), "All Supported (*.CMDL *.MREA);;Models (*.CMDL);;Areas (*.MREA)");
-
-    ui->glView->startUpdates();
-
-    if (files.count() == 0)
-        return;
-
-    ui->glView->openModels(files);
 }
 
 void CMainWindow::onToggled(bool checked)
@@ -161,54 +148,14 @@ void CMainWindow::onViewerInitialized()
     connect(ui->enableLightingCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
     connect(ui->wireframeCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
     connect(ui->transActors, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->glView, SIGNAL(fileAdded(QString)), this, SLOT(onFileAdded(QString)));
-    connect(ui->listWidget, SIGNAL(itemSelectionChanged()), ui->glView, SLOT(onItemSelectionChanged()));
-    ui->listWidget->addAction(ui->actionClose);
-    ui->listWidget->addAction(ui->actionExport);
-    ui->listWidget->setContextMenuPolicy(Qt::ActionsContextMenu);
     connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(resetCamera()));
     connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(update()));
-    connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(onCloseFile()));
-    connect(ui->actionCloseAll, SIGNAL(triggered()), this, SLOT(onCloseAll()));
-}
-
-void CMainWindow::onFileAdded(QString file)
-{
-    QListWidgetItem* item = new QListWidgetItem(QFileInfo(file).fileName());
-    item->setData(Qt::UserRole, file);
-    ui->listWidget->addItem(item);
-    if (ui->listWidget->selectedItems().count() == 0 )
-        ui->listWidget->setCurrentItem(item);
-}
-
-void CMainWindow::onCloseFile()
-{
-    foreach (QListWidgetItem* item, ui->listWidget->selectedItems())
-    {
-        ui->glView->closeFile(item->data(Qt::UserRole).toString());
-        delete item;
-        item = NULL;
-    }
-}
-
-void CMainWindow::onCloseAll()
-{
-    QList<QListWidgetItem*> items = ui->listWidget->findItems("*", Qt::MatchWrap | Qt::MatchWildcard);
-    foreach (QListWidgetItem* item, items)
-    {
-        ui->glView->closeFile(item->data(Qt::UserRole).toString());
-        delete item;
-        item = NULL;
-    }
 }
 
 void CMainWindow::onExport()
 {
     ui->glView->stopUpdates();
-    foreach (QListWidgetItem* item, ui->listWidget->selectedItems())
-    {
-        ui->glView->exportFile(item->data(Qt::UserRole).toString());
-    }
+    ui->glView->exportFile();
     ui->glView->startUpdates();
 }
 
@@ -232,4 +179,10 @@ void CMainWindow::onLoadPak()
 
     foreach(QString file, files)
         resourceManager->loadPak(file.toStdString());
+}
+
+void CMainWindow::onTabChanged()
+{
+    CGLViewer::instance()->setCurrent(nullptr);
+    CResourceManager::instance()->clear();
 }

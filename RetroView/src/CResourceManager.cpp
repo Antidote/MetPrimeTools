@@ -50,6 +50,7 @@ void CResourceManager::loadPak(std::string filepath)
     {
         CPakFileReader reader(filepath);
         pak = reader.read();
+        pak->removeDuplicates();
         m_pakFiles.push_back(pak);
         CPakTreeWidget* widget = new CPakTreeWidget(pak);
 
@@ -64,6 +65,13 @@ void CResourceManager::loadPak(std::string filepath)
         delete pak;
         std::cout << " failed to load" << std::endl;
     }
+}
+
+void CResourceManager::clear()
+{
+    for (std::pair<atUint64, IResource*> res : m_cachedResources)
+        delete res.second;
+    m_cachedResources.clear();
 }
 
 void CResourceManager::initialize(const std::string& baseDirectory)
@@ -107,46 +115,29 @@ IResource* CResourceManager::loadResource(const atUint64& assetID, const std::st
 
     for (CPakFile* pak : m_pakFiles)
     {
-        std::vector<SPakResource> pakResources;
-        if (!type.empty())
-            pakResources = pak->resourcesByType(type);
-        else
-            pakResources = pak->resources();
-
-        std::vector<SPakResource>::iterator iter = std::find_if(pakResources.begin(), pakResources.end(),
-                                                                [&assetID](const SPakResource& r)->bool{return r.id == assetID; });
-        if (iter != pakResources.end())
-            return attemptLoad(*iter, pak);
+        IResource* ret = loadResourceFromPak(pak, assetID, type);
+        if (ret)
+            return ret;
     }
 
-    return attemptLoadFromFile(assetID, type);
+    return nullptr;
 }
 
-IResource* CResourceManager::loadResource(const std::string& filepath)
+IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const atUint64& assetID, const std::string& type)
 {
-    IResource* ret = nullptr;
+    std::vector<SPakResource> pakResources;
+    if (!type.empty())
+        pakResources = pak->resourcesByType(type);
+    else
+        pakResources = pak->resources();
 
-    try
-    {
-        std::string tag = filepath.substr(filepath.rfind(".") + 1, filepath.length());
-        Athena::utility::tolower(tag);
-        if (m_loaders.find(tag) == m_loaders.end())
-            return nullptr;
+    std::vector<SPakResource>::iterator iter = std::find_if(pakResources.begin(), pakResources.end(),
+                                                            [&assetID](const SPakResource& r)->bool{return r.id == assetID; });
+    if (iter != pakResources.end())
+        return attemptLoad(*iter, pak);
 
-        ret = m_loaders[tag].byFile(filepath);
-        ret->m_assetID = assetIdFromPath(filepath);
-        m_cachedResources[ret->assetId()] = ret;
-    }
-    catch(const Athena::error::Exception& e)
-    {
-        std::cout << e.message() << std::endl;
-        delete ret;
-        ret = nullptr;
-    }
-
-    return ret;
+    return nullptr;
 }
-
 
 std::shared_ptr<CResourceManager> CResourceManager::instance()
 {
@@ -188,73 +179,7 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
     return ret;
 }
 
-IResource* CResourceManager::attemptLoadFromFile(atUint64 assetId, const std::string& type)
-{
-    for (std::pair<std::string, ResourceLoaderDesc> desc : m_loaders)
-    {
-        if (!type.empty())
-        {
-            std::string tmp = type;
-            Athena::utility::tolower(tmp);
-            if (tmp.compare(desc.first) != 0)
-                continue;
-        }
-
-        QString tag = QString::fromStdString(desc.first);
-        for (atUint32 attempt = 0; attempt < 8; attempt++)
-        {
-            QString filepath;
-            switch(attempt)
-            {
-                case 0:
-                    filepath = QString("%1.%2").arg(assetId, 8, 16, QChar('0')).arg(tag);
-                    break;
-                case 1:
-                    filepath = QString("%1.%2").arg(assetId, 8, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-                case 2:
-                    filepath = QString("0_%1.%2").arg(assetId, 8, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-                case 3:
-                    filepath = QString("1_%1.%2").arg(assetId, 8, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-                case 4:
-                    filepath = QString("%1.%2").arg(assetId, 16, 16, QChar('0')).arg(tag);
-                    break;
-                case 5:
-                    filepath = QString("%1.%2").arg(assetId, 16, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-                case 6:
-                    filepath = QString("0_%1.%2").arg(assetId, 16, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-                case 7:
-                    filepath = QString("1_%1.%2").arg(assetId, 16, 16, QChar('0')).arg(tag).toUpper();
-                    break;
-            }
-
-            IResource* ret = nullptr;
-            try
-            {
-                ret = desc.second.byFile(m_baseDirectory + "/" + filepath.toStdString());
-
-                if (ret)
-                {
-                    m_cachedResources[assetId] = ret;
-                    return ret;
-                }
-            }
-            catch(const Athena::error::Exception& e)
-            {
-                delete ret;
-                ret = nullptr;
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-void CResourceManager::registerLoader(std::string tag, ResourceFileLoaderCallback byFile, ResourceDataLoaderCallback byData)
+void CResourceManager::registerLoader(std::string tag, ResourceDataLoaderCallback byData)
 {
     if (m_loaders.find(tag) != m_loaders.end())
     {
@@ -266,14 +191,13 @@ void CResourceManager::registerLoader(std::string tag, ResourceFileLoaderCallbac
     Athena::utility::tolower(tag);
     ResourceLoaderDesc desc;
     tag = tag;
-    desc.byFile = byFile;
     desc.byData = byData;
     m_loaders[tag] = desc;
 }
 
-SResourceLoaderRegistrator::SResourceLoaderRegistrator(std::string tag, ResourceFileLoaderCallback byFile, ResourceDataLoaderCallback byData)
+SResourceLoaderRegistrator::SResourceLoaderRegistrator(std::string tag, ResourceDataLoaderCallback byData)
 {
-    CResourceManager::instance().get()->registerLoader(tag, byFile, byData);
+    CResourceManager::instance().get()->registerLoader(tag, byData);
 }
 
 

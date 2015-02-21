@@ -80,7 +80,10 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 {
                     mat.m_konstCount = base::readUint32() % 4;
                     for (atUint32 i = 0; i < mat.m_konstCount; i++)
+                    {
                         mat.m_konstColor[i] = base::readUint32();
+                        Athena::utility::BigUint32(mat.m_konstColor[i]);
+                    }
                 }
 
                 mat.m_blendDstFactor = (EBlendMode)base::readUint16();

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QItemSelection>
 
 namespace Ui {
 class CPakTreeWidget;
@@ -24,6 +25,7 @@ protected:
 
 private slots:
     void onItemClicked(QModelIndex idx);
+    void onSelectionChanged(QItemSelection, QItemSelection);
 private:
     Ui::CPakTreeWidget *ui;
     CPakFileModel* m_model;

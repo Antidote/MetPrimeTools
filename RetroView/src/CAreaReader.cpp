@@ -446,4 +446,4 @@ void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectio
     }
 }
 
-REGISTER_RESOURCE_LOADER(CAreaReader, "mrea", loadByFile, loadByData);
+REGISTER_RESOURCE_LOADER(CAreaReader, "mrea", loadByData);

@@ -94,4 +94,4 @@ atUint32 CTexture::textureID() const
     return m_textureID;
 }
 
-REGISTER_RESOURCE_LOADER(CTexture, "txtr", loadByFile, loadByData);
+REGISTER_RESOURCE_LOADER(CTexture, "txtr", loadByData);

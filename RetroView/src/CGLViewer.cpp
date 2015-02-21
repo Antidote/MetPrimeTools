@@ -22,7 +22,6 @@
 #include "CGLViewer.hpp"
 #include "IRenderableModel.hpp"
 #include "GXCommon.hpp"
-#include "CResourceLoaderThead.hpp"
 
 //TODO: Remove this
 #include "CAreaFile.hpp"
@@ -35,8 +34,6 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_mouseEnabled(false),
       m_isInitialized(false)
 {
-    //grabKeyboard();
-
     QGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -50,7 +47,6 @@ CGLViewer::CGLViewer(QWidget* parent)
 CGLViewer::~CGLViewer()
 {
     m_updateTimer.stop();
-    m_renderables.clear();
     std::cout << "I'M DYING!!!" << std::endl;
 }
 
@@ -223,11 +219,6 @@ void CGLViewer::wheelEvent(QWheelEvent* e)
     QGLWidget::wheelEvent(e);
 }
 
-bool CGLViewer::hasFile(const QString& file)
-{
-    return m_renderables.keys().contains(file);
-}
-
 void CGLViewer::updateCamera()
 {
     CKeyboardManager* km = CKeyboardManager::instance();
@@ -239,39 +230,6 @@ void CGLViewer::updateCamera()
         m_camera.processKeyboard(CCamera::LEFT, 1.0f);
     if (km->isKeyPressed(Qt::Key_D))
         m_camera.processKeyboard(CCamera::RIGHT, 1.0f);
-}
-
-void CGLViewer::openModels(QStringList files)
-{
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    QThread* thread = new QThread;
-    CResourceLoaderThread* worker = new CResourceLoaderThread(files);
-    worker->moveToThread(thread);
-    connect(worker, SIGNAL(error(QString)), this, SLOT(onError(QString)));
-    connect(worker, SIGNAL(newFile(IResource*,QString)), this, SLOT(onNewFile(IResource*,QString)));
-    connect(worker, SIGNAL(finished()), this, SLOT(onFinished()));
-    connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    thread->start();
-}
-
-void CGLViewer::addRenderable(const QString& path, IRenderableModel* renderable)
-{
-    QString tmpFilename = path;
-#ifdef Q_OS_WIN32
-    tmpFilename = path.toLower();
-#endif
-    if (m_renderables.contains(tmpFilename))
-        return;
-
-    m_renderables[tmpFilename] = renderable;
-}
-
-void CGLViewer::removeRenderable(IRenderableModel* renderable)
-{
-    m_renderables.remove(m_renderables.key(renderable));
 }
 
 glm::mat4 CGLViewer::projectionMatrix()
@@ -304,22 +262,18 @@ void CGLViewer::startUpdates()
     m_updateTimer.start();
 }
 
-void CGLViewer::exportFile(const QString& file)
+void CGLViewer::exportFile()
 {
-    QString tmpFilename = file;
-#ifdef Q_OS_WIN32
-    tmpFilename = file.toLower();
-#endif
-    if (m_renderables.contains(tmpFilename) && m_renderables[tmpFilename]->canExport())
-    {
-        QString exportPath = QFileDialog::getSaveFileName(this, "Export Model...", QString(), "Wavefron Obj *.obj (*.obj)");
-        if (!exportPath.isEmpty())
-        {
-            if (!exportPath.contains(".obj"))
-                exportPath += ".obj";
+    if (!m_currentRenderable)
+        return;
 
-            m_renderables[tmpFilename]->exportToObj(exportPath.toStdString());
-        }
+    QString exportPath = QFileDialog::getSaveFileName(this, "Export Model...", QString(), "Wavefron Obj *.obj (*.obj)");
+    if (!exportPath.isEmpty())
+    {
+        if (!exportPath.contains(".obj"))
+            exportPath += ".obj";
+
+        m_currentRenderable->exportToObj(exportPath.toStdString());
     }
 }
 
@@ -328,45 +282,9 @@ CGLViewer* CGLViewer::instance()
     return m_instance;
 }
 
-void CGLViewer::closeFile(const QString& filename)
-{
-    QString tmpFilename = filename;
-#ifdef Q_OS_WIN32
-    tmpFilename = filename.toLower();
-#endif
-    if (m_renderables.contains(tmpFilename))
-    {
-        IRenderableModel* file = m_renderables[tmpFilename];
-        m_renderables.remove(tmpFilename);
-
-        delete file;
-        file = NULL;
-        m_currentRenderable = nullptr;
-        update();
-        return;
-    }
-}
-
-void CGLViewer::onItemSelectionChanged()
-{
-    QListWidget* listWidget = qobject_cast<QListWidget*>(sender());
-    if (listWidget && listWidget->currentItem())
-    {
-        QString path = listWidget->currentItem()->data(Qt::UserRole).toString();
-#ifdef Q_OS_WIN32
-        path = path.toLower();
-#endif
-        if (m_renderables.contains(path))
-            m_currentRenderable = m_renderables[path];
-    }
-}
-
 void CGLViewer::resetCamera()
 {
-    /*
-    m_camera.reset();
-    m_camera.setLookAt(glm::vec3(0, -10, 0));
-    m_camera.setPosition(glm::vec3(0, 5, 0));*/
+    m_camera.setPosition(glm::vec3(0, 5, 0));
 }
 
 void CGLViewer::setAxisIsDrawn(bool drawn)
@@ -377,30 +295,4 @@ void CGLViewer::setAxisIsDrawn(bool drawn)
 void CGLViewer::setGridIsDrawn(bool drawn)
 {
     QSettings().setValue("gridDrawn", drawn);
-}
-
-void CGLViewer::onError(QString message)
-{
-    QMessageBox::warning(this, "Error loading model", message);
-}
-
-void CGLViewer::onNewFile(IResource* resource, QString path)
-{
-    QMutexLocker lock(&globalMutex);
-    IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(resource);
-    if (!renderable)
-        return;
-
-    QString tmpFilename = path;
-#ifdef Q_OS_WIN32
-    tmpFilename = tmpFilename.toLower();
-#endif
-    m_renderables[tmpFilename] = renderable;
-    emit fileAdded(path);
-    lock.unlock();
-}
-
-void CGLViewer::onFinished()
-{
-    qApp->restoreOverrideCursor();
 }

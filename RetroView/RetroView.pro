@@ -72,7 +72,6 @@ SOURCES += \
     src/CModelReader.cpp \
     src/CAreaFile.cpp \
     src/CAreaReader.cpp \
-    src/CResourceLoaderThead.cpp \
     src/CTexture.cpp \
     src/STEVStage.cpp \
     src/CKeyboardManager.cpp \
@@ -108,7 +107,6 @@ HEADERS += \
     include/CModelFile.hpp \
     include/CModelReader.hpp \
     include/IResource.hpp \
-    include/CResourceLoaderThead.hpp \
     include/CTexture.hpp \
     include/STEVStage.hpp \
     include/CKeyboardManager.hpp \

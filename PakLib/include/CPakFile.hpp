@@ -67,6 +67,7 @@ public:
 
     int version() const;
 
+    void removeDuplicates();
 private:
     friend class CPakFileReader;
 
@@ -82,5 +83,6 @@ private:
 
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right);
 bool operator ==(const SPakResource& left, const SPakResource& right);
+bool operator <(const SPakResource& left, const SPakResource& right);
 
 #endif // PAKFILE_HPP

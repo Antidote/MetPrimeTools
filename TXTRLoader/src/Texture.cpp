@@ -153,7 +153,15 @@ void Texture::exportPNG(const std::string& path)
                 output.set_pixel(x, y, png::rgba_pixel(r, g, b, 0xFF));
                 i += 2;
             }
-            else if (m_format == Format::RGBA8 || m_format == Format::DXT1)
+            else if (m_format == Format::RGBA8)
+            {
+                output.set_pixel(x, y, png::rgba_pixel(*(char*)(rgba + i + 0),
+                                                       *(char*)(rgba + i + 1),
+                                                       *(char*)(rgba + i + 2),
+                                                       *(char*)(rgba + i + 3)));
+                i += 4;
+            }
+            else if (m_format == Format::DXT1)
             {
 
                 output.set_pixel(x, y, png::rgba_pixel(*(char*)(rgba + i + 0),

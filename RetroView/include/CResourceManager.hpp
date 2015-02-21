@@ -13,20 +13,18 @@
 #include "IResource.hpp"
 
 
-typedef IResource* (*ResourceFileLoaderCallback)(const std::string&);
 typedef IResource* (*ResourceDataLoaderCallback)(const atUint8*, atUint64);
 
 struct ResourceLoaderDesc
 {
     std::string                tag;
-    ResourceFileLoaderCallback byFile;
     ResourceDataLoaderCallback byData;
 };
 
 
 struct SResourceLoaderRegistrator
 {
-    SResourceLoaderRegistrator(std::string tag, ResourceFileLoaderCallback byFile, ResourceDataLoaderCallback byData);
+    SResourceLoaderRegistrator(std::string tag, ResourceDataLoaderCallback byData);
 };
 
 class CPakFile;
@@ -44,16 +42,16 @@ public:
     std::vector<SPakResource*> resourcesForPack(const std::string& pak);
 
     IResource* loadResource(const atUint64& assetID, const std::string& type = std::string());
+    IResource* loadResourceFromPak(CPakFile* pak, const atUint64& assetID, const std::string& type = std::string());
 
-    IResource* loadResource(const std::string& filepath);
-
-    void registerLoader(std::string tag, ResourceFileLoaderCallback byFile, ResourceDataLoaderCallback byData);
+    void registerLoader(std::string tag, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();
 
     std::vector<CPakTreeWidget*> pakWidgets() const;
 
     void loadPak(std::string filepath);
 
+    void clear();
 signals:
     void newPak(CPakTreeWidget*);
 protected:
@@ -64,7 +62,6 @@ protected:
 private:
     std::unordered_map<std::string, ResourceLoaderDesc> m_loaders;
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
-    IResource* attemptLoadFromFile(atUint64 assetID, const std::string& type);
     std::unordered_map<atUint64, IResource*> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
     std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
@@ -79,8 +76,8 @@ private:
 #endif
 
 #ifndef REGISTER_RESOURCE_LOADER
-#define REGISTER_RESOURCE_LOADER(Loader, Tag, ByFile, ByData) \
-    const SResourceLoaderRegistrator Loader::____DO_NOT_USE___p_resourceRegistrator = SResourceLoaderRegistrator(Tag, Loader::ByFile, Loader::ByData)
+#define REGISTER_RESOURCE_LOADER(Loader, Tag, ByData) \
+    const SResourceLoaderRegistrator Loader::____DO_NOT_USE___p_resourceRegistrator = SResourceLoaderRegistrator(Tag, Loader::ByData)
 #endif
 
 #endif // RESOURCEMANAGER_HPP

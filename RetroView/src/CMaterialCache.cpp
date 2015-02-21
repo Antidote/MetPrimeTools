@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include "CMaterialCache.hpp"
-#include "CResourceLoaderThead.hpp"
 #include <iostream>
 #include <QCryptographicHash>
 #include <QDataStream>

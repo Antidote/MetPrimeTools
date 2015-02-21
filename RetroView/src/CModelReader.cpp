@@ -165,12 +165,6 @@ CModelFile* CModelReader::read()
     return m_result;
 }
 
-IResource* CModelReader::loadByFile(const std::string& filename)
-{
-    CModelReader reader(filename);
-    return reader.read();
-}
-
 IResource* CModelReader::loadByData(const atUint8* data, atUint64 length)
 {
     CModelReader reader(data, length);
@@ -287,4 +281,4 @@ void CModelReader::readMesh(Athena::io::BinaryReader& in)
     m_result->m_meshes.push_back(mesh);
 }
 
-REGISTER_RESOURCE_LOADER(CModelReader, "cmdl", loadByFile, loadByData);
+REGISTER_RESOURCE_LOADER(CModelReader, "cmdl", loadByData);

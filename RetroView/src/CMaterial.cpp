@@ -409,6 +409,9 @@ bool CMaterial::bind()
         {
             const char* name = QString("konst[%1]").arg(i).toStdString().c_str();
             QColor konstColor = QColor::fromRgba(m_konstColor[i]);
+            int b = konstColor.red();
+            konstColor.setRed(konstColor.blue());
+            konstColor.setBlue(b);
 
             m_program->setUniformValue(name, konstColor);
         }

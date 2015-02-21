@@ -30,15 +30,12 @@ protected:
 
 private slots:
     void onModeToggled(bool value);
-    void onOpenFile();
     void onToggled(bool);
     void onViewerInitialized();
-    void onFileAdded(QString file);
-    void onCloseFile();
-    void onCloseAll();
     void onExport();
     void onNewPak(CPakTreeWidget* pak);
     void onLoadPak();
+    void onTabChanged();
 private:
     Ui::CMainWindow *ui;
     QStringList    m_filters;
