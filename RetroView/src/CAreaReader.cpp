@@ -5,6 +5,7 @@
 #include "GXCommon.hpp"
 #include "RetroCommon.hpp"
 
+#include <Athena/MemoryWriter.hpp>
 #include <Athena/InvalidDataException.hpp>
 
 #include <algorithm>
@@ -32,7 +33,7 @@ CAreaReader::~CAreaReader()
 CAreaFile* CAreaReader::read()
 {
     {
-        Athena::io::BinaryWriter out;
+        Athena::io::MemoryWriter out;
         if (decompressMREA(*this, out))
             setData(out.data(), out.length());
     }
@@ -309,7 +310,7 @@ void CAreaReader::readModelData(CAreaFile* ret, CModelData& model, atUint64& sec
     }
 }
 
-void CAreaReader::readVertices(CModelData& model, Athena::io::BinaryReader& in)
+void CAreaReader::readVertices(CModelData& model, Athena::io::MemoryReader& in)
 {
     atInt32 vertexCount = in.length() / sizeof(glm::vec3);
 
@@ -323,7 +324,7 @@ void CAreaReader::readVertices(CModelData& model, Athena::io::BinaryReader& in)
     }
 }
 
-void CAreaReader::readNormals(CModelData& model, Athena::io::BinaryReader& in)
+void CAreaReader::readNormals(CModelData& model, Athena::io::MemoryReader& in)
 {
     atInt32 normalCount = in.length() / (sizeof(atUint16) * 3);
     while ((normalCount--) > 0)
@@ -336,7 +337,7 @@ void CAreaReader::readNormals(CModelData& model, Athena::io::BinaryReader& in)
     }
 }
 
-void CAreaReader::readColors(CModelData& model, Athena::io::BinaryReader& in)
+void CAreaReader::readColors(CModelData& model, Athena::io::MemoryReader& in)
 {
     atInt32 colorCount = in.length() / sizeof(atUint32);
 
@@ -344,7 +345,7 @@ void CAreaReader::readColors(CModelData& model, Athena::io::BinaryReader& in)
         model.m_colors.push_back(in.readUint32());
 }
 
-void CAreaReader::readTexCoords(CModelData& model, Athena::io::BinaryReader& in, bool isLightmap)
+void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in, bool isLightmap)
 {
     if (isLightmap)
     {
@@ -371,7 +372,7 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::BinaryReader& in,
     }
 }
 
-void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::BinaryReader& in)
+void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::MemoryReader& in)
 {
     model.m_meshes.push_back(CMesh());
     CMesh& mesh = model.m_meshes.back();

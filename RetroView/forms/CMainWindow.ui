@@ -64,6 +64,7 @@
     <addaction name="actionMode3"/>
     <addaction name="actionMode4And5"/>
     <addaction name="actionMode6"/>
+    <addaction name="actionMode7"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Animations"/>
@@ -239,6 +240,14 @@
     <string>Load &amp;Pak</string>
    </property>
   </action>
+  <action name="actionMode7">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Mode &amp;7</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -368,6 +377,22 @@
    <signal>triggered()</signal>
    <receiver>CMainWindow</receiver>
    <slot>onLoadPak()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>232</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMode7</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onModeToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

@@ -1,7 +1,7 @@
 #ifndef MREAREADER_HPP
 #define MREAREADER_HPP
 
-#include <Athena/BinaryReader.hpp>
+#include <Athena/MemoryReader.hpp>
 #include "CResourceManager.hpp"
 
 struct SAreaSectionIndex final
@@ -16,9 +16,9 @@ class CModelData;
 class CMesh;
 class CAreaFile;
 class IRenderableModel;
-class CAreaReader final : protected Athena::io::BinaryReader
+class CAreaReader final : protected Athena::io::MemoryReader
 {
-    BINARYREADER_BASE();
+    MEMORYREADER_BASE();
     DEFINE_RESOURCE_LOADER();
 public:
     CAreaReader(const atUint8* data, atUint64 length);
@@ -35,19 +35,19 @@ private:
     void readSectionsMP3DKCR(CAreaFile* ret);
     void readModelHeader(CAreaFile*  file, atUint64& sectionStart, atUint32& i);
     void readModelData  (CAreaFile* file,  CModelData& model, atUint64& sectionStart, atUint32& i);
-    void readMeshOffsets(CModelData& model, Athena::io::BinaryReader& in);
-    void readAROT       (CAreaFile*  file,  Athena::io::BinaryReader& in);
-    void readAABB       (CAreaFile*  file,  Athena::io::BinaryReader& in);
-    void readVertices   (CModelData& model, Athena::io::BinaryReader& in);
-    void readNormals    (CModelData& model, Athena::io::BinaryReader& in);
-    void readColors     (CModelData& model, Athena::io::BinaryReader& in);
-    void readTexCoords  (CModelData& model, Athena::io::BinaryReader& in, bool isLightmap);
-    void readMesh       (CModelData& model, CAreaFile* ret, Athena::io::BinaryReader& in);
+    void readMeshOffsets(CModelData& model, Athena::io::MemoryReader& in);
+    void readAROT       (CAreaFile*  file,  Athena::io::MemoryReader& in);
+    void readAABB       (CAreaFile*  file,  Athena::io::MemoryReader& in);
+    void readVertices   (CModelData& model, Athena::io::MemoryReader& in);
+    void readNormals    (CModelData& model, Athena::io::MemoryReader& in);
+    void readColors     (CModelData& model, Athena::io::MemoryReader& in);
+    void readTexCoords  (CModelData& model, Athena::io::MemoryReader& in, bool isLightmap);
+    void readMesh       (CModelData& model, CAreaFile* ret, Athena::io::MemoryReader& in);
     void readMeshes     (CAreaFile* ret, CModelData& model, atUint64& sectionStart, atUint32& i, atUint32 m);
 
     std::vector<std::vector<atUint32>> m_modelMeshOffsets;
     std::vector<atUint32>    m_sectionSizes;
-    Athena::io::BinaryReader m_sectionReader;
+    Athena::io::MemoryReader m_sectionReader;
     // The following is for Metroid Prime 1 and 2 only:
     atUint32                 m_materialSection;
     atUint32                 m_sclySection;

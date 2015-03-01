@@ -34,8 +34,15 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 base::readUint32();
                 mat.m_version = version;
                 mat.m_vertexAttributes = base::readUint32();
+                base::readUint32();
+                base::readUint32();
+                base::readUint32();
+                // spin until we read in all commands
+                while (!readMaterialCommand(ret, mat))
+                    ;
                 base::seek(materialStart + dataSize, Athena::SeekOrigin::Begin);
-                ret.m_materials.push_back(CMaterialCache::instance()->addMaterial(mat));
+                atUint32 matID = CMaterialCache::instance()->addMaterial(mat);
+                ret.m_materials.push_back(matID);
             }
         }
         else
@@ -43,7 +50,7 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
             atUint32 textureCount = base::readUint32();
             ret.m_textureIds.resize(textureCount);
             for (atUint32 i = 0; i < textureCount; i++)
-                ret.m_textureIds[i] = base::readUint32();
+                ret.m_textureIds[i] =  CAssetID(*this, CAssetID::E_32Bits);
 
             atUint32 materialCount = base::readUint32();
 
@@ -168,4 +175,82 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
     }
 
     return ret;
+}
+
+// Reads the current material command, returns true when done
+bool CMaterialReader::readMaterialCommand(CMaterialSet& set, CMaterial& material)
+{
+    EMaterialCommand cmd = (EMaterialCommand)base::readUint32();
+    if (cmd == EMaterialCommand::END)
+        return true;
+
+    switch(cmd)
+    {
+        case EMaterialCommand::PASS:
+        {
+            atUint32 passSize = base::readUint32();
+            atUint32 passDataStart = base::position();
+            //material.m_tevStages.push_back(STEVStage());
+            bool done = readMaterialCommand(set, material);
+            base::seek(passDataStart + passSize, Athena::SeekOrigin::Begin);
+            return done;
+        }
+            break;
+        case EMaterialCommand::CLR:
+        {
+            atUint32 clrValue = base::readUint32();
+            if (clrValue == (int)EMaterialCommand::CLR)
+            {
+                /*Uint32 RGBA = */base::readUint32();
+            }
+            else if (clrValue == (int)EMaterialCommand::DIFB)
+            {
+                /*Uint32 unknown  = */base::readUint32();
+            }
+            else
+            {
+                CAssetID textureId = CAssetID(*this, CAssetID::E_64Bits);
+                /*Uint32 filler    = */base::readUint32(); // ????
+                atUint32 unknownSize   = base::readUint32();
+                if (textureId != CAssetID())
+                {
+                    set.m_textureIds.push_back(textureId);
+                    material.m_textureIndices.push_back(set.m_textureIds.size() - 1);
+                }
+                base::seek(unknownSize);
+            }
+        }
+            break;
+        case EMaterialCommand::INT:
+        {
+            base::readUint32();
+            base::readUint32();
+        }
+            break;
+        case EMaterialCommand::DIFF:
+        {
+            atUint32 unk = base::readUint32();
+            CAssetID textureId = CAssetID(*this, CAssetID::E_64Bits);
+            atUint32 unk2 = base::readUint32();
+            atUint32 unkSize = base::readUint32();
+            if (textureId != CAssetID())
+            {
+                set.m_textureIds.push_back(textureId);
+                material.m_textureIndices.push_back(set.m_textureIds.size() - 1);
+            }
+            base::seek(unkSize);
+        }
+            break;
+        default:
+        {
+            atUint32 unk = base::readUint32();
+            atUint64 texID = base::readUint64();
+            atUint32 unk2 = base::readUint32();
+            atUint32 unkSize = base::readUint32();
+            base::seek(unkSize);
+        }
+            break;
+    }
+
+    return false;
 }

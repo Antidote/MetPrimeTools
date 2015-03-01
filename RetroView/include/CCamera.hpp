@@ -34,6 +34,8 @@ public:
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void processMouseScroll(float yoffset);
 
+    void setYaw(float yaw);
+    void setPitch(float pitch);
     void setPosition(const glm::vec3& pos);
     glm::vec3 position() const;
 
@@ -44,6 +46,7 @@ public:
 
     void increaseSpeed();
     void decreaseSpeed();
+
 private:
     // Calculates the front vector from the Camera's (updated) Eular Angles
     void updateCameraVectors();

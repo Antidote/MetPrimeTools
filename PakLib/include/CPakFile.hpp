@@ -8,13 +8,14 @@
 #include <memory.h>
 #include <cstring>
 
+#include "CAssetID.hpp"
 #include "CFourCC.hpp"
 
 struct SPakResource
 {
     atUint32 compressed;
     CFourCC  tag;
-    atUint64 id;
+    CAssetID id;
     atUint32 size;
     atUint32 offset;
 };
@@ -22,7 +23,7 @@ struct SPakResource
 struct SPakNamedResource
 {
     CFourCC     tag;
-    atUint64    id;
+    CAssetID    id;
     std::string name;
 };
 
@@ -52,7 +53,7 @@ public:
 
     void loadTable();
 
-    atUint8* loadData(atUint64 assetID, const std::string& type = std::string());
+    atUint8* loadData(CAssetID assetID, const std::string& type = std::string());
 
     std::vector<SPakResource> resourcesByType(const std::string& type);
     std::vector<SPakResource> resources() const;
@@ -62,7 +63,7 @@ public:
 
     bool isWorldPak();
 
-    bool resourceExists(const atUint64& assetID);
+    bool resourceExists(const CAssetID& assetID);
     bool resourceExists(const SPakResource& resource);
 
     int version() const;

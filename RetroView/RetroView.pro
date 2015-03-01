@@ -35,6 +35,7 @@ unix:LIBS += \
 
 DEFINES += _LARGEFILE64_SOURCE _FILE_OFFSET_BITS
 include(../Athena/AthenaCore.pri)
+include(../RetroCommon/RetroCommon.pri)
 include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
 
@@ -44,19 +45,11 @@ CONFIG   += app_bundle
 
 TEMPLATE = app
 
-#DEFINES += ATHENA_NO_SAVES ATHENA_NO_ZQUEST
-
-unix {
-    CONFIG += link_pkgconfig
-}
-
 INCLUDEPATH += include
 win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
 
 SOURCES += \
     src/GXCommon.cpp \
-    src/RetroCommon.cpp \
-    src/MREADecompress.cpp \
     src/CCamera.cpp \
     src/CGLViewer.cpp \
     src/CMaterialReader.cpp \
@@ -77,7 +70,9 @@ SOURCES += \
     src/CKeyboardManager.cpp \
     src/CPakFileModel.cpp \
     src/CResourceTreeItem.cpp \
-    src/CPakTreeWidget.cpp
+    src/CPakTreeWidget.cpp \
+    src/CIndexBuffer.cpp \
+    src/CMaterialViewer.cpp
 
 !contains(DEFINES, NO_MAIN): {
     SOURCES += src/main.cpp
@@ -88,8 +83,6 @@ HEADERS += \
     include/IRenderableModel.hpp \
     include/GXCommon.hpp \
     include/GXTypes.hpp \
-    include/RetroCommon.hpp \
-    include/MREADecompress.hpp \
     include/CCamera.hpp \
     include/CScene.hpp \
     include/CGLViewer.hpp \
@@ -112,11 +105,14 @@ HEADERS += \
     include/CKeyboardManager.hpp \
     include/CPakFileModel.hpp \
     include/CResourceTreeItem.hpp \
-    include/CPakTreeWidget.hpp
+    include/CPakTreeWidget.hpp \
+    include/CIndexBuffer.hpp \
+    include/CMaterialViewer.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \
-    forms/CMainWindow.ui
+    forms/CMainWindow.ui \
+    forms/CMaterialViewer.ui
 
 RESOURCES += \
     resources/resources.qrc

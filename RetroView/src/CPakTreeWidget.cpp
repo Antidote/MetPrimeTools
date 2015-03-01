@@ -42,14 +42,10 @@ void CPakTreeWidget::changeEvent(QEvent *e)
 
 void CPakTreeWidget::onItemClicked(QModelIndex idx)
 {
-    bool ok = false;
-    QString text = m_model->data(idx, Qt::DisplayRole).toString();
-    text = "0x" + text.toUpper();
-    quint64 id = text.toULongLong(&ok, 16);
-
-    if (ok)
+    CResourceTreeItem* item = static_cast<CResourceTreeItem*>(idx.internalPointer());
+    if (item)
     {
-        IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResource(id));
+        IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_model->pak(), item->assetID()));
         if (renderable)
             CGLViewer::instance()->setCurrent(renderable);
     }

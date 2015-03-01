@@ -25,10 +25,10 @@ namespace Athena
 {
 namespace io
 {
-class BinaryReader;
+class IStreamReader;
 }
 }
 
-void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::BinaryReader& reader);
+void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader);
 
 #endif // GXCOMMON_HPP

@@ -12,6 +12,27 @@
 #include <CPakFile.hpp>
 #include "IResource.hpp"
 
+class CAssetIDHash
+{
+public:
+    std::size_t operator()(CAssetID const& id) const
+    {
+        size_t hash = 0;
+        atUint8* tmp = id.raw();
+        for (; *tmp; ++tmp)
+            hash = (hash << 2)  + *tmp;
+        return hash;
+    }
+};
+
+class CAssetIDComparison
+{
+public:
+    bool operator()(CAssetID const& left, CAssetID const& right) const
+    {
+        return (left == right);
+    }
+};
 
 typedef IResource* (*ResourceDataLoaderCallback)(const atUint8*, atUint64);
 
@@ -33,16 +54,20 @@ class CResourceManager : public QObject
 {
     Q_OBJECT
 public:
+    static constexpr atUint64 InvalidAsset64 = 0xFFFFFFFFFFFFFFFF;
+    static constexpr atUint32 InvalidAsset32 = 0xFFFFFFFF;
+
     virtual ~CResourceManager();
-    typedef std::unordered_map<atUint64, IResource*>::iterator         CachedResourceIterator;
-    typedef std::unordered_map<atUint64, IResource*>::const_iterator   ConstCachedResourceIterator;
+    typedef std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison>::iterator         CachedResourceIterator;
+    typedef std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison>::const_iterator   ConstCachedResourceIterator;
 
     void initialize(const std::string& baseDirectory);
     bool addPack(const std::string& pak);
     std::vector<SPakResource*> resourcesForPack(const std::string& pak);
 
-    IResource* loadResource(const atUint64& assetID, const std::string& type = std::string());
-    IResource* loadResourceFromPak(CPakFile* pak, const atUint64& assetID, const std::string& type = std::string());
+    IResource* loadResource(const CAssetID& assetID, const std::string& type = std::string());
+    IResource* loadResourceFromPak(CPakFile* pak, const CAssetID& assetID, const std::string& type = std::string());
+    //void releaseResource()
 
     void registerLoader(std::string tag, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();
@@ -62,7 +87,7 @@ protected:
 private:
     std::unordered_map<std::string, ResourceLoaderDesc> m_loaders;
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
-    std::unordered_map<atUint64, IResource*> m_cachedResources;
+    std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
     std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
     std::string                              m_baseDirectory;

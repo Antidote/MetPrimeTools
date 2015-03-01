@@ -9,10 +9,10 @@ CMaterialSet::~CMaterialSet()
 {
 }
 
-atUint32 CMaterialSet::textureID(const atUint32& index) const
+CAssetID CMaterialSet::textureID(const atUint32& index) const
 {
-    if (index > m_textureIds.size())
-        return 0;
+    if (index >= m_textureIds.size())
+        return CAssetID();
 
     return m_textureIds[index];
 }
@@ -20,7 +20,7 @@ atUint32 CMaterialSet::textureID(const atUint32& index) const
 CMaterial& CMaterialSet::material(const atUint32& index)
 {
     static CMaterial invalid;
-    if (index > m_materials.size())
+    if (index >= m_materials.size())
         return invalid;
 
     return CMaterialCache::instance()->material(m_materials[index]);

@@ -20,9 +20,9 @@ struct CompressedBlockInfo
 };
 
 
-bool decompressBlock(CompressedBlockInfo& info, Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out);
+bool decompressBlock(CompressedBlockInfo& info, Athena::io::IStreamReader& in, Athena::io::IStreamWriter& out);
 
-bool decompressMREA(Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out)
+bool decompressMREA(Athena::io::IStreamReader& in, Athena::io::IStreamWriter& out)
 {
     try
     {
@@ -113,7 +113,7 @@ bool decompressMREA(Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out)
     return true;
 }
 
-bool decompressBlock(CompressedBlockInfo& info, Athena::io::BinaryReader& in, Athena::io::BinaryWriter& out)
+bool decompressBlock(CompressedBlockInfo& info, Athena::io::IStreamReader& in, Athena::io::IStreamWriter& out)
 {
     try
     {

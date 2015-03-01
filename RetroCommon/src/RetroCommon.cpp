@@ -9,7 +9,7 @@ struct CMPDBlock
     atUint32 uncompressedLen;
 };
 
-void decompressData(aIO::BinaryWriter& outbuf, atUint8* srcData, atUint32 srcLength, atUint32 uncompressedLength)
+void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLength, atUint32 uncompressedLength)
 {
     atUint16 compressionMethod = *(atUint16*)(srcData);
     Athena::utility::BigUint16(compressionMethod);
@@ -53,7 +53,7 @@ void decompressData(aIO::BinaryWriter& outbuf, atUint8* srcData, atUint32 srcLen
     }
 }
 
-void decompressFile(aIO::BinaryWriter& outbuf, atUint8* data, atUint32 srcLength)
+void decompressFile(aIO::IStreamWriter& outbuf, atUint8* data, atUint32 srcLength)
 {
     atUint32 magic = *(atUint32*)(data);
     Athena::utility::BigUint32(magic);

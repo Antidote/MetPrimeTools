@@ -197,6 +197,10 @@ QOpenGLShader* CMaterial::buildVertex()
         source = source.replace("//{GXSHADERINFO}", QString("// %1 TEV Stages %2 TexGens").arg(m_tevStages.size()).arg(m_texGenFlags.size()));
         source = source.replace("//{TEXGEN}", vertSource.join("\n"));
     }
+    else
+    {
+        source = source.replace("//{TEXGEN}", "texCoord0 = vec3(in_TexCoord0, 1);");
+    }
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Vertex);
 }
@@ -319,7 +323,7 @@ QOpenGLShader* CMaterial::buildFragment()
         source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
     }
     else
-        source = source.replace("//{TEVSTAGES}", "prev = clamp(normalize(vec4(norm, 1.0)), 0.0, 1.0) - color0;");
+        source = source.replace("//{TEVSTAGES}", "prev = texture(tex0, texCoord0.xy);//color0;");
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Fragment);
 }
@@ -418,6 +422,8 @@ bool CMaterial::bind()
         m_program->setUniformValue("ambientLight", m_ambient);
         if (!(m_materialFlags & 0x80))
             glDepthMask(GL_FALSE);
+
+
         GXSetBlendMode(m_blendSrcFactor, m_blendDstFactor);
     }
     else
@@ -446,7 +452,7 @@ QOpenGLShaderProgram* CMaterial::program()
 
 bool CMaterial::operator==(const CMaterial& right)
 {
-    return (m_version == m_version && right.m_materialFlags == right.m_materialFlags &&
+    return (m_version == right.m_version && right.m_materialFlags == right.m_materialFlags &&
             m_textureIndices == right.textureIndices() && m_vertexAttributes == right.m_vertexAttributes &&
             m_unknown1_mp2 == right.m_unknown1_mp2 && m_unknown2_mp2 == right.m_unknown2_mp2 &&
             m_unknown1 == right.m_unknown1 && m_konstCount == right.m_konstCount &&
@@ -468,18 +474,36 @@ void CMaterial::updateAnimations()
         {
             case 0:
             case 1:
+            case 7:
             {
                 if ((m_animations[i].mode == 0 && !QSettings().value("mode0").toBool()) ||
-                        (m_animations[i].mode == 1 && !QSettings().value("mode1").toBool()))
+                        (m_animations[i].mode == 1 && !QSettings().value("mode1").toBool()) ||
+                        (m_animations[i].mode == 7 && !QSettings().value("mode7").toBool()))
                     break;
 
                 texMtx = glm::inverse(CGLViewer::instance()->viewMatrix()) * m_modelMatrix;
-                postMtx = glm::mat4(glm::mat3x4(
-                                        0.5, 0.0, 0.0, 0.5,
-                                        0.0, 0.0, 0.5, 0.5,
-                                        0.0, 0.0, 0.0, 1.0));
+                if (m_animations[i].mode != 7)
+                {
+                    postMtx = glm::mat4(glm::mat3x4(
+                                            0.5, 0.0, 0.0, 0.5,
+                                            0.0, 0.0, 0.5, 0.5,
+                                            0.0, 0.0, 0.0, 1.0));
+                }
+                else
+                {
+                    glm::mat4 view = CGLViewer::instance()->viewMatrix();
+                    float xy = (view[0][3] + view[1][3]) * 0.025f * m_animations[i].parms[1];
+                    xy = (xy - (int)xy);
+                    float z = (view[2][3]) * 0.05f * m_animations[i].parms[1];
+                    z = (z - (int)z);
 
-                if (m_animations[i].mode == 0)
+                    float halfA = m_animations[i].parms[0] * 0.5f;
+
+                    postMtx = glm::mat4(glm::mat2x4(halfA, 0.0, 0.0, xy,
+                                                    0.0, 0.0, halfA, z));
+                }
+
+                if (m_animations[i].mode == 0 || m_animations[i].mode == 7)
                     texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
             }
                 break;
@@ -494,7 +518,6 @@ void CMaterial::updateAnimations()
                 texMtx = glm::mat4(1);
                 texMtx[0][3] = texCoordBias.s;
                 texMtx[1][3] = texCoordBias.t;
-                //postMtx = texMtx;
             }
                 break;
             case 3:

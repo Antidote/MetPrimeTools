@@ -1,8 +1,9 @@
 #include "CResourceTreeItem.hpp"
 
-CResourceTreeItem::CResourceTreeItem(const QList<QVariant> &data, CResourceTreeItem *parent)
+CResourceTreeItem::CResourceTreeItem(const QList<QVariant> &data, const CAssetID& assetID, CResourceTreeItem *parent)
     : m_itemData(data),
-      m_parentItem(parent)
+      m_parentItem(parent),
+      m_assetID(assetID)
 {
 }
 
@@ -47,4 +48,9 @@ int CResourceTreeItem::row() const
 CResourceTreeItem* CResourceTreeItem::parent()
 {
     return m_parentItem;
+}
+
+CAssetID CResourceTreeItem::assetID() const
+{
+    return m_assetID;
 }

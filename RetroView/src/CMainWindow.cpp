@@ -33,6 +33,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     ui->actionMode3->setChecked(QSettings().value("mode3").toBool());
     ui->actionMode4And5->setChecked(QSettings().value("mode4And5").toBool());
     ui->actionMode6->setChecked(QSettings().value("mode6").toBool());
+    ui->actionMode7->setChecked(QSettings().value("mode7").toBool());
 
     QString basePath = QFileDialog::getExistingDirectory(nullptr, "Specify Basepath");
 
@@ -85,6 +86,8 @@ void CMainWindow::onModeToggled(bool value)
         QSettings().setValue("mode4And5", value);
     else if (sender() == ui->actionMode6)
         QSettings().setValue("mode6", value);
+    else if (sender() == ui->actionMode7)
+        QSettings().setValue("mode7", value);
 }
 
 void CMainWindow::onToggled(bool checked)

@@ -2,13 +2,13 @@
 #define CMDLREADER_HPP
 
 
-#include <Athena/BinaryReader.hpp>
+#include <Athena/MemoryReader.hpp>
 #include "CResourceManager.hpp"
 
 class CModelFile;
-class CModelReader final : protected Athena::io::BinaryReader
+class CModelReader final : protected Athena::io::MemoryReader
 {
-    BINARYREADER_BASE();
+    MEMORYREADER_BASE();
     DEFINE_RESOURCE_LOADER();
 public:
     CModelReader(const atUint8* data, atUint64 length);
@@ -19,12 +19,12 @@ public:
     static IResource* loadByData(const atUint8* data, atUint64 length);
 
 private:
-    void readVertices   (Athena::io::BinaryReader& in);
-    void readNormals    (Athena::io::BinaryReader& in);
-    void readColors     (Athena::io::BinaryReader& in);
-    void readTexCoords  (atUint32 slot, Athena::io::BinaryReader& in);
-    void readMeshOffsets(Athena::io::BinaryReader& in);
-    void readMesh       (Athena::io::BinaryReader& in);
+    void readVertices   (Athena::io::MemoryReader& in);
+    void readNormals    (Athena::io::MemoryReader& in);
+    void readColors     (Athena::io::MemoryReader& in);
+    void readTexCoords  (atUint32 slot, Athena::io::MemoryReader& in);
+    void readMeshOffsets(Athena::io::MemoryReader& in);
+    void readMesh       (Athena::io::MemoryReader& in);
 
     CModelFile*             m_result;
     std::vector<atUint32> m_sectionSizes;

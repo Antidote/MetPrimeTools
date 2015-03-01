@@ -3,6 +3,7 @@
 
 #include "CMaterialSet.hpp"
 #include "CMesh.hpp"
+#include "CIndexBuffer.hpp"
 #include "SBoundingBox.hpp"
 
 #include <dae.h>
@@ -70,10 +71,11 @@ protected:
     friend class CAreaFile;
     friend class CAreaReader;
     friend class CModelReader;
+    friend class CMaterialViewer;
 
     atUint32 exportUVIdx(atUint32 texOff, VertexDescriptor desc, CMaterial& mat);
     atUint32 getIbo(atUint32 prim, atUint32 matId, atUint32 start);
-    void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboID, atUint32 vertStartIndex);
+    void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex);
     void loadIbos(CMaterialSet& ms);
 
     atUint32                 m_format;
@@ -85,7 +87,6 @@ protected:
     std::vector<glm::vec2>   m_texCoords;
     std::vector<glm::vec2>   m_lightmapCoords;
     std::vector<CMesh>       m_meshes;
-
 
     // GL specific code
     bool                           m_ibosIndexed;

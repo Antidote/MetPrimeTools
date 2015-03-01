@@ -1,6 +1,6 @@
 #ifndef MATERIALCONTAINER_HPP
 #define MATERIALCONTAINER_HPP
-
+#include "CAssetID.hpp"
 #include "CMaterial.hpp"
 #include <vector>
 
@@ -10,7 +10,7 @@ public:
     CMaterialSet();
     ~CMaterialSet();
 
-    atUint32 textureID(const atUint32& index) const;
+    CAssetID textureID(const atUint32& index) const;
 
     CMaterial& material(const atUint32& index);
     CMaterial& material(const atUint32& index) const;
@@ -18,7 +18,7 @@ public:
 private:
     friend class CMaterialReader;
 
-    std::vector<atUint32> m_textureIds;
+    std::vector<CAssetID> m_textureIds;
     std::vector<atUint32> m_materials;
 };
 

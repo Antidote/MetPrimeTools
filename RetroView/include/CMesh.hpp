@@ -27,7 +27,7 @@ namespace Athena
 {
 namespace io
 {
-class BinaryReader;
+class IStreamReader;
 }
 }
 
@@ -46,7 +46,7 @@ public:
     std::vector<CPrimitive>& primitives();
     std::vector<CPrimitive>& primitives() const;
 private:
-    friend void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::BinaryReader& reader);
+    friend void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader);
     friend class CModelData;
     friend class CAreaFile;
     friend class CAreaReader;

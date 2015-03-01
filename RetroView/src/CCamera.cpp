@@ -76,6 +76,18 @@ void CCamera::processMouseScroll(float yoffset)
         m_zoom = 45.0f;
 }
 
+void CCamera::setYaw(float yaw)
+{
+    m_yaw = yaw;
+    updateCameraVectors();
+}
+
+void CCamera::setPitch(float pitch)
+{
+    m_pitch = pitch;
+    updateCameraVectors();
+}
+
 void CCamera::setPosition(const glm::vec3& pos)
 {
     m_position = pos;
@@ -105,7 +117,6 @@ void CCamera::decreaseSpeed()
     if (m_movementSpeed < 0.05f)
         m_movementSpeed = 0.05f;
 }
-
 
 void CCamera::updateCameraVectors()
 {

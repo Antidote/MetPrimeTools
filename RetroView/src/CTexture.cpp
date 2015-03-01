@@ -5,7 +5,7 @@
 #include <TextureReader.hpp>
 #include <GL/gl.h>
 
-CTexture::CTexture(const QImage& texture)
+CTexture::CTexture(Texture* texture)
     : m_texture(texture),
       m_textureID(0)
 {
@@ -18,42 +18,13 @@ CTexture::~CTexture()
 
 IResource* CTexture::loadByData(const atUint8* data, atUint64 length)
 {
-    Texture* tex = nullptr;
+    Texture* tex;
     CTexture* ret = nullptr;
     try
     {
         TextureReader reader(data, length);
         tex = reader.read();
-        tex->exportPNG("tmp.png");
-
-        ret = new CTexture(QImage("tmp.png"));
-
-        QDir().remove("tmp.png");
-    }
-    catch(...)
-    {
-        delete tex;
-        tex = nullptr;
-        delete ret;
-        ret = nullptr;
-    }
-
-    return ret;
-}
-
-IResource* CTexture::loadByFile(const std::string& file)
-{
-    Texture* tex = nullptr;
-    CTexture* ret = nullptr;
-    try
-    {
-        TextureReader reader(file);
-        tex = reader.read();
-        tex->exportDDS("tmp.dds");
-
-        ret = new CTexture(QImage("tmp.dds"));
-
-        QDir().remove("tmp.dds");
+        ret = new CTexture(tex);
     }
     catch(...)
     {
@@ -70,20 +41,63 @@ void CTexture::bind()
 {
     if (m_textureID == 0)
     {
-        // Ensure the image data is RGBA formatted
-        if (m_texture.format() != QImage::Format_ARGB32)
-            m_texture = m_texture.convertToFormat(QImage::Format_ARGB32);
-
-        m_texture = CGLViewer::convertToGLFormat(m_texture);
-
-        m_texture = m_texture.transformed(QTransform::fromScale(1, -1));
         glGenTextures(1, &m_textureID);
         glBindTexture(GL_TEXTURE_2D, m_textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_texture.width(), m_texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_texture.bits());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Linear Filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        GLenum format, type;
+        bool compressed = false;
+
+        switch(m_texture->format())
+        {
+            case Texture::Format::Luminance:
+                format = GL_LUMINANCE;
+                type = GL_UNSIGNED_BYTE;
+                break;
+            case Texture::Format::LuminanceAlpha:
+                format = GL_LUMINANCE_ALPHA;
+                type = GL_UNSIGNED_BYTE;
+                break;
+            case Texture::Format::RGB565:
+                format = GL_RGB;
+                type = GL_UNSIGNED_SHORT_5_6_5;
+                break;
+            case Texture::Format::RGBA8:
+                format = GL_RGBA;
+                type = GL_UNSIGNED_BYTE;
+                break;
+            case Texture::Format::DXT1:
+                format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+                compressed = true;
+                break;
+        }
+
+        atUint32 mipSize = m_texture->linearSize();
+        atUint32 mipOffset = 0;
+        atUint16 mipW = m_texture->width(), mipH = m_texture->height();
+        for (atUint32 m =0; m < m_texture->mipmaps(); m++)
+        {
+            if (!compressed)
+                glTexImage2D(GL_TEXTURE_2D, m, format, mipW, mipH, 0, format, type, m_texture->bits() + mipOffset);
+            else
+                glCompressedTexImage2D(GL_TEXTURE_2D, m, format, mipW, mipH, 0, mipSize, m_texture->bits() + mipOffset);
+
+            mipW /= 2;
+            mipH /= 2;
+            mipOffset += mipSize;
+            mipSize /=4;
+        }
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_texture->mipmaps() - 1);
+
+        // linear filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+        // Aniso
+        atInt32 maxAniso = 0;
+        glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);
     }
 
     glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -92,6 +106,15 @@ void CTexture::bind()
 atUint32 CTexture::textureID() const
 {
     return m_textureID;
+}
+
+QImage CTexture::toQImage()
+{
+    m_texture->exportPNG("tmp.png");
+    QImage ret("tmp.png");
+    QDir().remove("tmp.png");
+
+    return ret;
 }
 
 REGISTER_RESOURCE_LOADER(CTexture, "txtr", loadByData);

@@ -4,6 +4,7 @@
 #include "GXCommon.hpp"
 #include "RetroCommon.hpp"
 #include <Athena/InvalidDataException.hpp>
+#include <Athena/MemoryWriter.hpp>
 
 enum class SectionType : atUint32
 {
@@ -38,7 +39,7 @@ CModelFile* CModelReader::read()
 
     if (magic != 0xDEADBABE)
     {
-        Athena::io::BinaryWriter tmp;
+        Athena::io::MemoryWriter tmp;
         decompressFile(tmp, base::data(), base::length());
 
         if (tmp.length() > 0)
@@ -55,8 +56,8 @@ CModelFile* CModelReader::read()
     if (!(version >= CModelFile::MetroidPrime1 && version <= CModelFile::MetroidPrime3))
         THROW_INVALID_DATA_EXCEPTION("Only Metroid Prime 1 to 3 models are supported got v%i\n", version);
 
-    try
-    {
+//    try
+//    {
         m_result = new CModelFile;
         m_result->m_version = (CModelFile::Version)version;
         m_result->m_format = base::readUint32();
@@ -81,7 +82,7 @@ CModelFile* CModelReader::read()
 
         const atUint32 sectionBias = materialCount;
 
-        Athena::io::BinaryReader sectionReader(new atUint8[2], 2);
+        Athena::io::MemoryReader sectionReader(new atUint8[2], 2);
         sectionReader.setEndian(endian());
         for (atUint32 i = 0; i < sectionCount; i++)
         {
@@ -154,13 +155,13 @@ CModelFile* CModelReader::read()
         }
 
         m_result->indexIBOs(m_result->m_materialSets[0]);
-    }
-    catch(...)
-    {
-        delete m_result;
-        m_result = nullptr;
-        throw;
-    }
+//    }
+//    catch(...)
+//    {
+//        delete m_result;
+//        m_result = nullptr;
+//        throw;
+//    }
 
     return m_result;
 }
@@ -171,7 +172,7 @@ IResource* CModelReader::loadByData(const atUint8* data, atUint64 length)
     return reader.read();
 }
 
-void CModelReader::readVertices(Athena::io::BinaryReader& in)
+void CModelReader::readVertices(Athena::io::MemoryReader& in)
 {
     atUint32 vertexCount = in.length() / sizeof(glm::vec3);
     while ((vertexCount--) > 0)
@@ -184,7 +185,7 @@ void CModelReader::readVertices(Athena::io::BinaryReader& in)
     }
 }
 
-void CModelReader::readNormals(Athena::io::BinaryReader& in)
+void CModelReader::readNormals(Athena::io::MemoryReader& in)
 {
     if (!(m_result->m_format & EFormatFlags::ShortNormal))
     {
@@ -214,7 +215,7 @@ void CModelReader::readNormals(Athena::io::BinaryReader& in)
     }
 }
 
-void CModelReader::readColors(Athena::io::BinaryReader& in)
+void CModelReader::readColors(Athena::io::MemoryReader& in)
 {
     atUint32 colorCount = in.length() / sizeof(atUint32);
 
@@ -222,7 +223,7 @@ void CModelReader::readColors(Athena::io::BinaryReader& in)
         m_result->m_colors.push_back(in.readUint32());
 }
 
-void CModelReader::readTexCoords(atUint32 slot, Athena::io::BinaryReader& in)
+void CModelReader::readTexCoords(atUint32 slot, Athena::io::MemoryReader& in)
 {
     if (slot == 0)
     {
@@ -248,14 +249,14 @@ void CModelReader::readTexCoords(atUint32 slot, Athena::io::BinaryReader& in)
     }
 }
 
-void CModelReader::readMeshOffsets(Athena::io::BinaryReader& in)
+void CModelReader::readMeshOffsets(Athena::io::MemoryReader& in)
 {
     atInt32 meshCount = in.readUint32();
     while((meshCount--) > 0)
         m_meshOffsets.push_back(in.readUint32());
 }
 
-void CModelReader::readMesh(Athena::io::BinaryReader& in)
+void CModelReader::readMesh(Athena::io::MemoryReader& in)
 {
     CMesh mesh;
     for (atUint32 i = 0; i < 3; i++)

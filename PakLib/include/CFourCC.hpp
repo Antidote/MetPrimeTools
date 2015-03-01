@@ -2,7 +2,7 @@
 #define CFOURCC_HPP
 // Thanks parax:
 
-#include <Athena/Stream.hpp>
+#include <Athena/IStreamReader.hpp>
 #include <string>
 
 class CFourCC
@@ -12,7 +12,7 @@ public:
     CFourCC();
     CFourCC(const char *src);
     CFourCC(long src);
-    CFourCC(Athena::io::Stream& src);
+    CFourCC(Athena::io::IStreamReader& src);
 
     CFourCC& operator=(const char *src);
     CFourCC& operator=(long src);

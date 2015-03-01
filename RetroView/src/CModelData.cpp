@@ -41,7 +41,7 @@ atUint32 CModelData::exportUVIdx(atUint32 texOff, VertexDescriptor desc, CMateri
 void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms)
 {
     glm::mat4 rotMat = glm::rotate(glm::mat4(1), glm::radians(90.0f), glm::vec3(-1, 0, 0));
-    glm::mat4 inverseTransform = glm::inverse(glm::transpose(glm::mat4(m_transform)));
+    glm::mat4 inverseTransform = glm::transpose(glm::inverse(glm::mat4(m_transform)));
 
     of << "# vertex positions" << std::endl;
     for (glm::vec3 v : m_vertices)
@@ -423,7 +423,7 @@ atUint32 CModelData::getIbo(atUint32 prim, atUint32 matId, atUint32 start)
     return m_ibos.size() - 1;
 }
 
-void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboID, atUint32 vertStartIndex)
+void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex)
 {
     SVertex vert;
     if (material.hasPosition())
@@ -474,14 +474,12 @@ void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& m
 
     if (!m_vertexBuffer.empty())
     {
-        for (atUint32 vi = vertStartIndex; vi < m_vertexBuffer.size(); vi++)
+        std::vector<SVertex>::iterator iter = std::find_if(m_vertexBuffer.begin(), m_vertexBuffer.end(),
+                                                                     [&vert](SVertex vtx)->bool{return vtx == vert; });
+        if (iter != m_vertexBuffer.end())
         {
-            if (m_vertexBuffer[vi] == vert)
-            {
-                index = vi;
-                unique = false;
-                break;
-            }
+            index = iter - m_vertexBuffer.begin();
+            unique = false;
         }
     }
 
@@ -490,7 +488,7 @@ void CModelData::indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& m
         m_vertexBuffer.push_back(vert);
         index = m_vertexBuffer.size() - 1;
     }
-    m_ibos[iboID].indexBuffer.push_back(index);
+    m_ibos[iboId].indexBuffer.push_back(index);
 }
 
 void CModelData::loadIbos(CMaterialSet& ms)

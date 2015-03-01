@@ -24,6 +24,7 @@ public:
 
     QString filepath() const;
 
+    CPakFile* pak();
 private:
     void setupModelData();
     CPakFile* m_pakFile;

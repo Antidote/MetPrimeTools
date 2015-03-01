@@ -40,9 +40,12 @@ const atUint32 DDSF_LINEARSIZE     = 0x00080000l;
 
 // pixel format flags
 const atUint32 DDSF_ALPHAPIXELS     = 0x00000001l;
+const atUint32 DDSF_ALPHA           = 0x00000002l;
 const atUint32 DDSF_FOURCC          = 0x00000004l;
+const atUint32 DDSF_INDEXED4        = 0x00000008l;
+const atUint32 DDSF_INDEXED8        = 0x00000020l;
 const atUint32 DDSF_RGB             = 0x00000040l;
-const atUint32 DDSF_RGBA            = 0x00000041l;
+const atUint32 DDSF_RGBA            = DDSF_RGB | DDSF_ALPHAPIXELS;
 const atUint32 DDSF_LUMINANCE       = 0x00020000l;
 const atUint32 DDSF_LUMINANCE_ALPHA = DDSF_LUMINANCE | DDSF_ALPHAPIXELS;
 

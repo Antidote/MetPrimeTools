@@ -9,17 +9,18 @@ class CTexture : public IResource
 {
     DEFINE_RESOURCE_LOADER();
 public:
-    CTexture(const QImage& texture);
+    CTexture(Texture* texture);
     ~CTexture();
 
     static IResource* loadByData(const atUint8* data, atUint64 length);
-    static IResource* loadByFile(const std::string& file);
 
     void bind();
 
     atUint32 textureID() const;
+
+    QImage toQImage();
 private:
-    QImage   m_texture;
+    Texture* m_texture;
     atUint32 m_textureID;
 };
 

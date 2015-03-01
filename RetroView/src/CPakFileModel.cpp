@@ -1,4 +1,5 @@
 #include "CPakFileModel.hpp"
+#include "CAssetID.hpp"
 
 CPakFileModel::CPakFileModel(CPakFile* pak, QObject* parent)
     : QAbstractItemModel(parent),
@@ -7,7 +8,7 @@ CPakFileModel::CPakFileModel(CPakFile* pak, QObject* parent)
     QList<QVariant> rootData;
     rootData << "Contents";
 
-    m_rootItem = new CResourceTreeItem(rootData);
+    m_rootItem = new CResourceTreeItem(rootData, CAssetID(nullptr, CAssetID::E_Invalid));
 
     setupModelData();
 }
@@ -107,24 +108,28 @@ QString CPakFileModel::filepath() const
     return QString::fromStdString(m_pakFile->filename());
 }
 
+CPakFile* CPakFileModel::pak()
+{
+    return m_pakFile;
+}
+
 void CPakFileModel::setupModelData()
 {
     QMap<QString, CResourceTreeItem*> parents;
 
     for (const SPakResource& res : m_pakFile->resources())
     {
-        int idLen = ((m_pakFile->version() == EPakVersion::MetroidPrime1_2) ? 8 : 16);
         QList<QVariant> tmpData;
-        tmpData << QString("%1").arg(res.id, idLen, 16, QChar('0'));
+        tmpData << QString::fromStdString(res.id.toString());
         QString parentNodeTag = QString::fromStdString(res.tag.toString());
         if (parents[parentNodeTag] == nullptr)
         {
             QList<QVariant> nodeTag;
             nodeTag << parentNodeTag;
-            parents[parentNodeTag] = new CResourceTreeItem(nodeTag, m_rootItem);
+            parents[parentNodeTag] = new CResourceTreeItem(nodeTag, CAssetID(), m_rootItem);
             m_rootItem->appendChild(parents[parentNodeTag]);
         }
 
-        parents[parentNodeTag]->appendChild(new CResourceTreeItem(tmpData, parents[parentNodeTag]));
+        parents[parentNodeTag]->appendChild(new CResourceTreeItem(tmpData, res.id, parents[parentNodeTag]));
     }
 }

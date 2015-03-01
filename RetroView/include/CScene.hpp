@@ -1,7 +1,7 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
-#include <unordered_map>
+#include <map>
 #include "CMaterial.hpp"
 #include "CMesh.hpp"
 #include "CModelData.hpp"
@@ -14,9 +14,9 @@ public:
 
     void addModel(CModelData& model);
 private:
-//    std::vector<CModelData> m_models;
-//    std::unordered_map<CMaterial, CMesh> m_opaqueMeshes;
-//    std::unordered_map<CMaterial, CMesh> m_transparentMeshes;
+    std::vector<CModelData> m_models;
+    std::vector<CMesh> m_opaqueMeshes;
+    std::vector<CMesh> m_transparentMeshes;
 };
 
 #endif // SCENE_HPP

@@ -15,7 +15,6 @@
 #include <QStatusBar>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <Athena/BinaryWriter.hpp>
 
 #include "CResourceManager.hpp"
 #include "CMaterialCache.hpp"
@@ -30,7 +29,7 @@ CGLViewer* CGLViewer::m_instance = NULL;
 CGLViewer::CGLViewer(QWidget* parent)
     : QGLWidget(parent),
       m_currentRenderable(nullptr),
-      m_camera(glm::vec3(0.0f, 0.0f, 3.0f)),
+      m_camera(glm::vec3(0.0f, 10.0f, 3.0f)),
       m_mouseEnabled(false),
       m_isInitialized(false)
 {
@@ -56,7 +55,7 @@ void CGLViewer::paintGL()
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -67,9 +66,6 @@ void CGLViewer::paintGL()
     glLoadMatrixf(&mvp[0][0]);
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glEnable(GL_PRIMITIVE_RESTART);
-    glEnable(GL_COLOR_MATERIAL);
-    glPrimitiveRestartIndex(0xFFFFFFFF);
     glEnable(GL_BLEND);
     glShadeModel(GL_SMOOTH);
 
@@ -168,7 +164,7 @@ void CGLViewer::initializeGL()
         CMaterialCache::instance()->initialize();
 
 
-        qglClearColor(QColor(128, 128, 128).darker(300));
+        qglClearColor(QColor(128, 128, 128).darker(900));
         emit initialized();
     }
 
@@ -184,14 +180,29 @@ void CGLViewer::closeEvent(QCloseEvent* ce)
 void CGLViewer::mouseMoveEvent(QMouseEvent* e)
 {
     static QPoint lastPos = e->pos();
+    QPoint curPos = e->pos();
 
-    float xoffset = e->pos().x() - lastPos.x();
-    float yoffset = lastPos.y() - e->pos().y();
+    float xoffset = curPos.x() - lastPos.x();
+    float yoffset = lastPos.y() - curPos.y();
 
-    lastPos = e->pos();
+    lastPos = curPos;
 
     if (m_mouseEnabled)
+    {
         m_camera.processMouseMovement(xoffset, yoffset);
+
+//        QPoint newPos = curPos;
+//        if (curPos.x() <= 0)
+//            newPos.setX(size().width());
+//        else if (curPos.x() >= size().width())
+//            newPos.setX(1);
+
+//        if (newPos != curPos)
+//        {
+//            cursor().setPos(mapToGlobal(newPos));
+//            lastPos = newPos;
+//        }
+    }
     QGLWidget::mouseMoveEvent(e);
 }
 
@@ -284,7 +295,9 @@ CGLViewer* CGLViewer::instance()
 
 void CGLViewer::resetCamera()
 {
-    m_camera.setPosition(glm::vec3(0, 5, 0));
+    m_camera.setPitch(0.f);
+    m_camera.setYaw(-90.f);
+    m_camera.setPosition(glm::vec3(0.0f, 10.0f, 3.0f));
 }
 
 void CGLViewer::setAxisIsDrawn(bool drawn)

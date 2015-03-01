@@ -73,7 +73,7 @@ void CAreaFile::draw()
     buildBBox();
     indexIBOs();
     CMaterialSet materialSet = currentMaterialSet();
-    glm::mat4 model = glm::inverse(glm::transpose(glm::mat4(m_transformMatrix)));
+    glm::mat4 model = glm::transpose(glm::inverse(glm::mat4(m_transformMatrix)));
 
     // our opaques go first
     for (CModelData& m : m_models)

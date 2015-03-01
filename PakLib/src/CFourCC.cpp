@@ -20,7 +20,7 @@ CFourCC::CFourCC(long src)
     *this = src;
 }
 
-CFourCC::CFourCC(Athena::io::Stream& src)
+CFourCC::CFourCC(Athena::io::IStreamReader& src)
 {
     atUint8* bytes = src.readUBytes(4);
     memcpy(&fourCC[0], bytes, 4);

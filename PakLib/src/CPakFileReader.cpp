@@ -90,17 +90,20 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
         {
             SPakNamedResource res;
             res.tag = CFourCC(*this);
-            atUint64 id = base::readUint32();
+            base::readUint32();
             atUint32 nameLength = base::readUint32();
+            base::seek(-8);
             if (nameLength > 1024) // While the engine doesn't cap it to 1024, it's a reasonable to assume nobody will be using names this long
             {
                 ret->m_version = EPakVersion::MetroidPrime3Beta;
-                base::seek(-8);
-                id = base::readUint64();
-                nameLength = base::readUint32();
+                res.id = CAssetID(*this, CAssetID::E_64Bits);
+            }
+            else
+            {
+                res.id = CAssetID(*this, CAssetID::E_32Bits);
             }
 
-            res.id   = id;
+            nameLength = base::readUint32();
             res.name = base::readString(nameLength);
             res.name = std::string(res.name);
 
@@ -114,7 +117,7 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
             SPakNamedResource name;
             name.name = base::readString();
             name.tag = CFourCC(*this);
-            name.id = base::readUint64();
+            name.id = CAssetID(*this, CAssetID::E_64Bits);
             ret->m_namedResources.push_back(name);
         }
     }
@@ -134,43 +137,24 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
     ret->m_tableStart = base::position();
     if (ret->m_version == EPakVersion::MetroidPrime1_2)
     {
-
-        // We're going to cheat here:
-        // Since all the entries are contiguous, we're able to just read in the entire entry buffer
-        // and then assign it to a temporary vector via memcpy so we can pass it on to PakFile::m_resources,
-        // after that we just swap the necessary values, and voila complete entry table, this is a bit more involved
-        // than MP3 and MP3Beta.
-        std::vector<SMP1_2_Resource> tmpResources;
-        tmpResources.resize(resourceCount);
-        atUint8* data = base::readUBytes(sizeof(SMP1_2_Resource) * resourceCount);
-        memcpy((char*)tmpResources.data(), data, sizeof(SMP1_2_Resource) * resourceCount);
-
-        delete[] data;
         for (atUint32 i = 0; i < resourceCount; i++)
         {
-            ret->m_resources[i].compressed = Athena::utility::BigUint32(tmpResources[i].compressed);
-            ret->m_resources[i].tag        = tmpResources[i].tag;
-            ret->m_resources[i].id         = Athena::utility::BigUint32(tmpResources[i].id);
-            ret->m_resources[i].size       = Athena::utility::BigUint32(tmpResources[i].size);
-            ret->m_resources[i].offset     = Athena::utility::BigUint32(tmpResources[i].offset);
+            ret->m_resources[i].compressed = base::readUint32();
+            ret->m_resources[i].tag        = CFourCC(*this);
+            ret->m_resources[i].id         = CAssetID(*this, CAssetID::E_32Bits);
+            ret->m_resources[i].size       = base::readUint32();
+            ret->m_resources[i].offset     = base::readUint32();
         }
     }
     else
     {
-        // We're going to cheat here:
-        // Since all the entries are contiguous, we're able to just read in the entire entry buffer
-        // and then assign it to PakFile::m_resources via memcpy, after that we just swap the
-        // necessary values, and voila complete entry table
-        ret->m_resources.resize(resourceCount);
-        atUint8* data = base::readUBytes(sizeof(SPakResource) * resourceCount);
-        memcpy((char*)ret->m_resources.data(), data, sizeof(SPakResource) * resourceCount);
-        delete[] data;
-        for (SPakResource& res : ret->m_resources)
+        for (atUint32 i = 0; i < resourceCount; i++)
         {
-            Athena::utility::BigUint32(res.compressed);
-            Athena::utility::BigUint64(res.id);
-            Athena::utility::BigUint32(res.size);
-            Athena::utility::BigUint32(res.offset);
+            ret->m_resources[i].compressed = base::readUint32();
+            ret->m_resources[i].tag        = CFourCC(*this);
+            ret->m_resources[i].id         = CAssetID(*this, CAssetID::E_64Bits);
+            ret->m_resources[i].size       = base::readUint32();
+            ret->m_resources[i].offset     = base::readUint32();
         }
     }
 }

@@ -1,7 +1,8 @@
 #include "CPakFile.hpp"
 #include "RetroCommon.hpp"
 #include <Athena/FileReader.hpp>
-#include <Athena/BinaryWriter.hpp>
+#include <Athena/MemoryReader.hpp>
+#include <Athena/MemoryWriter.hpp>
 #include <algorithm>
 #include <iomanip>
 #include <cinttypes>
@@ -28,7 +29,7 @@ std::string CPakFile::filename() const
     return m_filename;
 }
 
-atUint8* CPakFile::loadData(atUint64 assetID, const std::string& type)
+atUint8* CPakFile::loadData(CAssetID assetID, const std::string& type)
 {
     ConstResourceIterator iter = std::find_if(m_resources.begin(), m_resources.end(),
                                               [&assetID](SPakResource res)->bool{return res.id == assetID; });
@@ -108,23 +109,13 @@ void CPakFile::dumpPak(const std::string& path, bool decompress)
         atUint32 len = resource.size;
         std::string outName;
         if (decompress)
-        {
-            if(m_version == EPakVersion::MetroidPrime1_2)
-                outName = Athena::utility::sprintf("%.8" PRIX64 ".%s", resource.id, resource.tag.toString().c_str());
-            else
-                outName = Athena::utility::sprintf("%.16" PRIX64 ".%s", resource.id, resource.tag.toString().c_str());
-        }
+            outName = Athena::utility::sprintf("%s.%s", resource.id.toString().c_str(), resource.tag.toString().c_str());
         else
-        {
-            if(m_version == EPakVersion::MetroidPrime1_2)
-                outName = Athena::utility::sprintf("%i_%.8" PRIX64 ".%s", resource.compressed, resource.id, resource.tag.toString().c_str());
-            else
-                outName = Athena::utility::sprintf("%i_%.16" PRIX64 ".%s", resource.compressed, resource.id, resource.tag.toString().c_str());
-        }
+            outName = Athena::utility::sprintf("%i_%s.%s", resource.compressed, resource.id.toString().c_str(), resource.tag.toString().c_str());
 
         if (decompress && resource.compressed)
         {
-            Athena::io::BinaryWriter tmp;
+            Athena::io::MemoryWriter tmp;
             decompressFile(tmp, data, len);
             if (tmp.length() > 0)
             {
@@ -135,14 +126,14 @@ void CPakFile::dumpPak(const std::string& path, bool decompress)
         }
 
         std::string outPath = path + "/" + outName;
-        Athena::io::BinaryWriter writer(outPath);
+        Athena::io::MemoryWriter writer(outPath);
         writer.writeUBytes(data, len);
         writer.save();
 
         if (!resource.tag.toString().compare("MREA"))
         {
-            Athena::io::BinaryReader  in(data, len);
-            Athena::io::BinaryWriter out(outPath);
+            Athena::io::MemoryReader  in(data, len);
+            Athena::io::MemoryWriter out(outPath);
 
             if(decompressMREA(in, out))
                 out.save();
@@ -158,7 +149,7 @@ bool CPakFile::isWorldPak()
     return m_isWorldPak;
 }
 
-bool CPakFile::resourceExists(const atUint64& assetID)
+bool CPakFile::resourceExists(const CAssetID& assetID)
 {
     std::vector<SPakResource>::iterator iter = std::find_if(m_resources.begin(), m_resources.end(),
                                                             [&assetID](const SPakResource& res)->bool{return res.id == assetID;});
@@ -178,9 +169,9 @@ int CPakFile::version() const
 
 void CPakFile::removeDuplicates()
 {
-    std::sort(m_resources.begin(), m_resources.end());
+    //std::sort(m_resources.begin(), m_resources.end());
     m_resources.erase(std::unique(m_resources.begin(), m_resources.end()), m_resources.end());
-    std::sort(m_resources.begin(), m_resources.end(), offsetGreater);
+    //std::sort(m_resources.begin(), m_resources.end(), offsetGreater);
 }
 
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right)
@@ -196,7 +187,7 @@ bool operator ==(const SPakResource& left, const SPakResource& right)
     return (left.compressed == right.compressed && left.tag == right.tag && right.id == left.id && left.size == right.size);
 }
 
-bool operator <(const SPakResource& left, const SPakResource& right)
-{
-    return (left.id < right.id);
-}
+//bool operator <(const SPakResource& left, const SPakResource& right)
+//{
+//    return (left.id.toUint64() < right.id.toUint64());
+//}

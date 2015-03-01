@@ -25,7 +25,7 @@ CResourceManager::CResourceManager()
 
 CResourceManager::~CResourceManager()
 {
-    for (std::pair<atUint64, IResource*> res : m_cachedResources)
+    for (std::pair<CAssetID, IResource*> res : m_cachedResources)
         delete res.second;
 
     for (CPakFile* pak : m_pakFiles)
@@ -69,7 +69,7 @@ void CResourceManager::loadPak(std::string filepath)
 
 void CResourceManager::clear()
 {
-    for (std::pair<atUint64, IResource*> res : m_cachedResources)
+    for (std::pair<CAssetID, IResource*> res : m_cachedResources)
         delete res.second;
     m_cachedResources.clear();
 }
@@ -107,7 +107,7 @@ void CResourceManager::initialize(const std::string& baseDirectory)
     }
 }
 
-IResource* CResourceManager::loadResource(const atUint64& assetID, const std::string& type)
+IResource* CResourceManager::loadResource(const CAssetID& assetID, const std::string& type)
 {
     CachedResourceIterator iter = m_cachedResources.find(assetID);
     if (iter != m_cachedResources.end())
@@ -123,7 +123,7 @@ IResource* CResourceManager::loadResource(const atUint64& assetID, const std::st
     return nullptr;
 }
 
-IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const atUint64& assetID, const std::string& type)
+IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& assetID, const std::string& type)
 {
     std::vector<SPakResource> pakResources;
     if (!type.empty())
@@ -166,8 +166,11 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
     try
     {
         ret = m_loaders[tag].byData(data, res.size);
-        ret->m_assetID = res.id;
-        m_cachedResources[res.id] = ret;
+        if (ret)
+        {
+            ret->m_assetID = res.id;
+            m_cachedResources[res.id] = ret;
+        }
     }
     catch(const Athena::error::Exception& e)
     {

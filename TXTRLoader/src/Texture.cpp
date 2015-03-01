@@ -1,5 +1,5 @@
 #include "Texture.hpp"
-#include <Athena/BinaryWriter.hpp>
+#include <Athena/MemoryWriter.hpp>
 #include <sys/cdefs.h>
 #include <memory.h>
 #include <dds.h>
@@ -39,6 +39,11 @@ atUint32 Texture::dataSize() const
 atUint16 Texture::width() const
 {
     return m_width;
+}
+
+atUint16 Texture::height() const
+{
+    return m_height;
 }
 
 atUint32 Texture::mipmaps() const
@@ -94,13 +99,15 @@ void Texture::exportDDS(const std::string& path)
         header.dwFlags |= DDSF_LINEARSIZE;
         header.dwPitchOrLinearSize = m_linearSize;
         header.ddspf.dwFlags = DDSF_FOURCC;
-        header.ddspf.dwFourCC = *(atUint32*)("DXT1");
+        atUint32 fourCC = *(atUint32*)("DXT1");
+        Athena::utility::LittleUint32(fourCC);
+        header.ddspf.dwFourCC = fourCC;
         header.ddspf.dwRGBBitCount = 32;
     }
 
     header.dwCaps1 = DDSF_TEXTURE | DDSF_MIPMAP;
 
-    Athena::io::BinaryWriter writer(path);
+    Athena::io::MemoryWriter writer(path);
     writer.writeUint32(*(atUint32*)("DDS\x20"));
     writer.writeUBytes((atUint8*)&header, sizeof(DDS_HEADER));
     writer.writeUBytes(m_bits, m_dataSize);
@@ -111,15 +118,15 @@ void Texture::exportPNG(const std::string& path)
 {
     // Temporary
     png::image<png::rgba_pixel> output(m_width, m_height);
-    atUint8* rgba = nullptr;
+    atUint8* pixels = nullptr;
 
 
     if (m_format == Format::RGBA8 || m_format == Format::RGB565)
-        rgba = m_bits;
+        pixels = m_bits;
     else if (m_format == Format::DXT1)
     {
-        rgba = new atUint8[m_width * m_height * 4];
-        squish::DecompressImage(rgba, m_width, m_height, m_bits, squish::kDxt1);
+        pixels = new atUint8[m_width * m_height * 4];
+        squish::DecompressImage(pixels, m_width, m_height, m_bits, squish::kDxt1);
     }
 
 
@@ -128,9 +135,15 @@ void Texture::exportPNG(const std::string& path)
     {
         for (atUint32 x = 0; x < m_width; ++x)
         {
+            // Luminance, and Luminance Alpha are pretty simple
+            // for Luminance we just assign 'l' to our RGB values, and set alpha to 255
+            // for Luminance Alpha the alpha value is directly after the luminance value,
+            // and we use that value instead
             if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
             {
                 atUint8 l, a;
+                l = *(atUint8*)(m_bits + i);
+                i++;
                 if (m_format == Format::LuminanceAlpha)
                 {
                     a = *(atUint8*)(m_bits + i);
@@ -138,14 +151,15 @@ void Texture::exportPNG(const std::string& path)
                 }
                 else
                     a = 0xFF;
-                l = *(atUint8*)(m_bits + i);
-                i++;
 
                 output.set_pixel(x, y, png::rgba_pixel(l, l, l, a));
             }
+            // RGB565 is an interesting format, it's in a 565 bit packing (hence RGB565 = Red 5-bits Green 6-bits Blue 5-bits)
+            // what this also means is that green gets truncated less in comparison to red and blue,
+            // Other than havingt to unpack the bits, it's in reverse order (red being last)
             else if (m_format == Format::RGB565)
             {
-                atUint16 rgb = *(atUint16*)(rgba + i);
+                atUint16 rgb = *(atUint16*)(pixels + i);
                 atUint8 r, g, b;
                 r = ((rgb & 0xF800) >> 11) << 3;
                 g = ((rgb & 0x07E0) >>  5) << 2;
@@ -153,25 +167,22 @@ void Texture::exportPNG(const std::string& path)
                 output.set_pixel(x, y, png::rgba_pixel(r, g, b, 0xFF));
                 i += 2;
             }
-            else if (m_format == Format::RGBA8)
-            {
-                output.set_pixel(x, y, png::rgba_pixel(*(char*)(rgba + i + 0),
-                                                       *(char*)(rgba + i + 1),
-                                                       *(char*)(rgba + i + 2),
-                                                       *(char*)(rgba + i + 3)));
-                i += 4;
-            }
-            else if (m_format == Format::DXT1)
+            // DXT1 and RGBA8 are the same, it's simply a straight copy.
+            else if (m_format == Format::DXT1 || m_format == Format::RGBA8)
             {
 
-                output.set_pixel(x, y, png::rgba_pixel(*(char*)(rgba + i + 0),
-                                                       *(char*)(rgba + i + 1),
-                                                       *(char*)(rgba + i + 2),
-                                                       *(char*)(rgba + i + 3)));
+                output.set_pixel(x, y, png::rgba_pixel(*(char*)(pixels + i + 0),
+                                                       *(char*)(pixels + i + 1),
+                                                       *(char*)(pixels + i + 2),
+                                                       *(char*)(pixels + i + 3)));
                 i += 4;
             }
         }
     }
+
+    // We only delete the pixelbuf if the format is DXT1, otherwise you roast the original data
+    if (m_format == Format::DXT1)
+        delete[] pixels;
 
     output.write(path);
 }

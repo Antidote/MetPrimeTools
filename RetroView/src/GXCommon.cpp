@@ -3,7 +3,7 @@
 #include "CGLViewer.hpp"
 #include "CModelData.hpp"
 #include "CMesh.hpp"
-#include <Athena/BinaryReader.hpp>
+#include <Athena/MemoryReader.hpp>
 #include <QFileInfo>
 #include <QDir>
 #include <cmath>
@@ -348,8 +348,8 @@ void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool di
         glEnable(GL_DEPTH_TEST);
 }
 
-atUint16 readAttribute(atUint16& value, atUint32 attributes, atUint32 index, Athena::io::BinaryReader& reader);
-void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::BinaryReader& reader)
+atUint16 readAttribute(atUint16& value, atUint32 attributes, atUint32 index, Athena::io::IStreamReader& reader);
+void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader)
 {
     atUint32 vertexAttributes = material.vertexAttributes();
 
@@ -446,7 +446,7 @@ void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, A
 }
 
 
-atUint16 readAttribute(atUint16 & value, atUint32 attributes, atUint32 index, Athena::io::BinaryReader& reader)
+atUint16 readAttribute(atUint16 & value, atUint32 attributes, atUint32 index, Athena::io::IStreamReader& reader)
 {
     atUint16 readCount = 0;
 
