@@ -45,7 +45,8 @@ void CPakTreeWidget::onItemClicked(QModelIndex idx)
     CResourceTreeItem* item = static_cast<CResourceTreeItem*>(idx.internalPointer());
     if (item)
     {
-        IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_model->pak(), item->assetID()));
+        CAssetID id = item->assetID().toUint64();
+        IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_model->pak(), id));
         if (renderable)
             CGLViewer::instance()->setCurrent(renderable);
     }

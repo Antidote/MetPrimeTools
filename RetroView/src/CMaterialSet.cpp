@@ -12,7 +12,7 @@ CMaterialSet::~CMaterialSet()
 CAssetID CMaterialSet::textureID(const atUint32& index) const
 {
     if (index >= m_textureIds.size())
-        return CAssetID();
+        return CAssetID::InvalidAsset;
 
     return m_textureIds[index];
 }

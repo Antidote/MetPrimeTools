@@ -9,7 +9,7 @@
 #include "CMainWindow.hpp"
 #include <QMessageBox>
 #include <glm/glm.hpp>
-
+#include <CAssetID.hpp>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

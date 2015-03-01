@@ -1,17 +1,17 @@
 #include "CAssetID.hpp"
 #include <memory.h>
 
+const CAssetID CAssetID::InvalidAsset;
+
 CAssetID::CAssetID()
     : m_idLen(E_Invalid)
 {
-    m_idVal = new atUint8[16];
     memset(m_idVal, 0xFF, 16);
 }
 
 CAssetID::CAssetID(Athena::io::IStreamReader& input, CAssetID::EIDBits idLength)
     : m_idLen(idLength)
 {
-    m_idVal = new atUint8[16];
     if (idLength != E_Invalid)
     {
         memset(m_idVal, 0, 16);
@@ -27,7 +27,6 @@ CAssetID::CAssetID(Athena::io::IStreamReader& input, CAssetID::EIDBits idLength)
 CAssetID::CAssetID(const atUint8* assetID, CAssetID::EIDBits idLength)
     : m_idLen(idLength)
 {
-    m_idVal = new atUint8[16];
     if (idLength != E_Invalid)
     {
         atUint32 bytes = this->idLength();
@@ -40,19 +39,16 @@ CAssetID::CAssetID(const atUint8* assetID, CAssetID::EIDBits idLength)
 
 CAssetID::CAssetID(const atUint32& assetID)
 {
-    m_idVal = new atUint8[16];
     fromUint32(assetID);
 }
 
 CAssetID::CAssetID(const atUint64& assetID)
 {
-    m_idVal = new atUint8[16];
     fromUint64(assetID);
 }
 
 CAssetID::~CAssetID()
 {
-//    delete[] m_idVal;
 }
 
 atUint32 CAssetID::toUint32() const
@@ -85,7 +81,7 @@ atUint32 CAssetID::idLength() const
 
 atUint8* CAssetID::raw() const
 {
-    return m_idVal;
+    return (atUint8*)m_idVal;
 }
 
 void CAssetID::fromUint32(const atUint32& other)

@@ -6,6 +6,7 @@
 class CAssetID
 {
 public:
+    static const CAssetID InvalidAsset;
     enum EIDBits
     {
         E_Invalid,
@@ -43,7 +44,7 @@ public:
 
 private:
     EIDBits  m_idLen;
-    atUint8* m_idVal;
+    atUint8  m_idVal[16];
 };
 
 #endif // CASSETID_HPP
