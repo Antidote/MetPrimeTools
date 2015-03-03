@@ -169,9 +169,9 @@ int CPakFile::version() const
 
 void CPakFile::removeDuplicates()
 {
-    //std::sort(m_resources.begin(), m_resources.end());
+    std::sort(m_resources.begin(), m_resources.end());
     m_resources.erase(std::unique(m_resources.begin(), m_resources.end()), m_resources.end());
-    //std::sort(m_resources.begin(), m_resources.end(), offsetGreater);
+    std::sort(m_resources.begin(), m_resources.end(), offsetGreater);
 }
 
 bool operator ==(const SPakNamedResource& left, const SPakNamedResource& right)
@@ -187,7 +187,7 @@ bool operator ==(const SPakResource& left, const SPakResource& right)
     return (left.compressed == right.compressed && left.tag == right.tag && right.id == left.id && left.size == right.size);
 }
 
-//bool operator <(const SPakResource& left, const SPakResource& right)
-//{
-//    return (left.id.toUint64() < right.id.toUint64());
-//}
+bool operator <(const SPakResource& left, const SPakResource& right)
+{
+    return (left.id.toUint64() < right.id.toUint64());
+}

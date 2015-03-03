@@ -22,6 +22,8 @@ public:
 
     atUint32 toLong();
     std::string toString() const;
+
+    bool valid();
 };
 
 #endif // CFOURCC_HPP

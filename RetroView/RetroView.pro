@@ -49,65 +49,70 @@ INCLUDEPATH += include
 win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
 
 SOURCES += \
-    src/GXCommon.cpp \
-    src/CCamera.cpp \
-    src/CGLViewer.cpp \
-    src/CMaterialReader.cpp \
-    src/CMaterialCache.cpp \
-    src/CMaterialSet.cpp \
-    src/CMaterial.cpp \
-    src/CMesh.cpp \
-    src/CMainWindow.cpp \
-    src/CModelData.cpp \
-    src/CResourceManager.cpp \
-    src/CScene.cpp \
-    src/CModelFile.cpp \
-    src/CModelReader.cpp \
-    src/CAreaFile.cpp \
-    src/CAreaReader.cpp \
-    src/CTexture.cpp \
-    src/STEVStage.cpp \
-    src/CKeyboardManager.cpp \
-    src/CPakFileModel.cpp \
-    src/CResourceTreeItem.cpp \
-    src/CPakTreeWidget.cpp \
-    src/CIndexBuffer.cpp \
-    src/CMaterialViewer.cpp
+    src/core/CCamera.cpp \
+    src/core/CIndexBuffer.cpp \
+    src/core/CKeyboardManager.cpp \
+    src/core/CMainWindow.cpp \
+    src/core/CMaterial.cpp \
+    src/core/CMaterialCache.cpp \
+    src/core/CMaterialSet.cpp \
+    src/core/CMesh.cpp \
+    src/core/CModelData.cpp \
+    src/core/CPakFileModel.cpp \
+    src/core/CResourceManager.cpp \
+    src/core/CResourceTreeItem.cpp \
+    src/core/CScene.cpp \
+    src/core/GXCommon.cpp \
+    src/generic/CDependencyGroup.cpp \
+    src/generic/CTexture.cpp \
+    src/generic/CWorldFile.cpp \
+    src/io/CAreaReader.cpp \
+    src/io/CMaterialReader.cpp \
+    src/io/CModelReader.cpp \
+    src/io/CWorldFileReader.cpp \
+    src/material/STEVStage.cpp \
+    src/models/CAreaFile.cpp \
+    src/models/CModelFile.cpp \
+    src/ui/CGLViewer.cpp \
+    src/ui/CMaterialViewer.cpp \
+    src/ui/CPakTreeWidget.cpp
 
 !contains(DEFINES, NO_MAIN): {
     SOURCES += src/main.cpp
 }
 
 HEADERS += \
-    include/GXCommon.hpp \
-    include/IRenderableModel.hpp \
-    include/GXCommon.hpp \
-    include/GXTypes.hpp \
-    include/CCamera.hpp \
-    include/CScene.hpp \
-    include/CGLViewer.hpp \
-    include/CMesh.hpp \
-    include/CAreaReader.hpp \
-    include/CAreaFile.hpp \
-    include/CModelData.hpp \
-    include/CMaterialSet.hpp \
-    include/CMaterialReader.hpp \
-    include/CMaterialCache.hpp \
-    include/CMainWindow.hpp \
-    include/CMaterial.hpp \
-    include/CResourceManager.hpp \
-    include/SBoundingBox.hpp \
-    include/CModelFile.hpp \
-    include/CModelReader.hpp \
-    include/IResource.hpp \
-    include/CTexture.hpp \
-    include/STEVStage.hpp \
-    include/CKeyboardManager.hpp \
-    include/CPakFileModel.hpp \
-    include/CResourceTreeItem.hpp \
-    include/CPakTreeWidget.hpp \
-    include/CIndexBuffer.hpp \
-    include/CMaterialViewer.hpp
+    include/core/CCamera.hpp \
+    include/core/CIndexBuffer.hpp \
+    include/core/CKeyboardManager.hpp \
+    include/core/CMaterial.hpp \
+    include/core/CMaterialCache.hpp \
+    include/core/CMaterialSet.hpp \
+    include/core/CMesh.hpp \
+    include/core/CModelData.hpp \
+    include/core/CPakFileModel.hpp \
+    include/core/CResourceManager.hpp \
+    include/core/CResourceTreeItem.hpp \
+    include/core/CScene.hpp \
+    include/core/GXCommon.hpp \
+    include/core/GXTypes.hpp \
+    include/core/IRenderableModel.hpp \
+    include/core/IResource.hpp \
+    include/core/SBoundingBox.hpp \
+    include/core/STEVStage.hpp \
+    include/generic/CDependencyGroup.hpp \
+    include/generic/CTexture.hpp \
+    include/generic/CWorldFile.hpp \
+    include/io/CAreaReader.hpp \
+    include/io/CMaterialReader.hpp \
+    include/io/CModelReader.hpp \
+    include/io/CWorldFileReader.hpp \
+    include/models/CAreaFile.hpp \
+    include/models/CModelFile.hpp \
+    include/ui/CGLViewer.hpp \
+    include/ui/CMainWindow.hpp \
+    include/ui/CMaterialViewer.hpp \
+    include/ui/CPakTreeWidget.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \

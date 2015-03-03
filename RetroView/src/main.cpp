@@ -2,11 +2,9 @@
 /**************************************************************************
 **
 **************************************************************************/
+#include "ui/CMainWindow.hpp"
 
-//#define GLEW_STATIC
-#include <GL/glew.h>
 #include <QApplication>
-#include "CMainWindow.hpp"
 #include <QMessageBox>
 #include <glm/glm.hpp>
 #include <CAssetID.hpp>

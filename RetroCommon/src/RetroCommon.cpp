@@ -13,7 +13,7 @@ void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLe
 {
     atUint16 compressionMethod = *(atUint16*)(srcData);
     Athena::utility::BigUint16(compressionMethod);
-    if (compressionMethod == 0x78DA)
+    if (compressionMethod == 0x78DA || compressionMethod == 0x7801 || compressionMethod == 0x789C)
     {
         atUint8*  decompData = new atUint8[uncompressedLength];
         if (aIO::Compression::decompressZlib(srcData, srcLength,  decompData, uncompressedLength) == uncompressedLength)

@@ -67,3 +67,13 @@ std::string CFourCC::toString() const
 {
     return std::string(fourCC, 4);
 }
+
+bool CFourCC::valid()
+{
+    for (atUint32 i = 0; i < 4; i++)
+        // only capital letters are excepted
+        if (fourCC[i] < 'A' || fourCC[i] > 'Z')
+            return false;
+
+    return true;
+}
