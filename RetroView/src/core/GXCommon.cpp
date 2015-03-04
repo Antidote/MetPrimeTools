@@ -44,7 +44,6 @@ void drawWireSphere(float radius, atUint32 longs, atUint32 lats)
     }
 }
 
-// TODO: Make a Color class
 void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, const glm::vec4& outlineColor, const glm::vec3& scale)
 {
     static float cubeCoords[] =

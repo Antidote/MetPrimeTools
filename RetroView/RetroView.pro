@@ -63,23 +63,24 @@ SOURCES += \
     src/core/CResourceTreeItem.cpp \
     src/core/CScene.cpp \
     src/core/GXCommon.cpp \
-    src/generic/CDependencyGroup.cpp \
-    src/generic/CTexture.cpp \
-    src/generic/CWorldFile.cpp \
+    src/core/STEVStage.cpp \
+    src/ui/CGLViewer.cpp \
+    src/ui/CMaterialViewer.cpp \
+    src/ui/CPakTreeWidget.cpp \
     src/io/CAreaReader.cpp \
     src/io/CMaterialReader.cpp \
     src/io/CModelReader.cpp \
     src/io/CWorldFileReader.cpp \
-    src/material/STEVStage.cpp \
+    src/generic/CDependencyGroup.cpp \
+    src/generic/CTexture.cpp \
+    src/generic/CWorldFile.cpp \
     src/models/CAreaFile.cpp \
     src/models/CModelFile.cpp \
-    src/ui/CGLViewer.cpp \
-    src/ui/CMaterialViewer.cpp \
-    src/ui/CPakTreeWidget.cpp
-
-!contains(DEFINES, NO_MAIN): {
-    SOURCES += src/main.cpp
-}
+    src/main.cpp \
+    src/io/CMapUniverseReader.cpp \
+    src/models/CMapUniverse.cpp \
+    src/io/CMapAreaReader.cpp \
+    src/models/CMapArea.cpp
 
 HEADERS += \
     include/core/CCamera.hpp \
@@ -100,19 +101,23 @@ HEADERS += \
     include/core/IResource.hpp \
     include/core/SBoundingBox.hpp \
     include/core/STEVStage.hpp \
-    include/generic/CDependencyGroup.hpp \
-    include/generic/CTexture.hpp \
-    include/generic/CWorldFile.hpp \
     include/io/CAreaReader.hpp \
     include/io/CMaterialReader.hpp \
     include/io/CModelReader.hpp \
     include/io/CWorldFileReader.hpp \
-    include/models/CAreaFile.hpp \
-    include/models/CModelFile.hpp \
     include/ui/CGLViewer.hpp \
     include/ui/CMainWindow.hpp \
     include/ui/CMaterialViewer.hpp \
-    include/ui/CPakTreeWidget.hpp
+    include/ui/CPakTreeWidget.hpp \
+    include/generic/CDependencyGroup.hpp \
+    include/generic/CTexture.hpp \
+    include/generic/CWorldFile.hpp \
+    include/models/CAreaFile.hpp \
+    include/models/CModelFile.hpp \
+    include/io/CMapUniverseReader.hpp \
+    include/models/CMapUniverse.hpp \
+    include/io/CMapAreaReader.hpp \
+    include/models/CMapArea.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \

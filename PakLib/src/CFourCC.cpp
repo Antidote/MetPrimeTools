@@ -59,8 +59,10 @@ bool CFourCC::operator==(const long other) const
 
 atUint32 CFourCC::toLong()
 {
-    // TODO: Not endian agnostic
-    return fourCC[0] << 24 | fourCC[1] << 16 | fourCC[2] << 8 | fourCC[3];
+    atUint32 ret = fourCC[0] << 24 | fourCC[1] << 16 | fourCC[2] << 8 | fourCC[3];
+    Athena::utility::LittleUint32(ret);
+
+    return ret;
 }
 
 std::string CFourCC::toString() const

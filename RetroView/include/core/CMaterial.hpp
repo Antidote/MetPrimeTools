@@ -35,10 +35,20 @@ public:
 
 
     void setModelMatrix(const glm::mat4& modelMatrix);
-    atUint32 materialFlags() const;
+    void setViewMatrix(const glm::mat4& viewMatrix);
+    void setProjectionMatrix(const glm::mat4& projectionMatrix);
+
+    atUint32 materialFlags()    const;
+    void setMaterialFlags(atUint32 matFlags);
+    void setVertexAttributes(atUint32 vertFlags);
     atUint32 vertexAttributes() const;
 
+    void addTevStage(const STEVStage& tevStage, atUint32 texInFlags);
     std::vector<atUint32> textureIndices() const;
+
+    void setBlendMode(EBlendMode dst, EBlendMode src);
+
+    void setKonstColor(atUint32 id, const QColor& color);
 
     bool hasPosition();
     bool hasNormal();
@@ -61,6 +71,11 @@ private:
     QString getSource(QString Filename);
     QOpenGLShader* buildVertex();
     QOpenGLShader* buildFragment();
+    void assignKonstColor(atUint32 id);
+    void assignModelMatrix();
+    void assignViewMatrix();
+    void assignProjectionMatrix();
+
     QOpenGLShaderProgram*    m_program;
     QColor                   m_ambient;
     Version                  m_version;
@@ -71,7 +86,7 @@ private:
     atUint32                 m_unknown2_mp2;
     atUint32                 m_unknown1;
     atUint32                 m_konstCount;
-    atUint32                 m_konstColor[4];
+    QColor                   m_konstColor[4];
     EBlendMode               m_blendDstFactor;
     EBlendMode               m_blendSrcFactor;
     atUint32                 m_unknown2;
@@ -81,7 +96,12 @@ private:
     std::vector<atUint32>    m_texGenFlags;
     std::vector<SAnimation>  m_animations;
     glm::mat4                m_modelMatrix;
+    glm::mat4                m_viewMatrix;
+    glm::mat4                m_projectionMatrix;
+    bool                     m_isBound;
 };
+
+
 
 
 #endif // MATERIAL_HPP

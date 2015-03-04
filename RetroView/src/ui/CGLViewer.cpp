@@ -252,7 +252,7 @@ void CGLViewer::updateCamera()
 
 glm::mat4 CGLViewer::projectionMatrix()
 {
-    return glm::perspective(glm::radians(55.0f), (float)width()/(float)height(), 0.1f, 4096.0f);
+    return glm::perspective(glm::radians(55.0f), (float)width()/(float)height(), 0.1f, 10000.0f);
 }
 
 glm::mat4 CGLViewer::modelMatrix()

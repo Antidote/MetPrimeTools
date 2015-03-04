@@ -89,8 +89,12 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                     mat.m_konstCount = base::readUint32() % 4;
                     for (atUint32 i = 0; i < mat.m_konstCount; i++)
                     {
-                        mat.m_konstColor[i] = base::readUint32();
-                        Athena::utility::BigUint32(mat.m_konstColor[i]);
+                        atUint32 tmpKColor = base::readUint32();
+                        Athena::utility::BigUint32(tmpKColor);
+                        mat.m_konstColor[i] = QColor::fromRgba(tmpKColor);
+                        int b = mat.m_konstColor[i].red();
+                        mat.m_konstColor[i].setRed(mat.m_konstColor[i].blue());
+                        mat.m_konstColor[i].setBlue(b);
                     }
                 }
 

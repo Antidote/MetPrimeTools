@@ -25,6 +25,7 @@ public:
     {
         m_ambient = color;
     }
+
     virtual SBoundingBox& boundingBox()=0;
 
 protected:

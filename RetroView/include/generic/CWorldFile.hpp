@@ -35,7 +35,7 @@ struct SRelocatableObjectInfo
 struct SWorldArea
 {
     CAssetID nameID;
-    glm::mat3x4 transformMatrix;
+    glm::mat4 transformMatrix;
     SBoundingBox boundingBox;
     CAssetID mreaID;
     CAssetID areaID;
@@ -52,9 +52,9 @@ struct SWorldArea
 
 struct SWorldMap
 {
-    CAssetID worldMapID;
+    CAssetID id;
     atUint32 unknown1;
-    atUint32 unknown2;
+    bool unknown2;
 };
 
 struct SAudioGroup
@@ -77,7 +77,7 @@ public:
     {
         MetroidPrimeDemo          = 0x0D,
         MetroidPrime1             = 0x11,
-        MetroidPrime2             = 0x14,
+        MetroidPrime2             = 0x17,
         MetroidPrime3             = 0x19,
         DonkeyKongCountryReturns  = 0x1B
     };
@@ -103,10 +103,11 @@ private:
     std::vector<SMemoryRelay> m_memoryRelays;  // only in MP1
     atUint32                  m_unknown2;      // only in MP1
     std::vector<SWorldArea>   m_areas;
-    SWorldMap                 m_worldMapID;
+    SWorldMap                 m_worldMap;
     std::vector<SAudioGroup>  m_audioGroups;
     std::vector<SLayerFlags>  m_layerFlags;
     std::vector<std::string>  m_layerNames;
+    std::vector<CAssetID>     m_layerIds;         // MP3 and DKCR only
     std::vector<atUint32>     m_layerNameIndices; // First index for each room
 };
 

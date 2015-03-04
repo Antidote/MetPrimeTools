@@ -39,14 +39,8 @@ void CModelFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::
     for (atUint32 materialIdx : currentMaterialSet().materials())
     {
         CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
-        if (!mat.bind())
-            continue;
-
-        atUint32 projectionLoc = mat.program()->uniformLocation("projection");
-        atUint32 viewLoc = mat.program()->uniformLocation("view");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &proj[0][0]);
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        mat.release();
+        mat.setViewMatrix(view);
+        mat.setProjectionMatrix(proj);
     }
 }
 

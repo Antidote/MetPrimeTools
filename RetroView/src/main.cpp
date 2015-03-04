@@ -1,7 +1,3 @@
-#ifndef NO_MAIN
-/**************************************************************************
-**
-**************************************************************************/
 #include "ui/CMainWindow.hpp"
 
 #include <QApplication>
@@ -21,4 +17,3 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-#endif

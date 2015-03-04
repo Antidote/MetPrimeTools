@@ -132,6 +132,10 @@ IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& 
     if (assetID == CAssetID::InvalidAsset)
         return nullptr;
 
+    CachedResourceIterator cacheIter = m_cachedResources.find(assetID);
+    if (cacheIter != m_cachedResources.end())
+        return cacheIter->second;
+
     std::vector<SPakResource> pakResources;
     if (!type.empty())
         pakResources = pak->resourcesByType(type);
@@ -170,8 +174,8 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
         return nullptr;
 
     IResource* ret = nullptr;
-//    try
-//    {
+    try
+    {
         ret = m_loaders[tag].byData(data, res.size);
         if (ret)
         {
@@ -180,13 +184,13 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
             ret->m_source = pak;
             m_cachedResources[res.id] = ret;
         }
-//    }
-//    catch(const Athena::error::Exception& e)
-//    {
-//        std::cout << e.message() << std::endl;
-//        delete ret;
-//        ret = nullptr;
-//    }
+    }
+    catch(const Athena::error::Exception& e)
+    {
+        std::cout << e.file() << e.message() << std::endl;
+        delete ret;
+        ret = nullptr;
+    }
 
     return ret;
 }

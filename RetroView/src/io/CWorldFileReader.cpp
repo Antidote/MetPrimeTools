@@ -23,8 +23,8 @@ CWorldFileReader::~CWorldFileReader()
 CWorldFile* CWorldFileReader::read()
 {
     CWorldFile* ret = nullptr;
-    try
-    {
+//    try
+//    {
         atUint32 magic = base::readUint32();
         if (magic != 0xDEAFBABE) // DCLN also uses this ID so we have to make absolutely sure this is correct
             THROW_INVALID_DATA_EXCEPTION("Invalid World File magic expected 0xDEAFBABE got 0x%8.X", magic);
@@ -36,9 +36,8 @@ CWorldFile* CWorldFileReader::read()
             THROW_INVALID_DATA_EXCEPTION("Invalid World File version expected 0x0D, 0x11, 0x14, 0x19, 0x1B; got 0x%8.X", (atUint32)version);
 
         ret = new CWorldFile();
-        CAssetID::EIDBits bits = CAssetID::E_32Bits;
-        if (version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)
-            bits = CAssetID::E_64Bits;
+        const CAssetID::EIDBits bits = ((version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)
+                                        ? CAssetID::E_64Bits :  CAssetID::E_32Bits);
 
         ret->m_worldName   = CAssetID(*this, bits);
         if (version == CWorldFile::Version::MetroidPrime2)
@@ -87,13 +86,16 @@ CWorldFile* CWorldFileReader::read()
         {
             SWorldArea area;
             area.nameID = CAssetID(*this, bits);
+            glm::mat3x4 transformMatrix;
             for (atUint32 i = 0; i < 3; i++)
             {
-                area.transformMatrix[i].x = base::readFloat();
-                area.transformMatrix[i].y = base::readFloat();
-                area.transformMatrix[i].z = base::readFloat();
-                area.transformMatrix[i].w = base::readFloat();
+                transformMatrix[i].x = base::readFloat();
+                transformMatrix[i].y = base::readFloat();
+                transformMatrix[i].z = base::readFloat();
+                transformMatrix[i].w = base::readFloat();
             }
+            area.transformMatrix = glm::transpose(glm::mat4(transformMatrix));
+
             glm::mat2x3 boundingBox;
             for (atUint32 i = 0; i < 2; i++)
             {
@@ -104,7 +106,7 @@ CWorldFile* CWorldFileReader::read()
             area.boundingBox = SBoundingBox(boundingBox);
 
             area.mreaID = CAssetID(*this, bits);
-            area.areaID =CAssetID(*this, bits);
+            area.areaID = CAssetID(*this, bits);
 
             if (version != CWorldFile::Version::DonkeyKongCountryReturns)
             {
@@ -174,12 +176,71 @@ CWorldFile* CWorldFileReader::read()
 
             ret->m_areas.push_back(area);
         }
-    }
-    catch(...)
-    {
-        delete ret;
-        ret = nullptr;
-    }
+
+        if (version != CWorldFile::Version::DonkeyKongCountryReturns)
+        {
+            ret->m_worldMap.id = CAssetID(*this, bits);
+            ret->m_worldMap.unknown1 = base::readUint32();
+            ret->m_worldMap.unknown2 = base::readBool();
+        }
+
+        if (version == CWorldFile::Version::MetroidPrime1)
+        {
+            atUint32 agscCount = base::readUint32();
+            while ((agscCount--) > 0)
+            {
+                SAudioGroup audioGroup;
+                audioGroup.unknown = base::readUint32();
+                audioGroup.id = CAssetID(*this, bits);
+            }
+
+            base::readBool();
+        }
+
+        atUint32 layerCount = base::readUint32();
+        while((layerCount--) > 0)
+        {
+            SLayerFlags lf;
+            lf.layerCount = base::readUint32();
+            lf.layerFlags = base::readUint64();
+            ret->m_layerFlags.push_back(lf);
+        }
+
+        layerCount = base::readUint32();
+        while ((layerCount--) > 0)
+        {
+            ret->m_layerNames.push_back(base::readString());
+        }
+
+        if (version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)
+        {
+            layerCount = base::readUint32();
+            while ((layerCount--) > 0)
+            {
+                CAssetID id = CAssetID(*this, CAssetID::E_128Bits);
+                ret->m_layerIds.push_back(id);
+            }
+        }
+
+        areaCount = base::readUint32();
+        while ((areaCount--) > 0)
+            ret->m_layerNameIndices.push_back(base::readUint32());
+
+        for (atUint32 i = 0; i < ret->m_areas.size(); i++)
+        {
+            SWorldArea area = ret->m_areas.at(i);
+            std::cout << "Area " << area.mreaID.toString() << " layer names" << std::endl;
+            SLayerFlags lf = ret->m_layerFlags.at(i);
+            for (atUint32 l = 0; l < lf.layerCount; l++)
+                std::cout << ret->m_layerNames.at(ret->m_layerNameIndices.at(i) + l) << std::endl;
+        }
+//    }
+//    catch(...)
+//    {
+//        delete ret;
+//        ret = nullptr;
+//        throw;
+//    }
 
     return ret;
 }

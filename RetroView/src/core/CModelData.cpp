@@ -293,7 +293,6 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
     if (m_ibosIndexed)
         return;
 
-    std::cout << "Indexing..." << std::endl;
     m_ibosIndexed = true;
 
     for (CMesh& mesh : m_meshes)

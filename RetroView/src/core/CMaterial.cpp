@@ -12,84 +12,14 @@
 #include <ctime>
 #include <QSettings>
 
-static const char *tevKSelTableC[] =
-{
-    "1, 1 ,1",  // 1   = 0x00
-    "0.9, 0.9, 0.9",  // 7_8 = 0x01
-    "0.7, 0.7, 0.7",  // 3_4 = 0x02
-    "0.6, 0.6, 0.6",  // 5_8 = 0x03
-    "0.5, 0.5, 0.5",  // 1_2 = 0x04
-    "0.4, 0.4, 0.4",     // 3_8 = 0x05
-    "0.25, 0.25, 0.25",     // 1_4 = 0x06
-    "0.13, 0.13, 0.13",     // 1_8 = 0x07
-    "0, 0, 0",        // INVALID = 0x08
-    "0, 0, 0",        // INVALID = 0x09
-    "0, 0, 0",        // INVALID = 0x0a
-    "0, 0, 0",        // INVALID = 0x0b
-    KCOLORS"[0].rgb", // K0 = 0x0C
-    KCOLORS"[1].rgb", // K1 = 0x0D
-    KCOLORS"[2].rgb", // K2 = 0x0E
-    KCOLORS"[3].rgb", // K3 = 0x0F
-    KCOLORS"[0].rrr", // K0_R = 0x10
-    KCOLORS"[1].rrr", // K1_R = 0x11
-    KCOLORS"[2].rrr", // K2_R = 0x12
-    KCOLORS"[3].rrr", // K3_R = 0x13
-    KCOLORS"[0].ggg", // K0_G = 0x14
-    KCOLORS"[1].ggg", // K1_G = 0x15
-    KCOLORS"[2].ggg", // K2_G = 0x16
-    KCOLORS"[3].ggg", // K3_G = 0x17
-    KCOLORS"[0].bbb", // K0_B = 0x18
-    KCOLORS"[1].bbb", // K1_B = 0x19
-    KCOLORS"[2].bbb", // K2_B = 0x1A
-    KCOLORS"[3].bbb", // K3_B = 0x1B
-    KCOLORS"[0].aaa", // K0_A = 0x1C
-    KCOLORS"[1].aaa", // K1_A = 0x1D
-    KCOLORS"[2].aaa", // K2_A = 0x1E
-    KCOLORS"[3].aaa", // K3_A = 0x1F
-};
-
-static const char *tevKSelTableA[] =
-{
-    "1",  // 1   = 0x00
-    "0.9",  // 7_8 = 0x01
-    "0.7",  // 3_4 = 0x02
-    "0.6",  // 5_8 = 0x03
-    "0.5",  // 1_2 = 0x04
-    "0.4",   // 3_8 = 0x05
-    "0.25",   // 1_4 = 0x06
-    "0.13",   // 1_8 = 0x07
-    "0",    // INVALID = 0x08
-    "0",    // INVALID = 0x09
-    "0",    // INVALID = 0x0a
-    "0",    // INVALID = 0x0b
-    "0",    // INVALID = 0x0c
-    "0",    // INVALID = 0x0d
-    "0",    // INVALID = 0x0e
-    "0",    // INVALID = 0x0f
-    KCOLORS"[0].r", // K0_R = 0x10
-    KCOLORS"[1].r", // K1_R = 0x11
-    KCOLORS"[2].r", // K2_R = 0x12
-    KCOLORS"[3].r", // K3_R = 0x13
-    KCOLORS"[0].g", // K0_G = 0x14
-    KCOLORS"[1].g", // K1_G = 0x15
-    KCOLORS"[2].g", // K2_G = 0x16
-    KCOLORS"[3].g", // K3_G = 0x17
-    KCOLORS"[0].b", // K0_B = 0x18
-    KCOLORS"[1].b", // K1_B = 0x19
-    KCOLORS"[2].b", // K2_B = 0x1A
-    KCOLORS"[3].b", // K3_B = 0x1B
-    KCOLORS"[0].a", // K0_A = 0x1C
-    KCOLORS"[1].a", // K1_A = 0x1D
-    KCOLORS"[2].a", // K2_A = 0x1E
-    KCOLORS"[3].a", // K3_A = 0x1F
-};
-
 CMaterial::CMaterial()
     : m_program(nullptr),
+      m_version(MetroidPrime1),
       m_materialFlags(0),
       m_unknown1_mp2(0),
       m_unknown2_mp2(0),
-      m_konstCount(0)
+      m_konstCount(0),
+      m_isBound(false)
 {
     memset(m_konstColor, 0, sizeof(m_konstColor));
 }
@@ -102,6 +32,19 @@ CMaterial::~CMaterial()
 void CMaterial::setModelMatrix(const glm::mat4& modelMatrix)
 {
     m_modelMatrix = modelMatrix;
+    assignModelMatrix();
+}
+
+void CMaterial::setViewMatrix(const glm::mat4& viewMatrix)
+{
+    m_viewMatrix = viewMatrix;
+    assignViewMatrix();
+}
+
+void CMaterial::setProjectionMatrix(const glm::mat4& projectionMatrix)
+{
+    m_projectionMatrix = projectionMatrix;
+    assignProjectionMatrix();
 }
 
 atUint32 CMaterial::materialFlags() const
@@ -109,14 +52,47 @@ atUint32 CMaterial::materialFlags() const
     return m_materialFlags;
 }
 
+void CMaterial::setMaterialFlags(atUint32 matFlags)
+{
+    m_materialFlags = matFlags;
+}
+
+void CMaterial::setVertexAttributes(atUint32 vertFlags)
+{
+    m_vertexAttributes = vertFlags;
+}
+
 atUint32 CMaterial::vertexAttributes() const
 {
     return m_vertexAttributes;
 }
 
+void CMaterial::addTevStage(const STEVStage& tevStage, atUint32 texInFlags)
+{
+    m_tevStages.push_back(tevStage);
+    m_texTEVIn.push_back(texInFlags);
+}
+
 std::vector<atUint32> CMaterial::textureIndices() const
 {
     return m_textureIndices;
+}
+
+void CMaterial::setBlendMode(EBlendMode dst, EBlendMode src)
+{
+    m_blendDstFactor = dst;
+    m_blendSrcFactor = src;
+}
+
+void CMaterial::setKonstColor(atUint32 id, const QColor& color)
+{
+    atUint32 realIndex = id % 4;
+    m_konstColor[realIndex] = color;
+
+    if (m_konstCount < (realIndex + 1))
+        m_konstCount = realIndex + 1;
+
+    assignKonstColor(realIndex);
 }
 
 bool CMaterial::hasAttribute(atUint32 index)
@@ -193,59 +169,6 @@ QOpenGLShader* CMaterial::buildVertex()
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Vertex);
 }
 
-static const char *tevRegNames[] =
-{
-    "prev",
-    "c0",
-    "c1",
-    "c2",
-    "tex",
-};
-
-
-static const char *cRegNames[] =
-{
-    "prev.rgb",
-    "prev.aaa",
-    "c0.rgb",
-    "c0.aaa",
-    "c1.rgb",
-    "c1.aaa",
-    "c2.rgb",
-    "c2.aaa",
-    "tex.rgb",
-    "tex.aaa",
-    "rast.rgb",
-    "rast.aaa",
-    "vec3(1.0,1.0,1.0)",
-    "vec3(0.5,0.5,0.5)",
-    "konstc.rgb",
-    "vec3(0.0,0.0,0.0)",
-};
-
-static const char *aRegNames[] =
-{
-    "prev.a",
-    "c0.a",
-    "c1.a",
-    "c2.a",
-    "tex.a",
-    "tex.a",
-    "konstc.a",
-    "0",
-};
-
-static const char *rasTable[] =
-{
-    "color0",
-    "color1",
-    "vec4(0, 0, 0, color0.a)", //2
-    "vec4(0, 0, 0, color1.a)", //3
-    "color0", //4
-    "color1", // bump alpha (0..248)
-    "vec4(0, 0, 0, 0)"
-};
-
 QOpenGLShader* CMaterial::buildFragment()
 {
     QStringList fragmentSource;
@@ -255,58 +178,7 @@ QOpenGLShader* CMaterial::buildFragment()
         source = source.replace("//{GXSHADERINFO}", QString("// %1 TEV Stages %2 TexGens\n").arg(m_tevStages.size()).arg(m_texGenFlags.size()));
 
         for (atUint32 i = 0; i < m_tevStages.size(); i++)
-        {
-            atUint32 texUVid = (m_texTEVIn[i] & 0x0000FF);
-            if (texUVid < m_textureIndices.size())
-                fragmentSource << QString("    tevCoord = (texCoord%1.z == 0.0) ? texCoord%1.xy : texCoord%1.xy / texCoord%1.z;").arg(texUVid);
-            else
-                fragmentSource << QString("    tevCoord = (texCoord%1.z == 0.0) ? texCoord%1.xy : texCoord%1.xy / texCoord%1.z;").arg(i);
-
-            atUint32 clrRegASrc   =  m_tevStages[i].ColorInFlags        & 15;
-            atUint32 alphaRegASrc =  m_tevStages[i].AlphaInFlags        &  7;
-            atUint32 clrRegBSrc   = (m_tevStages[i].ColorInFlags >>  5) & 15;
-            atUint32 alphaRegBSrc = (m_tevStages[i].AlphaInFlags >>  5) &  7;
-            atUint32 clrRegCSrc   = (m_tevStages[i].ColorInFlags >> 10) & 15;
-            atUint32 alphaRegCSrc = (m_tevStages[i].AlphaInFlags >> 10) &  7;
-            atUint32 clrRegDSrc   = (m_tevStages[i].ColorInFlags >> 15) & 15;
-            atUint32 alphaRegDSrc = (m_tevStages[i].AlphaInFlags >> 15) &  7;
-            atUint32 texSampId    = ((m_texTEVIn[i] & 0x000FF00) >> 8);
-
-            if(texSampId < 8)
-                fragmentSource << QString("    tex = texture(tex%1, tevCoord);").arg(texSampId);
-            else
-                fragmentSource << "vec4(1.0, 1.0, 1.0, 1.0);\n";
-
-            fragmentSource << QString("    konstc = vec4(%1, %2);").arg(tevKSelTableC[m_tevStages[i].KonstColorIn]).arg(tevKSelTableA[m_tevStages[i].KonstAlphaIn]);
-
-            if (m_tevStages[i].RasterizedIn != 0xFF)
-                fragmentSource << QString("    rast = %1;").arg(rasTable[m_tevStages[i].RasterizedIn]);
-
-            fragmentSource << QString("    tevin_a = vec4(%1, %2);").arg(cRegNames[clrRegASrc]).arg(aRegNames[alphaRegASrc]);
-            fragmentSource << QString("    tevin_b = vec4(%1, %2);").arg(cRegNames[clrRegBSrc]).arg(aRegNames[alphaRegBSrc]);
-            fragmentSource << QString("    tevin_c = vec4(%1, %2);").arg(cRegNames[clrRegCSrc]).arg(aRegNames[alphaRegCSrc]);
-            fragmentSource << QString("    tevin_d = vec4(%1, %2);").arg(cRegNames[clrRegDSrc]).arg(aRegNames[alphaRegDSrc]);
-            fragmentSource << "    // ColorCombine";
-            QString clrCombine = QString("    %1.rgb =").arg(tevRegNames[(m_tevStages[i].ColorOpFlags & 0x600) >> 9]);
-            if ((m_tevStages[i].ColorOpFlags & 0x100) >> 8)
-                clrCombine += "clamp(";
-
-            clrCombine += "(tevin_d.rgb + ((1.0 - tevin_c.rgb) * tevin_a.rgb + tevin_c.rgb * tevin_b.rgb))";
-            if ((m_tevStages[i].ColorOpFlags & 0x100) >> 8)
-                clrCombine += ", vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0))";
-            fragmentSource << clrCombine + ";";
-            fragmentSource << "    // AlphaCombine";
-            QString alphaCombine = QString("    %1.a = ").arg(tevRegNames[(m_tevStages[i].AlphaOpFlags & 0x600) >> 9]);
-
-            if ((m_tevStages[i].AlphaOpFlags & 0x100) >> 8)
-                alphaCombine += "clamp(";
-
-            alphaCombine +=  "(tevin_d.a + ((1.0 - tevin_c.a) * tevin_a.a + tevin_c.a * tevin_b.a))";
-            if ((m_tevStages[i].AlphaOpFlags & 0x100) >> 8)
-                alphaCombine +=  ", 0.0, 1.0)";
-            fragmentSource << alphaCombine + ";"
-                           << QString("    // End TEV Stage %1").arg(i);
-        }
+            fragmentSource << m_tevStages[i].fragmentSource(m_texTEVIn[i], m_textureIndices.size(), i);
 
         source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
     }
@@ -314,6 +186,42 @@ QOpenGLShader* CMaterial::buildFragment()
         source = source.replace("//{TEVSTAGES}", "prev = texture(tex0, texCoord0.xy);//color0;");
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Fragment);
+}
+
+void CMaterial::assignKonstColor(atUint32 id)
+{
+    if (!m_isBound)
+        return;
+
+    id = id % 4;
+    const char* name = QString("konst[%1]").arg(id).toStdString().c_str();
+    m_program->setUniformValue(name, m_konstColor[id]);
+}
+
+void CMaterial::assignModelMatrix()
+{
+    if (!m_isBound)
+        return;
+
+    atUint32 modelLoc = m_program->uniformLocation("model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &m_modelMatrix[0][0]);
+}
+
+void CMaterial::assignViewMatrix()
+{
+    if (!m_isBound)
+        return;
+
+    atUint32 viewLoc = m_program->uniformLocation("view");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &m_viewMatrix[0][0]);
+}
+
+void CMaterial::assignProjectionMatrix()
+{
+    if (!m_isBound)
+        return;
+    atUint32 projLoc = m_program->uniformLocation("projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, &m_projectionMatrix[0][0]);
 }
 
 bool CMaterial::hasPosition()
@@ -393,23 +301,19 @@ bool CMaterial::bind()
         g_postMtx[i] = glm::mat4(1);
 
     m_program->bind();
-    atUint32 modelLoc = m_program->uniformLocation("model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &m_modelMatrix[0][0]);
+    m_isBound = true;
+
+    assignModelMatrix();
+    assignViewMatrix();
+    assignProjectionMatrix();
 
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
         updateAnimations();
 
         for (atUint32 i = 0; i < m_konstCount; i++)
-        {
-            const char* name = QString("konst[%1]").arg(i).toStdString().c_str();
-            QColor konstColor = QColor::fromRgba(m_konstColor[i]);
-            int b = konstColor.red();
-            konstColor.setRed(konstColor.blue());
-            konstColor.setBlue(b);
+            assignKonstColor(i);
 
-            m_program->setUniformValue(name, konstColor);
-        }
         m_program->setUniformValue("ambientLight", m_ambient);
         if (!(m_materialFlags & 0x80))
             glDepthMask(GL_FALSE);
@@ -434,6 +338,7 @@ void CMaterial::release()
     glBlendFunc(GL_ONE, GL_ZERO);
 
     m_program->release();
+    m_isBound = false;
 }
 
 QOpenGLShaderProgram* CMaterial::program()
@@ -624,3 +529,6 @@ bool operator==(const SAnimation& left, const SAnimation& right)
 {
     return !memcmp(&left, &right, sizeof(SAnimation));
 }
+
+
+
