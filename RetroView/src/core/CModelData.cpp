@@ -193,7 +193,10 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
 {
     std::unordered_map<atUint32, std::vector<SIndexBufferObject>> ibos;
     if (transparents)
+    {
         ibos = m_transparents;
+        sortTransparent(ibos);
+    }
     else
         ibos = m_opaques;
 
@@ -232,6 +235,15 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
             glBindTexture(GL_TEXTURE_2D, 0);
         }
     }
+
+    glPointSize(15.f);
+    glBegin(GL_POINTS);
+    for (const CMesh& mesh : m_meshes)
+    {
+        glVertex3fv(&mesh.m_unkVector[0]);
+        //drawOutlinedCube(glm::vec3(0), glm::vec4(0), glm::vec4(0), glm::vec3(1));
+    }
+    glEnd();
 }
 
 void CModelData::drawTransparentBoxes()
@@ -285,7 +297,14 @@ void CModelData::drawBoundingBoxes()
 {
     drawBoundingBox(m_boundingBox);
     for (const CMesh& mesh : m_meshes)
+    {
+        const CMaterial& mat = CMaterialCache::instance()->material(mesh.m_materialID);
+
+        if (!mat.isTransparent())
+            continue;
+
         drawBoundingBox(mesh.boundingBox());
+    }
 }
 
 void CModelData::indexIBOs(CMaterialSet& materialSet)
@@ -297,7 +316,6 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
 
     for (CMesh& mesh : m_meshes)
     {
-
         CMaterial material = materialSet.material(mesh.m_materialID);
 
         // If it's not drawn don't even bother indexing it
@@ -346,8 +364,6 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
             }
 
             atUint32 iboID = getIbo(type, mesh.m_materialID, iboStartIndex);
-
-            m_ibos[iboID].pos = mesh.m_pivot;
 
             for (atUint32 v = 0; v < primitive.indices.size(); v++)
             {
@@ -527,4 +543,8 @@ void CModelData::loadIbos(CMaterialSet& ms)
         else
             m_opaques[m_ibos[ibo].materialId].push_back(m_ibos[ibo]);
     }
+}
+
+void CModelData::sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans)
+{
 }

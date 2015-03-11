@@ -43,7 +43,7 @@ void main()
 {
     gl_Position = projection * view * model * vec4(in_Position, 1.0);
     pos  = in_Position;
-    norm = in_Normal;
+    norm = transpose(inverse(mat3(view * model))) * in_Normal;
 
     color0 = ambientLight;
     color1 = color0;

@@ -47,7 +47,7 @@ CMapArea* CMapAreaReader::read()
         material.setBlendMode(EBlendMode::Zero, EBlendMode::One);
 
         STEVStage tevStage;
-        tevStage.ColorInFlags = 0xE | (0xf << 5) | (0xf << 10) | (0xf << 15);
+        tevStage.ColorInFlags = 0xE | (0xF << 5) | (0xF << 10) | (0xF << 15);
         tevStage.AlphaInFlags = 0x6 | (0x7 << 5) | (0x7 << 10) | (0x7 << 15);
 
         tevStage.ColorOpFlags = 0;
@@ -190,17 +190,13 @@ CMapArea* CMapAreaReader::read()
                 }
 
                 atUint32 indexCount = base::readUint32();
-                atUint32 alignedCount = (indexCount + 3) & ~3;
 
-                for (atUint32 k = 0; k < alignedCount; k++)
-                {
-                    atUint8 index = base::readUByte();
-                    if (k < indexCount)
-                        primitive.indices.push_back(index);
-                }
+                for (atUint32 k = 0; k < indexCount; ++k)
+                    primitive.indices.push_back(base::readUByte());
 
                 primitive.indices.push_back(0xFF);
                 detail.primitives.push_back(primitive);
+                base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }
             base::seek(primDataEnd + headerSize, Athena::SeekOrigin::Begin);
 
@@ -210,15 +206,12 @@ CMapArea* CMapAreaReader::read()
             {
                 SMapBorder border;
                 atUint32 borderIndexCount = base::readUint32();
-                atUint32 alignedCount = (borderIndexCount + 3) & ~3;
-                for (atUint32 k = 0; k < alignedCount; k++)
-                {
-                    atUint8 index = base::readUByte();
-                    if (k < borderIndexCount)
-                        border.indices.push_back(index);
-                }
+                for (atUint32 k = 0; k < borderIndexCount; ++k)
+                    border.indices.push_back(base::readUByte());
+
                 border.indices.push_back(0xFF);
                 detail.borders.push_back(border);
+                base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }
 
             ret->m_details.push_back(detail);

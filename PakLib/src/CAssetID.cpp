@@ -12,29 +12,35 @@ CAssetID::CAssetID()
 CAssetID::CAssetID(Athena::io::IStreamReader& input, CAssetID::EIDBits idLength)
     : m_idLen(idLength)
 {
-    if (idLength != E_Invalid)
+    atUint32 bytes = this->idLength();
+    if (idLength != E_Invalid && bytes > 0)
     {
         memset(m_idVal, 0, 16);
-        atUint32 bytes = this->idLength();
         atUint8* tmp = input.readUBytes(bytes);
         memcpy(m_idVal, tmp, bytes);
         delete[] tmp;
     }
     else
+    {
+        m_idLen = E_Invalid; // just to make sure
         memset(m_idVal, 0xFF, 16);
+    }
 }
 
 CAssetID::CAssetID(const atUint8* assetID, CAssetID::EIDBits idLength)
     : m_idLen(idLength)
 {
-    if (idLength != E_Invalid)
+    atUint32 bytes = this->idLength();
+    if (idLength != E_Invalid && bytes > 0)
     {
-        atUint32 bytes = this->idLength();
         memset(m_idVal, 0, 16);
         memcpy(m_idVal, assetID, bytes);
     }
     else
+    {
+        m_idLen = E_Invalid; // just to make sure
         memset(m_idVal, 0xFF, 16);
+    }
 }
 
 CAssetID::CAssetID(const atUint32& assetID)

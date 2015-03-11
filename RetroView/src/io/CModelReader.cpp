@@ -57,8 +57,8 @@ CModelFile* CModelReader::read()
     if (!(version >= CModelFile::MetroidPrime1 && version <= CModelFile::MetroidPrime3))
         THROW_INVALID_DATA_EXCEPTION("Only Metroid Prime 1 to 3 models are supported got v%i\n", version);
 
-//    try
-//    {
+    try
+    {
         m_result = new CModelFile;
         m_result->m_version = (CModelFile::Version)version;
         m_result->m_format = base::readUint32();
@@ -155,14 +155,14 @@ CModelFile* CModelReader::read()
             }
         }
 
-        m_result->indexIBOs(m_result->m_materialSets[0]);
-//    }
-//    catch(...)
-//    {
-//        delete m_result;
-//        m_result = nullptr;
-//        throw;
-//    }
+        m_result->indexIBOs(m_result->currentMaterialSet());
+    }
+    catch(...)
+    {
+        delete m_result;
+        m_result = nullptr;
+        throw;
+    }
 
     return m_result;
 }
@@ -208,9 +208,9 @@ void CModelReader::readNormals(Athena::io::MemoryReader& in)
         while ((normalCount--) > 0)
         {
             glm::vec3 nrm;
-            nrm.x = in.readUint16() / 32768.f;
-            nrm.y = in.readUint16() / 32768.f;
-            nrm.z = in.readUint16() / 32768.f;
+            nrm.x = (float)(in.readInt16() / 32768.f);
+            nrm.y = (float)(in.readInt16() / 32768.f);
+            nrm.z = (float)(in.readInt16() / 32768.f);
             m_result->m_normals.push_back(nrm);
         }
     }
@@ -243,8 +243,8 @@ void CModelReader::readTexCoords(atUint32 slot, Athena::io::MemoryReader& in)
         while ((lightmapCoordCount--) > 0)
         {
             glm::vec2 tex;
-            tex.s = in.readUint16() / 32768.f;
-            tex.t = in.readUint16() / 32768.f;
+            tex.s = in.readInt16() / 32768.f;
+            tex.t = in.readInt16() / 32768.f;
             m_result->m_lightmapCoords.push_back(tex);
         }
     }
@@ -272,7 +272,7 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
     atUint32 extraDataSize = in.readUint32();
 
     for (atUint32 i = 0; i < 3; i++)
-        in.readFloat();
+        mesh.m_unkVector[i] = in.readFloat();
 
     in.seek(extraDataSize);
     in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);

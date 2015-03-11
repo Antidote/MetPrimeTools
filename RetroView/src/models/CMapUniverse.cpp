@@ -1,12 +1,12 @@
 #include <GL/glew.h>
 #include "models/CMapUniverse.hpp"
+#include "models/CMapArea.hpp"
 #include "core/GXCommon.hpp"
 #include "core/CMaterial.hpp"
 #include "core/CMaterialCache.hpp"
 #include "core/CResourceManager.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include "models/CMapArea.hpp"
 
 CMapUniverse::CMapUniverse()
 {
@@ -37,6 +37,7 @@ void CMapUniverse::draw()
             hex->draw();
         }
     }
+    hex->setTransformMatrix(glm::mat4(1));
 }
 
 void CMapUniverse::drawBoundingBox()

@@ -19,7 +19,8 @@ CMaterial::CMaterial()
       m_unknown1_mp2(0),
       m_unknown2_mp2(0),
       m_konstCount(0),
-      m_isBound(false)
+      m_isBound(false),
+      m_texturesEnabled(true)
 {
     memset(m_konstColor, 0, sizeof(m_konstColor));
 }
@@ -45,6 +46,12 @@ void CMaterial::setProjectionMatrix(const glm::mat4& projectionMatrix)
 {
     m_projectionMatrix = projectionMatrix;
     assignProjectionMatrix();
+}
+
+void CMaterial::setTexturesEnabled(const bool& enabled)
+{
+    m_texturesEnabled = enabled;
+    assignTexturesEnabled();
 }
 
 atUint32 CMaterial::materialFlags() const
@@ -101,10 +108,12 @@ bool CMaterial::hasAttribute(atUint32 index)
     return (tmp == 2 || tmp == 3);
 }
 
-QString CMaterial::getSource(QString Filename){
+QString CMaterial::getSource(QString Filename)
+{
     QFile file(Filename);
 
-    if(!file.open(QFile::ReadOnly | QFile::Text)){
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
         qDebug() << "could not open file for read";
         return QString();
     }
@@ -224,6 +233,13 @@ void CMaterial::assignProjectionMatrix()
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &m_projectionMatrix[0][0]);
 }
 
+void CMaterial::assignTexturesEnabled()
+{
+    if (!m_isBound)
+        return;
+    m_program->setUniformValue("texturesEnabled", m_texturesEnabled);
+}
+
 bool CMaterial::hasPosition()
 {
     return hasAttribute(0);
@@ -250,7 +266,7 @@ bool CMaterial::hasUV(atUint8 slot)
     return hasAttribute(4 + slot);
 }
 
-bool CMaterial::isTransparent()
+bool CMaterial::isTransparent() const
 {
     return (m_materialFlags & 0x10);
 }
@@ -306,6 +322,7 @@ bool CMaterial::bind()
     assignModelMatrix();
     assignViewMatrix();
     assignProjectionMatrix();
+    assignTexturesEnabled();
 
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
@@ -377,13 +394,13 @@ void CMaterial::updateAnimations()
                         (m_animations[i].mode == 7 && !QSettings().value("mode7").toBool()))
                     break;
 
-                texMtx = glm::inverse(CGLViewer::instance()->viewMatrix()) * m_modelMatrix;
+                texMtx = glm::inverse(CGLViewer::instance()->viewMatrix() * m_modelMatrix);
                 if (m_animations[i].mode != 7)
                 {
-                    postMtx = glm::mat4(glm::mat3x4(
-                                            0.5, 0.0, 0.0, 0.5,
-                                            0.0, 0.0, 0.5, 0.5,
-                                            0.0, 0.0, 0.0, 1.0));
+                    postMtx = glm::mat4(0.5, 0.0, 0.0, 0.5,
+                                        0.0, 0.5, 0.0, 0.5,
+                                        0.0, 0.0, 0.0, 1.0,
+                                        0.0, 0.0, 0.0, 1.0);
                 }
                 else
                 {
@@ -395,8 +412,10 @@ void CMaterial::updateAnimations()
 
                     float halfA = m_animations[i].parms[0] * 0.5f;
 
-                    postMtx = glm::mat4(glm::mat2x4(halfA, 0.0, 0.0, xy,
-                                                    0.0, 0.0, halfA, z));
+                    postMtx = glm::mat4(halfA, 0.0, 0.0, xy,
+                                        0.0, 0.0, halfA, z,
+                                        0.0, 0.0, 0.0, 1.0,
+                                        0.0, 0.0, 0.0, 1.0);
                 }
 
                 if (m_animations[i].mode == 0 || m_animations[i].mode == 7)

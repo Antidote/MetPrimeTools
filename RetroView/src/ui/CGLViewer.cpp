@@ -74,21 +74,11 @@ void CGLViewer::paintGL()
         glm::mat4 viewRot = m_camera.rotationMatrix();
         m_skybox->setAmbient(1, 1, 1);
         m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
+        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
         m_skybox->draw();
     }
 
     glClear(GL_DEPTH_BUFFER_BIT);
-
-    if (QSettings().value("enableLighting").toBool())
-    {
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-    }
-    else
-    {
-        glDisable(GL_LIGHTING);
-        glDisable(GL_LIGHT0);
-    }
 
     bool _drawAxis = QSettings().value("axisDrawn").toBool();
     bool _drawGrid = QSettings().value("gridDrawn").toBool();
@@ -104,7 +94,7 @@ void CGLViewer::paintGL()
     if (_drawGrid)
     {
         glBegin(GL_LINES);
-        for(int i = -20; i <= 20; i += 2)
+        for(int i = -20; i <= 20; i += 1)
         {
             if (i == 0 && _drawAxis)
                 continue;
@@ -136,6 +126,7 @@ void CGLViewer::paintGL()
     if (m_currentRenderable)
     {
         m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
+        m_currentRenderable->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
 
         if (QSettings().value("drawBoundingBox").toBool())
             m_currentRenderable->drawBoundingBox();
@@ -169,7 +160,7 @@ void CGLViewer::initializeGL()
         // Enable depth test
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        qglClearColor(QColor().black());
+        qglClearColor(QColor(128, 128, 128).darker(350));
         setAutoFillBackground(true);
         setAutoBufferSwap(true);
         emit initialized();
@@ -252,7 +243,7 @@ void CGLViewer::updateCamera()
 
 glm::mat4 CGLViewer::projectionMatrix()
 {
-    return glm::perspective(glm::radians(55.0f), (float)width()/(float)height(), 0.1f, 10000.0f);
+    return m_camera.projectionMatrix();
 }
 
 glm::mat4 CGLViewer::modelMatrix()
@@ -277,7 +268,7 @@ void CGLViewer::setSkybox(IRenderableModel* renderable)
 
 float CGLViewer::frameRate() const
 {
-    return 10000.f / m_deltaTime;
+    return 1000.f / m_deltaTime;
 }
 
 void CGLViewer::stopUpdates()

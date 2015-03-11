@@ -133,11 +133,11 @@ void CMainWindow::onViewerInitialized()
     ui->wireframeCheckBox->setChecked(QSettings().value("wireframe").toBool());
     ui->boundingBoxChkBox->setChecked(QSettings().value("drawBoundingBox").toBool());
     ui->enableLightingCheckBox->setChecked(QSettings().value("enableLighting").toBool());
-    ui->enableTexturesCheckBox->setChecked(QSettings().value("enableTextures").toBool());
+    ui->enableTexturesCheckBox->setChecked(QSettings().value("enableTextures", true).toBool());
     ui->drawCollisionCheckBox->setChecked(QSettings().value("drawCollision").toBool());
     ui->transActors->setChecked(QSettings().value("drawTranslucent").toBool());
-    ui->axisCheckBox->setChecked(QSettings().value("axisDrawn").toBool());
-    ui->gridCheckBox->setChecked(QSettings().value("gridDrawn").toBool());
+    ui->axisCheckBox->setChecked(QSettings().value("axisDrawn", true).toBool());
+    ui->gridCheckBox->setChecked(QSettings().value("gridDrawn", true).toBool());
 
 
     connect(ui->pointsCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
@@ -191,16 +191,16 @@ void CMainWindow::onTabChanged()
     CGLViewer::instance()->setSkybox(nullptr);
     CResourceManager::instance()->clear();
 
-    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
-    if (ptw && ptw->pak()->isWorldPak())
-    {
-        std::vector<SPakResource> res = ptw->pak()->resourcesByType("mlvl");
-        CWorldFile* world = nullptr;
-        if (res.size() > 0)
-            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
-        if (world)
-            CGLViewer::instance()->setSkybox(world->skyboxModel());
-    }
+//    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
+//    if (ptw && ptw->pak()->isWorldPak())
+//    {
+//        std::vector<SPakResource> res = ptw->pak()->resourcesByType("mlvl");
+//        CWorldFile* world = nullptr;
+//        if (res.size() > 0)
+//            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
+//        if (world)
+//            CGLViewer::instance()->setSkybox(world->skyboxModel());
+//    }
 }
 
 void CMainWindow::updateFPS()

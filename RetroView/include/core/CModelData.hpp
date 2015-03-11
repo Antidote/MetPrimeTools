@@ -78,6 +78,8 @@ protected:
     void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex);
     void loadIbos(CMaterialSet& ms);
 
+    void sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans);
+
     atUint32                 m_format;
     glm::mat3x4              m_transform;
     SBoundingBox             m_boundingBox;

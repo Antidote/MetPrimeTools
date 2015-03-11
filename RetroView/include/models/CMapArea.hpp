@@ -68,6 +68,7 @@ private:
     std::vector<SMapAreaDetail>    m_details;
     atUint32                       m_vertexBuffer;
 
+    // Internal variables
     atUint32                       m_materialID;
     QColor                         m_color;
     bool                           m_vboBuilt;

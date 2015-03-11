@@ -73,6 +73,7 @@ void CResourceManager::clear()
     for (std::pair<CAssetID, IResource*> res : m_cachedResources)
         delete res.second;
     m_cachedResources.clear();
+    m_failedAssets.clear();
 }
 
 void CResourceManager::initialize(const std::string& baseDirectory)
@@ -113,6 +114,10 @@ IResource* CResourceManager::loadResource(const CAssetID& assetID, const std::st
     if (assetID == CAssetID::InvalidAsset)
         return nullptr;
 
+    std::vector<CAssetID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
+    if (failedIter != m_failedAssets.end())
+        return nullptr;
+
     CachedResourceIterator iter = m_cachedResources.find(assetID);
     if (iter != m_cachedResources.end())
         return iter->second;
@@ -132,9 +137,14 @@ IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& 
     if (assetID == CAssetID::InvalidAsset)
         return nullptr;
 
+    std::vector<CAssetID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
+    if (failedIter != m_failedAssets.end())
+        return nullptr;
+
     CachedResourceIterator cacheIter = m_cachedResources.find(assetID);
     if (cacheIter != m_cachedResources.end())
         return cacheIter->second;
+
 
     std::vector<SPakResource> pakResources;
     if (!type.empty())
@@ -187,9 +197,10 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
     }
     catch(const Athena::error::Exception& e)
     {
-        std::cout << e.file() << e.message() << std::endl;
+        std::cout << e.file() << " " << e.message() << std::endl;
         delete ret;
         ret = nullptr;
+        m_failedAssets.push_back(res.id);
     }
 
     return ret;

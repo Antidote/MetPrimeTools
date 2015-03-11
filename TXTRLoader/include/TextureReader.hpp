@@ -16,10 +16,8 @@ public:
 
     Texture* read();
 
-    static Texture* loadTexture(const std::string& texture);
 private:
     void decode(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& dst);
-    Texture* createTexture(Athena::io::MemoryWriter& buf);
     Athena::io::MemoryReader* m_paletteStream;
     atUint16             m_width;
     atUint16             m_height;

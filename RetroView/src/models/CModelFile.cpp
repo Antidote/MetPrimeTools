@@ -4,6 +4,7 @@
 #include "core/GXCommon.hpp"
 #include "ui/CGLViewer.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <dae.h>
 #include <dae/daeUtils.h>
 #include <dom/domCOLLADA.h>
@@ -22,7 +23,7 @@ void CModelFile::draw()
 {
     CMaterialCache::instance()->setAmbientOnMaterials(currentMaterialSet().materials(), m_ambient);
 
-    glm::mat4 model = CGLViewer::instance()->modelMatrix();
+    glm::mat4 model = glm::mat4(1);
     CModelData::preDraw(currentMaterialSet());
     CModelData::drawIbos(false, currentMaterialSet(), model);
     CModelData::drawIbos(true,  currentMaterialSet(), model);
@@ -41,6 +42,15 @@ void CModelFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::
         CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
         mat.setViewMatrix(view);
         mat.setProjectionMatrix(proj);
+    }
+}
+
+void CModelFile::updateTexturesEnabled(const bool& enabled)
+{
+    for (atUint32 materialIdx : currentMaterialSet().materials())
+    {
+        CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
+        mat.setTexturesEnabled(enabled);
     }
 }
 

@@ -87,6 +87,7 @@ private:
     std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
     std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
+    std::vector<CAssetID>                    m_failedAssets;
     std::string                              m_baseDirectory;
 };
 

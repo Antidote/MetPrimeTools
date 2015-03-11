@@ -1,10 +1,11 @@
 #include "TextureReader.hpp"
+#include <Athena/InvalidDataException.hpp>
 #include <RetroCommon.hpp>
 #include "pngpp/png.hpp"
 
 static const float sizeOutputMultiplierLut[] =
 { // number of pixels * this = number of bytes
-  1.f, 1.f, 2.f, 2.f, 4.f, 4.f, 0.f, 2.f, 4.f, 4.f, 0.5f
+  4.f, 4.f, 4.f, 4.f, 4.f, 4.f, 0.f, 2.f, 4.f, 4.f, 0.5f
 };
 
 static const atUint32 bppOutputMultiplierLut[] =
@@ -14,7 +15,7 @@ static const atUint32 bppOutputMultiplierLut[] =
 
 static const atUint32 pixelStrideLut[] =
 { // size of one pixel in output data in bytes
-  1, 1, 2, 2, 2, 2, 0, 2, 4, 4, 8
+  4, 4, 4, 4, 2, 2, 0, 2, 4, 4, 8
 };
 
 static const atUint32 blockWidthLut[] =
@@ -48,66 +49,96 @@ TextureReader::~TextureReader()
 
 Texture* TextureReader::read()
 {
-    atUint32 fmt = base::readUint32();
-
-    if (fmt > (atUint32)GXTextureFormat::CMPR)
-    {
-        Athena::io::MemoryWriter writer;
-
-        decompressFile(writer, data(), length());
-
-        if (writer.length() > 0x10)
-        {
-            setData(writer.data(), writer.length());
-            fmt = base::readUint32();
-        }
-    }
-
-    m_format  = (GXTextureFormat)fmt;
-    m_width   = base::readUint16();
-    m_height  = base::readUint16();
-    m_mipmaps = base::readUint32();
-
-    if (m_format == GXTextureFormat::C4 || m_format == GXTextureFormat::C8)
-    {
-        m_hasPalette = true;
-
-        m_palFormat = (GXPaletteFormat)base::readUint32();
-
-        base::seek(4);
-
-        atUint32 entryCount = (m_format == GXTextureFormat::C4) ? 16 : 256;
-        atUint8* palData = base::readUBytes(entryCount * 2);
-
-        m_paletteStream = new Athena::io::MemoryReader(palData, entryCount * 2);
-    }
-    else
-        m_hasPalette = false;
-
-    atUint32 imageStart = base::position();
-    atUint32 imageDataLength = base::length() - imageStart;
-
-    atUint32 dataBufferSize = imageDataLength * bppOutputMultiplierLut[(atUint32)m_format];
-
-    if (m_hasPalette && m_palFormat == GXPaletteFormat::RGB5A3)
-        dataBufferSize *= 2;
-
-    atUint8* data = new atUint8[dataBufferSize];
-
-    Athena::io::MemoryWriter buf{data, dataBufferSize};
-
-    decode(*this, buf);
-
-    return createTexture(buf);
-}
-
-Texture*TextureReader::loadTexture(const std::string& texture)
-{
     Texture* ret = nullptr;
+
     try
     {
-        TextureReader reader(texture);
-        ret = reader.read();
+        atUint32 fmt = base::readUint32();
+
+        if (fmt > (atUint32)GXTextureFormat::CMPR)
+        {
+            Athena::io::MemoryWriter writer;
+
+            decompressFile(writer, data(), length());
+
+            if (writer.length() > 0)
+            {
+                setData(writer.data(), writer.length());
+                fmt = base::readUint32();
+            }
+            else
+                THROW_INVALID_DATA_EXCEPTION("Invalid texture data, unable to decompress");
+        }
+
+        m_format  = (GXTextureFormat)fmt;
+        m_width   = base::readUint16();
+        m_height  = base::readUint16();
+        m_mipmaps = base::readUint32();
+
+        if (m_format == GXTextureFormat::C4 || m_format == GXTextureFormat::C8)
+        {
+            m_hasPalette = true;
+
+            m_palFormat = (GXPaletteFormat)base::readUint32();
+
+            base::seek(4);
+
+            atUint32 entryCount = (m_format == GXTextureFormat::C4) ? 16 : 256;
+            atUint8* palData = base::readUBytes(entryCount * 2);
+
+            m_paletteStream = new Athena::io::MemoryReader(palData, entryCount * 2);
+        }
+        else
+            m_hasPalette = false;
+
+        atUint32 imageStart = base::position();
+        atUint32 imageDataLength = base::length() - imageStart;
+
+        atUint32 dataBufferSize = imageDataLength * bppOutputMultiplierLut[(atUint32)m_format];
+
+        if (m_hasPalette && m_palFormat == GXPaletteFormat::RGB5A3)
+            dataBufferSize *= 2;
+
+        atUint8* data = new atUint8[dataBufferSize];
+
+        Athena::io::MemoryWriter buf{data, dataBufferSize};
+
+        decode(*this, buf);
+
+        ret = new Texture;
+        switch (m_format)
+        {
+            case GXTextureFormat::I4:
+            case GXTextureFormat::IA4:
+            case GXTextureFormat::IA8:
+            case GXTextureFormat::I8:
+                ret->m_format = Texture::Format::RGBA8;
+                break;
+            case GXTextureFormat::C4:
+            case GXTextureFormat::C8:
+                if (m_palFormat == GXPaletteFormat::RGB565)
+                    ret->m_format = Texture::Format::RGB565;
+                if (m_palFormat == GXPaletteFormat::RGB5A3 || m_palFormat == GXPaletteFormat::IA8)
+                    ret->m_format = Texture::Format::RGBA8;
+                break;
+            case GXTextureFormat::RGB565:
+                ret->m_format = Texture::Format::RGB565;
+                break;
+            case GXTextureFormat::RGB5A3:
+            case GXTextureFormat::RGBA8:
+                ret->m_format = Texture::Format::RGBA8;
+                break;
+            case GXTextureFormat::CMPR:
+                ret->m_format = Texture::Format::DXT1;
+                break;
+        }
+
+        ret->m_width      = m_width;
+        ret->m_height     = m_height;
+        ret->m_mipmaps    = m_mipmaps;
+        ret->m_bits       = buf.data();
+        ret->m_dataSize   = buf.length();
+        ret->m_linearSize = m_width * m_height * sizeOutputMultiplierLut[(atUint32)m_format];
     }
     catch(...)
     {
@@ -192,60 +223,28 @@ void TextureReader::decode(Athena::io::MemoryReader& in, Athena::io::MemoryWrite
     }
 }
 
-Texture* TextureReader::createTexture(Athena::io::MemoryWriter& buf)
-{
-    Texture* ret  = new Texture;
-    switch (m_format)
-    {
-        case GXTextureFormat::I4:
-        case GXTextureFormat::I8:
-            ret->m_format = Texture::Format::Luminance;
-            break;
-        case GXTextureFormat::IA4:
-        case GXTextureFormat::IA8:
-            ret->m_format = Texture::Format::LuminanceAlpha;
-            break;
-        case GXTextureFormat::C4:
-        case GXTextureFormat::C8:
-            if (m_palFormat == GXPaletteFormat::IA8)
-                ret->m_format = Texture::Format::LuminanceAlpha;
-            if (m_palFormat == GXPaletteFormat::RGB565)
-                ret->m_format = Texture::Format::RGB565;
-            if (m_palFormat == GXPaletteFormat::RGB5A3)
-                ret->m_format = Texture::Format::RGBA8;
-            break;
-        case GXTextureFormat::RGB565:
-            ret->m_format = Texture::Format::RGB565;
-            break;
-        case GXTextureFormat::RGB5A3:
-        case GXTextureFormat::RGBA8:
-            ret->m_format = Texture::Format::RGBA8;
-            break;
-        case GXTextureFormat::CMPR:
-            ret->m_format = Texture::Format::DXT1;
-            break;
-    }
-
-    ret->m_width      = m_width;
-    ret->m_height     = m_height;
-    ret->m_mipmaps    = m_mipmaps;
-    ret->m_bits       = buf.data();
-    ret->m_dataSize   = buf.length();
-    ret->m_linearSize = m_width * m_height * sizeOutputMultiplierLut[(atUint32)m_format];
-
-    return ret;
-}
-
 void TextureReader::readPixelI4(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& out)
 {
     atUint8 px = in.readByte();
-    out.writeByte(extend4To8(px >> 4));
-    out.writeByte(extend4To8(px));
+    atUint8 l1 = extend4To8(px >> 4);
+    atUint8 l2 = extend4To8(px);
+    out.writeByte(l1);
+    out.writeByte(l1);
+    out.writeByte(l1);
+    out.writeByte(l1);
+    out.writeByte(l2);
+    out.writeByte(l2);
+    out.writeByte(l2);
+    out.writeByte(l2);
 }
 
 void TextureReader::readPixelI8(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& out)
 {
-    out.writeByte(in.readByte());
+    atUint8 l = in.readByte();
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(l);
 }
 
 void TextureReader::readPixelIA4(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& out)
@@ -253,12 +252,20 @@ void TextureReader::readPixelIA4(Athena::io::MemoryReader& in, Athena::io::Memor
     atUint8 b = in.readByte();
     atUint8 a = extend4To8(b >> 4);
     atUint8 l = extend4To8(b);
-    out.writeUint16((l << 8) | a);
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(a);
 }
 
 void TextureReader::readPixelIA8(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& out)
 {
-    out.writeUint16(in.readUint16());
+    atUint8 a = in.readByte();
+    atUint8 l = in.readByte();
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(l);
+    out.writeByte(a);
 }
 
 void TextureReader::readPixelC4(Athena::io::MemoryReader& in, Athena::io::MemoryWriter& out)
@@ -342,9 +349,9 @@ void TextureReader::readCMPRSubBlock(Athena::io::MemoryReader& in, Athena::io::M
     atUint32 b = in.readUint32();
     Athena::utility::BigUint32(b);
     b = ((b & 0x03)       << 6) | ((b & 0x0C)       << 2) | ((b & 0x30)       >> 2) | ((b & 0xC0)       >> 6) |
-        ((b & 0x0300)     << 6) | ((b & 0x0C00)     << 2) | ((b & 0x3000)     >> 2) | ((b & 0xC000)     >> 6) |
-        ((b & 0x030000)   << 6) | ((b & 0x0C0000)   << 2) | ((b & 0x300000)   >> 2) | ((b & 0xC00000)   >> 6) |
-        ((b & 0x03000000) << 6) | ((b & 0x0C000000) << 2) | ((b & 0x30000000) >> 2) | ((b & 0xC0000000) >> 6);
+            ((b & 0x0300)     << 6) | ((b & 0x0C00)     << 2) | ((b & 0x3000)     >> 2) | ((b & 0xC000)     >> 6) |
+            ((b & 0x030000)   << 6) | ((b & 0x0C0000)   << 2) | ((b & 0x300000)   >> 2) | ((b & 0xC00000)   >> 6) |
+            ((b & 0x03000000) << 6) | ((b & 0x0C000000) << 2) | ((b & 0x30000000) >> 2) | ((b & 0xC0000000) >> 6);
     out.writeUint32(b);
 }
 

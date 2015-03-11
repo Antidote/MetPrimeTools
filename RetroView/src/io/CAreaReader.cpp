@@ -330,9 +330,9 @@ void CAreaReader::readNormals(CModelData& model, Athena::io::MemoryReader& in)
     while ((normalCount--) > 0)
     {
         glm::vec3 nrm;
-        nrm.x = in.readUint16() / 32768.f; // really shouldn't do this here
-        nrm.y = in.readUint16() / 32768.f; // but it's constant enough to be reliable
-        nrm.z = in.readUint16() / 32768.f;
+        nrm.x = in.readInt16() / 32768.f; // really shouldn't do this here
+        nrm.y = in.readInt16() / 32768.f; // but it's constant enough to be reliable
+        nrm.z = in.readInt16() / 32768.f;
         model.m_normals.push_back(nrm);
     }
 }
@@ -353,8 +353,8 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in,
         while ((texCoordCount--) > 0)
         {
             glm::vec2 texCoord;
-            texCoord.s = (float)(in.readUint16() / 32768.f); // really shouldn't do this here
-            texCoord.t = (float)(in.readUint16() / 32768.f); // but it's constant enough to be reliable
+            texCoord.s = (float)(in.readInt16() / 32768.f); // really shouldn't do this here
+            texCoord.t = (float)(in.readInt16() / 32768.f); // but it's constant enough to be reliable
             model.m_lightmapCoords.push_back(texCoord);
         }
     }
@@ -403,8 +403,8 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
             assert(in.readUint32() == 0);
             assert(in.readUint32() == 0);
             extraDataSize = in.readUint32();
-            for (int i = 0; i < 3; i++)
-                in.readFloat(); // Normalized vector
+            for (atUint32 i = 0; i < 3; i++)
+                mesh.m_unkVector[i] = in.readFloat(); // normalized?
         }
 
         if (ret->m_version == CAreaFile::MetroidPrime2)

@@ -68,14 +68,14 @@ void Texture::exportDDS(const std::string& path)
     memset(header.dwReserved1, 0, sizeof(atUint32) * 11);
     header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
 
-    if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
+    /*if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
     {
         header.ddspf.dwFlags = (m_format == Format::Luminance ? DDSF_LUMINANCE : DDSF_LUMINANCE_ALPHA);
         header.ddspf.dwRGBBitCount = (m_format == Format::Luminance ? 8 : 16);
         header.ddspf.dwRBitMask = 0x000000FF;
         header.ddspf.dwABitMask = 0x0000FF00;
     }
-    else if (m_format == Format::RGB565)
+    else*/ if (m_format == Format::RGB565)
     {
         header.ddspf.dwFlags    = DDSF_RGB;
         header.ddspf.dwFourCC   = 0;
@@ -139,7 +139,7 @@ void Texture::exportPNG(const std::string& path)
             // for Luminance we just assign 'l' to our RGB values, and set alpha to 255
             // for Luminance Alpha the alpha value is directly after the luminance value,
             // and we use that value instead
-            if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
+ /*           if (m_format == Format::Luminance || m_format == Format::LuminanceAlpha)
             {
                 atUint8 l, a;
                 l = *(atUint8*)(m_bits + i);
@@ -150,14 +150,14 @@ void Texture::exportPNG(const std::string& path)
                     i++;
                 }
                 else
-                    a = 0xFF;
+                    a = l;
 
                 output.set_pixel(x, y, png::rgba_pixel(l, l, l, a));
-            }
+            }*/
             // RGB565 is an interesting format, it's in a 565 bit packing (hence RGB565 = Red 5-bits Green 6-bits Blue 5-bits)
             // what this also means is that green gets truncated less in comparison to red and blue,
             // Other than havingt to unpack the bits, it's in reverse order (red being last)
-            else if (m_format == Format::RGB565)
+            if (m_format == Format::RGB565)
             {
                 atUint16 rgb = *(atUint16*)(pixels + i);
                 atUint8 r, g, b;

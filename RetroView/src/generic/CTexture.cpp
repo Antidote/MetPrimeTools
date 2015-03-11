@@ -19,7 +19,7 @@ CTexture::~CTexture()
 
 IResource* CTexture::loadByData(const atUint8* data, atUint64 length)
 {
-    Texture* tex;
+    Texture* tex = nullptr;
     CTexture* ret = nullptr;
     try
     {
@@ -33,6 +33,7 @@ IResource* CTexture::loadByData(const atUint8* data, atUint64 length)
         tex = nullptr;
         delete ret;
         ret = nullptr;
+        throw;
     }
 
     return ret;
@@ -50,14 +51,6 @@ void CTexture::bind()
 
         switch(m_texture->format())
         {
-            case Texture::Format::Luminance:
-                format = GL_LUMINANCE;
-                type = GL_UNSIGNED_BYTE;
-                break;
-            case Texture::Format::LuminanceAlpha:
-                format = GL_LUMINANCE_ALPHA;
-                type = GL_UNSIGNED_BYTE;
-                break;
             case Texture::Format::RGB565:
                 format = GL_RGB;
                 type = GL_UNSIGNED_SHORT_5_6_5;

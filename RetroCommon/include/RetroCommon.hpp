@@ -15,7 +15,7 @@ enum class EPAKSection
 };
 
 void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLength, atInt32 uncompressedLength);
-void decompressFile(Athena::io::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLength);
+void decompressFile(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLength);
 bool decompressMREA(aIO::IStreamReader& in, aIO::IStreamWriter& out);
 
 #endif // RETROCOMMON_HPP

@@ -16,6 +16,9 @@ layout (binding = 7) uniform sampler2D tex7;
 uniform vec4 konst[4];
 
 uniform bool punchThrough;
+uniform bool texturesEnabled;
+uniform bool visualizeNormals;
+
 // input
 in vec3 norm;
 in vec4 color0;
@@ -44,10 +47,15 @@ void main() {
     if (!gl_FrontFacing)
         discard;
 
+    if (texturesEnabled)
+    {
 //{TEVSTAGES}
 
-    if (punchThrough && prev.a < 0.25)
-        discard;
+        if (punchThrough && prev.a < 0.25)
+            discard;
+    }
+    else
+        prev = vec4(norm * vec3(0.5) + 0.5, 1.0);
 
     colorOut = prev;
 }

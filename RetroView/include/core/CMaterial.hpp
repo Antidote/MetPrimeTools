@@ -37,6 +37,7 @@ public:
     void setModelMatrix(const glm::mat4& modelMatrix);
     void setViewMatrix(const glm::mat4& viewMatrix);
     void setProjectionMatrix(const glm::mat4& projectionMatrix);
+    void setTexturesEnabled(const bool& enabled);
 
     atUint32 materialFlags()    const;
     void setMaterialFlags(atUint32 matFlags);
@@ -54,7 +55,7 @@ public:
     bool hasNormal();
     bool hasColor(atUint8 slot);
     bool hasUV(atUint8 slot);
-    bool isTransparent();
+    bool isTransparent() const;
     void setAmbient(const QColor& ambient);
 
     bool bind();
@@ -75,6 +76,7 @@ private:
     void assignModelMatrix();
     void assignViewMatrix();
     void assignProjectionMatrix();
+    void assignTexturesEnabled();
 
     QOpenGLShaderProgram*    m_program;
     QColor                   m_ambient;
@@ -99,6 +101,7 @@ private:
     glm::mat4                m_viewMatrix;
     glm::mat4                m_projectionMatrix;
     bool                     m_isBound;
+    bool                     m_texturesEnabled;
 };
 
 

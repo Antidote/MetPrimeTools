@@ -9,7 +9,7 @@ CCamera::CCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
       m_movementSpeed(5.0f),
       m_mouseSensitivity(0.25f),
-      m_zoom(1.0f)
+      m_zoom(55.0f)
 {
     m_position = position;
     m_worldUp = up;
@@ -22,7 +22,7 @@ CCamera::CCamera(float posX, float posY, float posZ, float upX, float upY, float
     : m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
       m_movementSpeed(1.5f),
       m_mouseSensitivity(0.25f),
-      m_zoom(1.0f)
+      m_zoom(55.0f)
 {
     m_position = glm::vec3(posX, posY, posZ);
     m_worldUp = glm::vec3(upX, upY, upZ);
@@ -43,6 +43,7 @@ glm::mat4 CCamera::rotationMatrix()
 
 glm::mat4 CCamera::projectionMatrix()
 {
+    return glm::perspective(glm::radians(m_zoom), (float)m_viewportWidth/(float)m_viewportHeight, 0.1f, 4096.0f);
 }
 
 void CCamera::processKeyboard(EMovement direction, float deltaTime)

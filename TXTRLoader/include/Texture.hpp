@@ -29,8 +29,6 @@ class Texture
 public:
     enum class Format : atUint32
     {
-        Luminance,
-        LuminanceAlpha,
         RGB565,
         RGBA8,
         DXT1
@@ -59,7 +57,7 @@ private:
     atUint16 m_width;
     atUint16 m_height;
     atUint32 m_mipmaps;
-    Format   m_format;
+    Format m_format;
 };
 
 #endif // TEXTURE_HPP

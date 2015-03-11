@@ -6,6 +6,8 @@
 #include <GL/gl.h>
 #include <iostream>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 CAreaFile::CAreaFile()
 {
 }
@@ -77,7 +79,7 @@ void CAreaFile::draw()
     buildBBox();
     indexIBOs();
     CMaterialSet materialSet = currentMaterialSet();
-    glm::mat4 model = glm::mat4(1);//glm::transpose(glm::inverse(glm::mat4(m_transformMatrix)));
+    glm::mat4 model = glm::mat4(1);
 
     // our opaques go first
     for (CModelData& m : m_models)
@@ -110,6 +112,15 @@ void CAreaFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::m
         CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
         mat.setViewMatrix(view);
         mat.setProjectionMatrix(proj);
+    }
+}
+
+void CAreaFile::updateTexturesEnabled(const bool& enabled)
+{
+    for (atUint32 materialIdx : currentMaterialSet().materials())
+    {
+        CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
+        mat.setTexturesEnabled(enabled);
     }
 }
 

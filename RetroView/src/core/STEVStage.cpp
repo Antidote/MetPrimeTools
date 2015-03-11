@@ -138,15 +138,30 @@ STEVStage::STEVStage()
 {
 }
 
+const char* tevBiasOp[] =
+{
+    "",
+    " + 0.5",
+    " - 0.5",
+    ""
+};
+const char* tevScaleOp[] =
+{
+    "",
+    " * 2",
+    " / 4",
+    " / 2"
+};
+
 QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, atUint32 idx)
 {
     QStringList fragmentSource;
 
     atUint32 texUVid = (texTEVIn & 0x0000FF);
     if (texUVid < textureCount)
-        fragmentSource << QString("    tevCoord = (texCoord%1.z == 0.0) ? texCoord%1.xy : texCoord%1.xy / texCoord%1.z;").arg(texUVid);
+        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(texUVid);
     else
-        fragmentSource << QString("    tevCoord = (texCoord%1.z == 0.0) ? texCoord%1.xy : texCoord%1.xy / texCoord%1.z;").arg(idx);
+        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(idx);
 
     atUint32 clrRegASrc   =  ColorInFlags        & 15;
     atUint32 alphaRegASrc =  AlphaInFlags        &  7;
@@ -174,21 +189,28 @@ QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, 
     fragmentSource << QString("    tevin_d = vec4(%1, %2);").arg(cRegNames[clrRegDSrc]).arg(aRegNames[alphaRegDSrc]);
     fragmentSource << "    // ColorCombine";
     QString clrCombine = QString("    %1.rgb =").arg(tevRegNames[(ColorOpFlags & 0x600) >> 9]);
-    if ((ColorOpFlags & 0x100) >> 8)
+    if ((ColorOpFlags >> 8) & 1)
         clrCombine += "clamp(";
 
-    clrCombine += "(tevin_d.rgb + ((1.0 - tevin_c.rgb) * tevin_a.rgb + tevin_c.rgb * tevin_b.rgb))";
-    if ((ColorOpFlags & 0x100) >> 8)
+    atUint8 combinerOp = (ColorOpFlags & 0xF);
+    atUint8 biasOp = (ColorOpFlags >> 3) & 3;
+    atUint8 scaleOp = (ColorOpFlags >> 6) & 3;
+    clrCombine += QString("((tevin_d.rgb %1 ((1.0 - tevin_c.rgb) * tevin_a.rgb + tevin_c.rgb * tevin_b.rgb) %2) %3)").arg((combinerOp == 1 ? "-" : "+")).arg(tevBiasOp[biasOp]).arg(tevScaleOp[scaleOp]);
+    if ((ColorOpFlags >> 8) & 1)
         clrCombine += ", vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0))";
     fragmentSource << clrCombine + ";";
     fragmentSource << "    // AlphaCombine";
     QString alphaCombine = QString("    %1.a = ").arg(tevRegNames[(AlphaOpFlags & 0x600) >> 9]);
 
-    if ((AlphaOpFlags & 0x100) >> 8)
+    if ((AlphaOpFlags >> 8) & 1)
         alphaCombine += "clamp(";
 
-    alphaCombine +=  "(tevin_d.a + ((1.0 - tevin_c.a) * tevin_a.a + tevin_c.a * tevin_b.a))";
-    if ((AlphaOpFlags & 0x100) >> 8)
+    combinerOp = (AlphaOpFlags & 0xF);
+    biasOp = (AlphaOpFlags >> 3) & 3;
+    scaleOp = (AlphaOpFlags >> 6) & 3;
+
+    alphaCombine +=  QString("((tevin_d.a %1 ((1.0 - tevin_c.a) * tevin_a.a + tevin_c.a * tevin_b.a) %2) %3)").arg((combinerOp == 1 ? "-" : "+")).arg(tevBiasOp[biasOp]).arg(tevScaleOp[scaleOp]);
+    if ((AlphaOpFlags >> 8) & 1)
         alphaCombine +=  ", 0.0, 1.0)";
     fragmentSource << alphaCombine + ";"
                    << QString("    // End TEV Stage %1").arg(idx);

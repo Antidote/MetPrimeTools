@@ -14,6 +14,7 @@ public:
     virtual void drawBoundingBox() =0;
     virtual void exportToObj(const std::string&) {}
     virtual void updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj) = 0;
+    virtual void updateTexturesEnabled(const bool& /* enabled */) {}
     virtual bool canExport() const {return false;}
 
     void setAmbient(float r, float g, float b)
