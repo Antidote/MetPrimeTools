@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include "models/CAreaFile.hpp"
-#include "core/GXCommon.hpp"
 #include "core/CMaterialCache.hpp"
 #include "ui/CGLViewer.hpp"
 #include <GL/gl.h>
@@ -8,7 +7,10 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+static atUint32 drawCalls;
+
 CAreaFile::CAreaFile()
+    : m_ibosIndexed(false)
 {
 }
 
@@ -33,13 +35,15 @@ void CAreaFile::exportToObj(const std::string& filename)
 
 void CAreaFile::indexIBOs()
 {
+    if (m_ibosIndexed)
+        return;
+
+    m_ibosIndexed = true;
     QColor clr = (m_version != MetroidPrime3 || m_version != DKCR) ? QColor(0, 0, 0) : QColor(128, 128, 128);
     setAmbient(clr);
 
-    CMaterialSet& materialSet = currentMaterialSet();
-
     for (CModelData& model : m_models)
-        model.indexIBOs(materialSet);
+        model.indexIBOs(currentMaterialSet());
 }
 
 void CAreaFile::buildBBox()
@@ -74,32 +78,25 @@ void CAreaFile::buildBBox()
 void CAreaFile::draw()
 {
 
-    CMaterialCache::instance()->setAmbientOnMaterials(currentMaterialSet().materials(), m_ambient);
+    //glDepthRangef(0.015625f, 0.03125f);
+    currentMaterialSet().setAmbient(m_ambient);
 
-    buildBBox();
+    //buildBBox();
     indexIBOs();
     CMaterialSet materialSet = currentMaterialSet();
     glm::mat4 model = glm::mat4(1);
 
-    // our opaques go first
-    for (CModelData& m : m_models)
-    {
-        m.preDraw(materialSet);
-        m.drawIbos(false, materialSet, model);
-        m.doneDraw();
-    }
-
-    // then our transparents
-    for (CModelData& m : m_models)
-    {
-        m.preDraw(materialSet);
-        m.drawIbos(true, materialSet, model);
-        m.doneDraw();
-    }
+    drawIbos(false, materialSet, model);
+    drawIbos(true, materialSet, model);
 }
 
 void CAreaFile::drawBoundingBox()
 {
+    /*for (const SAABB& aabb : m_aabbs)
+    {
+        ::drawBoundingBox(aabb.aabb);
+    }*/
+
     ::drawBoundingBox(m_boundingBox);
     for (CModelData& m : m_models)
         m.drawBoundingBoxes();
@@ -107,9 +104,9 @@ void CAreaFile::drawBoundingBox()
 
 void CAreaFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj)
 {
-    for (atUint32 materialIdx : currentMaterialSet().materials())
+    for (atUint32 matId : currentMaterialSet().materials())
     {
-        CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
+        CMaterial& mat = CMaterialCache::instance()->material(matId);
         mat.setViewMatrix(view);
         mat.setProjectionMatrix(proj);
     }
@@ -117,9 +114,9 @@ void CAreaFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::m
 
 void CAreaFile::updateTexturesEnabled(const bool& enabled)
 {
-    for (atUint32 materialIdx : currentMaterialSet().materials())
+    for (atUint32 matId : currentMaterialSet().materials())
     {
-        CMaterial& mat = CMaterialCache::instance()->material(materialIdx);
+        CMaterial& mat = CMaterialCache::instance()->material(matId);
         mat.setTexturesEnabled(enabled);
     }
 }
@@ -139,3 +136,8 @@ CMaterialSet& CAreaFile::currentMaterialSet()
     return m_materialSets[0];
 }
 
+void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 modelMat)
+{
+    for (CModelData& model : m_models)
+        model.drawIbos(transparents, materialSet, modelMat);
+}

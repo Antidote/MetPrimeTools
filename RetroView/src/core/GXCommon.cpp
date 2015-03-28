@@ -390,7 +390,7 @@ void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, A
 
         bool valid = false;
         primitive.indices.resize(indexCount);
-        VertexDescriptor* pFaces = &primitive.indices.front();
+        SVertexDescriptor* pFaces = &primitive.indices.front();
 
         if (mainAttributes)
         {

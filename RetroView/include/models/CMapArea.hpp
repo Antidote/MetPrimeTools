@@ -4,6 +4,7 @@
 #include "core/IResource.hpp"
 #include "core/IRenderableModel.hpp"
 #include "core/GXTypes.hpp"
+#include "core/CMaterial.hpp"
 
 struct SPointOfInterest
 {
@@ -18,15 +19,15 @@ struct SPointOfInterest
 
 struct SMapAreaPrimitive
 {
-    atUint32             type; // GL primitive NOT GX
-    std::vector<atUint8> indices;
-    atUint32             elementBuffer;
+    atUint32              type; // GL primitive NOT GX
+    std::vector<atInt16> indices;
+    atUint32              elementBuffer;
 };
 
 struct SMapBorder
 {
-    std::vector<atUint8> indices;
-    atUint32             elementBuffer;
+    std::vector<atInt16> indices;
+    atUint32              elementBuffer;
 };
 
 struct SMapAreaDetail

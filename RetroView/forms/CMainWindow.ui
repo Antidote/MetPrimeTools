@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>896</width>
-    <height>582</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -56,7 +56,7 @@
    </widget>
    <widget class="QMenu" name="menu_Animations">
     <property name="title">
-     <string>UV &amp;Animations</string>
+     <string>&amp;UV Animations</string>
     </property>
     <addaction name="actionMode0"/>
     <addaction name="actionMode1"/>
@@ -81,7 +81,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
    <property name="windowTitle">
-    <string>Settings</string>
+    <string>Setti&amp;ngs</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>

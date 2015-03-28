@@ -2,6 +2,7 @@
 #include "io/CMaterialReader.hpp"
 #include "models/CModelFile.hpp"
 #include "core/GXCommon.hpp"
+#include "core/CVertexBuffer.hpp"
 
 #include <RetroCommon.hpp>
 #include <Athena/InvalidDataException.hpp>
@@ -50,7 +51,7 @@ CModelFile* CModelReader::read()
     }
 
     if (magic != 0xDEADBABE)
-        THROW_INVALID_DATA_EXCEPTION("Not a valid MREA magic, expected 0xDEADBABE got 0x%.8X\n", magic);
+        THROW_INVALID_DATA_EXCEPTION("Not a valid CMDL magic, expected 0xDEADBABE got 0x%.8X\n", magic);
 
     atUint32 version = base::readUint32();
 

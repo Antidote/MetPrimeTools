@@ -158,10 +158,8 @@ QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, 
     QStringList fragmentSource;
 
     atUint32 texUVid = (texTEVIn & 0x0000FF);
-    if (texUVid < textureCount)
-        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(texUVid);
-    else
-        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(idx);
+    atUint32 colorDest = (ColorOpFlags & 0x600) >> 9;
+    atUint32 alphaDest = (AlphaOpFlags & 0x600) >> 9;
 
     atUint32 clrRegASrc   =  ColorInFlags        & 15;
     atUint32 alphaRegASrc =  AlphaInFlags        &  7;
@@ -172,11 +170,23 @@ QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, 
     atUint32 clrRegDSrc   = (ColorInFlags >> 15) & 15;
     atUint32 alphaRegDSrc = (AlphaInFlags >> 15) &  7;
     atUint32 texSampId    = ((texTEVIn & 0x000FF00) >> 8);
+#if 0
+    if (colorDest == 1 || colorDest == 2 || colorDest == 3)
+        return fragmentSource;
+    if (alphaDest == 1 || alphaDest == 2 || alphaDest == 3)
+        return fragmentSource;
+#endif
+
+    if (texUVid < textureCount)
+        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(texUVid);
+    else
+        fragmentSource << QString("    tevCoord = texCoord%1.xy;").arg(idx);
+
 
     if(texSampId < 8)
         fragmentSource << QString("    tex = texture(tex%1, tevCoord);").arg(texSampId);
     else
-        fragmentSource << "vec4(1.0, 1.0, 1.0, 1.0);\n";
+        fragmentSource << "    tex = vec4(1.0, 1.0, 1.0, 1.0);";
 
     fragmentSource << QString("    konstc = vec4(%1, %2);").arg(tevKSelTableC[KonstColorIn]).arg(tevKSelTableA[KonstAlphaIn]);
 
@@ -188,19 +198,19 @@ QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, 
     fragmentSource << QString("    tevin_c = vec4(%1, %2);").arg(cRegNames[clrRegCSrc]).arg(aRegNames[alphaRegCSrc]);
     fragmentSource << QString("    tevin_d = vec4(%1, %2);").arg(cRegNames[clrRegDSrc]).arg(aRegNames[alphaRegDSrc]);
     fragmentSource << "    // ColorCombine";
-    QString clrCombine = QString("    %1.rgb =").arg(tevRegNames[(ColorOpFlags & 0x600) >> 9]);
+    QString clrCombine = QString("    %1.rgb =").arg(tevRegNames[colorDest]);
     if ((ColorOpFlags >> 8) & 1)
         clrCombine += "clamp(";
 
     atUint8 combinerOp = (ColorOpFlags & 0xF);
     atUint8 biasOp = (ColorOpFlags >> 3) & 3;
     atUint8 scaleOp = (ColorOpFlags >> 6) & 3;
-    clrCombine += QString("((tevin_d.rgb %1 ((1.0 - tevin_c.rgb) * tevin_a.rgb + tevin_c.rgb * tevin_b.rgb) %2) %3)").arg((combinerOp == 1 ? "-" : "+")).arg(tevBiasOp[biasOp]).arg(tevScaleOp[scaleOp]);
+    clrCombine += QString("((tevin_d.rgb %1 ((1.0 - tevin_c.rgb) * tevin_a.rgb + tevin_c.rgb * tevin_b.rgb)%2)%3)").arg((combinerOp == 1 ? "-" : "+")).arg(tevBiasOp[biasOp]).arg(tevScaleOp[scaleOp]);
     if ((ColorOpFlags >> 8) & 1)
         clrCombine += ", vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0))";
     fragmentSource << clrCombine + ";";
     fragmentSource << "    // AlphaCombine";
-    QString alphaCombine = QString("    %1.a = ").arg(tevRegNames[(AlphaOpFlags & 0x600) >> 9]);
+    QString alphaCombine = QString("    %1.a = ").arg(tevRegNames[alphaDest]);
 
     if ((AlphaOpFlags >> 8) & 1)
         alphaCombine += "clamp(";

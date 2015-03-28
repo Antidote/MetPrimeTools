@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <QMessageBox>
+#include <QLabel>
 
 namespace
 {
@@ -141,10 +142,10 @@ IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& 
     if (failedIter != m_failedAssets.end())
         return nullptr;
 
-    CachedResourceIterator cacheIter = m_cachedResources.find(assetID);
-    if (cacheIter != m_cachedResources.end())
-        return cacheIter->second;
 
+    IResource* res = m_cachedResources[assetID];
+    if (res != nullptr)
+        return res;
 
     std::vector<SPakResource> pakResources;
     if (!type.empty())

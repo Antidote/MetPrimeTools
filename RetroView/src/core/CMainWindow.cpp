@@ -40,7 +40,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     else
         QTimer::singleShot(10, qApp, SLOT(quit()));
 
-    m_fpsUpdateTimer.setInterval(10);
+    m_fpsUpdateTimer.setInterval(50);
 }
 
 CMainWindow::~CMainWindow()
@@ -191,16 +191,16 @@ void CMainWindow::onTabChanged()
     CGLViewer::instance()->setSkybox(nullptr);
     CResourceManager::instance()->clear();
 
-//    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
-//    if (ptw && ptw->pak()->isWorldPak())
-//    {
-//        std::vector<SPakResource> res = ptw->pak()->resourcesByType("mlvl");
-//        CWorldFile* world = nullptr;
-//        if (res.size() > 0)
-//            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
-//        if (world)
-//            CGLViewer::instance()->setSkybox(world->skyboxModel());
-//    }
+    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
+    if (ptw && ptw->pak()->isWorldPak())
+    {
+        std::vector<SPakResource> res = ptw->pak()->resourcesByType("mlvl");
+        CWorldFile* world = nullptr;
+        if (res.size() > 0)
+            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
+        if (world)
+            CGLViewer::instance()->setSkybox(world->skyboxModel());
+    }
 }
 
 void CMainWindow::updateFPS()

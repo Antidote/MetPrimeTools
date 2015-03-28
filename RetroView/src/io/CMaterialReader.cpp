@@ -30,28 +30,27 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 atUint32 dataSize = base::readUint32();
                 atUint64 materialStart = base::position();
 
-                base::readUint32();
+                mat.m_unknown1 = base::readUint32();
                 base::readUint32();
                 base::readUint32();
                 mat.m_version = version;
                 mat.m_vertexAttributes = base::readUint32();
                 base::readUint32();
-                base::readUint32();
-                base::readUint32();
+                mat.m_unknown2 = base::readUint32();
+               base::readUint32();
                 // spin until we read in all commands
                 while (!readMaterialCommand(ret, mat))
                     ;
                 base::seek(materialStart + dataSize, Athena::SeekOrigin::Begin);
-                atUint32 matID = CMaterialCache::instance()->addMaterial(mat);
-                ret.m_materials.push_back(matID);
+                ret.m_materials.push_back(CMaterialCache::instance()->addMaterial(mat));
             }
         }
         else
         {
             atUint32 textureCount = base::readUint32();
-            ret.m_textureIds.resize(textureCount);
+            m_textures.resize(textureCount);
             for (atUint32 i = 0; i < textureCount; i++)
-                ret.m_textureIds[i] =  CAssetID(*this, CAssetID::E_32Bits);
+                m_textures[i] =  CAssetID(*this, CAssetID::E_32Bits);
 
             atUint32 materialCount = base::readUint32();
 
@@ -70,10 +69,9 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
 
                 mat.m_materialFlags = base::readUint32();
                 atUint32 textureIdxCount = base::readInt32();
-                mat.m_textureIndices.resize(textureIdxCount);
 
                 for (atUint32 i = 0; i < textureIdxCount; i++)
-                    mat.m_textureIndices[i] = base::readUint32();
+                    mat.m_textures.push_back(m_textures[base::readUint32()]);
 
                 mat.m_vertexAttributes = base::readUint32();
                 if (version == CMaterial::MetroidPrime2)
@@ -188,73 +186,40 @@ bool CMaterialReader::readMaterialCommand(CMaterialSet& set, CMaterial& material
     EMaterialCommand cmd = (EMaterialCommand)base::readUint32();
     if (cmd == EMaterialCommand::END)
         return true;
-
-    switch(cmd)
+    else
     {
-        case EMaterialCommand::PASS:
+
+        CMaterialSection* section = new CMaterialSection;
+        section->m_command = cmd;
+
+        switch(cmd)
         {
-            atUint32 passSize = base::readUint32();
-            atUint32 passDataStart = base::position();
-            //material.m_tevStages.push_back(STEVStage());
-            bool done = readMaterialCommand(set, material);
-            base::seek(passDataStart + passSize, Athena::SeekOrigin::Begin);
-            return done;
+            case EMaterialCommand::PASS:
+            {
+                SPASSCommand* tmp = new SPASSCommand(*this, set);
+                section->m_commandImpl = tmp;
+                atInt32 passIndex = passCommandToIndex(tmp->subCommand);
+                if (passIndex != -1)
+                    material.m_passes[passIndex] = tmp;
+            }
+                break;
+            case EMaterialCommand::CLR:
+                section->m_commandImpl = new SCLRCommand(*this);
+                break;
+            case EMaterialCommand::INT:
+                section->m_commandImpl = new SINTCommand(*this);
+                break;
+            default:
+                assert("Invalid material command");
         }
-            break;
-        case EMaterialCommand::CLR:
+
+        if (section->m_commandImpl != nullptr)
         {
-            atUint32 clrValue = base::readUint32();
-            if (clrValue == (int)EMaterialCommand::CLR)
-            {
-                /*Uint32 RGBA = */base::readUint32();
-            }
-            else if (clrValue == (int)EMaterialCommand::DIFB)
-            {
-                /*Uint32 unknown  = */base::readUint32();
-            }
+            if (section->m_commandImpl->subCommand == EMaterialCommand::DIFF || section->m_commandImpl->subCommand == EMaterialCommand::DIFB)
+                material.m_materialSections.insert(material.m_materialSections.begin(), section);
             else
-            {
-                CAssetID textureId = CAssetID(*this, CAssetID::E_64Bits);
-                /*Uint32 filler    = */base::readUint32(); // ????
-                atUint32 unknownSize   = base::readUint32();
-                if (textureId != CAssetID())
-                {
-                    set.m_textureIds.push_back(textureId);
-                    material.m_textureIndices.push_back(set.m_textureIds.size() - 1);
-                }
-                base::seek(unknownSize);
-            }
+                material.m_materialSections.emplace_back(section);
         }
-            break;
-        case EMaterialCommand::INT:
-        {
-            base::readUint32();
-            base::readUint32();
-        }
-            break;
-        case EMaterialCommand::DIFF:
-        {
-            atUint32 unk = base::readUint32();
-            CAssetID textureId = CAssetID(*this, CAssetID::E_64Bits);
-            atUint32 unk2 = base::readUint32();
-            atUint32 unkSize = base::readUint32();
-            if (textureId != CAssetID())
-            {
-                set.m_textureIds.push_back(textureId);
-                material.m_textureIndices.push_back(set.m_textureIds.size() - 1);
-            }
-            base::seek(unkSize);
-        }
-            break;
-        default:
-        {
-            atUint32 unk = base::readUint32();
-            atUint64 texID = base::readUint64();
-            atUint32 unk2 = base::readUint32();
-            atUint32 unkSize = base::readUint32();
-            base::seek(unkSize);
-        }
-            break;
     }
 
     return false;

@@ -2,9 +2,10 @@
 #define CPAKFILEMODEL_HPP
 
 
-#include <CPakFile.hpp>
 #include <QAbstractItemModel>
 #include "CResourceTreeItem.hpp"
+class CPakFile;
+class CWorldFile;
 class CPakFileModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -28,6 +29,7 @@ public:
 private:
     void setupModelData();
     CPakFile* m_pakFile;
+    std::vector<CWorldFile*> m_worlds;
     CResourceTreeItem* m_rootItem;
 
 };

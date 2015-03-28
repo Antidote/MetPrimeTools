@@ -3,6 +3,8 @@
 #include "core/CMaterial.hpp"
 #include "core/CMaterialCache.hpp"
 #include "core/GXCommon.hpp"
+#include "core/CResourceManager.hpp"
+#include "generic/CTexture.hpp"
 
 #include <QStringList>
 #include <QFile>
@@ -23,6 +25,8 @@ CMaterial::CMaterial()
       m_texturesEnabled(true)
 {
     memset(m_konstColor, 0, sizeof(m_konstColor));
+    for (atUint32 i= 0; i < 12; i++)
+        m_passes[i] = nullptr;
 }
 
 CMaterial::~CMaterial()
@@ -78,11 +82,6 @@ void CMaterial::addTevStage(const STEVStage& tevStage, atUint32 texInFlags)
 {
     m_tevStages.push_back(tevStage);
     m_texTEVIn.push_back(texInFlags);
-}
-
-std::vector<atUint32> CMaterial::textureIndices() const
-{
-    return m_textureIndices;
 }
 
 void CMaterial::setBlendMode(EBlendMode dst, EBlendMode src)
@@ -141,6 +140,20 @@ static const char* texcoordTransform[] =
     "vec3(in_TexCoord7, 1)"
 };
 
+static const char* texcoordTransformMP3[] =
+{
+    "in_Position",
+    "in_Normal",
+    "vec3(in_TexCoord0, 1)",
+    "vec3(in_TexCoord1, 1)",
+    "vec3(in_TexCoord2, 1)",
+    "vec3(in_TexCoord3, 1)",
+    "vec3(in_TexCoord4, 1)",
+    "vec3(in_TexCoord5, 1)",
+    "vec3(in_TexCoord6, 1)",
+    "vec3(in_TexCoord7, 1)"
+};
+
 QOpenGLShader* CMaterial::buildVertex()
 {
     QStringList vertSource;
@@ -172,7 +185,39 @@ QOpenGLShader* CMaterial::buildVertex()
     }
     else
     {
-        source = source.replace("//{TEXGEN}", "texCoord0 = vec3(in_TexCoord0, 1);");
+        atUint32 pass = 0;
+        for (atUint32 i = 0; i < 12; i++)
+        {
+            if (m_passes[i] != nullptr)
+            {
+                if (m_passes[i]->hasAnim)
+                {
+                    if (m_passes[i]->subCommand == EMaterialCommand::RFLD)
+                    {
+                        std::cout << "Anim mode: " << std::dec << m_passes[i]->anim.mode << std::endl;
+                        std::cout << m_passes[i]->textureId.toString() << std::endl;
+                        std::cout << std::dec << texcoordTransformMP3[m_passes[i]->animUvSource] << std::endl;
+                    }
+
+                    if (m_passes[i]->anim.mode != 2 && m_passes[i]->anim.mode != 3 && m_passes[i]->anim.mode != 4 && m_passes[i]->anim.mode != 5)
+                        vertSource << QString("texCoord%1 = vec3(vec4(%2, 1.0) * texMtx[%1]);").arg(pass)
+                                      .arg(texcoordTransformMP3[m_passes[i]->animUvSource]);
+                    else
+                        vertSource << QString("texCoord%1 = vec3(vec4(vec3(in_TexCoord%2, 1.0), 1.0) * texMtx[%1]);").arg(pass)
+                                      .arg(m_passes[i]->uvSource);
+
+                    if (m_passes[i]->anim.mode != 2 && m_passes[i]->anim.mode != 3 && m_passes[i]->anim.mode != 4 && m_passes[i]->anim.mode != 5)
+                        vertSource << QString("texCoord%1 = normalize(texCoord%1);").arg(pass);
+
+                    vertSource << QString("texCoord%1 = vec3(vec4(texCoord%1, 1.0) * postMtx[%1]);").arg(pass);
+                }
+                else
+                    vertSource << QString("texCoord%1 = vec3(in_TexCoord%2, 1);").arg(pass).arg(m_passes[i]->uvSource);
+
+                pass++;
+            }
+        }
+        source = source.replace("//{TEXGEN}", vertSource.join("\n"));
     }
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Vertex);
@@ -187,12 +232,37 @@ QOpenGLShader* CMaterial::buildFragment()
         source = source.replace("//{GXSHADERINFO}", QString("// %1 TEV Stages %2 TexGens\n").arg(m_tevStages.size()).arg(m_texGenFlags.size()));
 
         for (atUint32 i = 0; i < m_tevStages.size(); i++)
-            fragmentSource << m_tevStages[i].fragmentSource(m_texTEVIn[i], m_textureIndices.size(), i);
+            fragmentSource << m_tevStages[i].fragmentSource(m_texTEVIn[i], m_textures.size(), i);
 
         source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
     }
     else
-        source = source.replace("//{TEVSTAGES}", "prev = texture(tex0, texCoord0.xy);//color0;");
+    {
+        fragmentSource << "        vec4 clr = vec4(1.0);";
+        fragmentSource << "        prev = vec4(1.0);";
+        atUint32 passIdx = 0;
+        for (atUint32 i =0; i < 12; i++)
+        {
+            SPASSCommand* pass = m_passes[i];
+            if (pass)
+            {
+                //if (pass->subCommand == EMaterialCommand::RFLD)
+                    fragmentSource << pass->fragmentSource(passIdx);
+                passIdx++;
+            }
+        }
+
+        for (CMaterialSection* section : m_materialSections)
+        {
+            SINTCommand* intC = dynamic_cast<SINTCommand*>(section->m_commandImpl);
+            if (intC && intC->subCommand == EMaterialCommand::OPAC)
+            {
+                fragmentSource << QString("        prev = vec4(prev.rgb, %1);").arg((atUint8)intC->val * (1.f/255.f));
+            }
+        }
+
+        source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
+    }
 
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Fragment);
 }
@@ -268,7 +338,28 @@ bool CMaterial::hasUV(atUint8 slot)
 
 bool CMaterial::isTransparent() const
 {
-    return (m_materialFlags & 0x10);
+    if (m_version != MetroidPrime3 && m_version != DKCR)
+        return (m_materialFlags & Transparent);
+    else
+    {
+        atUint32 idx = 0;
+        for (CMaterialSection* section : m_materialSections)
+        {
+            SPASSCommand* pass = dynamic_cast<SPASSCommand*>(section->m_commandImpl);
+            SINTCommand* intC = dynamic_cast<SINTCommand*>(section->m_commandImpl);
+            SCLRCommand* clr = dynamic_cast<SCLRCommand*>(section->m_commandImpl);
+            if (pass && pass->subCommand == EMaterialCommand::TRAN)
+                return true;
+            else if (pass && pass->subCommand == EMaterialCommand::INCA)
+                return true;
+            else if (intC && intC->subCommand == EMaterialCommand::OPAC)
+                return true;
+            else if (clr)
+                return (clr->color.alphaF() < 1.0);
+        }
+    }
+
+    return false;
 }
 
 void CMaterial::setAmbient(const QColor& ambient)
@@ -293,6 +384,7 @@ bool CMaterial::bind()
 
         if (m_version != MetroidPrime3 && m_version != DKCR)
             m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
+
 
         for (atUint32 i = 0; i < 11; i++)
         {
@@ -323,10 +415,21 @@ bool CMaterial::bind()
     assignViewMatrix();
     assignProjectionMatrix();
     assignTexturesEnabled();
+    updateAnimations();
 
+    atUint32 pass = 0;
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
-        updateAnimations();
+        for (CAssetID& texID : m_textures)
+        {
+            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(texID, "txtr"));
+
+            if (texture)
+            {
+                glActiveTexture(GL_TEXTURE0 + pass++);
+                texture->bind();
+            }
+        }
 
         for (atUint32 i = 0; i < m_konstCount; i++)
             assignKonstColor(i);
@@ -339,7 +442,33 @@ bool CMaterial::bind()
         GXSetBlendMode(m_blendSrcFactor, m_blendDstFactor);
     }
     else
-        glBlendFunc(GL_ONE, GL_ZERO);
+    {
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        if (m_passes[11] != nullptr)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//            m_program->setUniformValue("punchThrough", true);
+//        else
+//            m_program->setUniformValue("punchThrough", false);
+
+        for (atUint32 i = 0; i < 12; i++)
+        {
+            if (m_passes[i] == nullptr)
+                continue;
+
+            if (pass == 0 && m_passes[i]->subCommand == EMaterialCommand::INCA)
+                glBlendFunc(GL_ONE, GL_ONE);
+
+            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(m_passes[i]->textureId, "txtr"));
+
+            if (texture)
+            {
+                glActiveTexture(GL_TEXTURE0 + pass);
+                texture->bind();
+                pass++;
+            }
+        }
+    }
 
     return true;
 }
@@ -349,24 +478,24 @@ void CMaterial::release()
     if (!m_program)
         return;
 
+
     if (!(m_materialFlags & 0x80) && (m_version != MetroidPrime3 && m_version != DKCR))
         glDepthMask(GL_TRUE);
 
     glBlendFunc(GL_ONE, GL_ZERO);
-
     m_program->release();
     m_isBound = false;
 }
 
 QOpenGLShaderProgram* CMaterial::program()
 {
-    return m_program;
+    return  m_program;
 }
 
 bool CMaterial::operator==(const CMaterial& right)
 {
     return (m_version == right.m_version && right.m_materialFlags == right.m_materialFlags &&
-            m_textureIndices == right.textureIndices() && m_vertexAttributes == right.m_vertexAttributes &&
+            m_textures == right.m_textures && m_vertexAttributes == right.m_vertexAttributes &&
             m_unknown1_mp2 == right.m_unknown1_mp2 && m_unknown2_mp2 == right.m_unknown2_mp2 &&
             m_unknown1 == right.m_unknown1 && m_konstCount == right.m_konstCount &&
             !memcmp(m_konstColor, right.m_konstColor, sizeof(m_konstColor)) && m_blendDstFactor == right.m_blendDstFactor &&
@@ -375,123 +504,158 @@ bool CMaterial::operator==(const CMaterial& right)
             m_texGenFlags == right.m_texGenFlags && m_animations == right.m_animations);
 }
 
+
+void CMaterial::assignTexTransformMatrices(atUint32 pass, glm::mat4& texMtx, glm::mat4& postMtx)
+{
+    std::string texMtxName = QString("texMtx[%1]").arg(pass).toStdString();
+    atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
+    glUniformMatrix4fv(texMtxLoc, 1, GL_FALSE, &texMtx[0][0]);
+    std::string postMtxName = QString("postMtx[%1]").arg(pass).toStdString();
+    atUint32 postMtxLoc = m_program->uniformLocation(postMtxName.c_str());
+    glUniformMatrix4fv(postMtxLoc, 1, GL_FALSE, &postMtx[0][0]);
+}
+
 void CMaterial::updateAnimations()
 {
     float s = secondsMod900();
-    for (atUint32 i = 0; i < m_animations.size(); i++)
+    if (m_version == MetroidPrime1 || m_version == MetroidPrime2)
     {
-        glm::mat4& texMtx = g_texMtx[i];
-        glm::mat4& postMtx = g_postMtx[i];
-
-        switch (m_animations[i].mode)
+        for (atUint32 i = 0; i < m_animations.size(); i++)
         {
-            case 0:
-            case 1:
-            case 7:
-            {
-                if ((m_animations[i].mode == 0 && !QSettings().value("mode0").toBool()) ||
-                        (m_animations[i].mode == 1 && !QSettings().value("mode1").toBool()) ||
-                        (m_animations[i].mode == 7 && !QSettings().value("mode7").toBool()))
-                    break;
+            glm::mat4& texMtx = g_texMtx[i];
+            glm::mat4& postMtx = g_postMtx[i];
+            SAnimation& animation = m_animations[i];
 
-                texMtx = glm::inverse(CGLViewer::instance()->viewMatrix() * m_modelMatrix);
-                if (m_animations[i].mode != 7)
-                {
-                    postMtx = glm::mat4(0.5, 0.0, 0.0, 0.5,
-                                        0.0, 0.5, 0.0, 0.5,
-                                        0.0, 0.0, 0.0, 1.0,
-                                        0.0, 0.0, 0.0, 1.0);
-                }
-                else
-                {
-                    glm::mat4 view = CGLViewer::instance()->viewMatrix();
-                    float xy = (view[0][3] + view[1][3]) * 0.025f * m_animations[i].parms[1];
-                    xy = (xy - (int)xy);
-                    float z = (view[2][3]) * 0.05f * m_animations[i].parms[1];
-                    z = (z - (int)z);
-
-                    float halfA = m_animations[i].parms[0] * 0.5f;
-
-                    postMtx = glm::mat4(halfA, 0.0, 0.0, xy,
-                                        0.0, 0.0, halfA, z,
-                                        0.0, 0.0, 0.0, 1.0,
-                                        0.0, 0.0, 0.0, 1.0);
-                }
-
-                if (m_animations[i].mode == 0 || m_animations[i].mode == 7)
-                    texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
-            }
-                break;
-            case 2:
-            {
-                if (!QSettings().value("mode2").toBool())
-                    break;
-                glm::vec2 texCoordBias;
-                texCoordBias.s = (s * m_animations[i].parms[2]) + m_animations[i].parms[0];
-                texCoordBias.t = (s * m_animations[i].parms[3]) + m_animations[i].parms[1];
-
-                texMtx = glm::mat4(1);
-                texMtx[0][3] = texCoordBias.s;
-                texMtx[1][3] = texCoordBias.t;
-            }
-                break;
-            case 3:
-            {
-                if (!QSettings().value("mode3").toBool())
-                    break;
-
-                float angle = (s * m_animations[i].parms[1]) + m_animations[i].parms[0];
-                float acos = cos(angle);
-                float asin = sin(angle);
-                float translateX = (1.0 - (acos - asin)) * 0.5;
-                float translateY = (1.0 - (asin + acos)) * 0.5;
-
-                texMtx = glm::mat4(glm::mat3x4(acos, -asin, 0.0, translateX,
-                                               asin, acos, 0.0, translateY,
-                                               0.0, 0.0, 1.0, 0.0));
-            }
-                break;
-            case 4:
-            case 5:
-            {
-                if (!QSettings().value("mode4And5").toBool())
-                    break;
-
-                float scale = m_animations[i].parms[0];
-                float numFrames = m_animations[i].parms[1];
-                float step = m_animations[i].parms[2];
-                float offset  = m_animations[i].parms[3];
-
-                texMtx = glm::mat4(1);
-                float value = scale * step * (offset + s);
-
-                float uvOffset = (float)(short)(float)(numFrames * fmod(value, 1.0f)) * step;
-                if (m_animations[i].mode == 4)
-                    texMtx[0][3] = uvOffset;
-                else
-                    texMtx[1][3] = uvOffset;
-            }
-                break;
-            case 6:
-            {
-                if (!QSettings().value("mode6").toBool())
-                    break;
-
-                texMtx = m_modelMatrix;
-                texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
-                postMtx = glm::mat4(glm::mat3x4(
-                                        0.5, 0.0, 0.0, m_modelMatrix[0][3] * 0.50000001,
-                        0.0, 0.0, 0.5, m_modelMatrix[1][3] * 0.50000001,
-                        0.0, 0.0, 0.0, 1.0));
-            }
-                break;
+            updateAnimation(animation, texMtx, postMtx, s);
+            assignTexTransformMatrices(i, texMtx, postMtx);
         }
-        std::string texMtxName = QString("texMtx[%1]").arg(i).toStdString();
-        atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
-        glUniformMatrix4fv(texMtxLoc, 1, GL_FALSE, &g_texMtx[i][0][0]);
-        std::string postMtxName = QString("postMtx[%1]").arg(i).toStdString();
-        atUint32 postMtxLoc = m_program->uniformLocation(postMtxName.c_str());
-        glUniformMatrix4fv(postMtxLoc, 1, GL_FALSE, &g_postMtx[i][0][0]);
+    }
+    else
+    {
+        atUint32 pass = 0;
+        for (atUint32 i = 0; i < 12; i++)
+        {
+            if (m_passes[i] == nullptr)
+                continue;
+            if (!m_passes[i]->hasAnim)
+            {
+                pass++;
+                continue;
+            }
+
+            glm::mat4& texMtx = g_texMtx[pass];
+            glm::mat4& postMtx = g_postMtx[pass];
+            updateAnimation(m_passes[i]->anim, texMtx, postMtx, s);
+            assignTexTransformMatrices(pass, texMtx, postMtx);
+            pass++;
+        }
+    }
+}
+
+void CMaterial::updateAnimation(const SAnimation& animation, glm::mat4& texMtx, glm::mat4& postMtx, float s)
+{
+    switch (animation.mode)
+    {
+        case 0:
+        case 1:
+        case 7:
+        {
+            if ((animation.mode == 0 && !QSettings().value("mode0").toBool()) ||
+                    (animation.mode == 1 && !QSettings().value("mode1").toBool()) ||
+                    (animation.mode == 7 && !QSettings().value("mode7").toBool()))
+                break;
+
+            texMtx = glm::inverse(CGLViewer::instance()->viewMatrix() * m_modelMatrix);
+            if (animation.mode != 7)
+            {
+                postMtx = glm::mat4(0.5, 0.0, 0.0, 0.5,
+                                    0.0, 0.5, 0.0, 0.5,
+                                    0.0, 0.0, 0.0, 1.0,
+                                    0.0, 0.0, 0.0, 1.0);
+            }
+            else
+            {
+                glm::mat4 view = CGLViewer::instance()->viewMatrix();
+                float xy = (view[0][3] + view[1][3]) * 0.025f * animation.parms[1];
+                xy = (xy - (int)xy);
+                float z = (view[2][3]) * 0.05f * animation.parms[1];
+                z = (z - (int)z);
+
+                float halfA = animation.parms[0] * 0.5f;
+
+                postMtx = glm::mat4(halfA, 0.0, 0.0, xy,
+                                    0.0, 0.0, halfA, z,
+                                    0.0, 0.0, 0.0, 1.0,
+                                    0.0, 0.0, 0.0, 1.0);
+            }
+
+            if (animation.mode == 0 || animation.mode == 7)
+                texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
+        }
+            break;
+        case 2:
+        {
+            if (!QSettings().value("mode2").toBool())
+                break;
+            glm::vec2 texCoordBias;
+            texCoordBias.s = (s * animation.parms[2]) + animation.parms[0];
+            texCoordBias.t = (s * animation.parms[3]) + animation.parms[1];
+
+            texMtx = glm::mat4(1);
+            texMtx[0][3] = texCoordBias.s;
+            texMtx[1][3] = texCoordBias.t;
+        }
+            break;
+        case 3:
+        {
+            if (!QSettings().value("mode3").toBool())
+                break;
+
+            float angle = (s * animation.parms[1]) + animation.parms[0];
+            float acos = cos(angle);
+            float asin = sin(angle);
+            float translateX = (1.0 - (acos - asin)) * 0.5;
+            float translateY = (1.0 - (asin + acos)) * 0.5;
+
+            texMtx = glm::mat4(glm::mat3x4(acos, -asin, 0.0, translateX,
+                                           asin, acos, 0.0, translateY,
+                                           0.0, 0.0, 1.0, 0.0));
+        }
+            break;
+        case 4:
+        case 5:
+        {
+            if (!QSettings().value("mode4And5").toBool())
+                break;
+
+            float scale = animation.parms[0];
+            float numFrames = animation.parms[1];
+            float step = animation.parms[2];
+            float offset  = animation.parms[3];
+
+            texMtx = glm::mat4(1);
+            float value = scale * step * (offset + s);
+
+            float uvOffset = (float)(short)(float)(numFrames * fmod(value, 1.0f)) * step;
+            if (animation.mode == 4)
+                texMtx[0][3] = uvOffset;
+            else
+                texMtx[1][3] = uvOffset;
+        }
+            break;
+        case 6:
+        {
+            if (!QSettings().value("mode6").toBool())
+                break;
+
+            texMtx = m_modelMatrix;
+            texMtx[0][3] = texMtx[1][3] = texMtx[2][3] = 0;
+            postMtx = glm::mat4(glm::mat3x4(
+                                    0.5, 0.0, 0.0, m_modelMatrix[0][3] * 0.50000001,
+                    0.0, 0.0, 0.5, m_modelMatrix[1][3] * 0.50000001,
+                    0.0, 0.0, 0.0, 1.0));
+        }
+            break;
     }
 }
 

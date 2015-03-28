@@ -23,8 +23,8 @@ CWorldFileReader::~CWorldFileReader()
 CWorldFile* CWorldFileReader::read()
 {
     CWorldFile* ret = nullptr;
-//    try
-//    {
+    try
+    {
         atUint32 magic = base::readUint32();
         if (magic != 0xDEAFBABE) // DCLN also uses this ID so we have to make absolutely sure this is correct
             THROW_INVALID_DATA_EXCEPTION("Invalid World File magic expected 0xDEAFBABE got 0x%8.X", magic);
@@ -61,7 +61,6 @@ CWorldFile* CWorldFileReader::read()
 
         ret->m_saveWorldID = CAssetID(*this, bits);
         ret->m_skyboxID    = CAssetID(*this, bits);
-        std::cout << ret->m_skyboxID.toString() << std::endl;
 
         if (version == CWorldFile::Version::MetroidPrime1)
         {
@@ -225,22 +224,13 @@ CWorldFile* CWorldFileReader::read()
         areaCount = base::readUint32();
         while ((areaCount--) > 0)
             ret->m_layerNameIndices.push_back(base::readUint32());
-
-        for (atUint32 i = 0; i < ret->m_areas.size(); i++)
-        {
-            SWorldArea area = ret->m_areas.at(i);
-            std::cout << "Area " << area.mreaID.toString() << " layer names" << std::endl;
-            SLayerFlags lf = ret->m_layerFlags.at(i);
-            for (atUint32 l = 0; l < lf.layerCount; l++)
-                std::cout << ret->m_layerNames.at(ret->m_layerNameIndices.at(i) + l) << std::endl;
-        }
-//    }
-//    catch(...)
-//    {
-//        delete ret;
-//        ret = nullptr;
-//        throw;
-//    }
+    }
+    catch(...)
+    {
+        delete ret;
+        ret = nullptr;
+        throw;
+    }
 
     return ret;
 }

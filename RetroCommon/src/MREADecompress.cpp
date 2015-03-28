@@ -4,6 +4,7 @@
 
 enum MREAVersion
 {
+    MetroidPrimeDemo = 0xC,
     MetroidPrime1 = 0x0F,
     MetroidPrime2 = 0x19,
     MetroidPrime3 = 0x1E,
@@ -37,7 +38,7 @@ bool decompressMREA(Athena::io::IStreamReader& in, Athena::io::IStreamWriter& ou
         atUint32 version = in.readUint32();
 
         // Metroid prime 1 MREAs aren't compressed
-        if (version == MetroidPrime1)
+        if (version == MetroidPrime1 || version == MetroidPrimeDemo)
             return false;
 
         out.writeUint32(magic);

@@ -4,6 +4,7 @@
 #include "core/CModelData.hpp"
 #include "core/IRenderableModel.hpp"
 #include "core/IResource.hpp"
+#include "core/CVertexBuffer.hpp"
 
 class CModelFile : public CModelData, public IRenderableModel, public IResource
 {
@@ -26,15 +27,14 @@ public:
     void updateTexturesEnabled(const bool& enabled);
 
     CMaterialSet& currentMaterialSet();
-    CMaterialSet& currentMaterialSet() const;
 
     bool canExport() const;
     void exportToObj(const std::string& filepath);
 private:
     friend class CModelReader;
 
-    Version                  m_version;
-    atUint32                 m_format;
+    Version                   m_version;
+    atUint32                  m_format;
     std::vector<CMaterialSet> m_materialSets;
 };
 

@@ -34,7 +34,6 @@ in vec3 texCoord7;
 
 // output
 
-
 out vec4 colorOut;
 void main() {
     vec4 tevin_a  = vec4(0, 0, 0, 1), tevin_b = tevin_a, tevin_c = tevin_a, tevin_d = tevin_a;
@@ -49,13 +48,16 @@ void main() {
 
     if (texturesEnabled)
     {
-//{TEVSTAGES}
-
-        if (punchThrough && prev.a < 0.25)
+        //{TEVSTAGES}
+        if (punchThrough && prev.a <= .25)
             discard;
+        else if (punchThrough)
+            prev.a = 1;
     }
     else
+    {
         prev = vec4(norm * vec3(0.5) + 0.5, 1.0);
+    }
 
     colorOut = prev;
 }

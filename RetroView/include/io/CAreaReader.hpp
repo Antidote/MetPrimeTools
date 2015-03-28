@@ -27,8 +27,7 @@ public:
 
     CAreaFile* read();
 
-    static IResource*        loadByFile(const std::string& filepath);
-    static IResource*        loadByData(const atUint8* data, atUint64 length);
+    static IResource* loadByData(const atUint8* data, atUint64 length);
 
 private:
     void readSections(CAreaFile* ret);

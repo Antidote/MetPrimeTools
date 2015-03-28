@@ -1,5 +1,8 @@
 #include "core/CPakFileModel.hpp"
-#include "CAssetID.hpp"
+#include "core/CResourceManager.hpp"
+#include "generic/CWorldFile.hpp"
+
+#include <CAssetID.hpp>
 
 CPakFileModel::CPakFileModel(CPakFile* pak, QObject* parent)
     : QAbstractItemModel(parent),
@@ -117,10 +120,32 @@ void CPakFileModel::setupModelData()
 {
     QMap<QString, CResourceTreeItem*> parents;
 
+    if (m_pakFile->isWorldPak())
+    {
+        std::vector<SPakResource> mlvls = m_pakFile->resourcesByType("mlvl");
+        for (SPakResource res : mlvls)
+        {
+            CWorldFile* world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResource(res.id, "mlvl"));
+            if (world)
+                m_worlds.push_back(world);
+        }
+    }
     for (const SPakResource& res : m_pakFile->resources())
     {
         QList<QVariant> tmpData;
-        tmpData << QString::fromStdString(res.id.toString());
+        QString areaName;
+        if (res.tag == "MREA")
+        {
+            for (CWorldFile* world : m_worlds)
+            {
+                areaName = QString::fromStdString(world->areaName(res.id));
+                if (!areaName.isEmpty())
+                    break;
+            }
+        }
+
+        tmpData << (areaName.isEmpty() ? "" : areaName + " (" ) + QString::fromStdString(res.id.toString()) + (areaName.isEmpty() ? "" : ")");
+
         QString parentNodeTag = QString::fromStdString(res.tag.toString());
         if (parents[parentNodeTag] == nullptr)
         {

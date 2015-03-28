@@ -2,24 +2,26 @@
 #define CINDEXBUFFER_HPP
 
 #include <Athena/Global.hpp>
+#include "core/GXTypes.hpp"
 #include <vector>
 
 class CIndexBuffer
 {
 public:
-    CIndexBuffer(atUint32 materialId);
+    CIndexBuffer();
     virtual ~CIndexBuffer();
 
-    void addIndices(atUint32 type, std::vector<atUint16> indices);
-    atUint32 materialId();
+    void addIndices(EPrimitive type, std::vector<atUint32> indices);
+    void initBuffer();
+    void bindBuffer();
+    void drawBuffer();
 private:
-    friend class CModelData;
-    void trianglesToStrips(atUint16* indices, atUint16 count);
-    void fansToStrips(atUint16* indices, atUint16 count);
-    void quadsToStrips(atUint16* indices, atUint16 count);
+    void trianglesToStrips(atUint32* indices, atUint32 count);
+    void fansToStrips(atUint32* indices, atUint32 count);
+    void quadsToStrips(atUint32* indices, atUint32 count);
+    bool     m_buffered;
     atUint32 m_iboId;
-    atUint32 m_materialId;
-    std::vector<atUint16> m_indices;
+    std::vector<atUint32> m_indices;
 };
 
 #endif // CINDEXBUFFER_HPP

@@ -1,5 +1,5 @@
-#ifndef MATERIALCACHE_HPP
-#define MATERIALCACHE_HPP
+#ifndef CMATERIALCACHE_HPP
+#define CMATERIALCACHE_HPP
 
 
 #include <vector>
@@ -35,4 +35,4 @@ private:
     std::unordered_map<atUint64, QOpenGLShader*> m_fragmentShaders;
 };
 
-#endif // MATERIALCACHE_HPP
+#endif // CMATERIALCACHE_HPP

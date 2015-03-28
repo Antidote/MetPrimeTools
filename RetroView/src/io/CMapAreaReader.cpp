@@ -89,10 +89,7 @@ CMapArea* CMapAreaReader::read()
             base::readUint32();
             headerSize = base::position();
             if (stringLength > 0)
-            {
-                std::string test = base::readString(stringLength);
-                std::cout << test << std::endl;
-            }
+                base::readString(stringLength);
         }
 
         for (atUint32 i = 0; i < poiCount; i++)
@@ -132,7 +129,7 @@ CMapArea* CMapAreaReader::read()
             ret->m_pointsOfInterest.push_back(pointOfInterest);
         }
 
-        for (atUint32 i = 0; i < vertexCount; i++)
+        for (atUint32 i = 0; i < vertexCount; ++i)
         {
             glm::vec3 vec;
             vec.x = base::readFloat();
@@ -191,10 +188,13 @@ CMapArea* CMapAreaReader::read()
 
                 atUint32 indexCount = base::readUint32();
 
-                for (atUint32 k = 0; k < indexCount; ++k)
-                    primitive.indices.push_back(base::readUByte());
+                for (atUint32 k = 0; k < indexCount; k++)
+                {
+                    atUint16 idx =(atUint16)base::readUByte();
+                    primitive.indices.push_back(idx);
+                }
 
-                primitive.indices.push_back(0xFF);
+                primitive.indices.push_back(-1);
                 detail.primitives.push_back(primitive);
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }
@@ -206,10 +206,13 @@ CMapArea* CMapAreaReader::read()
             {
                 SMapBorder border;
                 atUint32 borderIndexCount = base::readUint32();
-                for (atUint32 k = 0; k < borderIndexCount; ++k)
-                    border.indices.push_back(base::readUByte());
+                for (atUint32 k = 0; k < borderIndexCount; k++)
+                {
+                    atInt16 idx =(atInt16)base::readUByte();
+                    border.indices.push_back(idx);
+                }
 
-                border.indices.push_back(0xFF);
+                border.indices.push_back(~0);
                 detail.borders.push_back(border);
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }

@@ -29,11 +29,12 @@ void CMapArea::draw()
     if (!m_vboBuilt)
         buildVbo();
 
-    glPrimitiveRestartIndex(0xFF);
+    glPrimitiveRestartIndex(~0);
 
     CMaterial& mat = CMaterialCache::instance()->material(m_materialID);
     if (!mat.bind())
         return;
+
 
     mat.setModelMatrix(m_transform);
 
@@ -48,7 +49,7 @@ void CMapArea::draw()
         for (const SMapAreaPrimitive& primitive : detail.primitives)
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, primitive.elementBuffer);
-            glDrawElements(primitive.type, primitive.indices.size(), GL_UNSIGNED_BYTE, (void*)0);
+            glDrawElements(primitive.type, primitive.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
         }
     }
 
@@ -60,17 +61,13 @@ void CMapArea::draw()
         for (const SMapBorder& border : detail.borders)
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
-            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_BYTE, (void*)0);
+            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
         }
     }
 
-    for (const SPointOfInterest poi : m_pointsOfInterest)
-    {
-        mat.setModelMatrix(poi.transform);
-        drawOutlinedCube(glm::vec3(0), glm::vec4(0), glm::vec4(0), glm::vec3(1));
-    }
     mat.release();
     glLineWidth(1.f);
+    glDisableVertexAttribArray(0);
 }
 
 void CMapArea::drawBoundingBox()
@@ -102,14 +99,14 @@ void CMapArea::buildVbo()
         {
             glGenBuffers(1, &primitive.elementBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, primitive.elementBuffer);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, primitive.indices.size() * sizeof(atUint8), &primitive.indices[0], GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, primitive.indices.size() * sizeof(atUint16), &primitive.indices[0], GL_STATIC_DRAW);
         }
 
         for (SMapBorder& border : detail.borders)
         {
             glGenBuffers(1, &border.elementBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, border.indices.size() * sizeof(atUint8), &border.indices[0], GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, border.indices.size() * sizeof(atUint16), &border.indices[0], GL_STATIC_DRAW);
         }
     }
 

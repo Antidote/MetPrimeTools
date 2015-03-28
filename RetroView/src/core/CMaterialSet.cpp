@@ -9,14 +9,6 @@ CMaterialSet::~CMaterialSet()
 {
 }
 
-CAssetID CMaterialSet::textureID(const atUint32& index) const
-{
-    if (index >= m_textureIds.size())
-        return CAssetID::InvalidAsset;
-
-    return m_textureIds[index];
-}
-
 CMaterial& CMaterialSet::material(const atUint32& index)
 {
     static CMaterial invalid;
@@ -26,13 +18,17 @@ CMaterial& CMaterialSet::material(const atUint32& index)
     return CMaterialCache::instance()->material(m_materials[index]);
 }
 
-CMaterial& CMaterialSet::material(const atUint32& index) const
-{
-    return material(index);
-}
-
-std::vector<atUint32> CMaterialSet::materials() const
+std::vector<atUint32> CMaterialSet::materials()
 {
     return m_materials;
+}
+
+void CMaterialSet::setAmbient(const QColor& amb)
+{
+    for (atUint32 matId : m_materials)
+    {
+        CMaterial& mat = CMaterialCache::instance()->material(matId);
+        mat.setAmbient(amb);
+    }
 }
 

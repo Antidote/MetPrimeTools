@@ -6,8 +6,10 @@
 #include <glm/glm.hpp>
 #include "SBoundingBox.hpp"
 #include "GXTypes.hpp"
+#include "core/CVertexBuffer.hpp"
+#include "core/CIndexBuffer.hpp"
 
-struct VertexDescriptor
+struct SVertexDescriptor
 {
     atUint16 position;
     atUint16 normal;
@@ -20,7 +22,7 @@ struct CPrimitive final
 {
     EPrimitive primitive;
     atUint32    vertexFormatIdx;
-    std::vector<VertexDescriptor> indices;
+    std::vector<SVertexDescriptor> indices;
 };
 
 namespace Athena
@@ -52,13 +54,15 @@ private:
     friend class CAreaReader;
     friend class CModelReader;
 
-    SBoundingBox           m_boundingBox;
-    glm::vec3              m_pivot;
-    atUint32               m_materialID;
-    glm::vec3              m_unkVector;
-    atUint16               m_mantissa;
-    atUint16               m_uvSource;
+    SBoundingBox            m_boundingBox;
+    glm::vec3               m_pivot;
+    atUint32                m_materialID;
+    glm::vec3               m_unkVector;
+    atUint16                m_mantissa;
+    atUint16                m_uvSource;
     std::vector<CPrimitive> m_primitives;
+    CVertexBuffer           m_vertexBuffer;
+    CIndexBuffer            m_indexBuffer;
 };
 
 #endif // MESH_HPP

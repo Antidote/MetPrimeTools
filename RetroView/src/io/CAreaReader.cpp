@@ -46,7 +46,7 @@ CAreaFile* CAreaReader::read()
     if (magic != 0xDEADBEEF)
         THROW_INVALID_DATA_EXCEPTION("Not valid MREA file, expected magic 0xDEADBEEF got %.8X\n", magic);
 
-    if (version != CAreaFile::MetroidPrime1 && version != CAreaFile::MetroidPrime2
+    if (version != CAreaFile::MetroidPrimeDemo && version != CAreaFile::MetroidPrime1 && version != CAreaFile::MetroidPrime2
             && version != CAreaFile::MetroidPrime3 && version != CAreaFile::DKCR)
         THROW_INVALID_DATA_EXCEPTION("Unsupported version, got %i\n", version);
 
@@ -64,12 +64,13 @@ CAreaFile* CAreaReader::read()
     atUint32 modelCount = base::readUint32();
     // This is also valid for MP2 and DKCR
     atUint32 sclyLayerCount = 1;
-    if (version != CAreaFile::MetroidPrime1)
+    if (version != CAreaFile::MetroidPrime1 && ret->m_version != CAreaFile::MetroidPrimeDemo)
         atUint32 sclyLayerCount = base::readUint32();
 
     atUint32 sectionCount = base::readUint32();
 
-    if (version == CAreaFile::MetroidPrime1 || version == CAreaFile::MetroidPrime2)
+    if (version == CAreaFile::MetroidPrimeDemo || version == CAreaFile::MetroidPrime1 ||
+            version == CAreaFile::MetroidPrime2)
     {
         m_materialSection  = base::readUint32();
         m_sclySection      = base::readUint32();
@@ -89,7 +90,7 @@ CAreaFile* CAreaReader::read()
     }
 
     atUint32 compressedBlockCount = 0;
-    if (version != CAreaFile::MetroidPrime1)
+    if (version != CAreaFile::MetroidPrime1 && ret->m_version != CAreaFile::MetroidPrimeDemo)
         compressedBlockCount = base::readUint32();
     atUint32 sectionIndexCount = 0;
     if (version == CAreaFile::MetroidPrime3 || version == CAreaFile::DKCR)
@@ -103,7 +104,7 @@ CAreaFile* CAreaReader::read()
 
     base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
 
-    if (version != CAreaFile::MetroidPrime1)
+    if (version != CAreaFile::MetroidPrime1 && version != CAreaFile::MetroidPrimeDemo)
     {
         for (atUint32 i = 0; i < compressedBlockCount; i++)
         {
@@ -140,16 +141,9 @@ CAreaFile* CAreaReader::read()
     return ret;
 }
 
-IResource* CAreaReader::loadByFile(const std::string& filepath)
-{
-    CAreaReader reader(filepath);
-    return reader.read();
-}
-
 IResource* CAreaReader::loadByData(const atUint8* data, atUint64 length)
 {
-    CAreaReader reader(data, length);
-    return reader.read();
+    return CAreaReader(data, length).read();
 }
 
 void CAreaReader::readSections(CAreaFile* ret)
@@ -161,7 +155,7 @@ void CAreaReader::readSections(CAreaFile* ret)
 
         if (i == 0)
         {
-            CMaterial::Version matVer = (ret->m_version == CAreaFile::MetroidPrime1 ?
+            CMaterial::Version matVer = (ret->m_version == CAreaFile::MetroidPrime1 || ret->m_version == CAreaFile::MetroidPrimeDemo ?
                                              CMaterial::MetroidPrime1 : CMaterial::MetroidPrime2);
 
             atUint8* data = base::readUBytes(m_sectionSizes[i]);
@@ -214,6 +208,12 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
                         model.indexIBOs(ret->m_materialSets[0]);
                     }
                 }
+                else if (!idx.tag.compare("AABB"))
+                {
+                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
+                    m_sectionReader.setData(data, m_sectionSizes[i]);
+                    readAABB(ret, m_sectionReader);
+                }
             }
         }
 
@@ -247,7 +247,8 @@ void CAreaReader::readModelHeader(CAreaFile* ret, atUint64& sectionStart, atUint
     sectionStart = base::position();
     i++;
 
-    if (ret->m_version == CAreaFile::MetroidPrime1 || ret->m_version == CAreaFile::MetroidPrime2)
+    if (ret->m_version == CAreaFile::MetroidPrimeDemo || ret->m_version == CAreaFile::MetroidPrime1 ||
+            ret->m_version == CAreaFile::MetroidPrime2)
         readModelData(ret, model, sectionStart, i);
 
     atUint32 meshCount = base::readUint32();
@@ -258,10 +259,11 @@ void CAreaReader::readModelHeader(CAreaFile* ret, atUint64& sectionStart, atUint
     sectionStart = base::position();
     i++;
 
-    if (ret->m_version == CAreaFile::MetroidPrime1 || ret->m_version == CAreaFile::MetroidPrime2)
+    if (ret->m_version == CAreaFile::MetroidPrimeDemo ||  ret->m_version == CAreaFile::MetroidPrime1 ||
+            ret->m_version == CAreaFile::MetroidPrime2)
         readMeshes(ret, model, sectionStart, i, ret->m_models.size() - 1);
 
-    if (ret->m_version != CAreaFile::MetroidPrime1)
+    if (ret->m_version != CAreaFile::MetroidPrimeDemo && ret->m_version != CAreaFile::MetroidPrime1)
     {
         base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
         sectionStart = base::position();
@@ -300,7 +302,8 @@ void CAreaReader::readModelData(CAreaFile* ret, CModelData& model, atUint64& sec
     i++;
 
     // Something else goes here in DKCR, is it a short UV table?
-    if (ret->m_version == CAreaFile::MetroidPrime1 || ret->m_version == CAreaFile::MetroidPrime2 || ret->m_version == CAreaFile::DKCR)
+    if (ret->m_version == CAreaFile::MetroidPrimeDemo || ret->m_version == CAreaFile::MetroidPrime1 ||
+            ret->m_version == CAreaFile::MetroidPrime2 || ret->m_version == CAreaFile::DKCR)
     {
         data = base::readUBytes(m_sectionSizes[i]);
         m_sectionReader.setData(data, m_sectionSizes[i]);
@@ -308,6 +311,42 @@ void CAreaReader::readModelData(CAreaFile* ret, CModelData& model, atUint64& sec
         sectionStart = base::position();
         i++;
     }
+}
+
+void CAreaReader::readAABB(CAreaFile* file, Athena::io::MemoryReader& in)
+{
+    atUint32 aabbCount = in.readUint32();
+    std::cout << aabbCount << std::endl;
+    SAABB rootAABB;
+    while ((aabbCount--) > 0)
+    {
+        SAABB aabb;
+        aabb.aabb.min.x = in.readFloat();
+        aabb.aabb.min.y = in.readFloat();
+        aabb.aabb.min.z = in.readFloat();
+        aabb.aabb.max.x = in.readFloat();
+        aabb.aabb.max.y = in.readFloat();
+        aabb.aabb.max.z = in.readFloat();
+        aabb.unkIndex = in.readInt32();
+        aabb.selfIndex1 = in.readInt16();
+        aabb.selfIndex2 = in.readInt16();
+        /*
+        if (aabb.selfIndex1 != -1)
+        {
+            std::cout << "rootaabb" << std::endl;
+            if (rootAABB.aabb != SBoundingBox())
+                file->m_aabbs.push_back(rootAABB);
+
+            rootAABB = aabb;
+        }
+        else
+        {
+            rootAABB.aabb.min += aabb.aabb.min;
+            rootAABB.aabb.max += aabb.aabb.max;
+        }*/
+        file->m_aabbs.push_back(aabb);
+    }
+    //file->m_aabbs.push_back(rootAABB);
 }
 
 void CAreaReader::readVertices(CModelData& model, Athena::io::MemoryReader& in)

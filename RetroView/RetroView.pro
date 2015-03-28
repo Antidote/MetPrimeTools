@@ -14,7 +14,7 @@ QMAKE_LFLAGS += -fopenmp
 unix:{
     CONFIG += link_pkgconfig
     PKGCONFIG += collada-dom-141
-    LIBS += -lboost_system -lboost_filesystem
+    LIBS += -lboost_system -lboost_filesystem -ltinyxml
 }
 
 win32:LIBS += \
@@ -53,8 +53,6 @@ SOURCES += \
     src/core/CIndexBuffer.cpp \
     src/core/CKeyboardManager.cpp \
     src/core/CMainWindow.cpp \
-    src/core/CMaterial.cpp \
-    src/core/CMaterialCache.cpp \
     src/core/CMaterialSet.cpp \
     src/core/CMesh.cpp \
     src/core/CModelData.cpp \
@@ -80,14 +78,23 @@ SOURCES += \
     src/io/CMapUniverseReader.cpp \
     src/models/CMapUniverse.cpp \
     src/io/CMapAreaReader.cpp \
-    src/models/CMapArea.cpp
+    src/models/CMapArea.cpp \
+    src/io/CStringTableReader.cpp \
+    src/generic/CStringTable.cpp \
+    src/core/CVertexBuffer.cpp \
+    src/core/CMaterialSection.cpp \
+    src/core/IMaterial.cpp \
+    src/core/CMaterial.cpp \
+    src/core/CScriptObject.cpp \
+    src/core/CMaterialCache.cpp \
+    src/core/CPropertyTemplate.cpp \
+    src/core/CProperty.cpp \
+    src/core/CTemplateManager.cpp
 
 HEADERS += \
     include/core/CCamera.hpp \
     include/core/CIndexBuffer.hpp \
     include/core/CKeyboardManager.hpp \
-    include/core/CMaterial.hpp \
-    include/core/CMaterialCache.hpp \
     include/core/CMaterialSet.hpp \
     include/core/CMesh.hpp \
     include/core/CModelData.hpp \
@@ -117,7 +124,21 @@ HEADERS += \
     include/io/CMapUniverseReader.hpp \
     include/models/CMapUniverse.hpp \
     include/io/CMapAreaReader.hpp \
-    include/models/CMapArea.hpp
+    include/models/CMapArea.hpp \
+    include/io/CStringTableReader.hpp \
+    include/generic/CStringTable.hpp \
+    include/core/CVertexBuffer.hpp \
+    include/core/CMaterialSection.hpp \
+    include/core/IMaterial.hpp \
+    include/core/CMaterial.hpp \
+    include/core/CScriptObject.hpp \
+    include/core/CMaterialCache.hpp \
+    include/core/CProperty.hpp \
+    include/core/CPropertyTemplate.hpp \
+    include/core/EPropertyType.hpp \
+    include/core/CTemplateManager.hpp \
+    include/core/SAnimation.hpp \
+    include/core/SVertex.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \

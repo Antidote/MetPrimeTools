@@ -24,14 +24,14 @@
 
 CGLViewer* CGLViewer::m_instance = NULL;
 CGLViewer::CGLViewer(QWidget* parent)
-    : QGLWidget(parent),
+    : QOpenGLWidget(parent),
       m_currentRenderable(nullptr),
       m_skybox(nullptr),
       m_camera(glm::vec3(0.0f, 10.0f, 3.0f)),
       m_mouseEnabled(false),
       m_isInitialized(false)
 {
-    QGLWidget::setMouseTracking(true);
+    QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
     m_updateTimer.start(0);
@@ -47,6 +47,7 @@ CGLViewer::~CGLViewer()
     std::cout << "I'M DYING!!!" << std::endl;
 }
 
+// TODO: Clean this up
 void CGLViewer::paintGL()
 {
     m_currentTime = 1.f * hiresTimeMS();
@@ -54,9 +55,7 @@ void CGLViewer::paintGL()
     m_lastTime = m_currentTime;
 
     updateCamera();
-    QGLWidget::paintGL();
-
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glm::mat4 modelMat = modelMatrix();
@@ -69,16 +68,17 @@ void CGLViewer::paintGL()
     glShadeModel(GL_SMOOTH);
 
 
-    if (m_skybox)
-    {
-        glm::mat4 viewRot = m_camera.rotationMatrix();
-        m_skybox->setAmbient(1, 1, 1);
-        m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
-        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
-        m_skybox->draw();
-    }
+//    if (m_skybox)
+//    {
+//        //glDepthRangef(0.0090001f, 1.0f);
+//        glm::mat4 viewRot = m_camera.rotationMatrix();
+//        m_skybox->setAmbient(1, 1, 1);
+//        m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
+//        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
+//        m_skybox->draw();
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//    }
 
-    glClear(GL_DEPTH_BUFFER_BIT);
 
     bool _drawAxis = QSettings().value("axisDrawn").toBool();
     bool _drawGrid = QSettings().value("gridDrawn").toBool();
@@ -122,17 +122,19 @@ void CGLViewer::paintGL()
 
     glDisable(GL_LINE_SMOOTH);
 
-
     if (m_currentRenderable)
     {
         m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
-        m_currentRenderable->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
+        bool texturesEnabled = (QSettings().value("enableTextures").toBool() && !QSettings().value("drawPoints").toBool() && !QSettings().value("wireframe").toBool());
+        m_currentRenderable->updateTexturesEnabled(texturesEnabled);
 
         if (QSettings().value("drawBoundingBox").toBool())
             m_currentRenderable->drawBoundingBox();
 
-        if (QSettings().value("wireframe").toBool())
+        if (QSettings().value("wireframe").toBool() && !QSettings().value("drawPoints").toBool())
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else if (QSettings().value("drawPoints").toBool())
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         else
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         m_currentRenderable->draw();
@@ -143,26 +145,24 @@ void CGLViewer::resizeGL(int w, int h)
 {
     m_camera.setViewport(w, h);
     glViewport(0, 0, w, h);
-    QGLWidget::resize(w, h);
+    QOpenGLWidget::resize(w, h);
 }
 
 void CGLViewer::initializeGL()
 {
-    QGLWidget::initializeGL();
-
     if (!m_isInitialized)
     {
-        m_isInitialized = true;
-        glewExperimental = true;
+        QOpenGLWidget::initializeGL();
+
+        std::cout << format().depthBufferSize() << std::endl;
         glewInit();
         CMaterialCache::instance()->initialize();
 
         // Enable depth test
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        qglClearColor(QColor(128, 128, 128).darker(350));
-        setAutoFillBackground(true);
-        setAutoBufferSwap(true);
+        QColor clearColor = QColor(32, 32, 32);
+        glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
         emit initialized();
     }
 
@@ -172,7 +172,7 @@ void CGLViewer::initializeGL()
 void CGLViewer::closeEvent(QCloseEvent* ce)
 {
     emit closing();
-    QGLWidget::closeEvent(ce);
+    QOpenGLWidget::closeEvent(ce);
 }
 
 void CGLViewer::mouseMoveEvent(QMouseEvent* e)
@@ -201,20 +201,20 @@ void CGLViewer::mouseMoveEvent(QMouseEvent* e)
 //            lastPos = newPos;
 //        }
     }
-    QGLWidget::mouseMoveEvent(e);
+    QOpenGLWidget::mouseMoveEvent(e);
 }
 
 void CGLViewer::mousePressEvent(QMouseEvent* e)
 {
     m_mouseEnabled = true;
-    QGLWidget::mousePressEvent(e);
+    QOpenGLWidget::mousePressEvent(e);
     cursor().setShape(Qt::BlankCursor);
 }
 
 void CGLViewer::mouseReleaseEvent(QMouseEvent* e)
 {
     m_mouseEnabled = false;
-    QGLWidget::mousePressEvent(e);
+    QOpenGLWidget::mousePressEvent(e);
     cursor().setShape(Qt::ArrowCursor);
 }
 
@@ -225,7 +225,7 @@ void CGLViewer::wheelEvent(QWheelEvent* e)
     else
         m_camera.decreaseSpeed();
 
-    QGLWidget::wheelEvent(e);
+    QOpenGLWidget::wheelEvent(e);
 }
 
 void CGLViewer::updateCamera()

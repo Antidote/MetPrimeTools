@@ -10,15 +10,14 @@ public:
     CMaterialSet();
     virtual ~CMaterialSet();
 
-    CAssetID textureID(const atUint32& index) const;
-
     CMaterial& material(const atUint32& index);
-    CMaterial& material(const atUint32& index) const;
-    std::vector<atUint32> materials() const;
+    std::vector<atUint32> materials();
+
+    void setAmbient(const QColor& amb);
 private:
     friend class CMaterialReader;
+    friend struct SPASSCommand;
 
-    std::vector<CAssetID> m_textureIds;
     std::vector<atUint32> m_materials;
 };
 

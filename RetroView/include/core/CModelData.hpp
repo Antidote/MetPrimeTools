@@ -3,8 +3,9 @@
 
 #include "CMaterialSet.hpp"
 #include "CMesh.hpp"
-#include "CIndexBuffer.hpp"
-#include "SBoundingBox.hpp"
+#include "core/CIndexBuffer.hpp"
+#include "core/SBoundingBox.hpp"
+#include "core/SVertex.hpp"
 
 #include <dae.h>
 #include <glm/glm.hpp>
@@ -33,24 +34,6 @@ struct SIndexBufferObject
     SBoundingBox          boundingBox;
 };
 
-struct SVertex
-{
-    glm::vec3 pos;
-    glm::vec3 norm;
-    atUint32  color[2];
-    glm::vec2 texCoords[7];
-
-    SVertex()
-    {
-        memset(color, 0, sizeof(color));
-    }
-
-    bool operator ==(const SVertex& that) const
-    {
-        return !memcmp((void*)this, (void*)&that, sizeof(SVertex));
-    }
-};
-
 class CModelData
 {
 public:
@@ -59,23 +42,21 @@ public:
 
     void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms);
 
-    void preDraw(CMaterialSet& materialSet);
     void drawBoundingBoxes();
 
     void indexIBOs(CMaterialSet& materialSet);
 
     void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
     void drawTransparentBoxes();
-    void doneDraw();
 protected:
     friend class CAreaFile;
     friend class CAreaReader;
     friend class CModelReader;
     friend class CMaterialViewer;
 
-    atUint32 exportUVIdx(atUint32 texOff, VertexDescriptor desc, CMaterial& mat, CMesh& mesh);
+    atUint32 exportUVIdx(atUint32 texOff, SVertexDescriptor desc, CMaterial& mat, CMesh& mesh);
     atUint32 getIbo(atUint32 prim, atUint32 matId, atUint32 start);
-    void indexVert(CMaterial& material, VertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex);
+    void indexVert(CMaterial& material, SVertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex);
     void loadIbos(CMaterialSet& ms);
 
     void sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans);
@@ -92,21 +73,9 @@ protected:
 
     // GL specific code
     bool                           m_ibosIndexed;
-    bool                           m_ibosLoaded;
-    atUint32                       m_vertexObj;
-    atUint32                       m_normalObj;
-    atUint32                       m_clrObjs[2];
-    atUint32                       m_texCoordObjs[7];
-
-    // Buffers
-    std::vector<glm::vec3> m_posBuf;
-    std::vector<glm::vec3> m_normBuf;
-    std::vector<atUint32>  m_clrBufs[2];
-    std::vector<glm::vec2> m_texCoordBuf[7];
-    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_transparents;
-    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_opaques;
-    std::vector<SIndexBufferObject> m_ibos;
-    std::vector<SVertex>            m_vertexBuffer;
+    CVertexBuffer                  m_vertexBuffer;
+    std::unordered_map<atUint32, CIndexBuffer> m_transparents;
+    std::unordered_map<atUint32, CIndexBuffer> m_opaques;
 };
 
 #endif // MODEL_HPP

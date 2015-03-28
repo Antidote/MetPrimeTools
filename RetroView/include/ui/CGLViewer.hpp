@@ -6,9 +6,7 @@
 
 #include <Athena/Global.hpp>
 #include <glm/glm.hpp>
-#include <QtOpenGL/QGLWidget>
-#include <QGLWidget>
-#include <QOpenGLShaderProgram>
+#include <QOpenGLWidget>
 #include <QTime>
 #include <QTimer>
 #include <memory>
@@ -18,7 +16,7 @@ class QListWidgetItem;
 class IResource;
 class IRenderableModel;
 
-class CGLViewer : public QGLWidget
+class CGLViewer : public QOpenGLWidget
 {
     Q_OBJECT
 public:
@@ -63,12 +61,8 @@ protected:
     void wheelEvent(QWheelEvent* e);
 private:
     void updateCamera();
-    float                            m_cameraSpeed;
     QTime                            m_frameTimer;
     SBoundingBox                     m_sceneBounds;
-    glm::vec3                        m_position;
-    glm::mat4                        m_projectionMatrix;
-    glm::mat4                        m_viewMatrix;
     IRenderableModel*                m_currentRenderable;
     IRenderableModel*                m_skybox;
     static CGLViewer*                m_instance;
