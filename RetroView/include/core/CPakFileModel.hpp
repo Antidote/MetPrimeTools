@@ -29,9 +29,7 @@ public:
 private:
     void setupModelData();
     CPakFile* m_pakFile;
-    std::vector<CWorldFile*> m_worlds;
     CResourceTreeItem* m_rootItem;
-
 };
 
 #endif // CPAKLISTMODEL_HPP

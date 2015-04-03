@@ -22,7 +22,7 @@ public:
 
     void initialize();
     static std::shared_ptr<CMaterialCache> instance();
-    atUint32 addMaterial(CMaterial mat);
+    atUint32 addMaterial(const CMaterial& mat);
     CMaterial& material(atUint32 index);
 
     void setAmbientOnMaterials(std::vector<atUint32> materials, const QColor& ambient);

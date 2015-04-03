@@ -6,6 +6,7 @@
 #include <Athena/Types.hpp>
 #include <QColor>
 
+class CMaterialSet;
 class IRenderableModel
 {
 public:
@@ -16,6 +17,10 @@ public:
     virtual void updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj) = 0;
     virtual void updateTexturesEnabled(const bool& /* enabled */) {}
     virtual bool canExport() const {return false;}
+    virtual atUint32 materialSetCount() const=0;
+    virtual void setCurrentMaterialSet(atUint32)=0;
+    virtual atUint32 currentMaterialSetIndex() const=0;
+    virtual CMaterialSet& currentMaterialSet()=0;
 
     void setAmbient(float r, float g, float b)
     {
@@ -28,6 +33,7 @@ public:
     }
 
     virtual SBoundingBox& boundingBox()=0;
+
 
 protected:
     QColor m_ambient;

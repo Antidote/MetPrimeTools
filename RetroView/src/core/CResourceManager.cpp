@@ -161,6 +161,12 @@ IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& 
     return nullptr;
 }
 
+void CResourceManager::destroyResource(IResource* res)
+{
+    m_cachedResources.erase(res->assetId());
+    delete res;
+}
+
 std::shared_ptr<CResourceManager> CResourceManager::instance()
 {
     static std::shared_ptr<CResourceManager> instance = std::make_shared<concrete_ResourceManager>();

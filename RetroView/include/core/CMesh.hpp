@@ -34,6 +34,7 @@ class IStreamReader;
 }
 
 class CMaterial;
+class CModelData;
 class CMesh final
 {
 public:
@@ -48,7 +49,7 @@ public:
     std::vector<CPrimitive>& primitives();
     std::vector<CPrimitive>& primitives() const;
 private:
-    friend void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader);
+    friend void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, Athena::io::IStreamReader& reader);
     friend class CModelData;
     friend class CAreaFile;
     friend class CAreaReader;

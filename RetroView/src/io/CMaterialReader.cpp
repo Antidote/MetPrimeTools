@@ -36,8 +36,8 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                 mat.m_version = version;
                 mat.m_vertexAttributes = base::readUint32();
                 base::readUint32();
+                base::readUint32();
                 mat.m_unknown2 = base::readUint32();
-               base::readUint32();
                 // spin until we read in all commands
                 while (!readMaterialCommand(ret, mat))
                     ;

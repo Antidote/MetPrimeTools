@@ -7,7 +7,6 @@
 #include "core/SBoundingBox.hpp"
 #include "core/SVertex.hpp"
 
-#include <dae.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <fstream>
@@ -48,11 +47,13 @@ public:
 
     void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
     void drawTransparentBoxes();
+
 protected:
     friend class CAreaFile;
     friend class CAreaReader;
     friend class CModelReader;
     friend class CMaterialViewer;
+    friend void readPrimitives(CMesh&, CModelData&, const CMaterial&, Athena::io::IStreamReader&);
 
     atUint32 exportUVIdx(atUint32 texOff, SVertexDescriptor desc, CMaterial& mat, CMesh& mesh);
     atUint32 getIbo(atUint32 prim, atUint32 matId, atUint32 start);
@@ -67,8 +68,8 @@ protected:
     std::vector<glm::vec3>   m_vertices;
     std::vector<glm::vec3>   m_normals;
     std::vector<atUint32>    m_colors;
-    std::vector<glm::vec2>   m_texCoords;
-    std::vector<glm::vec2>   m_lightmapCoords;
+    std::vector<glm::vec2>   m_texCoords0;
+    std::vector<glm::vec2>   m_texCoords1;
     std::vector<CMesh>       m_meshes;
 
     // GL specific code

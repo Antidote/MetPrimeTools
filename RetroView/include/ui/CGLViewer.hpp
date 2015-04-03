@@ -35,6 +35,7 @@ public:
 
     float frameRate() const;
 
+    IRenderableModel* currentModel();
 public slots:
     void stopUpdates();
     void startUpdates();

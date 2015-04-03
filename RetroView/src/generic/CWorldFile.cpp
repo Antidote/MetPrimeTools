@@ -27,10 +27,17 @@ std::string CWorldFile::areaName(const CAssetID& assetId)
         CStringTable* table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResource(area.nameID, "strg"));
 
         if (table)
-            return table->string();
+        {
+            std::string ret = table->string();
+            table->destroy();
+            return ret;
+        }
     }
 
-    return std::string("!!") + area.internalName;
+    if (area.internalName != std::string())
+        return std::string("!!") + area.internalName;
+
+    return std::string();
 }
 
 IRenderableModel* CWorldFile::skyboxModel()

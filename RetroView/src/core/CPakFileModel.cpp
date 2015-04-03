@@ -120,6 +120,7 @@ void CPakFileModel::setupModelData()
 {
     QMap<QString, CResourceTreeItem*> parents;
 
+    std::vector<CWorldFile*> worlds;
     if (m_pakFile->isWorldPak())
     {
         std::vector<SPakResource> mlvls = m_pakFile->resourcesByType("mlvl");
@@ -127,16 +128,17 @@ void CPakFileModel::setupModelData()
         {
             CWorldFile* world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResource(res.id, "mlvl"));
             if (world)
-                m_worlds.push_back(world);
+                worlds.push_back(world);
         }
     }
+
     for (const SPakResource& res : m_pakFile->resources())
     {
         QList<QVariant> tmpData;
         QString areaName;
         if (res.tag == "MREA")
         {
-            for (CWorldFile* world : m_worlds)
+            for (CWorldFile* world : worlds)
             {
                 areaName = QString::fromStdString(world->areaName(res.id));
                 if (!areaName.isEmpty())
@@ -157,4 +159,8 @@ void CPakFileModel::setupModelData()
 
         parents[parentNodeTag]->appendChild(new CResourceTreeItem(tmpData, res.id, parents[parentNodeTag]));
     }
+
+    for (CWorldFile* world : worlds)
+        world->destroy();
+    worlds.clear();
 }

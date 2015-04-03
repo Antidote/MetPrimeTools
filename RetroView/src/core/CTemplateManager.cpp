@@ -1,4 +1,5 @@
 #include "core/CTemplateManager.hpp"
+#include "core/CPropertyTemplate.hpp"
 #include <sstream>
 #include <tinyxml.h>
 #include <iostream>
@@ -41,12 +42,16 @@ CTemplateManager::~CTemplateManager()
 
 void CTemplateManager::loadTemplates()
 {
-    loadMasterTemplate(MP1_TEMPLATE_DIR, MetroidPrime1);
-    //loadMasterTemplate(MP2_TEMPLATE_DIR, MetroidPrime2);
+    loadMasterTemplate(MP1_TEMPLATE_DIR);
+    //loadMasterTemplate(MP2_TEMPLATE_DIR);
+}
+
+void CTemplateManager::loadTemplate(const std::string& templatePath)
+{
 }
 
 
-void CTemplateManager::loadMasterTemplate(std::string gamePath, EPropertyVersion version)
+void CTemplateManager::loadMasterTemplate(std::string gamePath)
 {
     TiXmlDocument masterTemplate(m_templatePath + gamePath + MASTER_TEMPLATE_FILENAME);
     if (masterTemplate.LoadFile())
@@ -67,7 +72,7 @@ void CTemplateManager::loadMasterTemplate(std::string gamePath, EPropertyVersion
                 std::string id = std::string(element->Attribute("ID"));
                 std::string name = std::string(element->Attribute("name"));
                 std::cout << id << " " << name << std::endl;
-                m_templatePaths[id] = name;
+
                 element = element->NextSiblingElement("object");
             }
         }

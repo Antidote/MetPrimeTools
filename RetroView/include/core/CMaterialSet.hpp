@@ -7,6 +7,7 @@
 class CMaterialSet final
 {
 public:
+    static const CMaterialSet Invalid;
     CMaterialSet();
     virtual ~CMaterialSet();
 
@@ -14,6 +15,8 @@ public:
     std::vector<atUint32> materials();
 
     void setAmbient(const QColor& amb);
+
+    void dumpSources(const CAssetID& id);
 private:
     friend class CMaterialReader;
     friend struct SPASSCommand;

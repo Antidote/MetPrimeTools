@@ -10,7 +10,8 @@
 static atUint32 drawCalls;
 
 CAreaFile::CAreaFile()
-    : m_ibosIndexed(false)
+    : m_ibosIndexed(false),
+      m_currentSet(0)
 {
 }
 
@@ -99,7 +100,15 @@ void CAreaFile::drawBoundingBox()
 
     ::drawBoundingBox(m_boundingBox);
     for (CModelData& m : m_models)
-        m.drawBoundingBoxes();
+    {
+        for (CMesh& mesh : m.m_meshes)
+        {
+            CMaterial& mat = currentMaterialSet().material(mesh.m_materialID);
+            if (!mat.isTransparent())
+                continue;
+            ::drawBoundingBox(mesh.m_boundingBox);
+        }
+    }
 }
 
 void CAreaFile::updateViewProjectionUniforms(const glm::mat4& view, const glm::mat4& proj)
@@ -133,11 +142,28 @@ SBoundingBox& CAreaFile::boundingBox()
 
 CMaterialSet& CAreaFile::currentMaterialSet()
 {
-    return m_materialSets[0];
+    return m_materialSets[m_currentSet];
+}
+
+atUint32 CAreaFile::materialSetCount() const
+{
+    return m_materialSets.size();
+}
+
+atUint32 CAreaFile::currentMaterialSetIndex() const
+{
+    return m_currentSet;
+}
+
+void CAreaFile::setCurrentMaterialSet(atUint32 set)
+{
+    m_currentSet = set % m_materialSets.size();;
 }
 
 void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 modelMat)
 {
-    for (CModelData& model : m_models)
+    std::for_each(m_models.begin(), m_models.end(), [&transparents, &materialSet, &modelMat](CModelData& model)
+    {
         model.drawIbos(transparents, materialSet, modelMat);
+    });
 }

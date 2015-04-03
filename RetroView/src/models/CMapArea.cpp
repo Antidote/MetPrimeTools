@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include "models/CMapArea.hpp"
 #include "core/CMaterialCache.hpp"
+#include "core/CMaterialSet.hpp"
 
 #include "core/GXCommon.hpp"
 
@@ -85,6 +86,25 @@ void CMapArea::updateViewProjectionUniforms(const glm::mat4& view, const glm::ma
     CMaterial& mat = CMaterialCache::instance()->material(m_materialID);
     mat.setViewMatrix(view);
     mat.setProjectionMatrix(proj);
+}
+
+void CMapArea::setCurrentMaterialSet(atUint32)
+{
+}
+
+atUint32 CMapArea::currentMaterialSetIndex() const
+{
+    return 0;
+}
+
+CMaterialSet& CMapArea::currentMaterialSet()
+{
+    return (CMaterialSet&)CMaterialSet::Invalid;
+}
+
+atUint32 CMapArea::materialSetCount() const
+{
+    return 0;
 }
 
 void CMapArea::buildVbo()

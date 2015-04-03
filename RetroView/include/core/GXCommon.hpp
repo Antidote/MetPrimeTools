@@ -19,6 +19,7 @@ void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool di
 atUint64 assetIdFromPath(const std::string& filepath);
 
 class CMesh;
+class CModelData;
 class CMaterial;
 
 namespace Athena
@@ -29,7 +30,7 @@ class IStreamReader;
 }
 }
 
-void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader);
+void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, Athena::io::IStreamReader& reader);
 
 long hiresTimeMS();
 float hiresTimeSec();

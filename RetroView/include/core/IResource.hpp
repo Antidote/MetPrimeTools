@@ -16,6 +16,7 @@ public:
 
     CPakFile* source() const { return m_source; }
     QWidget* widget() const { return nullptr; }
+    void destroy();
 protected:
     friend class CResourceManager;
     CAssetID m_assetID;

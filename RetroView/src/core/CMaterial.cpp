@@ -31,7 +31,7 @@ CMaterial::CMaterial()
 
 CMaterial::~CMaterial()
 {
-
+    m_materialSections.clear();
 }
 
 void CMaterial::setModelMatrix(const glm::mat4& modelMatrix)
@@ -101,7 +101,7 @@ void CMaterial::setKonstColor(atUint32 id, const QColor& color)
     assignKonstColor(realIndex);
 }
 
-bool CMaterial::hasAttribute(atUint32 index)
+bool CMaterial::hasAttribute(atUint32 index) const
 {
     atUint32 tmp = ((m_vertexAttributes >> (index << 1)) & 3);
     return (tmp == 2 || tmp == 3);
@@ -199,14 +199,14 @@ QOpenGLShader* CMaterial::buildVertex()
                         std::cout << std::dec << texcoordTransformMP3[m_passes[i]->animUvSource] << std::endl;
                     }
 
-                    if (m_passes[i]->anim.mode != 2 && m_passes[i]->anim.mode != 3 && m_passes[i]->anim.mode != 4 && m_passes[i]->anim.mode != 5)
+                    if (m_passes[i]->anim.mode < 2 || m_passes[i]->anim.mode > 5)
                         vertSource << QString("texCoord%1 = vec3(vec4(%2, 1.0) * texMtx[%1]);").arg(pass)
                                       .arg(texcoordTransformMP3[m_passes[i]->animUvSource]);
                     else
                         vertSource << QString("texCoord%1 = vec3(vec4(vec3(in_TexCoord%2, 1.0), 1.0) * texMtx[%1]);").arg(pass)
                                       .arg(m_passes[i]->uvSource);
 
-                    if (m_passes[i]->anim.mode != 2 && m_passes[i]->anim.mode != 3 && m_passes[i]->anim.mode != 4 && m_passes[i]->anim.mode != 5)
+                    if (m_passes[i]->anim.mode < 2 || m_passes[i]->anim.mode > 5)
                         vertSource << QString("texCoord%1 = normalize(texCoord%1);").arg(pass);
 
                     vertSource << QString("texCoord%1 = vec3(vec4(texCoord%1, 1.0) * postMtx[%1]);").arg(pass);
@@ -220,6 +220,7 @@ QOpenGLShader* CMaterial::buildVertex()
         source = source.replace("//{TEXGEN}", vertSource.join("\n"));
     }
 
+    m_vertexSource = source;
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Vertex);
 }
 
@@ -238,16 +239,13 @@ QOpenGLShader* CMaterial::buildFragment()
     }
     else
     {
-        fragmentSource << "        vec4 clr = vec4(1.0);";
-        fragmentSource << "        prev = vec4(1.0);";
         atUint32 passIdx = 0;
-        for (atUint32 i =0; i < 12; i++)
+        for (atUint32 i = 0; i < 12; i++)
         {
             SPASSCommand* pass = m_passes[i];
             if (pass)
             {
-                //if (pass->subCommand == EMaterialCommand::RFLD)
-                    fragmentSource << pass->fragmentSource(passIdx);
+                fragmentSource << pass->fragmentSource(passIdx);
                 passIdx++;
             }
         }
@@ -256,14 +254,13 @@ QOpenGLShader* CMaterial::buildFragment()
         {
             SINTCommand* intC = dynamic_cast<SINTCommand*>(section->m_commandImpl);
             if (intC && intC->subCommand == EMaterialCommand::OPAC)
-            {
                 fragmentSource << QString("        prev = vec4(prev.rgb, %1);").arg((atUint8)intC->val * (1.f/255.f));
-            }
         }
 
         source = source.replace("//{TEVSTAGES}", fragmentSource.join("\n"));
     }
 
+    m_fragmentSource = source;
     return CMaterialCache::instance()->shaderFromSource(source, QOpenGLShader::Fragment);
 }
 
@@ -310,17 +307,17 @@ void CMaterial::assignTexturesEnabled()
     m_program->setUniformValue("texturesEnabled", m_texturesEnabled);
 }
 
-bool CMaterial::hasPosition()
+bool CMaterial::hasPosition() const
 {
     return hasAttribute(0);
 }
 
-bool CMaterial::hasNormal()
+bool CMaterial::hasNormal() const
 {
     return hasAttribute(1);
 }
 
-bool CMaterial::hasColor(atUint8 slot)
+bool CMaterial::hasColor(atUint8 slot) const
 {
     if (slot >= 2)
         return false;
@@ -328,7 +325,7 @@ bool CMaterial::hasColor(atUint8 slot)
     return hasAttribute(2 + slot);
 }
 
-bool CMaterial::hasUV(atUint8 slot)
+bool CMaterial::hasUV(atUint8 slot) const
 {
     if (slot >= 7)
         return false;
@@ -342,21 +339,10 @@ bool CMaterial::isTransparent() const
         return (m_materialFlags & Transparent);
     else
     {
-        atUint32 idx = 0;
-        for (CMaterialSection* section : m_materialSections)
-        {
-            SPASSCommand* pass = dynamic_cast<SPASSCommand*>(section->m_commandImpl);
-            SINTCommand* intC = dynamic_cast<SINTCommand*>(section->m_commandImpl);
-            SCLRCommand* clr = dynamic_cast<SCLRCommand*>(section->m_commandImpl);
-            if (pass && pass->subCommand == EMaterialCommand::TRAN)
-                return true;
-            else if (pass && pass->subCommand == EMaterialCommand::INCA)
-                return true;
-            else if (intC && intC->subCommand == EMaterialCommand::OPAC)
-                return true;
-            else if (clr)
-                return (clr->color.alphaF() < 1.0);
-        }
+        if (m_passes[11] != nullptr)
+            return true;
+
+        return (m_unknown1 & 0x20);
     }
 
     return false;
@@ -369,6 +355,12 @@ void CMaterial::setAmbient(const QColor& ambient)
 
 bool CMaterial::bind()
 {
+    if ((m_version == MetroidPrime3 || m_version == DKCR))
+    {
+        if (m_unknown1 & 0x100)
+            return false;
+    }
+
     if (!m_program)
     {
         QOpenGLShader* vertexShader = buildVertex();
@@ -384,7 +376,6 @@ bool CMaterial::bind()
 
         if (m_version != MetroidPrime3 && m_version != DKCR)
             m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
-
 
         for (atUint32 i = 0; i < 11; i++)
         {
@@ -443,13 +434,10 @@ bool CMaterial::bind()
     }
     else
     {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
         if (m_passes[11] != nullptr)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//            m_program->setUniformValue("punchThrough", true);
-//        else
-//            m_program->setUniformValue("punchThrough", false);
+        else
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         for (atUint32 i = 0; i < 12; i++)
         {
@@ -501,7 +489,18 @@ bool CMaterial::operator==(const CMaterial& right)
             !memcmp(m_konstColor, right.m_konstColor, sizeof(m_konstColor)) && m_blendDstFactor == right.m_blendDstFactor &&
             m_unknown2 == right.m_unknown2 && m_unkFlags == right.m_unkFlags &&
             m_tevStages == right.m_tevStages && m_texTEVIn == right.m_texTEVIn &&
-            m_texGenFlags == right.m_texGenFlags && m_animations == right.m_animations);
+            m_texGenFlags == right.m_texGenFlags && m_animations == right.m_animations &&
+            m_materialSections == right.m_materialSections);
+}
+
+QString CMaterial::fragmentSource() const
+{
+    return m_fragmentSource;
+}
+
+QString CMaterial::vertexSource() const
+{
+    return m_vertexSource;
 }
 
 
@@ -612,8 +611,8 @@ void CMaterial::updateAnimation(const SAnimation& animation, glm::mat4& texMtx, 
                 break;
 
             float angle = (s * animation.parms[1]) + animation.parms[0];
-            float acos = cos(angle);
-            float asin = sin(angle);
+            float acos  = cos(angle);
+            float asin  = sin(angle);
             float translateX = (1.0 - (acos - asin)) * 0.5;
             float translateY = (1.0 - (asin + acos)) * 0.5;
 
@@ -628,10 +627,10 @@ void CMaterial::updateAnimation(const SAnimation& animation, glm::mat4& texMtx, 
             if (!QSettings().value("mode4And5").toBool())
                 break;
 
-            float scale = animation.parms[0];
+            float scale     = animation.parms[0];
             float numFrames = animation.parms[1];
-            float step = animation.parms[2];
-            float offset  = animation.parms[3];
+            float step      = animation.parms[2];
+            float offset    = animation.parms[3];
 
             texMtx = glm::mat4(1);
             float value = scale * step * (offset + s);

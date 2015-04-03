@@ -19,7 +19,7 @@ public:
     static IResource* loadByData(const atUint8* data, atUint64 length);
 
 private:
-    void readVertices   (Athena::io::MemoryReader& in);
+    void readVertices   (Athena::io::MemoryReader& in, bool isShort = false);
     void readNormals    (Athena::io::MemoryReader& in);
     void readColors     (Athena::io::MemoryReader& in);
     void readTexCoords  (atUint32 slot, Athena::io::MemoryReader& in);

@@ -50,20 +50,22 @@ CModelFile* CModelReader::read()
         magic = base::readUint32();
     }
 
-    if (magic != 0xDEADBABE)
+    if (magic != 0xDEADBABE /*&& magic != 0x9381000A*/)
         THROW_INVALID_DATA_EXCEPTION("Not a valid CMDL magic, expected 0xDEADBABE got 0x%.8X\n", magic);
+    atUint32 version;
+    if (magic != 0x9381000A)
+        version = base::readUint32();
+    else
+        version = CModelFile::DKCR;
 
-    atUint32 version = base::readUint32();
-
-    if (!(version >= CModelFile::MetroidPrime1 && version <= CModelFile::MetroidPrime3))
+    if (!(version >= CModelFile::MetroidPrime1 && version <= CModelFile::DKCR))
         THROW_INVALID_DATA_EXCEPTION("Only Metroid Prime 1 to 3 models are supported got v%i\n", version);
 
     try
     {
         m_result = new CModelFile;
         m_result->m_version = (CModelFile::Version)version;
-        m_result->m_format = base::readUint32();
-
+        m_result->m_flags = base::readUint32();
         m_result->m_boundingBox.min.x = base::readFloat();
         m_result->m_boundingBox.min.y = base::readFloat();
         m_result->m_boundingBox.min.z = base::readFloat();
@@ -76,13 +78,31 @@ CModelFile* CModelReader::read()
 
         m_sectionSizes.resize(sectionCount);
 
+        if (m_result->m_flags & 0x10)
+        {
+            base::readUint32();
+            atUint32 visGroupCount = base::readUint32();
+            while((visGroupCount--) > 0)
+            {
+                atUint32 len = base::readUint32();
+                base::readString(len);
+            }
+
+            base::readUint32();
+            base::readUint32();
+            base::readUint32();
+            base::readUint32();
+            base::readUint32();
+        }
+
         m_result->m_materialSets.resize(materialCount);
         for (atUint32 i = 0; i < sectionCount; i++)
             m_sectionSizes[i] = base::readUint32();
 
         base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
 
-        const atUint32 sectionBias = materialCount;
+        const atUint32 sectionBias = ((m_result->m_version == CModelFile::DKCR || m_result->m_version == CModelFile::MetroidPrime3)
+                                      ? 1 : materialCount);
 
         Athena::io::MemoryReader sectionReader(new atUint8[2], 2);
         sectionReader.setEndian(endian());
@@ -93,25 +113,49 @@ CModelFile* CModelReader::read()
 
             if (materialCount > 0)
             {
-                atUint8* data = base::readUBytes(m_sectionSizes[i]);
-                CMaterialReader reader(data, m_sectionSizes[i]);
-                CMaterialSet materialSet;
-                switch(m_result->m_version)
+                if (m_result->m_version != CModelFile::DKCR && m_result->m_version != CModelFile::MetroidPrime3)
                 {
-                    case CModelFile::MetroidPrime1:
-                        materialSet = reader.read(CMaterial::MetroidPrime1);
-                        break;
-                    case CModelFile::MetroidPrime2:
-                        materialSet = reader.read(CMaterial::MetroidPrime2);
-                        break;
-                    case CModelFile::MetroidPrime3:
-                        materialSet = reader.read(CMaterial::MetroidPrime3);
-                        break;
-                }
+                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
+                    CMaterialReader reader(data, m_sectionSizes[i]);
+                    CMaterialSet materialSet;
+                    switch(m_result->m_version)
+                    {
+                        case CModelFile::MetroidPrime1:
+                            materialSet = reader.read(CMaterial::MetroidPrime1);
+                            break;
+                        case CModelFile::MetroidPrime2:
+                            materialSet = reader.read(CMaterial::MetroidPrime2);
+                            break;
+                        default:
+                            break;
+                    }
 
-                m_result->m_materialSets[i] = materialSet;
-                materialCount--;
-                continue;
+                    m_result->m_materialSets[i] = materialSet;
+                    materialCount--;
+                    continue;
+                }
+                else
+                {
+                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
+                    CMaterialReader reader(data, m_sectionSizes[i]);
+                    atUint32 setIdx = 0;
+                    while ((materialCount--) > 0)
+                    {
+                        CMaterialSet& materialSet = m_result->m_materialSets[setIdx];
+                        switch(m_result->m_version)
+                        {
+                            case CModelFile::MetroidPrime3:
+                                materialSet = reader.read(CMaterial::MetroidPrime3);
+                                break;
+                            case CModelFile::DKCR:
+                                materialSet = reader.read(CMaterial::DKCR);
+                            default:
+                                break;
+                        }
+                        setIdx++;
+                    }
+                    continue;
+                }
             }
             else
             {
@@ -121,7 +165,12 @@ CModelFile* CModelReader::read()
                 switch(section)
                 {
                     case SectionType::Vertices:
-                        readVertices(sectionReader);
+                    {
+                        if (m_result->m_flags & 0x20)
+                            readVertices(sectionReader, true);
+                        else
+                            readVertices(sectionReader);
+                    }
                         break;
                     case SectionType::Normals:
                         readNormals(sectionReader);
@@ -134,7 +183,7 @@ CModelFile* CModelReader::read()
                         break;
                     case SectionType::TexCoord1orMeshOffsets:
                     {
-                        if (m_result->m_format & EFormatFlags::TexCoord1)
+                        if (m_result->m_flags & EFormatFlags::TexCoord1 || m_result->m_version == CModelFile::DKCR)
                             readTexCoords(1, sectionReader);
                         else
                             readMeshOffsets(sectionReader);
@@ -174,22 +223,37 @@ IResource* CModelReader::loadByData(const atUint8* data, atUint64 length)
     return reader.read();
 }
 
-void CModelReader::readVertices(Athena::io::MemoryReader& in)
+void CModelReader::readVertices(Athena::io::MemoryReader& in, bool isShort)
 {
-    atUint32 vertexCount = in.length() / sizeof(glm::vec3);
-    while ((vertexCount--) > 0)
+    if (!isShort)
     {
-        glm::vec3 vert;
-        vert.x = in.readFloat();
-        vert.y = in.readFloat();
-        vert.z = in.readFloat();
-        m_result->m_vertices.push_back(vert);
+        atUint32 vertexCount = in.length() / sizeof(glm::vec3);
+        while ((vertexCount--) > 0)
+        {
+            glm::vec3 vert;
+            vert.x = in.readFloat();
+            vert.y = in.readFloat();
+            vert.z = in.readFloat();
+            m_result->m_vertices.push_back(vert);
+        }
+    }
+    else
+    {
+        atUint32 vertexCount = in.length() / (sizeof(atInt16) * 3);
+        while ((vertexCount--) > 0)
+        {
+            glm::vec3 vert;
+            vert.x = in.readInt16() / 32768.f;
+            vert.y = in.readInt16() / 32768.f;
+            vert.z = in.readInt16() / 32768.f;
+            m_result->m_vertices.push_back(vert);
+        }
     }
 }
 
 void CModelReader::readNormals(Athena::io::MemoryReader& in)
 {
-    if (!(m_result->m_format & EFormatFlags::ShortNormal))
+    if (!(m_result->m_flags & EFormatFlags::ShortNormal) && m_result->m_version != CModelFile::DKCR)
     {
         // floats
         atUint32 normalCount = in.length() / sizeof(glm::vec3);
@@ -235,7 +299,7 @@ void CModelReader::readTexCoords(atUint32 slot, Athena::io::MemoryReader& in)
             glm::vec2 tex;
             tex.s = in.readFloat();
             tex.t = in.readFloat();
-            m_result->m_texCoords.push_back(tex);
+            m_result->m_texCoords0.push_back(tex);
         }
     }
     else if (slot == 1)
@@ -244,9 +308,18 @@ void CModelReader::readTexCoords(atUint32 slot, Athena::io::MemoryReader& in)
         while ((lightmapCoordCount--) > 0)
         {
             glm::vec2 tex;
-            tex.s = in.readInt16() / 32768.f;
-            tex.t = in.readInt16() / 32768.f;
-            m_result->m_lightmapCoords.push_back(tex);
+            if (m_result->m_version != CModelFile::DKCR)
+            {
+                tex.s = in.readInt16() / 32768.f;
+                tex.t = in.readInt16() / 32768.f;
+            }
+            else
+            {
+                tex.s = (float)(in.readInt16() / 32768.f);
+                tex.t = (float)(in.readInt16() / 32768.f);
+                //tex = glm::normalize(tex);
+            }
+            m_result->m_texCoords1.push_back(tex);
         }
     }
 }
@@ -263,24 +336,40 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
     CMesh mesh;
     for (atUint32 i = 0; i < 3; i++)
         mesh.m_pivot[i] = in.readFloat();
+    atUint16 dataSize = 0;
+    if (m_result->m_version != CModelFile::DKCR)
+    {
+        mesh.m_materialID = in.readUint32();
+        mesh.m_mantissa = in.readUint16();
+        dataSize = in.readUint16();
 
-    mesh.m_materialID = in.readUint32();
-    mesh.m_mantissa = in.readUint16();
-    atUint16 dataSize = in.readUint16();
+        in.seek(2 * sizeof(atUint32));
 
-    in.seek(2 * sizeof(atUint32));
+        atUint32 extraDataSize = in.readUint32();
 
-    atUint32 extraDataSize = in.readUint32();
+        for (atUint32 i = 0; i < 3; i++)
+            mesh.m_unkVector[i] = in.readFloat();
 
-    for (atUint32 i = 0; i < 3; i++)
-        mesh.m_unkVector[i] = in.readFloat();
+        in.seek(extraDataSize);
+    }
+    else
+    {
+        mesh.m_mantissa = in.readUint16();
+        dataSize = in.readUint16();
+        in.readUint32();
+        in.readUint32();
+        in.readUint16();
+        mesh.m_materialID = in.readUint16();
+        in.readByte(); // 0xff?
+        in.readByte(); // visgroupidx
+        mesh.m_uvSource = in.readUByte();
+        in.readByte();
+    }
 
-    in.seek(extraDataSize);
     in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
 
     CMaterial& material = m_result->m_materialSets[0].material(mesh.m_materialID);
-    readPrimitives(mesh, material, dataSize, in);
-
+    readPrimitives(mesh, *m_result, material, in);
     m_result->m_meshes.push_back(mesh);
 }
 

@@ -13,7 +13,8 @@ public:
     {
         MetroidPrime1 = 2,
         MetroidPrime2 = 4,
-        MetroidPrime3 = 5
+        MetroidPrime3 = 5,
+        DKCR          = 6
     };
 
     CModelFile();
@@ -30,12 +31,17 @@ public:
 
     bool canExport() const;
     void exportToObj(const std::string& filepath);
+    atUint32 materialSetCount() const;
+    void setCurrentMaterialSet(atUint32 set);
+    atUint32 currentMaterialSetIndex() const;
 private:
     friend class CModelReader;
 
     Version                   m_version;
-    atUint32                  m_format;
+    atUint32                  m_flags;
     std::vector<CMaterialSet> m_materialSets;
+    atUint32                  m_currentSet;
+    bool                      m_sourcesDumped;
 };
 
 #endif // CMDLFILE_HPP

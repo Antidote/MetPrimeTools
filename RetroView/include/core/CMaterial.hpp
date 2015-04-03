@@ -71,10 +71,10 @@ public:
 
     void setKonstColor(atUint32 id, const QColor& color);
 
-    bool hasPosition();
-    bool hasNormal();
-    bool hasColor(atUint8 slot);
-    bool hasUV(atUint8 slot);
+    bool hasPosition() const;
+    bool hasNormal() const;
+    bool hasColor(atUint8 slot) const;
+    bool hasUV(atUint8 slot) const;
     bool isTransparent() const;
     void setAmbient(const QColor& ambient);
 
@@ -82,6 +82,9 @@ public:
     void release();
     QOpenGLShaderProgram* program();
     bool operator==(const CMaterial& right);
+
+    QString fragmentSource() const;
+    QString vertexSource() const;
 private:
     friend class CMaterialReader;
 
@@ -89,7 +92,7 @@ private:
     atUint32 textureMatrixIdx(atUint32 id);
     atUint32 postTransformMatrixIdx(atUint32 id);
     void updateAnimation(const SAnimation& animation, glm::mat4& texMtx, glm::mat4& postMtx, float s);
-    bool hasAttribute(atUint32 index);
+    bool hasAttribute(atUint32 index) const;
     QString getSource(QString Filename);
     QOpenGLShader* buildVertex();
     QOpenGLShader* buildFragment();
@@ -126,6 +129,8 @@ private:
     SPASSCommand*                  m_passes[12];
     std::vector<CMaterialSection*> m_materialSections;
     std::vector<CAssetID>          m_textures;
+    QString                        m_fragmentSource;
+    QString                        m_vertexSource;
 };
 
 

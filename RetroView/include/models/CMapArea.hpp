@@ -58,6 +58,12 @@ public:
 
     SBoundingBox& boundingBox();
     void updateViewProjectionUniforms(const glm::mat4 &view, const glm::mat4 &proj);
+
+    void setCurrentMaterialSet(atUint32 set);
+    atUint32 currentMaterialSetIndex() const;
+    CMaterialSet& currentMaterialSet();
+    atUint32 materialSetCount() const;
+
 private:
     friend class CMapAreaReader;
     void buildVbo();

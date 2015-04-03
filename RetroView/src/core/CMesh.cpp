@@ -1,6 +1,7 @@
 #include "core/CMesh.hpp"
 
 CMesh::CMesh()
+    : m_uvSource(0)
 {
 }
 

@@ -7,7 +7,7 @@ CStringTable::CStringTable()
 
 CStringTable::~CStringTable()
 {
-
+    m_languages.clear();
 }
 
 std::string CStringTable::string(const CFourCC& language, atUint32 index)

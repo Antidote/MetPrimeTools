@@ -1,5 +1,6 @@
 ﻿#include <GL/glew.h>
 #include "core/CResourceManager.hpp"
+#include "core/IRenderableModel.hpp"
 #include "generic/CWorldFile.hpp"
 #include "ui_CMainWindow.h"
 #include "ui/CMainWindow.hpp"
@@ -15,7 +16,8 @@
 
 CMainWindow::CMainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::CMainWindow)
+    ui(new Ui::CMainWindow),
+    m_currentTab(nullptr)
 {
     ui->setupUi(this);
     connect(ui->glView, SIGNAL(initialized()), this, SLOT(onViewerInitialized()));
@@ -126,6 +128,13 @@ void CMainWindow::onToggled(bool checked)
     ui->glView->update();
 }
 
+void CMainWindow::onMaterialSetChanged(int set)
+{
+    IRenderableModel* current = CGLViewer::instance()->currentModel();
+    if (current)
+        current->setCurrentMaterialSet(set);
+}
+
 void CMainWindow::onViewerInitialized()
 {
     ui->pointsCheckBox->setChecked(QSettings().value("drawPoints").toBool());
@@ -138,7 +147,6 @@ void CMainWindow::onViewerInitialized()
     ui->transActors->setChecked(QSettings().value("drawTranslucent").toBool());
     ui->axisCheckBox->setChecked(QSettings().value("axisDrawn", true).toBool());
     ui->gridCheckBox->setChecked(QSettings().value("gridDrawn", true).toBool());
-
 
     connect(ui->pointsCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
     connect(ui->jointNamesCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
@@ -165,6 +173,7 @@ void CMainWindow::onExport()
 
 void CMainWindow::onNewPak(CPakTreeWidget* pak)
 {
+    connect(pak, SIGNAL(resourceChanged(IResource*)), this, SLOT(onResourceChanged(IResource*)));
     QString tabTitle = QFileInfo(pak->filepath()).fileName();
     ui->tabWidget->addTab(pak, tabTitle);
 }
@@ -187,19 +196,50 @@ void CMainWindow::onLoadPak()
 
 void CMainWindow::onTabChanged()
 {
+    if (m_currentTab != nullptr)
+        m_currentTab->clearCurrent();
+
     CGLViewer::instance()->setCurrent(nullptr);
     CGLViewer::instance()->setSkybox(nullptr);
     CResourceManager::instance()->clear();
 
+
     CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
     if (ptw && ptw->pak()->isWorldPak())
     {
-        std::vector<SPakResource> res = ptw->pak()->resourcesByType("mlvl");
+        m_currentTab = ptw;
+        std::vector<SPakResource> res = m_currentTab->pak()->resourcesByType("mlvl");
         CWorldFile* world = nullptr;
         if (res.size() > 0)
             world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
         if (world)
+        {
             CGLViewer::instance()->setSkybox(world->skyboxModel());
+            world->destroy();
+        }
+    }
+}
+
+void CMainWindow::onResourceChanged(IResource* res)
+{
+    static const QString materialLbl = "Material Sets (%1)";
+    if (res == nullptr)
+        return;
+
+    IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(res);
+    if (renderable)
+    {
+        // Clear current, so we don't have a race condition
+        CGLViewer::instance()->setCurrent(nullptr);
+        atUint32 materialSetCount = renderable->materialSetCount();
+        QString lblVal = materialLbl.arg(materialSetCount);
+        ui->materialSetLbl->setText((materialSetCount > 0 ? lblVal : "Material Set:"));
+        ui->materialSetComboBox->setEnabled(materialSetCount > 1);
+        ui->materialSetComboBox->clear();
+        for (atUint32 i = 0; i < materialSetCount; i++)
+            ui->materialSetComboBox->addItem(QString("Set %1").arg(i + 1));
+        ui->materialSetComboBox->setCurrentIndex(renderable->currentMaterialSetIndex());
+        CGLViewer::instance()->setCurrent(renderable);
     }
 }
 

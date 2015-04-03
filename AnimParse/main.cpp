@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Athena/BinaryReader.hpp>
+#include <Athena/MemoryReader.hpp>
 
 struct JointHeader
 {
@@ -74,7 +74,7 @@ int main()
     std::vector<JointHeader> joints;
     try
     {
-        Athena::io::BinaryReader reader("/media/Storage/MetroidPrimeAssets/MP1Metroid2/ANIMs/88B6E0EB.ANIM");
+        Athena::io::MemoryReader reader("/media/Storage/MetroidPrimeAssets/MP1Metroid2/ANIMs/88B6E0EB.ANIM");
         reader.setEndian(Athena::Endian::BigEndian);
         atUint32 format = reader.readUint32();
         if (format == 2)

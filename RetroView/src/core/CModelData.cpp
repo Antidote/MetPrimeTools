@@ -42,7 +42,7 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
     of << std::endl << std::endl;
 
     of << "# texture coordinates" << std::endl;
-    for (glm::vec2 uv : m_texCoords)
+    for (glm::vec2 uv : m_texCoords0)
     {
         uv /= 1.f;
         of << "vt " << uv.x << " " << uv.y << std::endl;
@@ -175,7 +175,7 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
 
     vertexOff += m_vertices.size();
     normalOff += m_normals.size();
-    texOff    += m_texCoords.size();
+    texOff    += m_texCoords0.size();
 }
 
 void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model)
@@ -194,6 +194,10 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
     for (std::pair<atUint32, CIndexBuffer> iboPair : ibos)
     {
         CMaterial& mat = materialSet.material(iboPair.first);
+
+        if (mat.materialFlags() & Invisible)
+            continue;
+
         mat.setModelMatrix(model);
 
         if (!mat.bind())
@@ -213,7 +217,7 @@ void CModelData::drawTransparentBoxes()
 //    {
 //        for (SIndexBufferObject ibo : iboPair.second)
 //            drawBoundingBox(ibo.boundingBox);
-//    }
+    //    }
 }
 
 void CModelData::drawBoundingBoxes()
@@ -229,53 +233,6 @@ void CModelData::indexIBOs(CMaterialSet& materialSet)
         return;
 
     m_ibosIndexed = true;
-
-    for (CMesh& mesh : m_meshes)
-    {
-        CMaterial& mat = materialSet.material(mesh.m_materialID);
-        if (mat.materialFlags() & 0x200)
-            continue;
-
-        atUint16 primBegin = 0;
-        for (CPrimitive& prim : mesh.m_primitives)
-        {
-            std::vector<atUint32> indices;
-            for (SVertexDescriptor desc : prim.indices)
-            {
-                SVertex vert;
-                if (mat.hasPosition())
-                    vert.pos = m_vertices[desc.position];
-                if (mat.hasNormal())
-                    vert.norm = m_normals[desc.normal];
-
-                for (atUint32 i = 0; i < 2; i++)
-                {
-                    if (!mat.hasColor(i))
-                        continue;
-                    vert.color[i] = m_colors[desc.clr[i]];
-                }
-
-                for (atUint32 i = 0; i < 8; i++)
-                {
-                    if (!mat.hasUV(i))
-                        continue;
-
-                    if (((i == 0 && mat.materialFlags() & 0x2000) || (mesh.m_uvSource == 1 && i <= 1)) && m_lightmapCoords.size() > 0)
-                        vert.texCoords[i] = m_lightmapCoords[desc.texCoord[i]];
-                    else
-                        vert.texCoords[i] = m_texCoords[desc.texCoord[i]];
-                }
-                indices.push_back(m_vertexBuffer.addVertex(vert));
-            }
-
-            if (mat.isTransparent())
-                m_transparents[mesh.m_materialID].addIndices(prim.primitive, indices);
-            else
-                m_opaques[mesh.m_materialID].addIndices(prim.primitive, indices);
-            primBegin = mesh.m_vertexBuffer.size() - 1;
-        }
-
-    }
 }
 
 void CModelData::sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans)

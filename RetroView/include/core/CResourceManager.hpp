@@ -64,7 +64,7 @@ public:
 
     IResource* loadResource(const CAssetID& assetID, const std::string& type = std::string());
     IResource* loadResourceFromPak(CPakFile* pak, const CAssetID& assetID, const std::string& type = std::string());
-    //void releaseResource()
+    void destroyResource(IResource* res);
 
     void registerLoader(std::string tag, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();

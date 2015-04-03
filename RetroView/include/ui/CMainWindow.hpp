@@ -14,6 +14,7 @@ class CMainWindow;
 }
 
 class CPakTreeWidget;
+class IResource;
 class CMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -31,14 +32,17 @@ protected:
 private slots:
     void onModeToggled(bool value);
     void onToggled(bool);
+    void onMaterialSetChanged(int set);
     void onViewerInitialized();
     void onExport();
     void onNewPak(CPakTreeWidget* pak);
     void onLoadPak();
     void onTabChanged();
+    void onResourceChanged(IResource* res);
     void updateFPS();
 private:
     Ui::CMainWindow *ui;
+    CPakTreeWidget* m_currentTab;
     QStringList    m_filters;
     QString        m_allSupportedFilter;
     QTimer         m_fpsUpdateTimer;

@@ -16,6 +16,7 @@ CVertexBuffer::~CVertexBuffer()
         glDeleteVertexArrays(1, &m_vao);
         glDeleteBuffers(1, &m_attribBuffer);
     }
+    m_vertices.clear();
 }
 
 atUint32 CVertexBuffer::addVertex(const SVertex& vert)

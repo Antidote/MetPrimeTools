@@ -14,6 +14,7 @@ CIndexBuffer::~CIndexBuffer()
     {
         glDeleteBuffers(1, &m_iboId);
     }
+    m_indices.clear();
 }
 
 void CIndexBuffer::addIndices(EPrimitive type, std::vector<atUint32> indices)

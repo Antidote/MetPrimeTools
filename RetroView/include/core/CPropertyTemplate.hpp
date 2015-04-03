@@ -12,8 +12,9 @@ public:
 
     std::string name() const { return std::string(); }
 private:
-    std::string   m_name;
-    EPropertyType m_type;
+    //std::vector<CPropertyTemplate*> m_propertyTemplates;
+    std::string                     m_name;
+    EPropertyType                   m_type;
 };
 
 #endif // CPROPERTYTEMPLATE_HPP

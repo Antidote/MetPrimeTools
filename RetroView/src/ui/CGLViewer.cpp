@@ -271,6 +271,11 @@ float CGLViewer::frameRate() const
     return 1000.f / m_deltaTime;
 }
 
+IRenderableModel* CGLViewer::currentModel()
+{
+    return m_currentRenderable;
+}
+
 void CGLViewer::stopUpdates()
 {
     m_updateTimer.stop();

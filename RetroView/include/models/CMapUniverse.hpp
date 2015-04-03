@@ -28,6 +28,10 @@ public:
 
     SBoundingBox& boundingBox();
 
+    void setCurrentMaterialSet(atUint32 set);
+    CMaterialSet& currentMaterialSet();
+    atUint32 currentMaterialSetIndex() const;
+    atUint32 materialSetCount() const;
 private:
     friend class CMapUniverseReader;
 

@@ -5,11 +5,10 @@
 #include "ui/CGLViewer.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <dae.h>
-#include <dae/daeUtils.h>
-#include <dom/domCOLLADA.h>
 
 CModelFile::CModelFile()
+    : m_currentSet(0),
+      m_sourcesDumped(false)
 {
     setAmbient(.5f, .5f, .5f);
 }
@@ -26,6 +25,12 @@ void CModelFile::draw()
     glm::mat4 model = glm::mat4(1);
     CModelData::drawIbos(false, currentMaterialSet(), model);
     CModelData::drawIbos(true,  currentMaterialSet(), model);
+
+    if (!m_sourcesDumped)
+    {
+        m_sourcesDumped = true;
+        currentMaterialSet().dumpSources(m_assetID);
+    }
 }
 
 void CModelFile::drawBoundingBox()
@@ -54,22 +59,27 @@ void CModelFile::updateTexturesEnabled(const bool& enabled)
 
 CMaterialSet& CModelFile::currentMaterialSet()
 {
-    return m_materialSets[0];
+    return m_materialSets[m_currentSet];
+}
+
+atUint32 CModelFile::materialSetCount() const
+{
+    return m_materialSets.size();
+}
+
+void CModelFile::setCurrentMaterialSet(atUint32 set)
+{
+    m_currentSet = set % m_materialSets.size();;
+}
+
+atUint32 CModelFile::currentMaterialSetIndex() const
+{
+    return m_currentSet;
 }
 
 bool CModelFile::canExport() const
 {
     return true;
-}
-
-template<typename T>
-daeTArray<T> rawArrayToDaeArray(T rawArray[], size_t count)
-{
-    daeTArray<T> result;
-    for (size_t i = 0; i < count; i++)
-        result.append(rawArray[i]);
-
-    return result;
 }
 
 void CModelFile::exportToObj(const std::string& filepath)

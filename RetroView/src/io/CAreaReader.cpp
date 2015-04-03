@@ -394,7 +394,7 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in,
             glm::vec2 texCoord;
             texCoord.s = (float)(in.readInt16() / 32768.f); // really shouldn't do this here
             texCoord.t = (float)(in.readInt16() / 32768.f); // but it's constant enough to be reliable
-            model.m_lightmapCoords.push_back(texCoord);
+            model.m_texCoords1.push_back(texCoord);
         }
     }
     else
@@ -406,7 +406,7 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in,
             glm::vec2 texCoord;
             texCoord.s = in.readFloat();
             texCoord.t = in.readFloat();
-            model.m_texCoords.push_back(texCoord);
+            model.m_texCoords0.push_back(texCoord);
         }
     }
 }
@@ -485,7 +485,7 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
 
     const CMaterial& material = ret->m_materialSets[0].material(mesh.m_materialID);
 
-    readPrimitives(mesh, material, dataSize, in);
+    readPrimitives(mesh, model, material, in);
 }
 
 void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectionStart, atUint32& i, atUint32 m)

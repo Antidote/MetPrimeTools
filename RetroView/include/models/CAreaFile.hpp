@@ -47,6 +47,10 @@ public:
     CMaterialSet& currentMaterialSet();
 
     bool canExport() const { return true; }
+
+    atUint32 materialSetCount() const;
+    atUint32 currentMaterialSetIndex() const;
+    void setCurrentMaterialSet(atUint32 set);
 private:
     friend class CAreaReader;
     void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
@@ -60,6 +64,7 @@ private:
     std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_transparents;
     std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_opaques;
     std::vector<CMaterialSet>       m_materialSets;
+    atUint32                        m_currentSet;
     std::vector<CModelData>         m_models;
     std::vector<SAABB>              m_aabbs;
     glm::mat3x4                     m_transformMatrix;

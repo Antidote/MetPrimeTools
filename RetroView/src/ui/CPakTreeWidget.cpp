@@ -11,7 +11,8 @@
 CPakTreeWidget::CPakTreeWidget(CPakFile* pak, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CPakTreeWidget),
-    m_model(new CPakFileModel(pak))
+    m_model(new CPakFileModel(pak)),
+    m_currentResource(nullptr)
 {
     ui->setupUi(this);
     ui->treeView->setModel(m_model);
@@ -34,6 +35,13 @@ CPakFile* CPakTreeWidget::pak() const
     return m_model->pak();
 }
 
+void CPakTreeWidget::clearCurrent()
+{
+//    if (m_currentResource)
+//        m_currentResource->destroy();
+//    m_currentResource = nullptr;
+}
+
 void CPakTreeWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
@@ -51,9 +59,9 @@ void CPakTreeWidget::onItemClicked(QModelIndex idx)
     CResourceTreeItem* item = static_cast<CResourceTreeItem*>(idx.internalPointer());
     if (item)
     {
-        IRenderableModel* renderable = dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_model->pak(), item->assetID()));
-        if (renderable)
-            CGLViewer::instance()->setCurrent(renderable);
+        //CResourceManager::instance()->clear();
+        m_currentResource = CResourceManager::instance()->loadResourceFromPak(m_model->pak(), item->assetID());
+        emit resourceChanged(m_currentResource);
     }
 }
 

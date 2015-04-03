@@ -2,6 +2,7 @@
 #include "core/GXCommon.hpp"
 #include "core/CModelData.hpp"
 #include "core/CMesh.hpp"
+#include "core/CVertexBuffer.hpp"
 #include "ui/CGLViewer.hpp"
 
 #include <Athena/MemoryReader.hpp>
@@ -319,7 +320,6 @@ void drawCone(float width, float height, float offset)
     glEnd();
 }
 
-
 void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool disableDepth)
 {
     if (disableDepth)
@@ -351,10 +351,9 @@ void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool di
 }
 
 atUint16 readAttribute(atUint16& value, atUint32 attributes, atUint32 index, Athena::io::IStreamReader& reader);
-void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, Athena::io::IStreamReader& reader)
+void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, Athena::io::IStreamReader& reader)
 {
     atUint32 vertexAttributes = material.vertexAttributes();
-
     atUint32 mainAttributes = 0;
     atUint32 subAttributes = 0;
 
@@ -362,6 +361,7 @@ void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, A
     subAttributes = (vertexAttributes >> 0x18) & 0xFF;
 
     atUint32 readBytes = 0;
+    atUint32 primitiveStart = model.m_vertexBuffer.size();
 
     while (!reader.atEnd())
     {
@@ -398,8 +398,10 @@ void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, A
             readBytes = startReadBytes;
 
             atUint32 attributes = 0;
+            std::vector<atUint32> vertIndices;
             for (atUint32 v = 0; v < indexCount; ++v)
             {
+                SVertex vertex;
                 // read unknown attribute indices
                 attributes = subAttributes;
                 while (attributes)
@@ -416,23 +418,40 @@ void readPrimitives(CMesh& mesh, const CMaterial& material, atUint16 dataSize, A
                 attributes = mainAttributes;
 
                 readBytes += readAttribute(pFaces[v].position, attributes, 0, reader);
+                vertex.pos = model.m_vertices[pFaces[v].position];
                 readBytes += readAttribute(pFaces[v].normal, attributes, 1, reader);
+                vertex.norm = model.m_normals[pFaces[v].normal];
 
                 for (int iColor = 0; iColor < 2; ++iColor)
                 {
                     readBytes += readAttribute(pFaces[v].clr[iColor], attributes, iColor + 2, reader);
+                    vertex.color[iColor] = model.m_colors[pFaces[v].clr[iColor]];
                 }
 
                 for (int iUV = 0; iUV < 8; ++iUV)
                 {
                     readBytes += readAttribute(pFaces[v].texCoord[iUV], attributes, iUV + 4, reader);
+                    if (material.hasUV(iUV))
+                    {
+                        if ((iUV == 0 && material.materialFlags() & 0x2000) || mesh.m_uvSource == 1)
+                            vertex.texCoords[iUV] = model.m_texCoords1[pFaces[v].texCoord[iUV]];
+                        else
+                            vertex.texCoords[iUV] = model.m_texCoords0[pFaces[v].texCoord[iUV]];
+                    }
                 }
 
                 for (int iUnk = 0; iUnk < 4; ++iUnk)
                 {
                     readBytes += readAttribute(pFaces[v].unkIndex[iUnk], attributes, iUnk + 12, reader);
                 }
+
+                vertIndices.push_back(model.m_vertexBuffer.addVertexIfUnique(vertex, primitiveStart));
             }
+
+            if (material.isTransparent())
+                model.m_transparents[mesh.m_materialID].addIndices(primitive.primitive, vertIndices);
+            else
+                model.m_opaques[mesh.m_materialID].addIndices(primitive.primitive, vertIndices);
 
             valid = true;
         }

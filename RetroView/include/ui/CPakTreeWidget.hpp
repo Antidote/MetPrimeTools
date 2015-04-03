@@ -11,6 +11,7 @@ class CPakTreeWidget;
 
 class CPakFile;
 class CPakFileModel;
+class IResource;
 class CPakTreeWidget final : public QWidget
 {
     Q_OBJECT
@@ -21,6 +22,9 @@ public:
 
     QString filepath() const;
     CPakFile* pak() const;
+    void clearCurrent();
+signals:
+    void resourceChanged(IResource*);
 protected:
     void changeEvent(QEvent *e);
 
@@ -30,6 +34,7 @@ private slots:
 private:
     Ui::CPakTreeWidget *ui;
     CPakFileModel* m_model;
+    IResource* m_currentResource;
 };
 
 #endif // CPAKTREEWIDGET_HPP

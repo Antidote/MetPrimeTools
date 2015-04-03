@@ -36,7 +36,7 @@ std::shared_ptr<CMaterialCache> CMaterialCache::instance()
     return m_instance;
 }
 
-atUint32 CMaterialCache::addMaterial(CMaterial mat)
+atUint32 CMaterialCache::addMaterial(const CMaterial& mat)
 {
     ConstMaterialIterator iter = std::find_if(m_cachedMaterials.begin(), m_cachedMaterials.end(),
                                               [&mat](CMaterial m)->bool{return m == mat; });
