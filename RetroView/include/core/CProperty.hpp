@@ -5,8 +5,6 @@
 #include "core/CPropertyTemplate.hpp"
 #include "core/IResource.hpp"
 
-#include <algorithm>
-#include <memory>
 #include <Athena/Global.hpp>
 #include <glm/vec3.hpp>
 #include <QColor>

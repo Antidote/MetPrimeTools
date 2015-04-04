@@ -68,18 +68,6 @@ void CGLViewer::paintGL()
     glShadeModel(GL_SMOOTH);
 
 
-//    if (m_skybox)
-//    {
-//        //glDepthRangef(0.0090001f, 1.0f);
-//        glm::mat4 viewRot = m_camera.rotationMatrix();
-//        m_skybox->setAmbient(1, 1, 1);
-//        m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
-//        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
-//        m_skybox->draw();
-//        glClear(GL_DEPTH_BUFFER_BIT);
-//    }
-
-
     bool _drawAxis = QSettings().value("axisDrawn").toBool();
     bool _drawGrid = QSettings().value("gridDrawn").toBool();
 

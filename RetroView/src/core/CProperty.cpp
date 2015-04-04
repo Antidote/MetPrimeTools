@@ -1,4 +1,6 @@
 #include "core/CProperty.hpp"
+#include <algorithm>
+#include <memory>
 
 CPropertyTemplate* IPropertyBase::propertyTemplate() const
 {

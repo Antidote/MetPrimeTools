@@ -89,8 +89,7 @@ SOURCES += \
     src/core/CPropertyTemplate.cpp \
     src/core/CProperty.cpp \
     src/core/CTemplateManager.cpp \
-    src/core/IResource.cpp \
-    src/core/CTemplate.cpp
+    src/core/IResource.cpp
 
 HEADERS += \
     include/core/CCamera.hpp \
@@ -139,8 +138,7 @@ HEADERS += \
     include/core/EPropertyType.hpp \
     include/core/CTemplateManager.hpp \
     include/core/SAnimation.hpp \
-    include/core/SVertex.hpp \
-    include/core/CTemplate.hpp
+    include/core/SVertex.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \
