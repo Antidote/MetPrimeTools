@@ -1,4 +1,4 @@
-﻿#include "core/CResourceManager.hpp"
+#include "core/CResourceManager.hpp"
 #include "core/IRenderableModel.hpp"
 #include "generic/CWorldFile.hpp"
 #include "ui_CMainWindow.h"
@@ -136,17 +136,6 @@ void CMainWindow::onMaterialSetChanged(int set)
 
 void CMainWindow::onViewerInitialized()
 {
-    ui->pointsCheckBox->setChecked(QSettings().value("drawPoints").toBool());
-    ui->jointNamesCheckBox->setChecked(QSettings().value("drawJointNames").toBool());
-    ui->wireframeCheckBox->setChecked(QSettings().value("wireframe").toBool());
-    ui->boundingBoxChkBox->setChecked(QSettings().value("drawBoundingBox").toBool());
-    ui->enableLightingCheckBox->setChecked(QSettings().value("enableLighting").toBool());
-    ui->enableTexturesCheckBox->setChecked(QSettings().value("enableTextures", true).toBool());
-    ui->drawCollisionCheckBox->setChecked(QSettings().value("drawCollision").toBool());
-    ui->transActors->setChecked(QSettings().value("drawTranslucent").toBool());
-    ui->axisCheckBox->setChecked(QSettings().value("axisDrawn", true).toBool());
-    ui->gridCheckBox->setChecked(QSettings().value("gridDrawn", true).toBool());
-
     connect(ui->pointsCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
     connect(ui->jointNamesCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
     connect(ui->enableTexturesCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
@@ -160,6 +149,18 @@ void CMainWindow::onViewerInitialized()
     connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(resetCamera()));
     connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(update()));
     connect(&m_fpsUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFPS()));
+    
+    ui->pointsCheckBox->setChecked(QSettings().value("drawPoints").toBool());
+    ui->jointNamesCheckBox->setChecked(QSettings().value("drawJointNames").toBool());
+    ui->wireframeCheckBox->setChecked(QSettings().value("wireframe").toBool());
+    ui->boundingBoxChkBox->setChecked(QSettings().value("drawBoundingBox").toBool());
+    ui->enableLightingCheckBox->setChecked(QSettings().value("enableLighting").toBool());
+    ui->enableTexturesCheckBox->setChecked(QSettings().value("enableTextures", true).toBool());
+    ui->drawCollisionCheckBox->setChecked(QSettings().value("drawCollision").toBool());
+    ui->transActors->setChecked(QSettings().value("drawTranslucent").toBool());
+    ui->axisCheckBox->setChecked(QSettings().value("axisDrawn", true).toBool());
+    ui->gridCheckBox->setChecked(QSettings().value("gridDrawn", true).toBool());
+    
     m_fpsUpdateTimer.start();
 }
 

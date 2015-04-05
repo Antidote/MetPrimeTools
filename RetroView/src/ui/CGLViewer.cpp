@@ -39,6 +39,7 @@ CGLViewer::CGLViewer(QWidget* parent)
     // Set our scene bounds
     m_sceneBounds.min = glm::vec3(-100.f);
     m_sceneBounds.max = glm::vec3( 100.f);
+    
 }
 
 CGLViewer::~CGLViewer()
@@ -53,11 +54,10 @@ void CGLViewer::paintGL()
     m_currentTime = 1.f * hiresTimeMS();
     m_deltaTime = m_currentTime - m_lastTime;
     m_lastTime = m_currentTime;
-
+    
     updateCamera();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
-    glShadeModel(GL_SMOOTH);
     glm::mat4 modelMat = modelMatrix();
     glm::mat4 viewMat = viewMatrix();
     glm::mat4 projectionMat = projectionMatrix();
@@ -108,7 +108,6 @@ void CGLViewer::paintGL()
 
     glDisable(GL_LINE_SMOOTH);
 #endif
-
     if (m_currentRenderable)
     {
         m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
@@ -116,6 +115,7 @@ void CGLViewer::paintGL()
         m_currentRenderable->updateTexturesEnabled(texturesEnabled);
         m_currentRenderable->draw();
     }
+    
 }
 
 void CGLViewer::resizeGL(int w, int h)
@@ -139,10 +139,12 @@ void CGLViewer::initializeGL()
 
         // Enable depth test
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
         glDepthFunc(GL_LEQUAL);
         QColor clearColor = QColor(32, 32, 32);
         glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
         emit initialized();
+        
     }
 
     m_frameTimer.start();

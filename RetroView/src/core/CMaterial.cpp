@@ -309,7 +309,7 @@ void CMaterial::assignTexturesEnabled()
 {
     if (!m_isBound)
         return;
-    m_program->setUniformValue("texturesEnabled", m_texturesEnabled);
+    m_program->setUniformValue("texturesEnabled", (float)m_texturesEnabled);
 }
 
 bool CMaterial::hasPosition() const
@@ -385,7 +385,7 @@ bool CMaterial::bind()
             glUniform1iv(texsLoc, 8, TEX_UNIS);
 
         if (m_version != MetroidPrime3 && m_version != DKCR)
-            m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));
+            m_program->setUniformValue("punchThrough", (float)(m_materialFlags & 0x20));
 
         for (atUint32 i = 0; i < 11; i++)
         {
