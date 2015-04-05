@@ -1,3 +1,4 @@
+#include "core/GLInclude.hpp"
 #include <Athena/Exception.hpp>
 #include <QImage>
 #include <QSettings>
@@ -49,28 +50,25 @@ CGLViewer::~CGLViewer()
 // TODO: Clean this up
 void CGLViewer::paintGL()
 {
-#if 0
     m_currentTime = 1.f * hiresTimeMS();
     m_deltaTime = m_currentTime - m_lastTime;
     m_lastTime = m_currentTime;
 
     updateCamera();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glEnable(GL_BLEND);
+    glShadeModel(GL_SMOOTH);
     glm::mat4 modelMat = modelMatrix();
     glm::mat4 viewMat = viewMatrix();
     glm::mat4 projectionMat = projectionMatrix();
     glm::mat4 mvp = projectionMat * viewMat * modelMat;
+#if 0
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glLoadMatrixf(&mvp[0][0]);
-
-    glEnable(GL_BLEND);
-    glShadeModel(GL_SMOOTH);
-
 
     bool _drawAxis = QSettings().value("axisDrawn").toBool();
     bool _drawGrid = QSettings().value("gridDrawn").toBool();
-
 
     glEnable( GL_LINE_SMOOTH );
     glLineWidth( 1.5 );
@@ -109,25 +107,15 @@ void CGLViewer::paintGL()
     glLineWidth( 1 );
 
     glDisable(GL_LINE_SMOOTH);
+#endif
 
     if (m_currentRenderable)
     {
         m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
         bool texturesEnabled = (QSettings().value("enableTextures").toBool() && !QSettings().value("drawPoints").toBool() && !QSettings().value("wireframe").toBool());
         m_currentRenderable->updateTexturesEnabled(texturesEnabled);
-
-        if (QSettings().value("drawBoundingBox").toBool())
-            m_currentRenderable->drawBoundingBox();
-
-        if (QSettings().value("wireframe").toBool() && !QSettings().value("drawPoints").toBool())
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else if (QSettings().value("drawPoints").toBool())
-            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        else
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         m_currentRenderable->draw();
     }
-#endif
 }
 
 void CGLViewer::resizeGL(int w, int h)
@@ -143,8 +131,8 @@ void CGLViewer::initializeGL()
     {
         QOpenGLWidget::initializeGL();
 
-        std::cout << format().depthBufferSize() << std::endl;
 #ifndef __APPLE__
+        glewExperimental = GL_TRUE;
         glewInit();
 #endif
         CMaterialCache::instance()->initialize();

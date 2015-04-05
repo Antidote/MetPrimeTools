@@ -3,7 +3,7 @@
 #include <float.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include "core/GLInclude.h"
+#include "core/GLInclude.hpp"
 
 CCamera::CCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : m_front(glm::vec3(0.0f, 0.0f, -1.0f)),

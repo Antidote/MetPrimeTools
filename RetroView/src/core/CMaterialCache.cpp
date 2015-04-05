@@ -1,9 +1,9 @@
+#include "core/GLInclude.hpp"
 #include "core/CMaterialCache.hpp"
 
 #include <iostream>
 #include <QCryptographicHash>
 #include <QDataStream>
-#include "core/GLInclude.h"
 
 atUint64 hashString(const QString & str)
 {

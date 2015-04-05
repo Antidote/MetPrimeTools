@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 #DEFINES += GLEW_STATIC
 QMAKE_CXXFLAGS += -std=c++11
 #QMAKE_CXXFLAGS += -std=c++11 -fopenmp
-QMAKE_LFLAGS += -stdlib=libc++
+mac:QMAKE_LFLAGS += -stdlib=libc++
 #QMAKE_LFLAGS += -fopenmp
 
 unix:{
@@ -144,7 +144,8 @@ HEADERS += \
     include/core/EPropertyType.hpp \
     include/core/CTemplateManager.hpp \
     include/core/SAnimation.hpp \
-    include/core/SVertex.hpp
+    include/core/SVertex.hpp \
+    include/core/GLInclude.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \

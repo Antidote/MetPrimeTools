@@ -1,3 +1,4 @@
+#include "core/GLInclude.hpp"
 #include "core/GXCommon.hpp"
 #include "core/CModelData.hpp"
 #include "core/CMesh.hpp"
@@ -8,7 +9,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <cmath>
-#include "core/GLInclude.h"
 #include <chrono>
 #include <ctime>
 

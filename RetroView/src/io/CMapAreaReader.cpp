@@ -1,8 +1,8 @@
+#include "core/GLInclude.hpp"
 #include "io/CMapAreaReader.hpp"
 #include "models/CMapArea.hpp"
 #include "core/CMaterialCache.hpp"
 
-#include "core/GLInclude.h"
 #include <Athena/InvalidDataException.hpp>
 
 CMapAreaReader::CMapAreaReader(const atUint8* data, atUint64 length)

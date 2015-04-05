@@ -1,3 +1,4 @@
+#include "core/GLInclude.hpp"
 #include "models/CMapArea.hpp"
 #include "core/CMaterialCache.hpp"
 #include "core/CMaterialSet.hpp"

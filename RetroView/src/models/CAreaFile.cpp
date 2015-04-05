@@ -1,7 +1,7 @@
+#include "core/GLInclude.hpp"
 #include "models/CAreaFile.hpp"
 #include "core/CMaterialCache.hpp"
 #include "ui/CGLViewer.hpp"
-#include "core/GLInclude.h"
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>

@@ -1,3 +1,4 @@
+#include "core/GLInclude.hpp"
 #include "ui/CGLViewer.hpp"
 #include "core/CMaterial.hpp"
 #include "core/CMaterialCache.hpp"

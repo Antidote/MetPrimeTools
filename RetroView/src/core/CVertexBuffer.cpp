@@ -1,4 +1,4 @@
-#include "core/GLInclude.h"
+#include "core/GLInclude.hpp"
 #include "core/CVertexBuffer.hpp"
 #include <iostream>
 #include <stdexcept>

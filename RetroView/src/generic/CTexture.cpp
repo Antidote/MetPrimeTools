@@ -1,10 +1,10 @@
+#include "core/GLInclude.hpp"
 #include "generic/CTexture.hpp"
 #include "ui/CGLViewer.hpp"
 
 #include <QDir>
 #include <QGLPixelBuffer>
 #include <TextureReader.hpp>
-#include "core/GLInclude.h"
 
 CTexture::CTexture(Texture* texture)
     : m_texture(texture),
