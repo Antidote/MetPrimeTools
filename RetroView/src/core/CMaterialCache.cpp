@@ -4,7 +4,7 @@
 #include <iostream>
 #include <QCryptographicHash>
 #include <QDataStream>
-#include <GL/gl.h>
+#include "core/GLInclude.h"
 
 atUint64 hashString(const QString & str)
 {

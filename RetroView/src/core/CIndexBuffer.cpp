@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include <GL/gl.h>
+#include "core/GLInclude.h"
 #include "core/CIndexBuffer.hpp"
 #include <stdexcept>
 

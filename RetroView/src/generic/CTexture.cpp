@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QGLPixelBuffer>
 #include <TextureReader.hpp>
-#include <GL/gl.h>
+#include "core/GLInclude.h"
 
 CTexture::CTexture(Texture* texture)
     : m_texture(texture),

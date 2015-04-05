@@ -2,7 +2,7 @@
 #include "models/CAreaFile.hpp"
 #include "core/CMaterialCache.hpp"
 #include "ui/CGLViewer.hpp"
-#include <GL/gl.h>
+#include "core/GLInclude.h"
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>

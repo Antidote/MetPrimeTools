@@ -9,7 +9,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <cmath>
-#include <GL/gl.h>
+#include "core/GLInclude.h"
 #include <chrono>
 #include <ctime>
 

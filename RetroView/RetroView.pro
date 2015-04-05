@@ -8,8 +8,10 @@ QT       += core gui xml opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #DEFINES += GLEW_STATIC
-QMAKE_CXXFLAGS += -std=c++11 -fopenmp
-QMAKE_LFLAGS += -fopenmp
+QMAKE_CXXFLAGS += -std=c++11
+#QMAKE_CXXFLAGS += -std=c++11 -fopenmp
+QMAKE_LFLAGS += -stdlib=libc++
+#QMAKE_LFLAGS += -fopenmp
 
 unix:{
     CONFIG += link_pkgconfig
@@ -31,6 +33,10 @@ unix:LIBS += \
     -lpng \
     -lz
 
+mac:LIBS -= \
+    -lGL \
+    -lGLU
+
 
 DEFINES += _LARGEFILE64_SOURCE _FILE_OFFSET_BITS
 include(../Athena/AthenaCore.pri)
@@ -44,7 +50,7 @@ CONFIG   += app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += include
+INCLUDEPATH += include ../libSquish
 win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
 
 SOURCES += \
