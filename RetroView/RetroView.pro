@@ -57,7 +57,6 @@ SOURCES += \
     src/core/CCamera.cpp \
     src/core/CIndexBuffer.cpp \
     src/core/CKeyboardManager.cpp \
-    src/core/CMainWindow.cpp \
     src/core/CMaterialSet.cpp \
     src/core/CMesh.cpp \
     src/core/CModelData.cpp \
@@ -67,6 +66,7 @@ SOURCES += \
     src/core/CScene.cpp \
     src/core/GXCommon.cpp \
     src/core/STEVStage.cpp \
+    src/ui/CMainWindow.cpp \
     src/ui/CGLViewer.cpp \
     src/ui/CMaterialViewer.cpp \
     src/ui/CPakTreeWidget.cpp \

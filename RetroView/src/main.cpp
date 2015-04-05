@@ -15,10 +15,13 @@ int main(int argc, char *argv[])
 
     CTemplateManager::instance()->initialize("../templates");
     QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
-    fmt.setDepthBufferSize(32);
+    fmt.setDepthBufferSize(24);
     fmt.setMajorVersion(3);
-    fmt.setMinorVersion(3);
+    fmt.setMinorVersion(2);
+#ifdef __APPLE__
     fmt.setProfile(QSurfaceFormat::CoreProfile);
+#endif
+    fmt.setSwapBehavior(QSurfaceFormat::SingleBuffer);
     QSurfaceFormat::setDefaultFormat(fmt);
 
     CMainWindow w;

@@ -7,9 +7,9 @@ uniform sampler2D texs[8];
 
 uniform vec4 konst[4];
 
-uniform bool punchThrough;
-uniform bool texturesEnabled;
-uniform bool visualizeNormals;
+uniform float punchThrough;
+uniform float texturesEnabled;
+uniform float visualizeNormals;
 
 // input
 in vec3 norm;
@@ -35,15 +35,12 @@ void main() {
     vec4 konstc   = vec4(1, 1, 1, 1);
     vec2 tevCoord = vec2(0);
 
-    if (!gl_FrontFacing)
-        discard;
-
-    if (texturesEnabled)
+    if (texturesEnabled > 0.5)
     {
         //{TEVSTAGES}
-        if (punchThrough && prev.a <= .25)
+        if (punchThrough > 0.5 && prev.a <= .25)
             discard;
-        else if (punchThrough)
+        else if (punchThrough > 0.5)
             prev.a = 1;
     }
     else

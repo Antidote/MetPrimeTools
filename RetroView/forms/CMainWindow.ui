@@ -44,7 +44,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -95,6 +95,9 @@
        </property>
        <property name="currentIndex">
         <number>-1</number>
+       </property>
+       <property name="documentMode">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -219,6 +222,9 @@
   <action name="actionMode1">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Mode &amp;1</string>

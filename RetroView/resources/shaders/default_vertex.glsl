@@ -47,5 +47,13 @@ void main()
 
     color0 = ambientLight;
     color1 = color0;
+    texCoord0 = vec3(0.0);
+    texCoord1 = vec3(0.0);
+    texCoord2 = vec3(0.0);
+    texCoord3 = vec3(0.0);
+    texCoord4 = vec3(0.0);
+    texCoord5 = vec3(0.0);
+    texCoord6 = vec3(0.0);
+    texCoord7 = vec3(0.0);
 //{TEXGEN}
 }
