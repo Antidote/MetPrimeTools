@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "models/CAreaFile.hpp"
 #include "core/CMaterialCache.hpp"
 #include "ui/CGLViewer.hpp"

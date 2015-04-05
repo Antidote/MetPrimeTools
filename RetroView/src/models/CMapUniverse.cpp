@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "models/CMapUniverse.hpp"
 #include "models/CMapArea.hpp"
 #include "core/GXCommon.hpp"

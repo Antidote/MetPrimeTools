@@ -73,7 +73,7 @@ QStringList SPASSCommand::fragmentSource(atUint32 idx)
     if (subCommand == EMaterialCommand::TRAN)
     {
         output << "// TRAN";
-        output << QString("prev = vec4(prev.rgb, 1.0 - texture(tex%1, texCoord%1.st).r);").arg(idx);
+        output << QString("prev = vec4(prev.rgb, 1.0 - texture(texs[%1], texCoord%1.st).r);").arg(idx);
         output << QString("if (punchThrough && prev.a <= .25) discard;");
     }
     else if (subCommand == EMaterialCommand::INCA)
@@ -82,23 +82,23 @@ QStringList SPASSCommand::fragmentSource(atUint32 idx)
         if (idx == 0)
             output << "prev = vec4(0, 0, 0, prev.a);";
         output << QString("prev = clamp(prev * vec4(0.5, 0.5, 0.5, 1.0) +"
-                          " texture(tex%1, texCoord%1.st) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
+                          " texture(texs[%1], texCoord%1.st) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
     }
     else if (subCommand == EMaterialCommand::RFLV || subCommand == EMaterialCommand::LURD)
     {
         output << "// RFLV, LURD";
-        output << QString("c0 = texture(tex%1, texCoord%1.st);").arg(idx);
+        output << QString("c0 = texture(texs[%1], texCoord%1.st);").arg(idx);
     }
     else if (subCommand == EMaterialCommand::RFLD || subCommand == EMaterialCommand::LRLD || subCommand == EMaterialCommand::XRAY)
     {
         output << "// RFLD, LRLD, XRAY";
         output << QString("prev = clamp(prev * vec4(0.5, 0.5, 0.5, 1.0) + "
-                          "(c0 * texture(tex%1, texCoord%1.st)) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
+                          "(c0 * texture(texs[%1], texCoord%1.st)) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
     }
     else
     {
         output << "// DIFF, CLR";
-        output << QString("prev = prev * texture(tex%1, texCoord%1.st);").arg(idx);
+        output << QString("prev = prev * texture(texs[%1], texCoord%1.st);").arg(idx);
     }
 
     return output;

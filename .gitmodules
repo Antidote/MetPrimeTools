@@ -6,4 +6,4 @@
 	url = https://github.com/Antidote/tinyxml2.git
 [submodule "libSquish"]
 	path = libSquish
-	url = https://github.com/jackoalan/libSquish.git
+	url = https://github.com/jackoalan/libSquish

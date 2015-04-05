@@ -1,5 +1,4 @@
-﻿#include <GL/glew.h>
-#include "core/CResourceManager.hpp"
+﻿#include "core/CResourceManager.hpp"
 #include "core/IRenderableModel.hpp"
 #include "generic/CWorldFile.hpp"
 #include "ui_CMainWindow.h"

@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "core/GXCommon.hpp"
 #include "core/CModelData.hpp"
 #include "core/CMesh.hpp"
@@ -20,6 +19,7 @@
 
 void drawWireSphere(float radius, atUint32 longs, atUint32 lats)
 {
+#if 0
     for (int i = 1; i <= lats; i++)
     {
         float lat0 = M_PI * (-0.5f + (float)(i - 1) / (float)lats);
@@ -43,6 +43,7 @@ void drawWireSphere(float radius, atUint32 longs, atUint32 lats)
         }
         glEnd();
     }
+#endif
 }
 
 void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, const glm::vec4& outlineColor, const glm::vec3& scale)
@@ -92,6 +93,7 @@ void drawOutlinedCube(const glm::vec3& position, const glm::vec4& mainColor, con
 
 void drawSolidSphere(double radius, atUint32 slices, atUint32 stacks)
 {
+#if 0
     atUint32 i, j;
     for(i = 0; i <= slices; i++)
     {
@@ -115,10 +117,12 @@ void drawSolidSphere(double radius, atUint32 slices, atUint32 stacks)
         }
         glEnd();
     }
+#endif
 }
 
 void drawTexturedCube(atUint32 texture, const glm::vec3& position, float alpha, const glm::vec3& scale)
 {
+#if 0
     static float cubeCoords[8][3] =
     {
         {-1.f, -1.f,  1.f},
@@ -212,6 +216,7 @@ void drawTexturedCube(atUint32 texture, const glm::vec3& position, float alpha, 
     glEnd();
     glPopMatrix();
     glPopAttrib();
+#endif
 }
 
 
@@ -268,6 +273,7 @@ atUint64 assetIdFromPath(const std::string& filepath)
 
 void drawBoundingBox(SBoundingBox bbox)
 {
+#if 0
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
@@ -301,10 +307,12 @@ void drawBoundingBox(SBoundingBox bbox)
 
     glEnd();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
 }
 
 void drawCone(float width, float height, float offset)
 {
+#if 0
     glBegin(GL_TRIANGLE_FAN);
     glVertex3f(0, 0, offset + height);
     float x, y;
@@ -318,10 +326,12 @@ void drawCone(float width, float height, float offset)
     y = sinf(0.0f) * width;
     glVertex3f(x, y, offset);
     glEnd();
+#endif
 }
 
 void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool disableDepth)
 {
+#if 0
     if (disableDepth)
         glDisable(GL_DEPTH_TEST);
     glPushMatrix();
@@ -348,6 +358,7 @@ void drawAxis(glm::vec3 translation, glm::vec3 orientation, float scale, bool di
     glPopMatrix();
     if (disableDepth)
         glEnable(GL_DEPTH_TEST);
+#endif
 }
 
 atUint16 readAttribute(atUint16& value, atUint32 attributes, atUint32 index, Athena::io::IStreamReader& reader);

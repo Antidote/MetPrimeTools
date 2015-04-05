@@ -1,6 +1,6 @@
 INCLUDEPATH += $$PWD/include
 
-include(libSquish.pri)
+include(../libSquish/libSquish.pri)
 
 HEADERS += \
     $$PWD/include/RetroCommon.hpp

@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include "core/GLInclude.h"
 #include "core/CVertexBuffer.hpp"
 #include <iostream>
 #include <stdexcept>

@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "ui/CGLViewer.hpp"
 #include "core/CMaterial.hpp"
 #include "core/CMaterialCache.hpp"
@@ -13,6 +12,11 @@
 #include <chrono>
 #include <ctime>
 #include <QSettings>
+
+static const GLint TEX_UNIS[] =
+{
+    0,1,2,3,4,5,6,7
+};
 
 CMaterial::CMaterial()
     : m_program(nullptr),
@@ -373,6 +377,11 @@ bool CMaterial::bind()
         m_program->addShader(fragmentShader);
         m_program->link();
         m_program->bind();
+        
+        std::string texsName = QString("texs").toStdString();
+        int texsLoc = m_program->uniformLocation(texsName.c_str());
+        if (texsLoc >= 0)
+            glUniform1iv(texsLoc, 8, TEX_UNIS);
 
         if (m_version != MetroidPrime3 && m_version != DKCR)
             m_program->setUniformValue("punchThrough", (m_materialFlags & 0x20));

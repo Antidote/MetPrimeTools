@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "core/GLInclude.h"
 #include "core/CIndexBuffer.hpp"
 #include <stdexcept>

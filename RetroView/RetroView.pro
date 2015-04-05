@@ -50,7 +50,7 @@ CONFIG   += app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += include ../libSquish
+INCLUDEPATH += $$PWD/include
 win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
 
 SOURCES += \

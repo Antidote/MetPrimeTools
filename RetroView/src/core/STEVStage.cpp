@@ -184,7 +184,7 @@ QStringList STEVStage::fragmentSource(atUint32 texTEVIn, atUint32 textureCount, 
 
 
     if(texSampId < 8)
-        fragmentSource << QString("    tex = texture(tex%1, tevCoord);").arg(texSampId);
+        fragmentSource << QString("    tex = texture(texs[%1], tevCoord);").arg(texSampId);
     else
         fragmentSource << "    tex = vec4(1.0, 1.0, 1.0, 1.0);";
 

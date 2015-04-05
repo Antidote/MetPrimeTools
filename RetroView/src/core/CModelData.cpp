@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "core/CResourceManager.hpp"
 #include "core/CModelData.hpp"
 #include "core/CMaterialCache.hpp"

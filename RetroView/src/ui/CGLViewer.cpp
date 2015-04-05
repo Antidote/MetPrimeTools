@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include <Athena/Exception.hpp>
 #include <QImage>
 #include <QSettings>
@@ -50,6 +49,7 @@ CGLViewer::~CGLViewer()
 // TODO: Clean this up
 void CGLViewer::paintGL()
 {
+#if 0
     m_currentTime = 1.f * hiresTimeMS();
     m_deltaTime = m_currentTime - m_lastTime;
     m_lastTime = m_currentTime;
@@ -127,6 +127,7 @@ void CGLViewer::paintGL()
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         m_currentRenderable->draw();
     }
+#endif
 }
 
 void CGLViewer::resizeGL(int w, int h)
@@ -143,7 +144,9 @@ void CGLViewer::initializeGL()
         QOpenGLWidget::initializeGL();
 
         std::cout << format().depthBufferSize() << std::endl;
+#ifndef __APPLE__
         glewInit();
+#endif
         CMaterialCache::instance()->initialize();
 
         // Enable depth test

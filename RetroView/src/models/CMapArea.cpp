@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "models/CMapArea.hpp"
 #include "core/CMaterialCache.hpp"
 #include "core/CMaterialSet.hpp"
