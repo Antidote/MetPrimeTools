@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 #ifdef __APPLE__
     fmt.setProfile(QSurfaceFormat::CoreProfile);
 #endif
-    fmt.setSwapBehavior(QSurfaceFormat::SingleBuffer);
+    fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     QSurfaceFormat::setDefaultFormat(fmt);
 
     CMainWindow w;
