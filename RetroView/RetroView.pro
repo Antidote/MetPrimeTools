@@ -49,7 +49,6 @@ CONFIG   += console
 CONFIG   += app_bundle
 
 TEMPLATE = app
-QMAKE_INFO_PLIST = resources/Info.plist
 
 INCLUDEPATH += $$PWD/include
 win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
@@ -159,9 +158,7 @@ RESOURCES += \
 win32:RC_FILE += \
     resources/mainicon.rc
 
-RESFILES.files = resources/mainicon.icns resources/pakicon.icns
+QMAKE_INFO_PLIST = resources/Info.plist
+RESFILES.files = resources/icons/mainicon.icns resources/icons/pakicon.icns
 RESFILES.path = Contents/Resources
 QMAKE_BUNDLE_DATA += RESFILES
-
-DISTFILES += \
-    RetroView.supp

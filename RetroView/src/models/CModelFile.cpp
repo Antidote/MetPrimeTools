@@ -24,12 +24,6 @@ void CModelFile::draw()
     glm::mat4 model = glm::mat4(1);
     CModelData::drawIbos(false, currentMaterialSet(), model);
     CModelData::drawIbos(true,  currentMaterialSet(), model);
-
-    if (!m_sourcesDumped)
-    {
-        m_sourcesDumped = true;
-        currentMaterialSet().dumpSources(m_assetID);
-    }
 }
 
 void CModelFile::drawBoundingBox()

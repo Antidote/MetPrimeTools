@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=RetroView
+GenericName=Game Data Viewer
+Comment=View 3D assets from games by Retro Studios
+Exec=retroview
+Icon=retroview
+Terminal=false
+Type=Application
+Categories=Graphics;3DGraphics;
+MimeType=application/retro-pak;
