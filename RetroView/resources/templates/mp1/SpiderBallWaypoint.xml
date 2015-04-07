@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SpiderBallWaypoint>
+	<count>5</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="long" />
+</SpiderBallWaypoint>

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<PlayerHintStruct>
+	<count>15</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Unknown 3" type="bool" />
+	<property name="Unknown 4" type="bool" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="bool" />
+	<property name="Unknown 7" type="bool" />
+	<property name="Unknown 8" type="bool" />
+	<property name="Unknown 9" type="bool" />
+	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 11" type="bool" />
+	<property name="Unknown 12" type="bool" />
+	<property name="Unknown 13" type="bool" />
+	<property name="Unknown 14" type="bool" />
+	<property name="Unknown 15" type="bool" />
+</PlayerHintStruct>

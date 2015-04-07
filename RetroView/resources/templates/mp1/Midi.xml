@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<Midi>
+	<count>6</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="file" ext="Unkn" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="long" />
+</Midi>

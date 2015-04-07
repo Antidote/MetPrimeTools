@@ -1,0 +1,273 @@
+<?xml version="1.0" ?>
+<TweakPlayer>
+<struct ID="0xFFFFFFFF" name="TweakPlayer" />
+    <count>14</count>
+    <property ID="0x7FDA1466" name="Tweak Name" type="string" />
+    <struct ID="0xDFD08EBA" name="Unknown 1" />
+        <count>6</count>
+        <property ID="0x4985BC73" name="Unknown 2" type="float" />
+        <property ID="0xA4E33EF0" name="Unknown 3" type="float" />
+        <struct ID="0xF9BF59A2" name="Dark World Damage" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0x333B7549" name="Unknown 4" type="float" />
+        <property ID="0xEE452490" name="Unknown 5" type="float" />
+        <property ID="0x19275A97" name="Unknown 6" type="float" />
+    </struct>
+    <struct ID="0x45171A96" name="Unknown 7" />
+        <count>4</count>
+        <property ID="0x14849367" name="Unknown 8" type="float" />
+        <property ID="0x6C6E6F3C" name="Unknown 9" type="float" />
+        <property ID="0x88AA6E41" name="Unknown 10" type="float" />
+        <property ID="0x2AAB8DDA" name="Unknown 11" type="float" />
+    </struct>
+    <struct ID="0x82CF4CF1" name="Unknown 12" />
+        <count>76</count>
+        <property ID="0x18D0B2DA" name="Unknown 13" type="float" />
+        <property ID="0x84F61AC5" name="Unknown 14" type="float" />
+        <property ID="0xEDB06C1D" name="Unknown 15" type="float" />
+        <property ID="0x56F9F2AF" name="Unknown 16" type="float" />
+        <property ID="0xD05B643F" name="Unknown 17" type="float" />
+        <property ID="0x122CE118" name="Unknown 18" type="float" />
+        <property ID="0xF848DABE" name="Unknown 19" type="float" />
+        <property ID="0x68AC6028" name="Unknown 20" type="float" />
+        <property ID="0xCD4EE9FC" name="Unknown 21" type="float" />
+        <property ID="0x3C461DB2" name="Unknown 22" type="float" />
+        <property ID="0x55006B6A" name="Unknown 23" type="float" />
+        <property ID="0x8421E909" name="Unknown 24" type="float" />
+        <property ID="0x2E41A61D" name="Unknown 25" type="float" />
+        <property ID="0xDCF5B580" name="Unknown 26" type="float" />
+        <property ID="0x2DD68198" name="Unknown 27" type="float" />
+        <property ID="0x1A946073" name="Unknown 28" type="float" />
+        <property ID="0xD4A25028" name="Unknown 29" type="float" />
+        <property ID="0x2B5CB136" name="Unknown 30" type="float" />
+        <property ID="0x421AC7EE" name="Unknown 31" type="float" />
+        <property ID="0x0586137D" name="Unknown 32" type="float" />
+        <property ID="0xAECE038B" name="Unknown 33" type="float" />
+        <property ID="0x3637E815" name="Unknown 34" type="float" />
+        <property ID="0x343A384C" name="Unknown 35" type="float" />
+        <property ID="0x0CAF4624" name="Unknown 36" type="float" />
+        <property ID="0x34B2C148" name="Unknown 37" type="float" />
+        <property ID="0xB917AE8A" name="Unknown 38" type="float" />
+        <property ID="0xD051D852" name="Unknown 39" type="float" />
+        <property ID="0x48D462B4" name="Unknown 40" type="float" />
+        <property ID="0x6BB67D81" name="Unknown 41" type="float" />
+        <property ID="0xF4725CAD" name="Unknown 42" type="float" />
+        <property ID="0xD42AA92C" name="Unknown 43" type="float" />
+        <property ID="0x319526DB" name="Unknown 44" type="float" />
+        <property ID="0x4B6EB6CA" name="Unknown 45" type="float" />
+        <property ID="0xC107F3DB" name="Unknown 46" type="float" />
+        <property ID="0xA8418503" name="Unknown 47" type="float" />
+        <property ID="0x4B1D5CCF" name="Unknown 48" type="float" />
+        <property ID="0xDDCC44CD" name="Unknown 49" type="float" />
+        <property ID="0xE8662D92" name="Unknown 50" type="float" />
+        <property ID="0xABF6DEAE" name="Unknown 51" type="float" />
+        <property ID="0x3C3F9884" name="Unknown 52" type="float" />
+        <property ID="0xFFD4A030" name="Unknown 53" type="float" />
+        <property ID="0x59DFBCB9" name="Unknown 54" type="float" />
+        <property ID="0x3099CA61" name="Unknown 55" type="float" />
+        <property ID="0x16C1FDDB" name="Unknown 56" type="float" />
+        <property ID="0x6C648931" name="Unknown 57" type="float" />
+        <property ID="0x4B42F5A9" name="Unknown 58" type="float" />
+        <property ID="0x1F4CC854" name="Unknown 59" type="float" />
+        <property ID="0xB3408173" name="Unknown 60" type="float" />
+        <property ID="0x14B78AAF" name="Unknown 61" type="float" />
+        <property ID="0x2C7620D3" name="Unknown 62" type="float" />
+        <property ID="0x0C2C91F7" name="Unknown 63" type="float" />
+        <property ID="0x938C77D4" name="Unknown 64" type="float" />
+        <property ID="0x13C95DFD" name="Unknown 65" type="float" />
+        <property ID="0x8E41FED2" name="Unknown 66" type="float" />
+        <property ID="0xB261FA30" name="Unknown 67" type="float" />
+        <property ID="0x6AE560E9" name="Unknown 68" type="float" />
+        <property ID="0x03149633" name="Unknown 69" type="float" />
+        <property ID="0xD7B3F3EA" name="Unknown 70" type="float" />
+        <property ID="0xAF1450A2" name="Unknown 71" type="float" />
+        <property ID="0x980D701A" name="Unknown 72" type="float" />
+        <property ID="0xA805FEAE" name="Unknown 73" type="float" />
+        <property ID="0x233E3199" name="Unknown 74" type="float" />
+        <property ID="0x97F30B95" name="Unknown 75" type="long" />
+        <property ID="0x4C4C5872" name="Unknown 76" type="float" />
+        <property ID="0x9BB73A0B" name="Unknown 77" type="long" />
+        <property ID="0x4C8D664C" name="Unknown 78" type="float" />
+        <property ID="0x1FC20169" name="Unknown 79" type="float" />
+        <property ID="0xE7A5D759" name="Unknown 80" type="float" />
+        <property ID="0x7044B295" name="Unknown 81" type="float" />
+        <property ID="0xD82380A6" name="Unknown 82" type="float" />
+        <property ID="0x2A2E4100" name="Unknown 83" type="float" />
+        <property ID="0x905545E6" name="Unknown 84" type="float" />
+        <property ID="0x229460BE" name="Unknown 85" type="float" />
+        <property ID="0x0E238FD3" name="Unknown 86" type="float" />
+        <property ID="0xDC92A0AC" name="Unknown 87" type="float" />
+        <property ID="0xE1FEFD3C" name="Unknown 88" type="bool" />
+    </struct>
+    <struct ID="0x56A720C8" name="Unknown 89" />
+        <count>15</count>
+        <property ID="0xB49B008E" name="Unknown 90" type="float" />
+        <property ID="0xB0291470" name="Unknown 91" type="float" />
+        <property ID="0x287892AB" name="Unknown 92" type="float" />
+        <property ID="0x79F8EF93" name="Unknown 93" type="float" />
+        <property ID="0x34304E98" name="Unknown 94" type="float" />
+        <property ID="0xBA27556F" name="Unknown 95" type="float" />
+        <property ID="0xD7D7828E" name="Unknown 96" type="float" />
+        <property ID="0x0E0C431E" name="Unknown 97" type="float" />
+        <property ID="0x2C1DA0EC" name="Unknown 98" type="float" />
+        <property ID="0xE11788E4" name="Unknown 99" type="float" />
+        <property ID="0xC982754E" name="Unknown 100" type="float" />
+        <property ID="0xFB5C81A9" name="Unknown 101" type="bool" />
+        <property ID="0xFB909BC3" name="Unknown 102" type="float" />
+        <property ID="0xF1F038DE" name="Unknown 103" type="float" />
+        <property ID="0x2B1F5094" name="Unknown 104" type="float" />
+    </struct>
+    <struct ID="0x42A17438" name="Unknown 105" />
+        <count>16</count>
+        <property ID="0x27C60D0A" name="Unknown 106" type="float" />
+        <property ID="0xB7B51DE0" name="Unknown 107" type="float" />
+        <property ID="0xF77D0359" name="Unknown 108" type="float" />
+        <property ID="0xDE887CCA" name="Unknown 109" type="float" />
+        <property ID="0xB4B07D5D" name="Unknown 110" type="float" />
+        <property ID="0xE5F8C567" name="Unknown 111" type="float" />
+        <property ID="0x9774749D" name="Unknown 112" type="float" />
+        <property ID="0x133F3002" name="Unknown 113" type="float" />
+        <property ID="0x96FAB602" name="Unknown 114" type="float" />
+        <property ID="0x94164A2F" name="Unknown 115" type="float" />
+        <property ID="0x54354C80" name="Unknown 116" type="float" />
+        <property ID="0x5361CE18" name="Unknown 117" type="float" />
+        <property ID="0x4B2E9260" name="Unknown 118" type="float" />
+        <property ID="0x3B9A3789" name="Unknown 119" type="float" />
+        <property ID="0x38DD0B85" name="Unknown 120" type="float" />
+        <property ID="0x1157883E" name="Unknown 121" type="float" />
+    </struct>
+    <struct ID="0x243AE038" name="Unknown 122" />
+        <count>50</count>
+        <property ID="0x68738246" name="Unknown 123" type="float" />
+        <property ID="0x991180EF" name="Unknown 124" type="float" />
+        <property ID="0x398A391B" name="Unknown 125" type="float" />
+        <property ID="0x495CAFF1" name="Unknown 126" type="float" />
+        <property ID="0xD2FB0FED" name="Unknown 127" type="float" />
+        <property ID="0x18A514AC" name="Unknown 128" type="float" />
+        <property ID="0x31072813" name="Unknown 129" type="float" />
+        <property ID="0xF0E68DAB" name="Unknown 130" type="float" />
+        <property ID="0x60FE934E" name="Unknown 131" type="float" />
+        <property ID="0xA6332F81" name="Unknown 132" type="float" />
+        <property ID="0x663A6F89" name="Unknown 133" type="float" />
+        <property ID="0xE60BBBBB" name="Unknown 134" type="float" />
+        <property ID="0x914977B4" name="Unknown 135" type="float" />
+        <property ID="0xEE0C7156" name="Unknown 136" type="float" />
+        <property ID="0xC6960BE2" name="Unknown 137" type="float" />
+        <property ID="0x6F6DFFDD" name="Unknown 138" type="float" />
+        <property ID="0x48C63796" name="Unknown 139" type="float" />
+        <property ID="0x598BEB71" name="Unknown 140" type="float" />
+        <property ID="0x30B2F98E" name="Unknown 141" type="float" />
+        <property ID="0x55F7D145" name="Unknown 142" type="float" />
+        <property ID="0xF034335C" name="Unknown 143" type="float" />
+        <property ID="0x40AE584E" name="Unknown 144" type="long" />
+        <property ID="0x111E9DEC" name="Unknown 145" type="long" />
+        <property ID="0x58EE9D03" name="Unknown 146" type="long" />
+        <property ID="0xE052FA66" name="Unknown 147" type="long" />
+        <property ID="0xC452B61E" name="Unknown 148" type="long" />
+        <property ID="0x7CEED17B" name="Unknown 149" type="long" />
+        <property ID="0x44989F30" name="Unknown 150" type="long" />
+        <property ID="0xA6A7F710" name="Unknown 151" type="long" />
+        <property ID="0xEC529A5E" name="Unknown 152" type="long" />
+        <property ID="0x54EEFD3B" name="Unknown 153" type="long" />
+        <property ID="0x73EBDCE2" name="Unknown 154" type="long" />
+        <property ID="0xCB57BB87" name="Unknown 155" type="long" />
+        <property ID="0xD2A8CC1F" name="Unknown 156" type="float" />
+        <property ID="0xD5CBCEC1" name="Unknown 157" type="float" />
+        <property ID="0x141ED3B9" name="Unknown 158" type="float" />
+        <property ID="0x72FBB5CD" name="Unknown 159" type="float" />
+        <property ID="0x478C15F9" name="Unknown 160" type="float" />
+        <property ID="0x93B712BA" name="Unknown 161" type="float" />
+        <property ID="0x7B4688CE" name="Unknown 162" type="float" />
+        <property ID="0x2E0CF3CD" name="Unknown 163" type="float" />
+        <property ID="0x90B71B2E" name="Unknown 164" type="float" />
+        <property ID="0x775761C5" name="Unknown 165" type="float" />
+        <property ID="0xFA255139" name="Unknown 166" type="bool" />
+        <property ID="0x8F80E39E" name="Unknown 167" type="bool" />
+        <property ID="0xD290D7B5" name="Unknown 168" type="float" />
+        <property ID="0x2421B618" name="Unknown 169" type="float" />
+        <property ID="0xB814530B" name="Unknown 170" type="float" />
+        <property ID="0x75A00CFB" name="Unknown 171" type="float" />
+        <property ID="0xC4775E5F" name="Unknown 172" type="float" />
+    </struct>
+    <struct ID="0x20124C3D" name="Unknown 173" />
+        <count>7</count>
+        <property ID="0xB0A32E5B" name="Unknown 174" type="float" />
+        <property ID="0x2A75F2B8" name="Unknown 175" type="bool" />
+        <property ID="0x058284BB" name="Unknown 176" type="bool" />
+        <property ID="0x1E54F5AE" name="Unknown 177" type="bool" />
+        <property ID="0xADFA90FC" name="Unknown 178" type="float" />
+        <property ID="0xF4DB84A9" name="Unknown 179" type="float" />
+        <property ID="0x8A7B245F" name="Unknown 180" type="float" />
+    </struct>
+    <struct ID="0x30412440" name="Unknown 181" />
+        <count>16</count>
+        <property ID="0xA726316B" name="Unknown 182" type="float" />
+        <property ID="0x33E79B51" name="Unknown 183" type="float" />
+        <property ID="0x9DD3E88B" name="Unknown 184" type="float" />
+        <property ID="0xFB605BA4" name="Unknown 185" type="float" />
+        <property ID="0xFE98B8E9" name="Unknown 186" type="float" />
+        <property ID="0x9210A25E" name="Unknown 187" type="float" />
+        <property ID="0xBE0C8B5E" name="Unknown 188" type="float" />
+        <property ID="0x2603A0BE" name="Unknown 189" type="float" />
+        <property ID="0x5B98A3BD" name="Unknown 190" type="float" />
+        <property ID="0x87D4B5D6" name="Unknown 191" type="float" />
+        <property ID="0xB7F82A9F" name="Unknown 192" type="float" />
+        <property ID="0x395478A8" name="Unknown 193" type="float" />
+        <property ID="0x93C013C9" name="Unknown 194" type="long" />
+        <property ID="0x8EEED636" name="Unknown 195" type="bool" />
+        <property ID="0xE1EB12E2" name="Unknown 196" type="bool" />
+        <struct ID="0xAE1FC47C" name="Unknown 197" />
+            <count>4</count>
+            <property ID="0x14849367" name="Unknown 198" type="float" />
+            <property ID="0x6C6E6F3C" name="Unknown 199" type="float" />
+            <property ID="0x88AA6E41" name="Unknown 200" type="float" />
+            <property ID="0x2AAB8DDA" name="Unknown 201" type="float" />
+        </struct>
+    </struct>
+    <struct ID="0xC4D32AE5" name="Unknown 202" />
+        <count>5</count>
+        <property ID="0xD0F345B2" name="Unknown 203" type="float" />
+        <property ID="0x6A884154" name="Unknown 204" type="float" />
+        <property ID="0xD9355674" name="Unknown 205" type="float" />
+        <property ID="0x88EA81DB" name="Unknown 206" type="float" />
+        <property ID="0x0E2F537F" name="Unknown 207" type="float" />
+    </struct>
+    <struct ID="0xD6155D4B" name="Unknown 208" />
+        <count>10</count>
+        <property ID="0xBA5EB7F5" name="Unknown 209" type="float" />
+        <property ID="0x0D41E3BA" name="Unknown 210" type="long" />
+        <property ID="0xB400EBD6" name="Unknown 211" type="float" />
+        <property ID="0xFD26B7B9" name="Unknown 212" type="float" />
+        <property ID="0x97B14DC6" name="Unknown 213" type="float" />
+        <property ID="0xEB59925A" name="Unknown 214" type="float" />
+        <property ID="0xA1D73380" name="Unknown 215" type="float" />
+        <property ID="0xC8E8344A" name="Unknown 216" type="float" />
+        <property ID="0xD40C480E" name="Unknown 217" type="float" />
+        <property ID="0x7960C3A0" name="Unknown 218" type="vector3f" />
+    </struct>
+    <struct ID="0xBCCA767E" name="Unknown 219" />
+        <count>4</count>
+        <property ID="0xD42FA1C1" name="Unknown 220" type="float" />
+        <property ID="0x787855E6" name="Unknown 221" type="float" />
+        <property ID="0x5DADD6AB" name="Unknown 222" type="float" />
+        <property ID="0x59EFBB34" name="Unknown 223" type="bool" />
+    </struct>
+    <struct ID="0x4D3B20B7" name="Unknown 224" />
+        <count>3</count>
+        <property ID="0xB3F20575" name="Unknown 225" type="float" />
+        <property ID="0xB851D54F" name="Unknown 226" type="long" />
+        <property ID="0x33B040BF" name="Unknown 227" type="float" />
+    </struct>
+    <struct ID="0xAEAFF210" name="Unknown 228" />
+        <count>3</count>
+        <property ID="0xDF131ECD" name="Unknown 229" type="float" />
+        <property ID="0x908A8E6C" name="Unknown 230" type="float" />
+        <property ID="0x95700A27" name="Unknown 231" type="float" />
+    </struct>
+</struct>
+</TweakPlayer>

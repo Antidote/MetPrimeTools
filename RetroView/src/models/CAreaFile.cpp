@@ -6,11 +6,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-static atUint32 drawCalls;
-
 CAreaFile::CAreaFile()
-    : m_ibosIndexed(false),
-      m_currentSet(0)
+    : m_currentSet(0)
 {
 }
 
@@ -31,19 +28,6 @@ void CAreaFile::exportToObj(const std::string& filename)
         of << "s 1" << std::endl;
         model.exportModel(of, vertOff, normOff, texOff, currentMaterialSet());
     }
-}
-
-void CAreaFile::indexIBOs()
-{
-    if (m_ibosIndexed)
-        return;
-
-    m_ibosIndexed = true;
-    QColor clr = (m_version != MetroidPrime3 || m_version != DKCR) ? QColor(0, 0, 0) : QColor(128, 128, 128);
-    setAmbient(clr);
-
-    for (CModelData& model : m_models)
-        model.indexIBOs(currentMaterialSet());
 }
 
 void CAreaFile::buildBBox()
@@ -77,12 +61,8 @@ void CAreaFile::buildBBox()
 
 void CAreaFile::draw()
 {
-
-    //glDepthRangef(0.015625f, 0.03125f);
     currentMaterialSet().setAmbient(m_ambient);
 
-    //buildBBox();
-    indexIBOs();
     CMaterialSet materialSet = currentMaterialSet();
     glm::mat4 model = glm::mat4(1);
 

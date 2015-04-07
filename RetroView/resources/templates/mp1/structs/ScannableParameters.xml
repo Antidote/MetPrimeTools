@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<ScannableParameters>
+	<count>1</count>
+	<property name="SCAN" type="file" ext="SCAN" />
+</ScannableParameters>

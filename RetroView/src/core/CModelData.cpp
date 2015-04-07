@@ -8,7 +8,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 CModelData::CModelData()
-    : m_ibosIndexed(false)
 {
 }
 
@@ -194,7 +193,7 @@ void CModelData::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat
     {
         CMaterial& mat = materialSet.material(iboPair.first);
 
-        if (mat.materialFlags() & Invisible)
+        if (mat.materialFlags() & Occluder)
             continue;
 
         mat.setModelMatrix(model);
@@ -224,16 +223,4 @@ void CModelData::drawBoundingBoxes()
     drawBoundingBox(m_boundingBox);
     for (const CMesh& mesh : m_meshes)
         drawBoundingBox(mesh.boundingBox());
-}
-
-void CModelData::indexIBOs(CMaterialSet& materialSet)
-{
-    if (m_ibosIndexed)
-        return;
-
-    m_ibosIndexed = true;
-}
-
-void CModelData::sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans)
-{
 }

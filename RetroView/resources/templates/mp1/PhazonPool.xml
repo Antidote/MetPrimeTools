@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<PhazonPool>
+	<count>18</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Model 1" type="file" ext="CMDL" />
+	<property name="Model 2" type="file" ext="CMDL" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Unknown 2" type="long" />
+	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
+	<property name="Let'sSayThisIsAVec3BecauseWhyNot" type="vector3f" />
+	<property name="Unknown 3" type="long" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="bool" />
+	<property name="Unknown 8" type="float" />
+
+	<attrib type="model" target="Model 1" />
+	<attrib type="model" target="Model 2" />
+</PhazonPool>

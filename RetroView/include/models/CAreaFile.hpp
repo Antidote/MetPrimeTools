@@ -54,15 +54,13 @@ public:
 private:
     friend class CAreaReader;
     void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
-    void indexIBOs();
     void buildBBox();
 
     Version                         m_version;
     // Buffers
     // GL specific code
-    bool                            m_ibosIndexed;
-    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_transparents;
-    std::unordered_map<atUint32, std::vector<SIndexBufferObject> > m_opaques;
+    CVertexBuffer                   m_vertexBuffer;
+    CIndexBuffer                    m_indexBuffer;
     std::vector<CMaterialSet>       m_materialSets;
     atUint32                        m_currentSet;
     std::vector<CModelData>         m_models;

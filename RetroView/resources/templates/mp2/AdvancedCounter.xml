@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<AdvancedCounter>
+<struct ID="0xFFFFFFFF" name="AdvancedCounter" />
+    <count>14</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xFD179A6F" name="Unknown 1" type="long" />
+    <property ID="0x5B851589" name="Unknown 2" type="long" />
+    <property ID="0x7BEF45CA" name="Unknown 3" type="bool" />
+    <property ID="0x1628F23A" name="Unknown 4" type="long" />
+    <property ID="0x049D5DD4" name="Unknown 5" type="long" />
+    <property ID="0xBC213AB1" name="Unknown 6" type="long" />
+    <property ID="0x21F60208" name="Unknown 7" type="long" />
+    <property ID="0x994A656D" name="Unknown 8" type="long" />
+    <property ID="0x8BFFCA83" name="Unknown 9" type="long" />
+    <property ID="0x3343ADE6" name="Unknown 10" type="long" />
+    <property ID="0x6B20BDB0" name="Unknown 11" type="long" />
+    <property ID="0xD39CDAD5" name="Unknown 12" type="long" />
+    <property ID="0x9215E813" name="Unknown 13" type="long" />
+</struct>
+</AdvancedCounter>

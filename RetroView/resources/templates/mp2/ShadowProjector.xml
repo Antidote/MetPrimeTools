@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<ShadowProjector>
+<struct ID="0xFFFFFFFF" name="ShadowProjector" />
+    <count>8</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x1D011A39" name="Unknown 1" type="float" />
+    <property ID="0xF371ED59" name="Unknown 2" type="vector3f" />
+    <property ID="0x24EC0FB0" name="Unknown 3" type="float" />
+    <property ID="0x3E2CD38D" name="Unknown 4" type="float" />
+    <property ID="0x8CCF36C0" name="Unknown 5" type="float" />
+    <property ID="0xBCA8B742" name="Unknown 6" type="bool" />
+    <property ID="0x606E341C" name="Unknown 7" type="UNKNOWN" />
+</struct>
+</ShadowProjector>

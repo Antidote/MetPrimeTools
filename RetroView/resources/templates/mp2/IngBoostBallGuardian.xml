@@ -1,0 +1,859 @@
+<?xml version="1.0" ?>
+<IngBoostBallGuardian>
+<struct ID="0xFFFFFFFF" name="IngBoostBallGuardian" />
+    <count>5</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0xB3774750" name="PatternedInfo" />
+        <count>43</count>
+        <property ID="0x75DBB375" name="Mass" type="float" />
+        <property ID="0x6392404E" name="Speed" type="float" />
+        <property ID="0x020C78BB" name="Turn Speed" type="float" />
+        <property ID="0x8DB77EE4" name="Detection Range" type="float" />
+        <property ID="0x513F04B8" name="Detection Height Range" type="float" />
+        <property ID="0x83DFC40F" name="Detection Angle" type="float" />
+        <property ID="0x58434916" name="Min Attack Range" type="float" />
+        <property ID="0xFF77C96F" name="Max Attack Range" type="float" />
+        <property ID="0xB0CFE015" name="Average Attack Time" type="float" />
+        <property ID="0xC80E329B" name="Attack Time Variation" type="float" />
+        <property ID="0x3FAE47EB" name="Leash Radius" type="float" />
+        <property ID="0x13F0B18F" name="Player Leash Radius" type="float" />
+        <property ID="0x7D5A0487" name="Player Leash Time" type="float" />
+        <struct ID="0xD756416E" name="DamageInfo" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0xE0CDC7E3" name="Damage Wait Time" type="float" />
+        <struct ID="0xCF90D15E" name="HealthContainer" />
+            <count>2</count>
+            <property ID="0xF0668919" name="Health" type="float" />
+            <property ID="0x3A2D17E4" name="Knockback Resistance" type="float" />
+        </struct>
+        <struct ID="0x7B71AE90" name="Vulnerabilities" />
+            <count>29</count>
+            <struct ID="0xAC8BB2A7" name="Power Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 1" type="long" />
+                <property ID="0x93677DA2" name="Unknown 2" type="bool" />
+            </struct>
+            <struct ID="0xB19B6D6C" name="Dark Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 3" type="long" />
+                <property ID="0x93677DA2" name="Unknown 4" type="bool" />
+            </struct>
+            <struct ID="0x002444C6" name="Light Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 5" type="long" />
+                <property ID="0x93677DA2" name="Unknown 6" type="bool" />
+            </struct>
+            <struct ID="0xE6BACDE5" name="Annihilator Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 7" type="long" />
+                <property ID="0x93677DA2" name="Unknown 8" type="bool" />
+            </struct>
+            <struct ID="0xD99C0400" name="Boost Ball?" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 9" type="long" />
+                <property ID="0x93677DA2" name="Unknown 10" type="bool" />
+            </struct>
+            <struct ID="0xC70D8B8B" name="Unknown 11" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 12" type="long" />
+                <property ID="0x93677DA2" name="Unknown 13" type="bool" />
+            </struct>
+            <struct ID="0x866F91BF" name="Screw Attack" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 14" type="long" />
+                <property ID="0x93677DA2" name="Unknown 15" type="bool" />
+            </struct>
+            <struct ID="0x68AE13A0" name="Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 16" type="long" />
+                <property ID="0x93677DA2" name="Unknown 17" type="bool" />
+            </struct>
+            <struct ID="0xF0B2F4CF" name="Power Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 18" type="long" />
+                <property ID="0x93677DA2" name="Unknown 19" type="bool" />
+            </struct>
+            <struct ID="0x00EFE8CB" name="Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 20" type="long" />
+                <property ID="0x93677DA2" name="Unknown 21" type="bool" />
+            </struct>
+            <struct ID="0xBB70093F" name="Unknown 22" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 23" type="long" />
+                <property ID="0x93677DA2" name="Unknown 24" type="bool" />
+            </struct>
+            <struct ID="0xBFAC229F" name="Unknown 25" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 26" type="long" />
+                <property ID="0x93677DA2" name="Unknown 27" type="bool" />
+            </struct>
+            <struct ID="0x50DDE891" name="Unknown 28" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 29" type="long" />
+                <property ID="0x93677DA2" name="Unknown 30" type="bool" />
+            </struct>
+            <struct ID="0x97B5C68B" name="Unknown 31" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 32" type="long" />
+                <property ID="0x93677DA2" name="Unknown 33" type="bool" />
+            </struct>
+            <struct ID="0xF4CE8ACF" name="Unknown 34" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 35" type="long" />
+                <property ID="0x93677DA2" name="Unknown 36" type="bool" />
+            </struct>
+            <struct ID="0x1D52588D" name="Unknown 37" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 38" type="long" />
+                <property ID="0x93677DA2" name="Unknown 39" type="bool" />
+            </struct>
+            <struct ID="0x64DDD543" name="Unknown 40" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 41" type="long" />
+                <property ID="0x93677DA2" name="Unknown 42" type="bool" />
+            </struct>
+            <struct ID="0x3D625F10" name="Unknown 43" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 44" type="long" />
+                <property ID="0x93677DA2" name="Unknown 45" type="bool" />
+            </struct>
+            <struct ID="0x591B80E3" name="Unknown 46" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 47" type="long" />
+                <property ID="0x93677DA2" name="Unknown 48" type="bool" />
+            </struct>
+            <struct ID="0xA442B4A3" name="Power (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 49" type="long" />
+                <property ID="0x93677DA2" name="Unknown 50" type="bool" />
+            </struct>
+            <struct ID="0x2A0F0524" name="Dark (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 51" type="long" />
+                <property ID="0x93677DA2" name="Unknown 52" type="bool" />
+            </struct>
+            <struct ID="0x949E3C86" name="Light (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 53" type="long" />
+                <property ID="0x93677DA2" name="Unknown 54" type="bool" />
+            </struct>
+            <struct ID="0x5BA991B1" name="Annihilator (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 55" type="long" />
+                <property ID="0x93677DA2" name="Unknown 56" type="bool" />
+            </struct>
+            <struct ID="0x6924B8C1" name="Super Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 57" type="long" />
+                <property ID="0x93677DA2" name="Unknown 58" type="bool" />
+            </struct>
+            <struct ID="0x1AB78BEF" name="Darkburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 59" type="long" />
+                <property ID="0x93677DA2" name="Unknown 60" type="bool" />
+            </struct>
+            <struct ID="0xFCDCB7D4" name="Sunburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 61" type="long" />
+                <property ID="0x93677DA2" name="Unknown 62" type="bool" />
+            </struct>
+            <struct ID="0x311FB061" name="Sonic Boom" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 63" type="long" />
+                <property ID="0x93677DA2" name="Unknown 64" type="bool" />
+            </struct>
+            <struct ID="0x89D25DF4" name="Unknown 65" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 66" type="long" />
+                <property ID="0x93677DA2" name="Unknown 67" type="bool" />
+            </struct>
+            <struct ID="0x3356D37E" name="Unknown 68" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 69" type="long" />
+                <property ID="0x93677DA2" name="Unknown 70" type="bool" />
+            </struct>
+        </struct>
+        <property ID="0x8A6AB139" name="Unknown 71" type="float" />
+        <property ID="0x3011B5DF" name="Unknown 72" type="float" />
+        <property ID="0x2E686C2A" name="Unknown 73" type="vector3f" />
+        <property ID="0xD9355674" name="Unknown 74" type="float" />
+        <property ID="0xE287D8DD" name="Unknown 75" type="float" />
+        <property ID="0x66CDC6E8" name="Unknown 76" type="float" />
+        <property ID="0x061CBE62" name="Unknown 77" type="long" />
+        <property ID="0x19F84380" name="Unknown 78" type="UNKNOWN" />
+        <struct ID="0xE25FB08C" name="ANCS" />
+            <property name="AnimSet" type="file" />
+            <property name="Node" type="long" />
+            <property name="Unknown" type="long" />
+        </struct>
+        <property ID="0x55744160" name="AFSM" type="file" ext="AFSM" />
+        <property ID="0xC1C7E255" name="FSM2" type="file" ext="FSM2" />
+        <property ID="0x87D22D43" name="Unknown 79" type="float" />
+        <property ID="0xF0790C1B" name="Unknown 80" type="float" />
+        <property ID="0xEF3BD8CF" name="Unknown 81" type="float" />
+        <property ID="0x98169634" name="Unknown 82" type="long" />
+        <property ID="0x487EF257" name="Unknown 83" type="vector3f" />
+        <property ID="0x684F00C9" name="PART" type="file" ext="PART" />
+        <property ID="0xF35F5164" name="Unknown 84" type="long" />
+        <property ID="0x130539A0" name="Unknown 85" type="vector3f" />
+        <property ID="0xA8DA9239" name="PART" type="file" ext="PART" />
+        <property ID="0x7344D6CD" name="Unknown 86" type="long" />
+        <property ID="0x562CF323" name="Unknown 87" type="UNKNOWN" />
+        <property ID="0xCDD9F41C" name="Unknown 88" type="long" />
+        <property ID="0x87011652" name="RULE" type="file" ext="RULE" />
+        <property ID="0x4BC4C4D9" name="Unknown 89" type="long" />
+        <struct ID="0x4476BED8" name="Unknown 90" />
+            <count>6</count>
+            <property ID="0x17ADDFC6" name="Unknown 91" type="bool" />
+            <property ID="0xF5DF62AD" name="Unknown 92" type="bool" />
+            <property ID="0xD0073A0C" name="Unknown 93" type="long" />
+            <property ID="0xED6D6782" name="Unknown 94" type="float" />
+            <property ID="0xDB190F68" name="Unknown 95" type="float" />
+            <property ID="0xF87A15E7" name="Unknown 96" type="float" />
+        </struct>
+    </struct>
+    <struct ID="0x7E397FED" name="ActorParameters" />
+        <count>17</count>
+        <struct ID="0xB028DB0E" name="LightParameters" />
+            <count>15</count>
+            <property ID="0xCD639B46" name="Unknown 97" type="bool" />
+            <property ID="0x1D011A39" name="Unknown 98" type="float" />
+            <property ID="0xECDA4163" name="Unknown 99" type="long" />
+            <property ID="0x3E2CD38D" name="Unknown 100" type="float" />
+            <property ID="0x0328E31B" name="Unknown 101" type="float" />
+            <property ID="0xA33E5B0E" name="Unknown 102" type="color" />
+            <property ID="0xA71810E9" name="Unknown 103" type="bool" />
+            <property ID="0x6B5E7509" name="Unknown 104" type="long" />
+            <property ID="0x628E6AC3" name="Unknown 105" type="long" />
+            <property ID="0xD19DE775" name="Unknown 106" type="vector3f" />
+            <property ID="0xCAC1E778" name="Unknown 107" type="long" />
+            <property ID="0x67F4D3DE" name="Unknown 108" type="long" />
+            <property ID="0xFB7A7ABB" name="Unknown 109" type="bool" />
+            <property ID="0x61A940D6" name="Unknown 110" type="bool" />
+            <property ID="0x1F715FD3" name="Unknown 111" type="long" />
+        </struct>
+        <struct ID="0x375BFD7C" name="ScannableParameters" />
+            <count>1</count>
+            <property ID="0xB94E9BE7" name="SCAN" type="file" ext="SCAN" />
+        </struct>
+        <property ID="0xC0BA9E18" name="Dark Visor model" type="file" ext="CMDL" />
+        <property ID="0x9F027D91" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x6B1FBC3A" name="Echo Visor model?" type="file" ext="CMDL" />
+        <property ID="0xEB1D06BE" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x1499803C" name="Unknown 112" type="bool" />
+        <property ID="0x90AA341F" name="Unknown 113" type="float" />
+        <property ID="0x7C269EBC" name="Unknown 114" type="float" />
+        <struct ID="0x05AD250E" name="Unknown 115" />
+            <count>2</count>
+            <property ID="0xFE9DC266" name="Unknown 116" type="bool" />
+            <property ID="0xCA19E8C6" name="Unknown 117" type="long" />
+        </struct>
+        <property ID="0xCD4C81A1" name="Unknown 118" type="bool" />
+        <property ID="0x799263F1" name="Unknown 119" type="bool" />
+        <property ID="0xED3A6E87" name="Unknown 120" type="bool" />
+        <property ID="0xF07981E8" name="Unknown 121" type="bool" />
+        <property ID="0x6DF33845" name="Unknown 122" type="bool" />
+        <property ID="0xC712847C" name="Unknown 123" type="long" />
+        <property ID="0xBA2600D7" name="Unknown 124" type="long" />
+    </struct>
+    <struct ID="0x22E574AA" name="Unknown 125" />
+        <count>55</count>
+        <property ID="0x01789ABD" name="Unknown 126" type="long" />
+        <property ID="0xED69488F" name="Unknown 127" type="float" />
+        <property ID="0x95B47CF9" name="Unknown 128" type="float" />
+        <property ID="0x8D42A8D5" name="Unknown 129" type="float" />
+        <property ID="0x84586BFD" name="Unknown 130" type="float" />
+        <property ID="0x50398A06" name="Unknown 131" type="float" />
+        <property ID="0xEAA3C3F8" name="Unknown 132" type="float" />
+        <property ID="0xCC5A4918" name="PART" type="file" ext="PART" />
+        <property ID="0x8851DC01" name="Unknown 133" type="UNKNOWN" />
+        <property ID="0x5D01100F" name="PART" type="file" ext="PART" />
+        <property ID="0x9A56892E" name="PART" type="file" ext="PART" />
+        <property ID="0x4CAB30A9" name="Unknown 134" type="UNKNOWN" />
+        <property ID="0x8F83BE73" name="Unknown 135" type="UNKNOWN" />
+        <property ID="0xB392943A" name="Unknown 136" type="UNKNOWN" />
+        <property ID="0x24ECC1E9" name="Unknown 137" type="UNKNOWN" />
+        <property ID="0x4489935E" name="Unknown 138" type="UNKNOWN" />
+        <property ID="0x3C2D681E" name="PART" type="file" ext="PART" />
+        <property ID="0xD576F379" name="SRSC" type="file" ext="SRSC" />
+        <property ID="0x3DA219C7" name="PART" type="file" ext="PART" />
+        <property ID="0x23271976" name="Unknown 139" type="float" />
+        <property ID="0x081E9E6C" name="PART" type="file" ext="PART" />
+        <property ID="0xCB39ECCB" name="Unknown 140" type="float" />
+        <property ID="0x587CA175" name="Unknown 141" type="float" />
+        <property ID="0x0BD7D5A9" name="Unknown 142" type="float" />
+        <property ID="0xE8EA5BC8" name="Unknown 143" type="UNKNOWN" />
+        <property ID="0x5650366A" name="Unknown 144" type="UNKNOWN" />
+        <property ID="0xB09AF706" name="Unknown 145" type="UNKNOWN" />
+        <property ID="0x0C13C5A8" name="Unknown 146" type="UNKNOWN" />
+        <property ID="0x148B81E4" name="Unknown 147" type="UNKNOWN" />
+        <property ID="0x5D0D2C40" name="Unknown 148" type="float" />
+        <property ID="0xC620183A" name="Unknown 149" type="float" />
+        <property ID="0x7D19C3CA" name="Unknown 150" type="float" />
+        <property ID="0xA77F6212" name="Unknown 151" type="float" />
+        <property ID="0x9579B1F2" name="Unknown 152" type="float" />
+        <struct ID="0x915DA374" name="Unknown 153" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <struct ID="0xAB258F6B" name="Unknown 154" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0xA0D63374" name="Unknown 155" type="float" />
+        <property ID="0xDFEA60A2" name="Unknown 156" type="float" />
+        <property ID="0x601CC5B4" name="PART" type="file" ext="PART" />
+        <property ID="0xCE980820" name="Unknown 157" type="float" />
+        <property ID="0xB752C177" name="Unknown 158" type="float" />
+        <property ID="0xE6DDB662" name="Unknown 159" type="float" />
+        <property ID="0xB57BAE86" name="Unknown 160" type="float" />
+        <property ID="0x2025858B" name="Unknown 161" type="UNKNOWN" />
+        <property ID="0x19F8FEE6" name="Unknown 162" type="UNKNOWN" />
+        <property ID="0xDC741FBD" name="Unknown 163" type="float" />
+        <property ID="0xFA6EDEB5" name="Unknown 164" type="float" />
+        <property ID="0xA9C8C651" name="Unknown 165" type="float" />
+        <property ID="0xA926F8A8" name="PART" type="file" ext="PART" />
+        <property ID="0x4051FD1A" name="Unknown 166" type="UNKNOWN" />
+        <struct ID="0x424A6D37" name="Unknown 167" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <struct ID="0x9C170968" name="Unknown 168" />
+            <count>18</count>
+            <property ID="0xFF713AAD" name="Unknown 169" type="long" />
+            <property ID="0x459AE4A8" name="WPSC" type="file" ext="WPSC" />
+            <property ID="0x4F387C49" name="PART" type="file" ext="PART" />
+            <property ID="0xDDD52E3A" name="PART" type="file" ext="PART" />
+            <property ID="0xC6F229C6" name="TXTR" type="file" ext="TXTR" />
+            <property ID="0x8F1A76C3" name="TXTR" type="file" ext="TXTR" />
+            <property ID="0xC26C291C" name="Unknown 170" type="float" />
+            <property ID="0x78C507EB" name="Unknown 171" type="float" />
+            <property ID="0xEC773D1D" name="Unknown 172" type="float" />
+            <property ID="0xB02DE555" name="Unknown 173" type="float" />
+            <property ID="0x5180181E" name="Unknown 174" type="float" />
+            <property ID="0x72A96252" name="Unknown 175" type="float" />
+            <property ID="0x855ED9B9" name="Unknown 176" type="float" />
+            <property ID="0xB8652FE4" name="Unknown 177" type="float" />
+            <property ID="0x3FED5E52" name="Unknown 178" type="float" />
+            <property ID="0x1AFB2B73" name="Unknown 179" type="color" />
+            <property ID="0x9FD338FC" name="Unknown 180" type="color" />
+            <property ID="0xAEB31AF3" name="PART" type="file" ext="PART" />
+        </struct>
+        <property ID="0xBD3EFE7D" name="Unknown 181" type="color" />
+        <property ID="0xD24B888F" name="Unknown 182" type="float" />
+        <struct ID="0x1B96FF8B" name="Unknown 183" />
+            <count>29</count>
+            <struct ID="0xAC8BB2A7" name="Power Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 184" type="long" />
+                <property ID="0x93677DA2" name="Unknown 185" type="bool" />
+            </struct>
+            <struct ID="0xB19B6D6C" name="Dark Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 186" type="long" />
+                <property ID="0x93677DA2" name="Unknown 187" type="bool" />
+            </struct>
+            <struct ID="0x002444C6" name="Light Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 188" type="long" />
+                <property ID="0x93677DA2" name="Unknown 189" type="bool" />
+            </struct>
+            <struct ID="0xE6BACDE5" name="Annihilator Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 190" type="long" />
+                <property ID="0x93677DA2" name="Unknown 191" type="bool" />
+            </struct>
+            <struct ID="0xD99C0400" name="Boost Ball?" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 192" type="long" />
+                <property ID="0x93677DA2" name="Unknown 193" type="bool" />
+            </struct>
+            <struct ID="0xC70D8B8B" name="Unknown 194" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 195" type="long" />
+                <property ID="0x93677DA2" name="Unknown 196" type="bool" />
+            </struct>
+            <struct ID="0x866F91BF" name="Screw Attack" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 197" type="long" />
+                <property ID="0x93677DA2" name="Unknown 198" type="bool" />
+            </struct>
+            <struct ID="0x68AE13A0" name="Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 199" type="long" />
+                <property ID="0x93677DA2" name="Unknown 200" type="bool" />
+            </struct>
+            <struct ID="0xF0B2F4CF" name="Power Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 201" type="long" />
+                <property ID="0x93677DA2" name="Unknown 202" type="bool" />
+            </struct>
+            <struct ID="0x00EFE8CB" name="Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 203" type="long" />
+                <property ID="0x93677DA2" name="Unknown 204" type="bool" />
+            </struct>
+            <struct ID="0xBB70093F" name="Unknown 205" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 206" type="long" />
+                <property ID="0x93677DA2" name="Unknown 207" type="bool" />
+            </struct>
+            <struct ID="0xBFAC229F" name="Unknown 208" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 209" type="long" />
+                <property ID="0x93677DA2" name="Unknown 210" type="bool" />
+            </struct>
+            <struct ID="0x50DDE891" name="Unknown 211" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 212" type="long" />
+                <property ID="0x93677DA2" name="Unknown 213" type="bool" />
+            </struct>
+            <struct ID="0x97B5C68B" name="Unknown 214" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 215" type="long" />
+                <property ID="0x93677DA2" name="Unknown 216" type="bool" />
+            </struct>
+            <struct ID="0xF4CE8ACF" name="Unknown 217" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 218" type="long" />
+                <property ID="0x93677DA2" name="Unknown 219" type="bool" />
+            </struct>
+            <struct ID="0x1D52588D" name="Unknown 220" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 221" type="long" />
+                <property ID="0x93677DA2" name="Unknown 222" type="bool" />
+            </struct>
+            <struct ID="0x64DDD543" name="Unknown 223" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 224" type="long" />
+                <property ID="0x93677DA2" name="Unknown 225" type="bool" />
+            </struct>
+            <struct ID="0x3D625F10" name="Unknown 226" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 227" type="long" />
+                <property ID="0x93677DA2" name="Unknown 228" type="bool" />
+            </struct>
+            <struct ID="0x591B80E3" name="Unknown 229" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 230" type="long" />
+                <property ID="0x93677DA2" name="Unknown 231" type="bool" />
+            </struct>
+            <struct ID="0xA442B4A3" name="Power (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 232" type="long" />
+                <property ID="0x93677DA2" name="Unknown 233" type="bool" />
+            </struct>
+            <struct ID="0x2A0F0524" name="Dark (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 234" type="long" />
+                <property ID="0x93677DA2" name="Unknown 235" type="bool" />
+            </struct>
+            <struct ID="0x949E3C86" name="Light (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 236" type="long" />
+                <property ID="0x93677DA2" name="Unknown 237" type="bool" />
+            </struct>
+            <struct ID="0x5BA991B1" name="Annihilator (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 238" type="long" />
+                <property ID="0x93677DA2" name="Unknown 239" type="bool" />
+            </struct>
+            <struct ID="0x6924B8C1" name="Super Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 240" type="long" />
+                <property ID="0x93677DA2" name="Unknown 241" type="bool" />
+            </struct>
+            <struct ID="0x1AB78BEF" name="Darkburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 242" type="long" />
+                <property ID="0x93677DA2" name="Unknown 243" type="bool" />
+            </struct>
+            <struct ID="0xFCDCB7D4" name="Sunburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 244" type="long" />
+                <property ID="0x93677DA2" name="Unknown 245" type="bool" />
+            </struct>
+            <struct ID="0x311FB061" name="Sonic Boom" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 246" type="long" />
+                <property ID="0x93677DA2" name="Unknown 247" type="bool" />
+            </struct>
+            <struct ID="0x89D25DF4" name="Unknown 248" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 249" type="long" />
+                <property ID="0x93677DA2" name="Unknown 250" type="bool" />
+            </struct>
+            <struct ID="0x3356D37E" name="Unknown 251" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 252" type="long" />
+                <property ID="0x93677DA2" name="Unknown 253" type="bool" />
+            </struct>
+        </struct>
+    </struct>
+    <struct ID="0x78656D1E" name="Unknown 254" />
+        <count>31</count>
+        <property ID="0xA322F51D" name="Unknown 255" type="vector3f" />
+        <property ID="0x528D951E" name="Unknown 256" type="float" />
+        <property ID="0xBEA96FB7" name="Unknown 257" type="float" />
+        <property ID="0xA25B96E1" name="Unknown 258" type="varied_length_struct" />
+        <struct ID="0x0E1A78BD" name="Unknown 259" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <struct ID="0x19C3D263" name="Unknown 260" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0xD8047CBA" name="Unknown 261" type="float" />
+        <property ID="0x7B21E31A" name="Unknown 262" type="float" />
+        <property ID="0x18381479" name="CMDL" type="file" ext="CMDL" />
+        <property ID="0x15534429" name="PART" type="file" ext="PART" />
+        <property ID="0x4CCEB7AD" name="Unknown 263" type="UNKNOWN" />
+        <property ID="0xE41CB449" name="SPSC" type="file" ext="SPSC" />
+        <property ID="0x6758BF01" name="Unknown 264" type="UNKNOWN" />
+        <property ID="0x8D9E014F" name="Unknown 265" type="UNKNOWN" />
+        <property ID="0xE35AE4BE" name="Unknown 266" type="UNKNOWN" />
+        <property ID="0x9F7372B3" name="Unknown 267" type="UNKNOWN" />
+        <property ID="0xDD69A116" name="Unknown 268" type="UNKNOWN" />
+        <property ID="0xBF42C3EC" name="Unknown 269" type="UNKNOWN" />
+        <struct ID="0x42ECA523" name="Unknown 270" />
+            <count>29</count>
+            <struct ID="0xAC8BB2A7" name="Power Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 271" type="long" />
+                <property ID="0x93677DA2" name="Unknown 272" type="bool" />
+            </struct>
+            <struct ID="0xB19B6D6C" name="Dark Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 273" type="long" />
+                <property ID="0x93677DA2" name="Unknown 274" type="bool" />
+            </struct>
+            <struct ID="0x002444C6" name="Light Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 275" type="long" />
+                <property ID="0x93677DA2" name="Unknown 276" type="bool" />
+            </struct>
+            <struct ID="0xE6BACDE5" name="Annihilator Beam" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 277" type="long" />
+                <property ID="0x93677DA2" name="Unknown 278" type="bool" />
+            </struct>
+            <struct ID="0xD99C0400" name="Boost Ball?" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 279" type="long" />
+                <property ID="0x93677DA2" name="Unknown 280" type="bool" />
+            </struct>
+            <struct ID="0xC70D8B8B" name="Unknown 281" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 282" type="long" />
+                <property ID="0x93677DA2" name="Unknown 283" type="bool" />
+            </struct>
+            <struct ID="0x866F91BF" name="Screw Attack" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 284" type="long" />
+                <property ID="0x93677DA2" name="Unknown 285" type="bool" />
+            </struct>
+            <struct ID="0x68AE13A0" name="Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 286" type="long" />
+                <property ID="0x93677DA2" name="Unknown 287" type="bool" />
+            </struct>
+            <struct ID="0xF0B2F4CF" name="Power Bomb" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 288" type="long" />
+                <property ID="0x93677DA2" name="Unknown 289" type="bool" />
+            </struct>
+            <struct ID="0x00EFE8CB" name="Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 290" type="long" />
+                <property ID="0x93677DA2" name="Unknown 291" type="bool" />
+            </struct>
+            <struct ID="0xBB70093F" name="Unknown 292" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 293" type="long" />
+                <property ID="0x93677DA2" name="Unknown 294" type="bool" />
+            </struct>
+            <struct ID="0xBFAC229F" name="Unknown 295" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 296" type="long" />
+                <property ID="0x93677DA2" name="Unknown 297" type="bool" />
+            </struct>
+            <struct ID="0x50DDE891" name="Unknown 298" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 299" type="long" />
+                <property ID="0x93677DA2" name="Unknown 300" type="bool" />
+            </struct>
+            <struct ID="0x97B5C68B" name="Unknown 301" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 302" type="long" />
+                <property ID="0x93677DA2" name="Unknown 303" type="bool" />
+            </struct>
+            <struct ID="0xF4CE8ACF" name="Unknown 304" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 305" type="long" />
+                <property ID="0x93677DA2" name="Unknown 306" type="bool" />
+            </struct>
+            <struct ID="0x1D52588D" name="Unknown 307" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 308" type="long" />
+                <property ID="0x93677DA2" name="Unknown 309" type="bool" />
+            </struct>
+            <struct ID="0x64DDD543" name="Unknown 310" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 311" type="long" />
+                <property ID="0x93677DA2" name="Unknown 312" type="bool" />
+            </struct>
+            <struct ID="0x3D625F10" name="Unknown 313" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 314" type="long" />
+                <property ID="0x93677DA2" name="Unknown 315" type="bool" />
+            </struct>
+            <struct ID="0x591B80E3" name="Unknown 316" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 317" type="long" />
+                <property ID="0x93677DA2" name="Unknown 318" type="bool" />
+            </struct>
+            <struct ID="0xA442B4A3" name="Power (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 319" type="long" />
+                <property ID="0x93677DA2" name="Unknown 320" type="bool" />
+            </struct>
+            <struct ID="0x2A0F0524" name="Dark (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 321" type="long" />
+                <property ID="0x93677DA2" name="Unknown 322" type="bool" />
+            </struct>
+            <struct ID="0x949E3C86" name="Light (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 323" type="long" />
+                <property ID="0x93677DA2" name="Unknown 324" type="bool" />
+            </struct>
+            <struct ID="0x5BA991B1" name="Annihilator (Charged)" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 325" type="long" />
+                <property ID="0x93677DA2" name="Unknown 326" type="bool" />
+            </struct>
+            <struct ID="0x6924B8C1" name="Super Missile" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 327" type="long" />
+                <property ID="0x93677DA2" name="Unknown 328" type="bool" />
+            </struct>
+            <struct ID="0x1AB78BEF" name="Darkburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 329" type="long" />
+                <property ID="0x93677DA2" name="Unknown 330" type="bool" />
+            </struct>
+            <struct ID="0xFCDCB7D4" name="Sunburst" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 331" type="long" />
+                <property ID="0x93677DA2" name="Unknown 332" type="bool" />
+            </struct>
+            <struct ID="0x311FB061" name="Sonic Boom" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 333" type="long" />
+                <property ID="0x93677DA2" name="Unknown 334" type="bool" />
+            </struct>
+            <struct ID="0x89D25DF4" name="Unknown 335" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 336" type="long" />
+                <property ID="0x93677DA2" name="Unknown 337" type="bool" />
+            </struct>
+            <struct ID="0x3356D37E" name="Unknown 338" />
+                <count>3</count>
+                <property ID="0x852D3871" name="Damage multiplier" type="float" />
+                <property ID="0x68ACBD86" name="Unknown 339" type="long" />
+                <property ID="0x93677DA2" name="Unknown 340" type="bool" />
+            </struct>
+        </struct>
+        <property ID="0xEE69B993" name="Unknown 341" type="long" />
+        <property ID="0x4B2DE673" name="Unknown 342" type="long" />
+        <property ID="0x2A7073CE" name="Unknown 343" type="float" />
+        <property ID="0xB0E85D53" name="Unknown 344" type="float" />
+        <struct ID="0x5616D5F1" name="Unknown 345" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <struct ID="0xED685533" name="Unknown 346" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0xD771EC43" name="PART" type="file" ext="PART" />
+        <property ID="0x2009A977" name="PART" type="file" ext="PART" />
+        <property ID="0x62AB33A2" name="PART" type="file" ext="PART" />
+        <struct ID="0xBAB98497" name="Unknown 347" />
+            <count>14</count>
+            <property ID="0x25D02BC5" name="Unknown 348" type="float" />
+            <property ID="0xABE99DE0" name="Unknown 349" type="float" />
+            <property ID="0xE2B23F03" name="Unknown 350" type="float" />
+            <property ID="0x2F845006" name="Unknown 351" type="float" />
+            <property ID="0x5D1626FB" name="Unknown 352" type="float" />
+            <property ID="0xBB76891A" name="Unknown 353" type="float" />
+            <property ID="0x285D67AD" name="Unknown 354" type="long" />
+            <property ID="0x6D5F242F" name="Unknown 355" type="long" />
+            <property ID="0xE3FF2ED6" name="Unknown 356" type="long" />
+            <property ID="0xA6FD6D54" name="Unknown 357" type="long" />
+            <property ID="0xECB314B6" name="Unknown 358" type="long" />
+            <property ID="0xA9B15734" name="Unknown 359" type="long" />
+            <property ID="0x1213A7D4" name="Unknown 360" type="float" />
+            <property ID="0xC19ED897" name="Unknown 361" type="float" />
+        </struct>
+        <struct ID="0xFE18A18F" name="Unknown 362" />
+            <count>14</count>
+            <property ID="0x25D02BC5" name="Unknown 363" type="float" />
+            <property ID="0xABE99DE0" name="Unknown 364" type="float" />
+            <property ID="0xE2B23F03" name="Unknown 365" type="float" />
+            <property ID="0x2F845006" name="Unknown 366" type="float" />
+            <property ID="0x5D1626FB" name="Unknown 367" type="float" />
+            <property ID="0xBB76891A" name="Unknown 368" type="float" />
+            <property ID="0x285D67AD" name="Unknown 369" type="long" />
+            <property ID="0x6D5F242F" name="Unknown 370" type="long" />
+            <property ID="0xE3FF2ED6" name="Unknown 371" type="long" />
+            <property ID="0xA6FD6D54" name="Unknown 372" type="long" />
+            <property ID="0xECB314B6" name="Unknown 373" type="long" />
+            <property ID="0xA9B15734" name="Unknown 374" type="long" />
+            <property ID="0x1213A7D4" name="Unknown 375" type="float" />
+            <property ID="0xC19ED897" name="Unknown 376" type="float" />
+        </struct>
+        <struct ID="0xC2784287" name="Unknown 377" />
+            <count>14</count>
+            <property ID="0x25D02BC5" name="Unknown 378" type="float" />
+            <property ID="0xABE99DE0" name="Unknown 379" type="float" />
+            <property ID="0xE2B23F03" name="Unknown 380" type="float" />
+            <property ID="0x2F845006" name="Unknown 381" type="float" />
+            <property ID="0x5D1626FB" name="Unknown 382" type="float" />
+            <property ID="0xBB76891A" name="Unknown 383" type="float" />
+            <property ID="0x285D67AD" name="Unknown 384" type="long" />
+            <property ID="0x6D5F242F" name="Unknown 385" type="long" />
+            <property ID="0xE3FF2ED6" name="Unknown 386" type="long" />
+            <property ID="0xA6FD6D54" name="Unknown 387" type="long" />
+            <property ID="0xECB314B6" name="Unknown 388" type="long" />
+            <property ID="0xA9B15734" name="Unknown 389" type="long" />
+            <property ID="0x1213A7D4" name="Unknown 390" type="float" />
+            <property ID="0xC19ED897" name="Unknown 391" type="float" />
+        </struct>
+    </struct>
+</struct>
+</IngBoostBallGuardian>

@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<PRTT>
+<struct ID="0xFFFFFFFF" name="PRTT" />
+    <count>11</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0xE25FB08C" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <property ID="0xE56BA365" name="Unknown 1" type="vector3f" />
+    <property ID="0x80C66C37" name="Unknown 2" type="long" />
+    <property ID="0xD6088BC5" name="Unknown 3" type="long" />
+    <property ID="0xE08E2172" name="AGSC" type="file" ext="AGSC" />
+    <property ID="0xB3E6C4E3" name="AGSC" type="file" ext="AGSC" />
+    <property ID="0x508520E1" name="Unknown 4" type="long" />
+    <property ID="0x34C7C1CC" name="Unknown 5" type="long" />
+    <property ID="0xB253B362" name="Unknown 6" type="long" />
+    <property ID="0x4406DC02" name="Unknown 7" type="long" />
+</struct>
+</PRTT>

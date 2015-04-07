@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<CameraHintStruct>
+	<count>22</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Unknown 3" type="bool" />
+	<property name="Unknown 4" type="bool" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="bool" />
+	<property name="Unknown 7" type="bool" />
+	<property name="Unknown 8" type="bool" />
+	<property name="Unknown 9" type="bool" />
+	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 11" type="bool" />
+	<property name="Unknown 12" type="bool" />
+	<property name="Unknown 13" type="bool" />
+	<property name="Unknown 14" type="bool" />
+	<property name="Unknown 15" type="bool" />
+	<property name="Unknown 16" type="bool" />
+	<property name="Unknown 17" type="bool" />
+	<property name="Unknown 18" type="bool" />
+	<property name="Unknown 19" type="bool" />
+	<property name="Unknown 20" type="bool" />
+	<property name="Unknown 21" type="bool" />
+	<property name="Unknown 22" type="bool" />
+</CameraHintStruct>

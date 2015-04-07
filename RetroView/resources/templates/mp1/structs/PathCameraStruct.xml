@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<PathCameraStruct>
+	<count>6</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Unknown 3" type="bool" />
+	<property name="Unknown 4" type="bool" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="bool" />
+</PathCameraStruct>

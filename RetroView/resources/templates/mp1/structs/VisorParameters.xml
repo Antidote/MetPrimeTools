@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<VisorParameters>
+	<count>3</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Unknown 3" type="long" />
+</VisorParameters>

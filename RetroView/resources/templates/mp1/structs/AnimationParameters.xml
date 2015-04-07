@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<AnimationParameters>
+	<property name="AnimSet" type="file" ext="ANCS" />
+	<property name="Node" type="long" />
+	<property name="ANCS int 2" type="long" />
+</AnimationParameters>

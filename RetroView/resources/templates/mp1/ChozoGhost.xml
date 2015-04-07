@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<ChozoGhost>
+	<count>31</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="WPSC 1" type="file" ext="WPSC" />
+	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
+	<property name="WPSC 2" type="file" ext="WPSC" />
+	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
+	<struct name="BehaveChance 1" template="mp1/structs/BehaveChance.xml" />
+	<struct name="BehaveChance 2" template="mp1/structs/BehaveChance.xml" />
+	<struct name="BehaveChance 3" template="mp1/structs/BehaveChance.xml" />
+	<property name="Always FFFFFFFF" type="long" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="long" />
+	<property name="Unknown 7" type="long" />
+	<property name="Unknown 8" type="long" />
+	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="long" />
+	<property name="Unknown 11" type="float" />
+	<property name="Particle" type="file" ext="PART" />
+	<property name="Unknown 12" type="long" />
+	<property name="Unknown 13" type="float" />
+	<property name="Unknown 14" type="float" />
+	<property name="Unknown 15" type="long" />
+	<property name="Unknown 16" type="long" />
+
+	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+</ChozoGhost>

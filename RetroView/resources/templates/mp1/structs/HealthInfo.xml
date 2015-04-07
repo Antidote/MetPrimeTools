@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<HealthInfo>
+	<count>2</count>
+	<property name="Health" type="float" />
+	<property name="Knockback Resistance" type="float" />
+</HealthInfo>

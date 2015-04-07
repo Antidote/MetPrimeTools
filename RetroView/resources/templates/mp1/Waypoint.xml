@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<Waypoint>
+	<count>13</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="long" />
+	<property name="Unknown 5" type="long" />
+	<property name="Unknown 6" type="long" />
+	<property name="Unknown 7" type="long" />
+	<property name="Unknown 8" type="long" />
+	<property name="Unknown 9" type="long" />
+	<property name="Unknown 10" type="long" />
+	
+	<attrib type="model" source="file" target="Waypoint.cmdl" />
+</Waypoint>

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<SpawnPoint>
+	<count>35</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Power" type="long" />
+	<property name="Ice" type="long" />
+	<property name="Wave" type="long" />
+	<property name="Plasma" type="long" />
+	<property name="Missiles" type="long" />
+	<property name="Scan Visor" type="long" />
+	<property name="Bombs" type="long" />
+	<property name="Power Bombs" type="long" />
+	<property name="Flamethrower" type="long" />
+	<property name="Thermal Visor" type="long" />
+	<property name="Charge" type="long" />
+	<property name="Super Missile" type="long" />
+	<property name="Grapple" type="long" />
+	<property name="X-Ray" type="long" />
+	<property name="Ice Spreader" type="long" />
+	<property name="Space Jump" type="long" />
+	<property name="Morph Ball" type="long" />
+	<property name="Combat Visor" type="long" />
+	<property name="Boost Ball" type="long" />
+	<property name="Spider Ball" type="long" />
+	<property name="Power Suit?" type="long" />
+	<property name="Gravity Suit" type="long" />
+	<property name="Varia Suit" type="long" />
+	<property name="Phazon Suit" type="long" />
+	<property name="Energy Tanks" type="long" />
+	<property name="Unknown Item 1" type="long" />
+	<property name="Health Refill" type="long" />
+	<property name="Unknown Item 2" type="long" />
+	<property name="Wavebuster" type="long" />
+	<property name="Default Spawn" type="bool" />
+	<property name="Active" type="bool" />
+	<property name="Morphed" type="bool" />
+</SpawnPoint>

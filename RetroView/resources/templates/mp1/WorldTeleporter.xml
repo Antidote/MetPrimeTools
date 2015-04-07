@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<WorldTeleporter>
+	<count>21</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="bool" />
+	<property name="MLVL" type="file" ext="MLVL" />
+	<property name="MREA" type="file" ext="MREA" />
+	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
+	<property name="Unknown 2" type="vector3f" />
+	<property name="Model 1" type="file" ext="CMDL" />
+	<property name="Unknown 3" type="vector3f" />
+	<property name="Model 2" type="file" ext="CMDL" />
+	<property name="Unknown 4" type="vector3f" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="long" />
+	<property name="Unknown 7" type="long" />
+	<property name="Unknown 8" type="long" />
+	<property name="Unknown 9" type="bool" />
+	<property name="FONT" type="file" ext="FONT" />
+	<property name="STRG" type="file" ext="STRG" />
+	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 11" type="float" />
+	<property name="Unknown 12" type="float" />
+	<property name="Unknown 13" type="float" />
+
+	<attrib type="animset" target="AnimationParameters" />
+	<attrib type="model" target="Model 1" />
+	<attrib type="model" target="Model 2" />
+</WorldTeleporter>

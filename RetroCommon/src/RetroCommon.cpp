@@ -9,7 +9,7 @@ struct CMPDBlock
     atUint32 uncompressedLen;
 };
 
-void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLength, atUint32 uncompressedLength)
+void decompressData(aIO::IStreamWriter& outbuf,  const atUint8* srcData, atUint32 srcLength, atInt32 uncompressedLength)
 {
     atUint16 compressionMethod = *(atUint16*)(srcData);
     Athena::utility::BigUint16(compressionMethod);
@@ -25,26 +25,35 @@ void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLe
         bool result = true;
         atUint8* newData = new atUint8[uncompressedLength];
         atInt32 remainingSize = uncompressedLength;
-        while (remainingSize)
+        do
         {
+            if (remainingSize <= 0)
+                break;
+
             atInt16 segmentSize = *(atInt16*)(srcData);
-            if (!segmentSize)
-            {
-                result = false;
-                break;
-            }
-
             srcData += 2;
-            Athena::utility::BigInt16(segmentSize);
-            atInt32 lzoStatus = Athena::io::Compression::decompressLZO((atUint8*)srcData, segmentSize, &newData[uncompressedLength - remainingSize], remainingSize);
 
-            if ((lzoStatus & 8) != 0)
+            Athena::utility::BigInt16(segmentSize);
+
+            if (segmentSize < 0)
             {
-                result = false;
-                break;
+                segmentSize = -segmentSize;
+                memcpy(&newData[uncompressedLength - remainingSize], srcData, segmentSize);
             }
-            srcData += segmentSize;
+            else
+            {
+                atInt32 lzoStatus = Athena::io::Compression::decompressLZO((const atUint8*)srcData, segmentSize, &newData[uncompressedLength - remainingSize], remainingSize);
+
+                if ((lzoStatus & 8) != 0)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            srcData  += segmentSize;
         }
+        while (remainingSize > 0);
 
         if (result)
             outbuf.writeUBytes(newData, uncompressedLength);
@@ -53,7 +62,7 @@ void decompressData(aIO::IStreamWriter& outbuf, atUint8* srcData, atUint32 srcLe
     }
 }
 
-void decompressFile(aIO::IStreamWriter& outbuf, atUint8* data, atUint32 srcLength)
+void decompressFile(aIO::IStreamWriter& outbuf, const atUint8* data, atUint32 srcLength)
 {
     atUint32 magic = *(atUint32*)(data);
     Athena::utility::BigUint32(magic);
@@ -75,10 +84,10 @@ void decompressFile(aIO::IStreamWriter& outbuf, atUint8* data, atUint32 srcLengt
             blocks[i].compressedLen &= 0x00FFFFFF;
 
             if (blocks[i].compressedLen == blocks[i].uncompressedLen)
-                outbuf.writeUBytes(data + currentOffset, blocks[i].uncompressedLen);
+                outbuf.writeUBytes((atUint8*)(data + currentOffset), blocks[i].uncompressedLen);
             else
             {
-                decompressData(outbuf, data + currentOffset, blocks[i].compressedLen, blocks[i].uncompressedLen);
+                decompressData(outbuf, (const atUint8*)(data + currentOffset), blocks[i].compressedLen, blocks[i].uncompressedLen);
             }
 
             currentOffset += blocks[i].compressedLen;
@@ -88,7 +97,11 @@ void decompressFile(aIO::IStreamWriter& outbuf, atUint8* data, atUint32 srcLengt
     {
         atUint32 uncompressedLength = *(atUint32*)(data);
         Athena::utility::BigUint32(uncompressedLength);
-        decompressData(outbuf, data + 4, srcLength - 4, uncompressedLength);
+        atUint8* tmp = new atUint8[srcLength];
+        memcpy(tmp, data, srcLength);
+        decompressData(outbuf, (const atUint8*)tmp, srcLength - 4, uncompressedLength);
+        delete[] tmp;
     }
+
     delete[] data;
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<TweakGame>
+<struct ID="0xFFFFFFFF" name="TweakGame" />
+    <count>24</count>
+    <property ID="0x7FDA1466" name="Tweak Name" type="string" />
+    <property ID="0x2BD13AB3" name="World PAK prefix" type="string" />
+    <property ID="0xF8BE005A" name="Unknown 1" type="string" />
+    <property ID="0xFC93CEB8" name="Field of View (SP)" type="float" />
+    <property ID="0x9FB2FAA6" name="Field of View (MP)" type="float" />
+    <property ID="0xA9096914" name="Unknown 2" type="bool" />
+    <property ID="0x7262D27B" name="Unknown 3" type="bool" />
+    <property ID="0xE943BA12" name="Unknown 4" type="bool" />
+    <property ID="0xA3DCF42A" name="Unknown 5" type="float" />
+    <property ID="0xB35C72BE" name="Unknown 6" type="float" />
+    <property ID="0x4A02103C" name="Unknown 7" type="float" />
+    <property ID="0xE1FCA71B" name="Unknown 8" type="float" />
+    <property ID="0xFBCE966A" name="Unknown 9" type="float" />
+    <property ID="0x09C6CA10" name="Unknown 10" type="float" />
+    <property ID="0x4DFCD432" name="Difficulty 2 damage" type="float" />
+    <property ID="0xAE1831D9" name="Difficulty 2 weapons" type="float" />
+    <property ID="0x5AB5812C" name="Unknown 11" type="float" />
+    <property ID="0x53401390" name="Unknown 12" type="float" />
+    <property ID="0xD09F373B" name="Total Item Count" type="long" />
+    <struct ID="0x1D627808" name="Deathmatch Kill Limit" />
+        <count>5</count>
+        <property ID="0xA2023BA8" name="Option 1" type="long" />
+        <property ID="0x1ABE5CCD" name="Option 2" type="long" />
+        <property ID="0x080BF323" name="Option 3" type="long" />
+        <property ID="0xB0B79446" name="Option 4" type="long" />
+        <property ID="0x2D60ACFF" name="Option 5" type="long" />
+    </struct>
+    <struct ID="0xB2E8828D" name="Deathmatch Time Limit" />
+        <count>5</count>
+        <property ID="0x779E8FF4" name="Option 1" type="float" />
+        <property ID="0xBCC25C51" name="Option 2" type="float" />
+        <property ID="0x3A562EFF" name="Option 3" type="float" />
+        <property ID="0xF10AFD5A" name="Option 4" type="float" />
+        <property ID="0xEC0FCDE2" name="Option 5" type="float" />
+    </struct>
+    <struct ID="0x06AF87BD" name="Bounty Mode Coin Limit" />
+        <count>5</count>
+        <property ID="0x6B4CAE26" name="Option 1" type="long" />
+        <property ID="0xD3F0C943" name="Option 2" type="long" />
+        <property ID="0xC14566AD" name="Option 3" type="long" />
+        <property ID="0x79F901C8" name="Option 4" type="long" />
+        <property ID="0xE42E3971" name="Option 5" type="long" />
+    </struct>
+    <struct ID="0x1533EA4E" name="Bounty Mode Time Limit" />
+        <count>5</count>
+        <property ID="0x779E8FF4" name="Option 1" type="float" />
+        <property ID="0xBCC25C51" name="Option 2" type="float" />
+        <property ID="0x3A562EFF" name="Option 3" type="float" />
+        <property ID="0xF10AFD5A" name="Option 4" type="float" />
+        <property ID="0xEC0FCDE2" name="Option 5" type="float" />
+    </struct>
+    <property ID="0x40818220" name="Unknown 13" type="varied_length_struct" />
+</struct>
+</TweakGame>

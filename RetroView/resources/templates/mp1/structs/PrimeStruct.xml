@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<PrimeStruct>
+	<count>14</count>
+	<property name="Unknown 1" type="long" />
+	<property name="Unknown 2" type="long" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="long" />
+	<property name="Unknown 5" type="long" />
+	<property name="Unknown 6" type="long" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="long" />
+	<property name="Unknown 10" type="long" />
+	<property name="Unknown 11" type="long" />
+	<property name="Unknown 12" type="long" />
+	<property name="Unknown 13" type="long" />
+	<property name="Unknown 14" type="long" />
+</PrimeStruct>

@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<Spinner>
+<struct ID="0xFFFFFFFF" name="Spinner" />
+    <count>12</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xDE4F6A76" name="Unknown 1" type="float" />
+    <property ID="0x54E15A3C" name="Unknown 2" type="float" />
+    <property ID="0x449DD059" name="Unknown 3" type="long" />
+    <property ID="0xFC849759" name="Unknown 4" type="long" />
+    <property ID="0x50501E17" name="Unknown 5" type="bool" />
+    <property ID="0x3983CBA7" name="Unknown 6" type="bool" />
+    <property ID="0xF1C8A0AE" name="Unknown 7" type="bool" />
+    <property ID="0xE8F0A1CE" name="Unknown 8" type="bool" />
+    <property ID="0x8B66ECA2" name="Unknown 9" type="long" />
+    <property ID="0x52EDD16B" name="Unknown 10" type="long" />
+    <property ID="0xE88E7D41" name="Unknown 11" type="UNKNOWN" />
+</struct>
+</Spinner>

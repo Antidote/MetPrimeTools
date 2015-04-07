@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<MemoryRelay>
+	<count>3</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Active" type="bool" />
+</MemoryRelay>

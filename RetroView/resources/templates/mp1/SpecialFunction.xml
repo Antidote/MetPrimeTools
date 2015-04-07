@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<SpecialFunction>
+	<count>15</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Type" type="long" />
+	<property name="Unknown 1" type="string" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<struct name="LayerSwitch" template="mp1/structs/LayerSwitch.xml" />
+	<property name="Item ID" type="long" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="float" />
+	<property name="Used by SpinnerController 1" type="long" />
+	<property name="Used by SpinnerController 2" type="long" />
+	<property name="Used by SpinnerController 3" type="long" />
+</SpecialFunction>

@@ -1,0 +1,243 @@
+<?xml version="1.0" ?>
+<SpawnPoint>
+<struct ID="0xFFFFFFFF" name="SpawnPoint" />
+    <count>5</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xC0E4521B" name="Unknown 1" type="bool" />
+    <property ID="0xB9C40F92" name="Morphed" type="bool" />
+    <struct ID="0x4C1D4CC9" name="Unknown 2" />
+        <count>109</count>
+        <property ID="0x9ACA45BC" name="Power Beam" type="long" />
+        <property ID="0x92BB94B7" name="Dark Beam" type="long" />
+        <property ID="0x6BE340BA" name="Light Beam" type="long" />
+        <property ID="0xC73B2C90" name="Annihilator Beam" type="long" />
+        <property ID="0xEFD4DABE" name="Super Missile" type="long" />
+        <property ID="0x9B06BD3C" name="Darkburst" type="long" />
+        <property ID="0x6D7172BF" name="Sunburst" type="long" />
+        <property ID="0x16D89ACC" name="Sonic Boom" type="long" />
+        <property ID="0xEA86A2B9" name="Charge Combo" type="long" />
+        <property ID="0x26A5E3C1" name="Combat Visor" type="long" />
+        <property ID="0x9DE8731D" name="Scan Visor" type="long" />
+        <property ID="0x3B0AB10B" name="Dark Visor" type="long" />
+        <property ID="0x95A30488" name="Echo Visor" type="long" />
+        <property ID="0x0AB603F7" name="Varia Suit" type="long" />
+        <property ID="0x4DA55282" name="Dark Suit" type="long" />
+        <property ID="0xB4FD868F" name="Light Suit" type="long" />
+        <property ID="0x3EC5A9F5" name="Morph Ball" type="long" />
+        <property ID="0x8C98247D" name="Boost Ball" type="long" />
+        <property ID="0xBD8B547C" name="Spider Ball" type="long" />
+        <property ID="0x53387689" name="Morph Ball Bomb" type="long" />
+        <property ID="0x57EB9E8B" name="Not in inventory" type="long" />
+        <property ID="0xAEB34A86" name="Not in inventory" type="long" />
+        <property ID="0xFB33F2A1" name="Not in inventory" type="long" />
+        <property ID="0x4B15EB9A" name="Charge Beam" type="long" />
+        <property ID="0x44FBB19C" name="Grapple Beam" type="long" />
+        <property ID="0xF55BE12C" name="Space Jump Boots" type="long" />
+        <property ID="0xBC25CAED" name="Gravity Boost" type="long" />
+        <property ID="0x0A6B376F" name="Seeker Launcher" type="long" />
+        <property ID="0xD8A9BBCB" name="Screw Attack" type="long" />
+        <property ID="0x7D1C9685" name="Not in inventory" type="long" />
+        <property ID="0x8F6CDCF9" name="Sky Temple Key 1" type="long" />
+        <property ID="0x9DD97317" name="Sky Temple Key 2" type="long" />
+        <property ID="0x25651472" name="Sky Temple Key 3" type="long" />
+        <property ID="0xB8B22CCB" name="Sky Temple Key 4" type="long" />
+        <property ID="0x000E4BAE" name="Sky Temple Key 5" type="long" />
+        <property ID="0x12BBE440" name="Sky Temple Key 6" type="long" />
+        <property ID="0xAA078325" name="Sky Temple Key 7" type="long" />
+        <property ID="0xF2649373" name="Sky Temple Key 8" type="long" />
+        <property ID="0x4AD8F416" name="Sky Temple Key 9" type="long" />
+        <property ID="0xC271CFBC" name="Dark Agon Key 1" type="long" />
+        <property ID="0xD0C46052" name="Dark Agon Key 2" type="long" />
+        <property ID="0x68780737" name="Dark Agon Key 3" type="long" />
+        <property ID="0x6EFFCF82" name="Dark Torvus Key 1" type="long" />
+        <property ID="0x7C4A606C" name="Dark Torvus Key 2" type="long" />
+        <property ID="0xC4F60709" name="Dark Torvus Key 3" type="long" />
+        <property ID="0xC20D622B" name="Ing Hive Key 1" type="long" />
+        <property ID="0xD0B8CDC5" name="Ing Hive Key 2" type="long" />
+        <property ID="0x6804AAA0" name="Ing Hive Key 3" type="long" />
+        <property ID="0x01C397F0" name="Not in inventory" type="long" />
+        <property ID="0xFC6F860C" name="Energy Tank" type="long" />
+        <property ID="0x161898DC" name="Not in inventory" type="long" />
+        <property ID="0xA6C29B8D" name="Power Bomb" type="long" />
+        <property ID="0xEC7FB0EF" name="Missile" type="long" />
+        <property ID="0xFCECF744" name="Dark Ammo" type="long" />
+        <property ID="0x32052F91" name="Light Ammo" type="long" />
+        <property ID="0x6E4038AB" name="Unknown 3" type="long" />
+        <property ID="0x14387AAB" name="Unknown 4" type="long" />
+        <property ID="0x068DD545" name="Unknown 5" type="long" />
+        <property ID="0xBE31B220" name="Unknown 6" type="long" />
+        <property ID="0x23E68A99" name="Unknown 7" type="long" />
+        <property ID="0x8ECB6665" name="Unknown 8" type="long" />
+        <property ID="0x92C402AB" name="Unknown 9" type="long" />
+        <property ID="0x7FE26363" name="Unknown 10" type="long" />
+        <property ID="0xD7F8586A" name="Unknown 11" type="long" />
+        <property ID="0x27D254AF" name="Unknown 12" type="long" />
+        <property ID="0x19926420" name="Unknown 13" type="long" />
+        <property ID="0xCE284C09" name="Unknown 14" type="long" />
+        <property ID="0xDEC999C3" name="Unknown 15" type="long" />
+        <property ID="0x66AE338E" name="Unknown 16" type="long" />
+        <property ID="0x210E495E" name="Unknown 17" type="long" />
+        <property ID="0x1C6E60EE" name="Unknown 18" type="long" />
+        <property ID="0xAE4EBCFE" name="Unknown 19" type="long" />
+        <property ID="0x5351DBA5" name="Unknown 20" type="long" />
+        <property ID="0x02DB9A0A" name="Unknown 21" type="long" />
+        <property ID="0x7B980651" name="Unknown 22" type="long" />
+        <property ID="0xE9861C49" name="Unknown 23" type="long" />
+        <property ID="0xFB33B3A7" name="Unknown 24" type="long" />
+        <property ID="0x438FD4C2" name="Unknown 25" type="long" />
+        <property ID="0xDE58EC7B" name="Unknown 26" type="long" />
+        <property ID="0x66E48B1E" name="Unknown 27" type="long" />
+        <property ID="0x745124F0" name="Unknown 28" type="long" />
+        <property ID="0xCCED4395" name="Unknown 29" type="long" />
+        <property ID="0x948E53C3" name="Unknown 30" type="long" />
+        <property ID="0xD438F8E4" name="Unknown 31" type="long" />
+        <property ID="0x89E950C4" name="Unknown 32" type="long" />
+        <property ID="0x2F0B92D2" name="Unknown 33" type="long" />
+        <property ID="0x81A22751" name="Unknown 34" type="long" />
+        <property ID="0xDB8F0E87" name="Unknown 35" type="long" />
+        <property ID="0xAF6F361A" name="Unknown 36" type="long" />
+        <property ID="0xAE8DEE81" name="Unknown 37" type="long" />
+        <property ID="0xD1FFB49F" name="Unknown 38" type="long" />
+        <property ID="0xBC51DE4B" name="Unknown 39" type="long" />
+        <property ID="0x88414F93" name="Unknown 40" type="long" />
+        <property ID="0xFBE21590" name="Unknown 41" type="long" />
+        <property ID="0xD0B6A007" name="Unknown 42" type="long" />
+        <property ID="0xC45848FE" name="Unknown 43" type="long" />
+        <property ID="0x92B916D7" name="Unknown 44" type="long" />
+        <property ID="0xA6257CD8" name="Unknown 45" type="long" />
+        <property ID="0x6BF24C24" name="Unknown 46" type="long" />
+        <property ID="0x32F5E918" name="Unknown 47" type="long" />
+        <property ID="0x1CE95541" name="Unknown 48" type="long" />
+        <property ID="0x5DD9004D" name="Unknown 49" type="long" />
+        <property ID="0xF64F1DBD" name="Unknown 50" type="long" />
+        <property ID="0x76000D1E" name="Unknown 51" type="long" />
+        <property ID="0x85AB52BC" name="Unknown 52" type="long" />
+        <property ID="0x711C150F" name="Unknown 53" type="long" />
+        <property ID="0x63A9BAE1" name="Unknown 54" type="long" />
+        <property ID="0xDB15DD84" name="Unknown 55" type="long" />
+        <property ID="0x46C2E53D" name="Last item" type="long" />
+    </struct>
+    <struct ID="0x4081BF95" name="Unknown 56" />
+        <count>109</count>
+        <property ID="0x9ACA45BC" name="Power Beam" type="long" />
+        <property ID="0x92BB94B7" name="Dark Beam" type="long" />
+        <property ID="0x6BE340BA" name="Light Beam" type="long" />
+        <property ID="0xC73B2C90" name="Annihilator Beam" type="long" />
+        <property ID="0xEFD4DABE" name="Super Missile" type="long" />
+        <property ID="0x9B06BD3C" name="Darkburst" type="long" />
+        <property ID="0x6D7172BF" name="Sunburst" type="long" />
+        <property ID="0x16D89ACC" name="Sonic Boom" type="long" />
+        <property ID="0xEA86A2B9" name="Charge Combo" type="long" />
+        <property ID="0x26A5E3C1" name="Combat Visor" type="long" />
+        <property ID="0x9DE8731D" name="Scan Visor" type="long" />
+        <property ID="0x3B0AB10B" name="Dark Visor" type="long" />
+        <property ID="0x95A30488" name="Echo Visor" type="long" />
+        <property ID="0x0AB603F7" name="Varia Suit" type="long" />
+        <property ID="0x4DA55282" name="Dark Suit" type="long" />
+        <property ID="0xB4FD868F" name="Light Suit" type="long" />
+        <property ID="0x3EC5A9F5" name="Morph Ball" type="long" />
+        <property ID="0x8C98247D" name="Boost Ball" type="long" />
+        <property ID="0xBD8B547C" name="Spider Ball" type="long" />
+        <property ID="0x53387689" name="Morph Ball Bomb" type="long" />
+        <property ID="0x57EB9E8B" name="Not in inventory" type="long" />
+        <property ID="0xAEB34A86" name="Not in inventory" type="long" />
+        <property ID="0xFB33F2A1" name="Not in inventory" type="long" />
+        <property ID="0x4B15EB9A" name="Charge Beam" type="long" />
+        <property ID="0x44FBB19C" name="Grapple Beam" type="long" />
+        <property ID="0xF55BE12C" name="Space Jump Boots" type="long" />
+        <property ID="0xBC25CAED" name="Gravity Boost" type="long" />
+        <property ID="0x0A6B376F" name="Seeker Launcher" type="long" />
+        <property ID="0xD8A9BBCB" name="Screw Attack" type="long" />
+        <property ID="0x7D1C9685" name="Not in inventory" type="long" />
+        <property ID="0x8F6CDCF9" name="Sky Temple Key 1" type="long" />
+        <property ID="0x9DD97317" name="Sky Temple Key 2" type="long" />
+        <property ID="0x25651472" name="Sky Temple Key 3" type="long" />
+        <property ID="0xB8B22CCB" name="Sky Temple Key 4" type="long" />
+        <property ID="0x000E4BAE" name="Sky Temple Key 5" type="long" />
+        <property ID="0x12BBE440" name="Sky Temple Key 6" type="long" />
+        <property ID="0xAA078325" name="Sky Temple Key 7" type="long" />
+        <property ID="0xF2649373" name="Sky Temple Key 8" type="long" />
+        <property ID="0x4AD8F416" name="Sky Temple Key 9" type="long" />
+        <property ID="0xC271CFBC" name="Dark Agon Key 1" type="long" />
+        <property ID="0xD0C46052" name="Dark Agon Key 2" type="long" />
+        <property ID="0x68780737" name="Dark Agon Key 3" type="long" />
+        <property ID="0x6EFFCF82" name="Dark Torvus Key 1" type="long" />
+        <property ID="0x7C4A606C" name="Dark Torvus Key 2" type="long" />
+        <property ID="0xC4F60709" name="Dark Torvus Key 3" type="long" />
+        <property ID="0xC20D622B" name="Ing Hive Key 1" type="long" />
+        <property ID="0xD0B8CDC5" name="Ing Hive Key 2" type="long" />
+        <property ID="0x6804AAA0" name="Ing Hive Key 3" type="long" />
+        <property ID="0x01C397F0" name="Not in inventory" type="long" />
+        <property ID="0xFC6F860C" name="Energy Tank" type="long" />
+        <property ID="0x161898DC" name="Not in inventory" type="long" />
+        <property ID="0xA6C29B8D" name="Power Bomb" type="long" />
+        <property ID="0xEC7FB0EF" name="Missile" type="long" />
+        <property ID="0xFCECF744" name="Dark Ammo" type="long" />
+        <property ID="0x32052F91" name="Light Ammo" type="long" />
+        <property ID="0x6E4038AB" name="Unknown 57" type="long" />
+        <property ID="0x14387AAB" name="Unknown 58" type="long" />
+        <property ID="0x068DD545" name="Unknown 59" type="long" />
+        <property ID="0xBE31B220" name="Unknown 60" type="long" />
+        <property ID="0x23E68A99" name="Unknown 61" type="long" />
+        <property ID="0x8ECB6665" name="Unknown 62" type="long" />
+        <property ID="0x92C402AB" name="Unknown 63" type="long" />
+        <property ID="0x7FE26363" name="Unknown 64" type="long" />
+        <property ID="0xD7F8586A" name="Unknown 65" type="long" />
+        <property ID="0x27D254AF" name="Unknown 66" type="long" />
+        <property ID="0x19926420" name="Unknown 67" type="long" />
+        <property ID="0xCE284C09" name="Unknown 68" type="long" />
+        <property ID="0xDEC999C3" name="Unknown 69" type="long" />
+        <property ID="0x66AE338E" name="Unknown 70" type="long" />
+        <property ID="0x210E495E" name="Unknown 71" type="long" />
+        <property ID="0x1C6E60EE" name="Unknown 72" type="long" />
+        <property ID="0xAE4EBCFE" name="Unknown 73" type="long" />
+        <property ID="0x5351DBA5" name="Unknown 74" type="long" />
+        <property ID="0x02DB9A0A" name="Unknown 75" type="long" />
+        <property ID="0x7B980651" name="Unknown 76" type="long" />
+        <property ID="0xE9861C49" name="Unknown 77" type="long" />
+        <property ID="0xFB33B3A7" name="Unknown 78" type="long" />
+        <property ID="0x438FD4C2" name="Unknown 79" type="long" />
+        <property ID="0xDE58EC7B" name="Unknown 80" type="long" />
+        <property ID="0x66E48B1E" name="Unknown 81" type="long" />
+        <property ID="0x745124F0" name="Unknown 82" type="long" />
+        <property ID="0xCCED4395" name="Unknown 83" type="long" />
+        <property ID="0x948E53C3" name="Unknown 84" type="long" />
+        <property ID="0xD438F8E4" name="Unknown 85" type="long" />
+        <property ID="0x89E950C4" name="Unknown 86" type="long" />
+        <property ID="0x2F0B92D2" name="Unknown 87" type="long" />
+        <property ID="0x81A22751" name="Unknown 88" type="long" />
+        <property ID="0xDB8F0E87" name="Unknown 89" type="long" />
+        <property ID="0xAF6F361A" name="Unknown 90" type="long" />
+        <property ID="0xAE8DEE81" name="Unknown 91" type="long" />
+        <property ID="0xD1FFB49F" name="Unknown 92" type="long" />
+        <property ID="0xBC51DE4B" name="Unknown 93" type="long" />
+        <property ID="0x88414F93" name="Unknown 94" type="long" />
+        <property ID="0xFBE21590" name="Unknown 95" type="long" />
+        <property ID="0xD0B6A007" name="Unknown 96" type="long" />
+        <property ID="0xC45848FE" name="Unknown 97" type="long" />
+        <property ID="0x92B916D7" name="Unknown 98" type="long" />
+        <property ID="0xA6257CD8" name="Unknown 99" type="long" />
+        <property ID="0x6BF24C24" name="Unknown 100" type="long" />
+        <property ID="0x32F5E918" name="Unknown 101" type="long" />
+        <property ID="0x1CE95541" name="Unknown 102" type="long" />
+        <property ID="0x5DD9004D" name="Unknown 103" type="long" />
+        <property ID="0xF64F1DBD" name="Unknown 104" type="long" />
+        <property ID="0x76000D1E" name="Unknown 105" type="long" />
+        <property ID="0x85AB52BC" name="Unknown 106" type="long" />
+        <property ID="0x711C150F" name="Unknown 107" type="long" />
+        <property ID="0x63A9BAE1" name="Unknown 108" type="long" />
+        <property ID="0xDB15DD84" name="Unknown 109" type="long" />
+        <property ID="0x46C2E53D" name="Last item" type="long" />
+    </struct>
+</struct>
+</SpawnPoint>

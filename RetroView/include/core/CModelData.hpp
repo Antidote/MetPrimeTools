@@ -23,16 +23,6 @@ enum
 };
 }
 
-struct SIndexBufferObject
-{
-    atUint32              bufferID;
-    glm::vec3             pos;
-    atUint32              primitiveType;
-    atUint32              materialId;
-    std::vector<atUint32> indexBuffer;
-    SBoundingBox          boundingBox;
-};
-
 class CModelData
 {
 public:
@@ -42,8 +32,6 @@ public:
     void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms);
 
     void drawBoundingBoxes();
-
-    void indexIBOs(CMaterialSet& materialSet);
 
     void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
     void drawTransparentBoxes();
@@ -60,8 +48,6 @@ protected:
     void indexVert(CMaterial& material, SVertexDescriptor& desc, CMesh& mesh, atUint32 iboId, atUint32 vertStartIndex);
     void loadIbos(CMaterialSet& ms);
 
-    void sortTransparent(std::unordered_map<atUint32, std::vector<SIndexBufferObject> >& trans);
-
     atUint32                 m_format;
     glm::mat3x4              m_transform;
     SBoundingBox             m_boundingBox;
@@ -73,8 +59,7 @@ protected:
     std::vector<CMesh>       m_meshes;
 
     // GL specific code
-    bool                           m_ibosIndexed;
-    CVertexBuffer                  m_vertexBuffer;
+    CVertexBuffer                              m_vertexBuffer;
     std::unordered_map<atUint32, CIndexBuffer> m_transparents;
     std::unordered_map<atUint32, CIndexBuffer> m_opaques;
 };

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<SpecialFunction>
+<struct ID="0xFFFFFFFF" name="SpecialFunction" />
+    <count>13</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x95F8D644" name="SpecialFunction Type" type="long" />
+    <property ID="0x9D7A576D" name="Unknown 1" type="string" />
+    <property ID="0x19028099" name="Unknown 2" type="float" />
+    <property ID="0x2C93AAF5" name="Unknown 3" type="float" />
+    <property ID="0xE7CF7950" name="Unknown 4" type="float" />
+    <property ID="0xFACA49E8" name="Unknown 5" type="float" />
+    <property ID="0xA734F8A5" name="Unknown 6" type="long" />
+    <property ID="0xB581574B" name="Unknown 7" type="long" />
+    <property ID="0x3FA164BC" name="Unknown 8" type="long" />
+    <property ID="0xA4EE16BF" name="Unknown 9" type="long" />
+    <property ID="0x227A6411" name="Unknown 10" type="long" />
+    <property ID="0xE926B7B4" name="Unknown 11" type="long" />
+</struct>
+</SpecialFunction>

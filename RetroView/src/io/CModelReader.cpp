@@ -44,7 +44,7 @@ CModelFile* CModelReader::read()
         Athena::io::MemoryWriter tmp;
         decompressFile(tmp, base::data(), base::length());
 
-        if (tmp.length() > 0)
+        if (tmp.length() > 0x10)
             base::setData(tmp.data(), tmp.length());
 
         magic = base::readUint32();
@@ -204,8 +204,6 @@ CModelFile* CModelReader::read()
                 }
             }
         }
-
-        m_result->indexIBOs(m_result->currentMaterialSet());
     }
     catch(...)
     {
@@ -336,15 +334,12 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
     CMesh mesh;
     for (atUint32 i = 0; i < 3; i++)
         mesh.m_pivot[i] = in.readFloat();
-    atUint16 dataSize = 0;
     if (m_result->m_version != CModelFile::DKCR)
     {
         mesh.m_materialID = in.readUint32();
         mesh.m_mantissa = in.readUint16();
-        dataSize = in.readUint16();
-
+        in.readUint16();
         in.seek(2 * sizeof(atUint32));
-
         atUint32 extraDataSize = in.readUint32();
 
         for (atUint32 i = 0; i < 3; i++)
@@ -355,7 +350,7 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
     else
     {
         mesh.m_mantissa = in.readUint16();
-        dataSize = in.readUint16();
+        in.readUint16();
         in.readUint32();
         in.readUint32();
         in.readUint16();

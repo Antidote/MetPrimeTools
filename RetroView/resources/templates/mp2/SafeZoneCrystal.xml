@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<SafeZoneCrystal>
+<struct ID="0xFFFFFFFF" name="SafeZoneCrystal" />
+    <count>29</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0xD29C031D" name="Unknown 1" />
+        <count>17</count>
+        <struct ID="0xB028DB0E" name="LightParameters" />
+            <count>15</count>
+            <property ID="0xCD639B46" name="Unknown 2" type="bool" />
+            <property ID="0x1D011A39" name="Unknown 3" type="float" />
+            <property ID="0xECDA4163" name="Unknown 4" type="long" />
+            <property ID="0x3E2CD38D" name="Unknown 5" type="float" />
+            <property ID="0x0328E31B" name="Unknown 6" type="float" />
+            <property ID="0xA33E5B0E" name="Unknown 7" type="color" />
+            <property ID="0xA71810E9" name="Unknown 8" type="bool" />
+            <property ID="0x6B5E7509" name="Unknown 9" type="long" />
+            <property ID="0x628E6AC3" name="Unknown 10" type="long" />
+            <property ID="0xD19DE775" name="Unknown 11" type="vector3f" />
+            <property ID="0xCAC1E778" name="Unknown 12" type="long" />
+            <property ID="0x67F4D3DE" name="Unknown 13" type="long" />
+            <property ID="0xFB7A7ABB" name="Unknown 14" type="bool" />
+            <property ID="0x61A940D6" name="Unknown 15" type="bool" />
+            <property ID="0x1F715FD3" name="Unknown 16" type="long" />
+        </struct>
+        <struct ID="0x375BFD7C" name="ScannableParameters" />
+            <count>1</count>
+            <property ID="0xB94E9BE7" name="SCAN" type="file" ext="SCAN" />
+        </struct>
+        <property ID="0xC0BA9E18" name="Dark Visor model" type="file" ext="CMDL" />
+        <property ID="0x9F027D91" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x6B1FBC3A" name="Echo Visor model?" type="file" ext="CMDL" />
+        <property ID="0xEB1D06BE" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x1499803C" name="Unknown 17" type="bool" />
+        <property ID="0x90AA341F" name="Unknown 18" type="float" />
+        <property ID="0x7C269EBC" name="Unknown 19" type="float" />
+        <struct ID="0x05AD250E" name="Unknown 20" />
+            <count>2</count>
+            <property ID="0xFE9DC266" name="Unknown 21" type="bool" />
+            <property ID="0xCA19E8C6" name="Unknown 22" type="long" />
+        </struct>
+        <property ID="0xCD4C81A1" name="Unknown 23" type="bool" />
+        <property ID="0x799263F1" name="Unknown 24" type="bool" />
+        <property ID="0xED3A6E87" name="Unknown 25" type="bool" />
+        <property ID="0xF07981E8" name="Unknown 26" type="bool" />
+        <property ID="0x6DF33845" name="Unknown 27" type="bool" />
+        <property ID="0xC712847C" name="Unknown 28" type="long" />
+        <property ID="0xBA2600D7" name="Unknown 29" type="long" />
+    </struct>
+    <property ID="0x9B8B3323" name="SCAN" type="file" ext="SCAN" />
+    <property ID="0xE36E20A7" name="SCAN" type="file" ext="SCAN" />
+    <property ID="0xAC794DA8" name="SCAN" type="file" ext="SCAN" />
+    <property ID="0xC21F264F" name="SCAN" type="file" ext="SCAN" />
+    <property ID="0x1115FB68" name="Unknown 30" type="long" />
+    <property ID="0xA0D9E87F" name="Unknown 31" type="bool" />
+    <property ID="0x42A046C2" name="PART" type="file" ext="PART" />
+    <property ID="0x5B91FF38" name="PART" type="file" ext="PART" />
+    <property ID="0x5B8275BC" name="PART" type="file" ext="PART" />
+    <property ID="0xADACEC90" name="PART" type="file" ext="PART" />
+    <property ID="0x0D2E4AD3" name="PART" type="file" ext="PART" />
+    <property ID="0x71EFFFC4" name="CMDL" type="file" ext="CMDL" />
+    <property ID="0xC3DD9B75" name="Unknown 32" type="UNKNOWN" />
+    <property ID="0xF1F3D90F" name="CMDL" type="file" ext="CMDL" />
+    <property ID="0x1E864B83" name="CMDL" type="file" ext="CMDL" />
+    <property ID="0xBD30F7A3" name="Unknown 33" type="float" />
+    <property ID="0xA7BDC4F8" name="Unknown 34" type="float" />
+    <property ID="0xF0A45C32" name="Unknown 35" type="float" />
+    <property ID="0xD8116003" name="Unknown 36" type="float" />
+    <property ID="0x415046ED" name="Unknown 37" type="float" />
+    <property ID="0xEC9C01B2" name="Unknown 38" type="float" />
+    <property ID="0x545540E5" name="Unknown 39" type="float" />
+    <property ID="0x5490E214" name="Unknown 40" type="UNKNOWN" />
+    <property ID="0x887E8A8B" name="Unknown 41" type="vector3f" />
+    <property ID="0xB7F5646D" name="Unknown 42" type="vector3f" />
+    <property ID="0x41B72B2C" name="Unknown 43" type="vector3f" />
+    <property ID="0xBBBEE60B" name="Unknown 44" type="varied_length_struct" />
+</struct>
+</SafeZoneCrystal>

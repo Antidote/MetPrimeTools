@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<TweakSlideshow>
+<struct ID="0xFFFFFFFF" name="TweakSlideshow" />
+    <count>18</count>
+    <property ID="0x7FDA1466" name="Tweak Name" type="string" />
+    <property ID="0x2BD13AB3" name="World PAK prefix" type="string" />
+    <property ID="0xFE31FBA0" name="Unknown 1" type="string" />
+    <property ID="0x1A96EC67" name="Unknown 2" type="color" />
+    <property ID="0x844AB6B0" name="Unknown 3" type="color" />
+    <property ID="0xD398DAC2" name="Unknown 4" type="float" />
+    <property ID="0x03757D08" name="Unknown 5" type="float" />
+    <property ID="0x59276E14" name="Unknown 6" type="float" />
+    <property ID="0x3CE7A013" name="Unknown 7" type="float" />
+    <property ID="0x278C0893" name="Unknown 8" type="float" />
+    <property ID="0xD75D29F8" name="Unknown 9" type="color" />
+    <property ID="0x27515C7B" name="Unknown 10" type="float" />
+    <property ID="0xAE47DC81" name="Unknown 11" type="float" />
+    <property ID="0x029D2082" name="Unknown 12" type="float" />
+    <property ID="0xB187CD9B" name="Unknown 13" type="float" />
+    <property ID="0x90AA341F" name="Unknown 14" type="float" />
+    <property ID="0x7C269EBC" name="Unknown 15" type="float" />
+    <property ID="0xC0544BC1" name="Unknown 16" type="string" />
+</struct>
+</TweakSlideshow>

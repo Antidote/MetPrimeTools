@@ -13,7 +13,7 @@ CWorldFile::~CWorldFile()
 
 }
 
-std::string CWorldFile::areaName(const CAssetID& assetId)
+std::string CWorldFile::areaName(const CAssetID& assetId, CPakFile* pak)
 {
     std::vector<SWorldArea>::iterator iter = std::find_if(m_areas.begin(), m_areas.end(),
                                                             [&assetId](const SWorldArea r)->bool{return r.mreaID == assetId; });
@@ -24,7 +24,11 @@ std::string CWorldFile::areaName(const CAssetID& assetId)
 
     if (area.nameID != CAssetID::InvalidAsset)
     {
-        CStringTable* table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResource(area.nameID, "strg"));
+        CStringTable* table;
+        if (pak != nullptr)
+            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResourceFromPak(pak, area.nameID, "strg"));
+        else
+            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResource(area.nameID, "strg"));
 
         if (table)
         {

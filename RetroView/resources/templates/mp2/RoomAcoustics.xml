@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<RoomAcoustics>
+<struct ID="0xFFFFFFFF" name="RoomAcoustics" />
+    <count>54</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xBD9EA266" name="Unknown 1" type="long" />
+    <property ID="0x86CF23F4" name="Unknown 2" type="long" />
+    <property ID="0xA00360CC" name="Unknown 3" type="bool" />
+    <property ID="0x3263C26E" name="Unknown 4" type="bool" />
+    <property ID="0xC5868061" name="Unknown 5" type="float" />
+    <property ID="0xC6F50032" name="Unknown 6" type="float" />
+    <property ID="0xCBA5555D" name="Unknown 7" type="float" />
+    <property ID="0x7319CF50" name="Unknown 8" type="float" />
+    <property ID="0x3DC3F16F" name="Unknown 9" type="float" />
+    <property ID="0xD5518B6C" name="Unknown 10" type="float" />
+    <property ID="0x26997CCB" name="Unknown 11" type="bool" />
+    <property ID="0x121BDFAD" name="Unknown 12" type="long" />
+    <property ID="0xE8796BCE" name="Unknown 13" type="long" />
+    <property ID="0x24BBD5E4" name="Unknown 14" type="long" />
+    <property ID="0xFF31631B" name="Unknown 15" type="bool" />
+    <property ID="0x4A5BBF90" name="Unknown 16" type="bool" />
+    <property ID="0x9662498A" name="Unknown 17" type="float" />
+    <property ID="0x91855D62" name="Unknown 18" type="float" />
+    <property ID="0xD34D2029" name="Unknown 19" type="float" />
+    <property ID="0xDC78E83D" name="Unknown 20" type="float" />
+    <property ID="0x820B509E" name="Unknown 21" type="float" />
+    <property ID="0xE9A36031" name="Unknown 22" type="bool" />
+    <property ID="0x62C49457" name="Unknown 23" type="long" />
+    <property ID="0xDA78F332" name="Unknown 24" type="long" />
+    <property ID="0xC8CD5CDC" name="Unknown 25" type="long" />
+    <property ID="0x7C14FF17" name="Unknown 26" type="long" />
+    <property ID="0xC4A89872" name="Unknown 27" type="long" />
+    <property ID="0xD61D379C" name="Unknown 28" type="long" />
+    <property ID="0x9F75987F" name="Unknown 29" type="long" />
+    <property ID="0x27C9FF1A" name="Unknown 30" type="long" />
+    <property ID="0x357C50F4" name="Unknown 31" type="long" />
+    <property ID="0xCF45711C" name="Unknown 32" type="UNKNOWN" />
+    <property ID="0x626D1E9B" name="Unknown 33" type="long" />
+    <property ID="0x7D8EE273" name="Unknown 34" type="bool" />
+    <property ID="0x83378E6A" name="Unknown 35" type="long" />
+    <property ID="0xF549D269" name="Unknown 36" type="long" />
+    <property ID="0x11FDAE16" name="Unknown 37" type="long" />
+    <property ID="0xA3C439C1" name="Unknown 38" type="long" />
+    <property ID="0x2DC70EFE" name="Unknown 39" type="long" />
+    <property ID="0xE2BD3706" name="Unknown 40" type="long" />
+    <property ID="0x5E29CEF8" name="Unknown 41" type="long" />
+    <property ID="0x35AE9F10" name="Unknown 42" type="long" />
+    <property ID="0x3E8D8694" name="Unknown 43" type="bool" />
+    <property ID="0xF51A1D6A" name="Unknown 44" type="long" />
+    <property ID="0xBB1A0F34" name="Unknown 45" type="long" />
+    <property ID="0xEB009039" name="Unknown 46" type="long" />
+    <property ID="0x58096E0B" name="Unknown 47" type="float" />
+    <property ID="0x3D8CAD84" name="Unknown 48" type="bool" />
+    <property ID="0x23C340F6" name="Unknown 49" type="long" />
+    <property ID="0x1E5A52B8" name="Unknown 50" type="long" />
+    <property ID="0x1D69BEC4" name="Unknown 51" type="long" />
+    <property ID="0x24538C4A" name="Unknown 52" type="long" />
+    <property ID="0xD5388116" name="Unknown 53" type="float" />
+</struct>
+</RoomAcoustics>

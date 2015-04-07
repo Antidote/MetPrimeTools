@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<VisorFlare>
+	<count>14</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Always 0 1" type="long" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Always 0 2" type="long" />
+	<struct name="FlareDef 1" template="mp1/structs/FlareDef.xml" />
+	<struct name="FlareDef 2" template="mp1/structs/FlareDef.xml" />
+	<struct name="FlareDef 3" template="mp1/structs/FlareDef.xml" />
+	<struct name="FlareDef 4" template="mp1/structs/FlareDef.xml" />
+	<struct name="FlareDef 5" template="mp1/structs/FlareDef.xml" />
+</VisorFlare>

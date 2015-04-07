@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<SnakeWeedSwarm>
+<struct ID="0xFFFFFFFF" name="SnakeWeedSwarm" />
+    <count>22</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0xE25FB08C" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <struct ID="0x7E397FED" name="ActorParameters" />
+        <count>17</count>
+        <struct ID="0xB028DB0E" name="LightParameters" />
+            <count>15</count>
+            <property ID="0xCD639B46" name="Unknown 1" type="bool" />
+            <property ID="0x1D011A39" name="Unknown 2" type="float" />
+            <property ID="0xECDA4163" name="Unknown 3" type="long" />
+            <property ID="0x3E2CD38D" name="Unknown 4" type="float" />
+            <property ID="0x0328E31B" name="Unknown 5" type="float" />
+            <property ID="0xA33E5B0E" name="Unknown 6" type="color" />
+            <property ID="0xA71810E9" name="Unknown 7" type="bool" />
+            <property ID="0x6B5E7509" name="Unknown 8" type="long" />
+            <property ID="0x628E6AC3" name="Unknown 9" type="long" />
+            <property ID="0xD19DE775" name="Unknown 10" type="vector3f" />
+            <property ID="0xCAC1E778" name="Unknown 11" type="long" />
+            <property ID="0x67F4D3DE" name="Unknown 12" type="long" />
+            <property ID="0xFB7A7ABB" name="Unknown 13" type="bool" />
+            <property ID="0x61A940D6" name="Unknown 14" type="bool" />
+            <property ID="0x1F715FD3" name="Unknown 15" type="long" />
+        </struct>
+        <struct ID="0x375BFD7C" name="ScannableParameters" />
+            <count>1</count>
+            <property ID="0xB94E9BE7" name="SCAN" type="file" ext="SCAN" />
+        </struct>
+        <property ID="0xC0BA9E18" name="Dark Visor model" type="file" ext="CMDL" />
+        <property ID="0x9F027D91" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x6B1FBC3A" name="Echo Visor model?" type="file" ext="CMDL" />
+        <property ID="0xEB1D06BE" name="CSKR" type="file" ext="CSKR" />
+        <property ID="0x1499803C" name="Unknown 16" type="bool" />
+        <property ID="0x90AA341F" name="Unknown 17" type="float" />
+        <property ID="0x7C269EBC" name="Unknown 18" type="float" />
+        <struct ID="0x05AD250E" name="Unknown 19" />
+            <count>2</count>
+            <property ID="0xFE9DC266" name="Unknown 20" type="bool" />
+            <property ID="0xCA19E8C6" name="Unknown 21" type="long" />
+        </struct>
+        <property ID="0xCD4C81A1" name="Unknown 22" type="bool" />
+        <property ID="0x799263F1" name="Unknown 23" type="bool" />
+        <property ID="0xED3A6E87" name="Unknown 24" type="bool" />
+        <property ID="0xF07981E8" name="Unknown 25" type="bool" />
+        <property ID="0x6DF33845" name="Unknown 26" type="bool" />
+        <property ID="0xC712847C" name="Unknown 27" type="long" />
+        <property ID="0xBA2600D7" name="Unknown 28" type="long" />
+    </struct>
+    <property ID="0x64E5FE9F" name="Unknown 29" type="float" />
+    <property ID="0x23CEF95F" name="Unknown 30" type="float" />
+    <property ID="0xBE02E456" name="Unknown 31" type="float" />
+    <property ID="0x21CDCF21" name="Unknown 32" type="float" />
+    <property ID="0x89664723" name="Unknown 33" type="float" />
+    <property ID="0x723737BC" name="Unknown 34" type="float" />
+    <property ID="0x57452DD9" name="Unknown 35" type="float" />
+    <property ID="0x5C20B0C7" name="Unknown 36" type="float" />
+    <property ID="0x6497C750" name="Unknown 37" type="float" />
+    <property ID="0x11F854E2" name="Unknown 38" type="float" />
+    <property ID="0xA755C1DF" name="Unknown 39" type="float" />
+    <property ID="0x558C6DD7" name="Unknown 40" type="float" />
+    <property ID="0xC5FF7D3D" name="Unknown 41" type="float" />
+    <property ID="0xB2EBC23A" name="Unknown 42" type="long" />
+    <struct ID="0xD756416E" name="DamageInfo" />
+        <count>4</count>
+        <property ID="0x119FBD31" name="WeaponType" type="long" />
+        <property ID="0xF2D02613" name="Damage" type="float" />
+        <property ID="0xEE1BE914" name="Radius" type="float" />
+        <property ID="0x555FF80A" name="Knockback Power" type="float" />
+    </struct>
+    <property ID="0xE0CDC7E3" name="Damage Wait Time" type="float" />
+    <property ID="0xCD7D996E" name="Unknown 43" type="UNKNOWN" />
+    <property ID="0x1026DB89" name="Unknown 44" type="UNKNOWN" />
+    <property ID="0xCDE17346" name="Unknown 45" type="UNKNOWN" />
+</struct>
+</SnakeWeedSwarm>

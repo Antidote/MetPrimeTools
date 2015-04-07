@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<TweakCameraBob>
+<struct ID="0xFFFFFFFF" name="TweakCameraBob" />
+    <count>15</count>
+    <property ID="0x7FDA1466" name="Tweak Name" type="string" />
+    <property ID="0xE2A0B6F1" name="Unknown 1" type="float" />
+    <property ID="0x29FC6554" name="Unknown 2" type="float" />
+    <property ID="0x149D7339" name="Unknown 3" type="float" />
+    <property ID="0xA27BB5A7" name="Unknown 4" type="float" />
+    <property ID="0xE3580B2B" name="Unknown 5" type="float" />
+    <property ID="0xB05DADE7" name="Unknown 6" type="float" />
+    <property ID="0x6DC5D440" name="Unknown 7" type="float" />
+    <property ID="0xD16539A7" name="Unknown 8" type="float" />
+    <property ID="0xADBB0A42" name="Unknown 9" type="float" />
+    <property ID="0xE7F8F11B" name="Unknown 10" type="float" />
+    <property ID="0x01985EFA" name="Unknown 11" type="float" />
+    <property ID="0xEF19BA33" name="Unknown 12" type="float" />
+    <property ID="0x7F59BE96" name="Unknown 13" type="float" />
+    <property ID="0x38A82AC1" name="Unknown 14" type="float" />
+</struct>
+</TweakCameraBob>

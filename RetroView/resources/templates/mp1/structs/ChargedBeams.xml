@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<ChargedBeams>
+	<count>5</count>
+	<property name="Power" type="long" />
+	<property name="Ice" type="long" />
+	<property name="Wave" type="long" />
+	<property name="Plasma" type="long" />
+	<property name="Phazon" type="long" />
+</ChargedBeams>

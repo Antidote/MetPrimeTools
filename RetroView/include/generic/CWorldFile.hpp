@@ -85,7 +85,7 @@ public:
     CWorldFile();
     virtual ~CWorldFile();
 
-    std::string areaName(const CAssetID& assetId);
+    std::string areaName(const CAssetID& assetId, CPakFile* pak = nullptr);
     IRenderableModel* skyboxModel();
 private:
     friend class CWorldFileReader;

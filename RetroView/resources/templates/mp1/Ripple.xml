@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<Ripple>
+	<count>4</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="float" />
+</Ripple>

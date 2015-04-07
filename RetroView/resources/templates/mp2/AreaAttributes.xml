@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<AreaAttributes>
+<struct ID="0xFFFFFFFF" name="AreaAttributes" />
+    <count>9</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>3</count>
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x95D4BEE7" name="Unknown 1" type="bool" />
+    <property ID="0xB24FDE1A" name="Unknown 2" type="bool" />
+    <property ID="0x9D0006AB" name="Unknown 3" type="long" />
+    <property ID="0x56263E35" name="Unknown 4" type="long" />
+    <property ID="0x64E5FE9F" name="Unknown 5" type="float" />
+    <property ID="0xBA5F801E" name="Unknown 6" type="float" />
+    <property ID="0xD208C9FA" name="CMDL" type="file" ext="CMDL" />
+    <property ID="0xFFEEBC46" name="Unknown 7" type="long" />
+</struct>
+</AreaAttributes>

@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<Relay>
+	<count>2</count>
+	<property name="Name" type="string" />
+	<property name="Active" type="bool" />
+</Relay>

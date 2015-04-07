@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<RoomAcoustics>
+	<count>32</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="long" />
+	<property name="Unknown 3" type="bool" />
+	<property name="Unknown 4" type="bool" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="long" />
+	<property name="Unknown 9" type="long" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="bool" />
+	<property name="Unknown 12" type="long" />
+	<property name="Unknown 13" type="long" />
+	<property name="Unknown 14" type="long" />
+	<property name="Unknown 15" type="bool" />
+	<property name="Unknown 16" type="bool" />
+	<property name="Unknown 17" type="float" />
+	<property name="Unknown 18" type="float" />
+	<property name="Unknown 19" type="float" />
+	<property name="Unknown 20" type="float" />
+	<property name="Unknown 21" type="float" />
+	<property name="Unknown 22" type="bool" />
+	<property name="Unknown 23" type="long" />
+	<property name="Unknown 24" type="long" />
+	<property name="Unknown 25" type="long" />
+	<property name="Unknown 26" type="long" />
+	<property name="Unknown 27" type="long" />
+	<property name="Unknown 28" type="long" />
+	<property name="Unknown 29" type="long" />
+	<property name="Unknown 30" type="long" />
+	<property name="Unknown 31" type="long" />
+</RoomAcoustics>

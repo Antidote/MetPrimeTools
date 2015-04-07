@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<PuddleSpore>
+	<count>16</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="long" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<property name="Unknown 2" type="bool" />
+	<property name="Particle" type="file" ext="PART" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="WPSC" type="file" ext="WPSC" />
+	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
+
+	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+</PuddleSpore>

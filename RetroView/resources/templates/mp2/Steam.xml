@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<Steam>
+<struct ID="0xFFFFFFFF" name="Steam" />
+    <count>8</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0x77A27411" name="Unknown 1" />
+        <count>3</count>
+        <struct ID="0x337F9524" name="Unknown 2" />
+            <count>4</count>
+            <property ID="0x119FBD31" name="WeaponType" type="long" />
+            <property ID="0xF2D02613" name="Damage" type="float" />
+            <property ID="0xEE1BE914" name="Radius" type="float" />
+            <property ID="0x555FF80A" name="Knockback Power" type="float" />
+        </struct>
+        <property ID="0x20927E9B" name="Unknown 3" type="vector3f" />
+        <property ID="0x82859F46" name="Unknown 4" type="UNKNOWN" />
+    </struct>
+    <property ID="0x26346050" name="TXTR" type="file" ext="TXTR" />
+    <property ID="0x4F8F5F5C" name="Unknown 5" type="float" />
+    <property ID="0xC2138F3D" name="Unknown 6" type="float" />
+    <property ID="0x2E9F259E" name="Unknown 7" type="float" />
+    <property ID="0x78C507EB" name="Unknown 8" type="float" />
+    <property ID="0xA366C949" name="Unknown 9" type="bool" />
+</struct>
+</Steam>

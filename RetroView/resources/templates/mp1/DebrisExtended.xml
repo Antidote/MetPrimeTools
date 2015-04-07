@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<DebrisExtended>
+	<count>39</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="color" />
+	<property name="Unknown 11" type="color" />
+	<property name="Unknown 12" type="float" />
+	<property name="Unknown 13" type="vector3f" />
+	<property name="Unknown 14" type="float" />
+	<property name="Unknown 15" type="float" />
+	<property name="Unknown 16" type="vector3f" />
+	<property name="Model" type="file" ext="CMDL" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="Unknown 17" type="vector3f" />
+	<property name="Unknown 18" type="bool" />
+	<property name="Unknown 19" type="bool" />
+	<property name="Unknown 20" type="long" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Unknown 21" type="vector3f" />
+	<property name="Unknown 22" type="bool" />
+	<property name="Unknown 23" type="bool" />
+	<property name="Always 0 1" type="long" />
+	<property name="Particle 3" type="file" ext="PART" />
+	<property name="Unknown 24" type="vector3f" />
+	<property name="Always 0 2" type="long" />
+	<property name="Unknown 25" type="bool" />
+	<property name="Unknown 26" type="bool" />
+	<property name="Unknown 27" type="bool" />
+	<property name="Unknown 28" type="bool" />
+
+	<attrib type="model" target="Model" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+</DebrisExtended>

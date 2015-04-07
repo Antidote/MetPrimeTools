@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<Magdolite>
+	<count>22</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
+	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
+	<struct name="DamageVulnerability 1" template="mp1/structs/DamageVulnerability.xml" />
+	<struct name="DamageVulnerability 2" template="mp1/structs/DamageVulnerability.xml" />
+	<property name="Model" type="file" ext="CMDL" />
+	<property name="CSKR" type="file" ext="CSKR" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<struct name="MagdoliteStruct" template="mp1/structs/MagdoliteStruct.xml" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+
+	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="Model" />
+</Magdolite>

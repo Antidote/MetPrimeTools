@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<ActorParameters>
+	<count>14</count>
+	<struct name="LightParameters" template="mp1/structs/LightParameters.xml" />
+	<struct name="ScannableParameters" template="mp1/structs/ScannableParameters.xml" />
+	<property name="X-Ray model" type="file" ext="CMDL" />
+	<property name="CSKR" type="file" ext="CSKR" />
+	<property name="X-Ray model 2" type="file" ext="CMDL" />
+	<property name="Unknown File Type" type="long" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<struct name="VisorParameters" template="mp1/structs/VisorParameters.xml" />
+	<property name="Unknown 4" type="bool" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="bool" />
+	<property name="Unknown 7" type="float" />
+</ActorParameters>

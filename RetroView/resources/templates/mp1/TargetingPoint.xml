@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<TargetingPoint>
+	<count>4</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Active" type="bool" />
+</TargetingPoint>

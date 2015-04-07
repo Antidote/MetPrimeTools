@@ -341,7 +341,7 @@ bool CMaterial::hasUV(atUint8 slot) const
 bool CMaterial::isTransparent() const
 {
     if (m_version != MetroidPrime3 && m_version != DKCR)
-        return (m_materialFlags & Transparent);
+        return (m_materialFlags & DepthSort);
     else
     {
         if (m_passes[11] != nullptr)

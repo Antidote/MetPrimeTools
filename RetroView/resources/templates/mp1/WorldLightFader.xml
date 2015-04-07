@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<WorldLightFader>
+	<count>4</count>
+	<property name="Name" type="string" />
+	<property name="Active" type="bool" />
+	<property name="Faded Light Level" type="float" />
+	<property name="Initial Light Level" type="float" />
+</WorldLightFader>

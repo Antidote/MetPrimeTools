@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<Camera>
+<struct ID="0xFFFFFFFF" name="Camera" />
+    <count>11</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x2A53245A" name="Unknown 1" type="float" />
+    <property ID="0x05C5FC6E" name="Unknown 2" type="UNKNOWN" />
+    <property ID="0xD4B29446" name="Unknown 3" type="long" />
+    <struct ID="0x493D6A2D" name="Unknown 4" />
+        <count>1</count>
+        <property ID="0xF53DCDD6" name="Unknown 5" type="long" />
+    </struct>
+    <struct ID="0x5604D304" name="Unknown 6" />
+        <count>1</count>
+        <property ID="0xF53DCDD6" name="Unknown 7" type="long" />
+    </struct>
+    <property ID="0x27E5F874" name="Unknown 8" type="varied_length_struct" />
+    <property ID="0xC4DFBFA7" name="Unknown 9" type="varied_length_struct" />
+    <property ID="0x6868D4B3" name="Unknown 10" type="varied_length_struct" />
+    <property ID="0x6E6D8EFD" name="Unknown 11" type="varied_length_struct" />
+    <property ID="0xF4F4798E" name="Unknown 12" type="varied_length_struct" />
+</struct>
+</Camera>

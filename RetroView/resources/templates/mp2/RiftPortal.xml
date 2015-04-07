@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<RiftPortal>
+<struct ID="0xFFFFFFFF" name="RiftPortal" />
+    <count>14</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xC27FFA8F" name="CMDL" type="file" ext="CMDL" />
+    <struct ID="0xE25FB08C" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <property ID="0x90C42387" name="CMDL" type="file" ext="CMDL" />
+    <property ID="0x80C6A38D" name="Unknown 1" type="UNKNOWN" />
+    <property ID="0xA71696B0" name="Unknown 2" type="UNKNOWN" />
+    <struct ID="0x5CB18EB4" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <property ID="0xF284D838" name="CMDL" type="file" ext="CMDL" />
+    <struct ID="0xE845FA67" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <property ID="0xF5B73AF8" name="Unknown 3" type="bool" />
+    <property ID="0x87D5A35F" name="Unknown 4" type="long" />
+    <property ID="0x709C1413" name="Unknown 5" type="float" />
+    <property ID="0x3B692A03" name="Unknown 6" type="float" />
+    <property ID="0xE1E5551F" name="Unknown 7" type="float" />
+</struct>
+</RiftPortal>

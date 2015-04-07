@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<CameraShaker>
+	<count>9</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="bool" />
+</CameraShaker>

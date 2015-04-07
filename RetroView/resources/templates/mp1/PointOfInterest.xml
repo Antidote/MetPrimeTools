@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<PointOfInterest>
+	<count>6</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<struct name="ScannableParameters" template="mp1/structs/ScannableParameters.xml" />
+	<property name="Unknown 2" type="float" />
+</PointOfInterest>

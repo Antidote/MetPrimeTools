@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<RumbleEffectStruct>
+	<count>2</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="bool" />
+</RumbleEffectStruct>

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<AIJumpPoint>
+	<count>5</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Active" type="bool" />
+	<property name="Unknown 1" type="float" />
+</AIJumpPoint>

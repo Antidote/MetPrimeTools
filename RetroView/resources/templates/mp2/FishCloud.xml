@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<FishCloud>
+<struct ID="0xFFFFFFFF" name="FishCloud" />
+    <count>35</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xC6BB2F45" name="Unknown 1" type="bool" />
+    <property ID="0x7990A3B6" name="CMDL" type="file" ext="CMDL" />
+    <struct ID="0xE25FB08C" name="ANCS" />
+        <property name="AnimSet" type="file" />
+        <property name="Node" type="long" />
+        <property name="Unknown" type="long" />
+    </struct>
+    <property ID="0xF1C07275" name="Unknown 2" type="float" />
+    <property ID="0x6392404E" name="Speed" type="float" />
+    <property ID="0x7864AD0E" name="Unknown 3" type="float" />
+    <property ID="0x61959F0D" name="Unknown 4" type="float" />
+    <property ID="0x4841F1DE" name="Unknown 5" type="float" />
+    <property ID="0xD293EBC4" name="Unknown 6" type="float" />
+    <property ID="0x5F362A14" name="Unknown 7" type="float" />
+    <property ID="0xEC9B73C2" name="Unknown 8" type="float" />
+    <property ID="0x7FF1469E" name="Unknown 9" type="float" />
+    <property ID="0x7CE17870" name="Unknown 10" type="float" />
+    <property ID="0x3A25F09D" name="Unknown 11" type="float" />
+    <property ID="0x23A160F3" name="Unknown 12" type="float" />
+    <property ID="0xF0671410" name="Unknown 13" type="float" />
+    <property ID="0xA1747268" name="Unknown 14" type="float" />
+    <property ID="0xCE77A8D0" name="Unknown 15" type="float" />
+    <property ID="0x8CB20C53" name="Unknown 16" type="float" />
+    <property ID="0x21B3D07C" name="Unknown 17" type="long" />
+    <property ID="0x1F83D350" name="Unknown 18" type="color" />
+    <property ID="0xF630B89F" name="Unknown 19" type="bool" />
+    <property ID="0x8A6AB139" name="Unknown 20" type="float" />
+    <property ID="0x5BA86245" name="PART" type="file" ext="PART" />
+    <property ID="0xA8232FB1" name="Unknown 21" type="long" />
+    <property ID="0x90F4B1E0" name="Unknown 22" type="long" />
+    <property ID="0xBF583BF2" name="Unknown 23" type="long" />
+    <property ID="0x1660C34E" name="Unknown 24" type="long" />
+    <property ID="0x86D50737" name="Unknown 25" type="long" />
+    <property ID="0xDD3C10EB" name="Unknown 26" type="long" />
+    <property ID="0x91AE1374" name="Unknown 27" type="long" />
+    <property ID="0x3DE26FC8" name="Unknown 28" type="long" />
+    <property ID="0xC320A050" name="Unknown 29" type="bool" />
+    <property ID="0xCD4C81A1" name="Unknown 30" type="bool" />
+</struct>
+</FishCloud>

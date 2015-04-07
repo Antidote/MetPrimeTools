@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<LightParameters>
+	<count>14</count>
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="float" />
+	<property name="Shadow Tessellation" type="long" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="color" />
+	<property name="Unknown 6" type="bool" />
+	<property name="World Lighting Options" type="long" />
+	<property name="Light Recalculation Options" type="long" />
+	<property name="Unknown 7" type="vector3f" />
+	<property name="Unknown 8" type="long" />
+	<property name="Unknown 9" type="long" />
+	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 11" type="long" />
+</LightParameters>

@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<RadialDamage>
+<struct ID="0xFFFFFFFF" name="RadialDamage" />
+    <count>6</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <struct ID="0x337F9524" name="Unknown 1" />
+        <count>4</count>
+        <property ID="0x119FBD31" name="WeaponType" type="long" />
+        <property ID="0xF2D02613" name="Damage" type="float" />
+        <property ID="0xEE1BE914" name="Radius" type="float" />
+        <property ID="0x555FF80A" name="Knockback Power" type="float" />
+    </struct>
+    <property ID="0x78C507EB" name="Unknown 2" type="float" />
+    <property ID="0x388E5DD3" name="Unknown 3" type="bool" />
+    <property ID="0xDB826CBE" name="Unknown 4" type="bool" />
+    <property ID="0x9C951FED" name="Unknown 5" type="bool" />
+</struct>
+</RadialDamage>

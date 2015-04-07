@@ -1,0 +1,335 @@
+<?xml version="1.0" ?>
+<TweakPlayerGunMulti>
+<struct ID="0xFFFFFFFF" name="TweakPlayerGunMulti" />
+    <count>15</count>
+    <property ID="0x7FDA1466" name="Tweak Name" type="string" />
+    <struct ID="0xB82ED424" name="Unknown 1" />
+        <count>12</count>
+        <property ID="0xE8BB7E3C" name="Unknown 2" type="float" />
+        <property ID="0x5ED7E0BD" name="Unknown 3" type="float" />
+        <property ID="0x842AE0B4" name="Unknown 4" type="float" />
+        <property ID="0x8C29E91C" name="Unknown 5" type="float" />
+        <property ID="0x7D5A6C93" name="Unknown 6" type="float" />
+        <property ID="0xB2E26D02" name="Unknown 7" type="float" />
+        <property ID="0xD81D1450" name="Unknown 8" type="float" />
+        <property ID="0x0CEBB5C6" name="Unknown 9" type="float" />
+        <property ID="0x904CD49D" name="Unknown 10" type="float" />
+        <property ID="0xFCCDDB00" name="Unknown 11" type="float" />
+        <property ID="0xF355D075" name="Unknown 12" type="float" />
+        <property ID="0x9262A722" name="Unknown 13" type="float" />
+    </struct>
+    <struct ID="0x6B6BDC47" name="Unknown 14" />
+        <count>3</count>
+        <property ID="0x7EE98EBB" name="Unknown 15" type="float" />
+        <property ID="0xEC515CD5" name="Unknown 16" type="float" />
+        <property ID="0x0448573F" name="Unknown 17" type="float" />
+    </struct>
+    <struct ID="0x87882CB0" name="Unknown 18" />
+        <count>4</count>
+        <property ID="0x1547D77B" name="Unknown 19" type="float" />
+        <property ID="0xA1677D4E" name="Unknown 20" type="float" />
+        <property ID="0x6A3BAEEB" name="Unknown 21" type="float" />
+        <property ID="0xECAFDC45" name="Unknown 22" type="float" />
+    </struct>
+    <struct ID="0x255007AD" name="Unknown 23" />
+        <count>2</count>
+        <property ID="0x3C9366AC" name="Unknown 24" type="vector3f" />
+        <property ID="0x66B1D066" name="Unknown 25" type="vector3f" />
+    </struct>
+    <struct ID="0x83D758AB" name="Unknown 26" />
+        <count>11</count>
+        <struct ID="0x6173AD96" name="Unknown 27" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <property ID="0xE8907530" name="Unknown 28" type="float" />
+        <property ID="0x0A9186CB" name="Unknown 29" type="float" />
+        <struct ID="0xDCC0C6FB" name="Unknown 30" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0x58F00B0A" name="Missile" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0x1F6C1A6B" name="Power Beam" />
+            <count>2</count>
+            <property ID="0x102E085F" name="Cooldown" type="float" />
+            <struct ID="0xFAA71E25" name="Damage Info" />
+                <count>2</count>
+                <struct ID="0x8AC4278A" name="Uncharged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+                <struct ID="0xC9AC01D2" name="Charged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+            </struct>
+        </struct>
+        <struct ID="0xC50F608B" name="Dark Beam" />
+            <count>2</count>
+            <property ID="0x102E085F" name="Cooldown" type="float" />
+            <struct ID="0xFAA71E25" name="Damage Info" />
+                <count>2</count>
+                <struct ID="0x8AC4278A" name="Uncharged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+                <struct ID="0xC9AC01D2" name="Charged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+            </struct>
+        </struct>
+        <struct ID="0x059DCE11" name="Unknown 31" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0xDE7A8255" name="Light Beam" />
+            <count>2</count>
+            <property ID="0x102E085F" name="Cooldown" type="float" />
+            <struct ID="0xFAA71E25" name="Damage Info" />
+                <count>2</count>
+                <struct ID="0x8AC4278A" name="Uncharged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+                <struct ID="0xC9AC01D2" name="Charged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+            </struct>
+        </struct>
+        <struct ID="0x74B9B983" name="Annihilator Beam" />
+            <count>2</count>
+            <property ID="0x102E085F" name="Cooldown" type="float" />
+            <struct ID="0xFAA71E25" name="Damage Info" />
+                <count>2</count>
+                <struct ID="0x8AC4278A" name="Uncharged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+                <struct ID="0xC9AC01D2" name="Charged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+            </struct>
+        </struct>
+        <struct ID="0xDD5F2E3D" name="Phazon Beam" />
+            <count>2</count>
+            <property ID="0x102E085F" name="Cooldown" type="float" />
+            <struct ID="0xFAA71E25" name="Damage Info" />
+                <count>2</count>
+                <struct ID="0x8AC4278A" name="Uncharged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+                <struct ID="0xC9AC01D2" name="Charged" />
+                    <count>5</count>
+                    <property ID="0x4D577910" name="Weapon Type" type="long" />
+                    <property ID="0xF3EC8748" name="Max damage" type="float" />
+                    <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+                    <property ID="0x0F598739" name="Radius?" type="float" />
+                    <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+                </struct>
+            </struct>
+        </struct>
+    </struct>
+    <struct ID="0x888C8775" name="Beam Combos" />
+        <count>5</count>
+        <struct ID="0xC713ACF9" name="Super Missile" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0x19468F2A" name="Darkburst" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0x48AC6DD8" name="Sunburst" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0xC1C315FF" name="Sonic Boom" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0x42885C6C" name="Phazon Combo" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+    </struct>
+    <struct ID="0xAAEBB73E" name="Unknown 32" />
+        <count>7</count>
+        <struct ID="0x8AACFC27" name="Unknown 33" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0xA054FF1C" name="Unknown 34" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <struct ID="0xABFA93E9" name="Unknown 35" />
+            <count>5</count>
+            <property ID="0x4D577910" name="Weapon Type" type="long" />
+            <property ID="0xF3EC8748" name="Max damage" type="float" />
+            <property ID="0x37B6DF3D" name="Splash damage" type="float" />
+            <property ID="0x0F598739" name="Radius?" type="float" />
+            <property ID="0x56F98C49" name="Knockback Power?" type="float" />
+        </struct>
+        <property ID="0xF8F9BF33" name="Unknown 36" type="float" />
+        <property ID="0x4848F444" name="Unknown 37" type="float" />
+        <property ID="0x1E710222" name="Unknown 38" type="long" />
+        <property ID="0x3AE5D1FA" name="Unknown 39" type="float" />
+    </struct>
+    <struct ID="0x8DA058FE" name="Unknown 40" />
+        <count>6</count>
+        <property ID="0x5D623269" name="Unknown 41" type="float" />
+        <property ID="0x4F420191" name="Unknown 42" type="float" />
+        <property ID="0x7B529049" name="Unknown 43" type="float" />
+        <property ID="0x503DDDCA" name="Unknown 44" type="float" />
+        <property ID="0xF668C245" name="Unknown 45" type="float" />
+        <property ID="0x01234CD8" name="Unknown 46" type="float" />
+    </struct>
+    <struct ID="0xFFDB4BB7" name="Unknown 47" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 48" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 49" type="float" />
+        <property ID="0xF122CD97" name="Unknown 50" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 51" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 52" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 53" type="float" />
+        <property ID="0x388D2E46" name="Unknown 54" type="UNKNOWN" />
+    </struct>
+    <struct ID="0x937A35BD" name="Unknown 55" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 56" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 57" type="float" />
+        <property ID="0xF122CD97" name="Unknown 58" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 59" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 60" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 61" type="float" />
+        <property ID="0x388D2E46" name="Unknown 62" type="UNKNOWN" />
+    </struct>
+    <struct ID="0x26196738" name="Unknown 63" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 64" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 65" type="float" />
+        <property ID="0xF122CD97" name="Unknown 66" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 67" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 68" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 69" type="float" />
+        <property ID="0x388D2E46" name="Unknown 70" type="UNKNOWN" />
+    </struct>
+    <struct ID="0xF40808C9" name="Unknown 71" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 72" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 73" type="float" />
+        <property ID="0xF122CD97" name="Unknown 74" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 75" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 76" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 77" type="float" />
+        <property ID="0x388D2E46" name="Unknown 78" type="UNKNOWN" />
+    </struct>
+    <struct ID="0x9A6D7A31" name="Unknown 79" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 80" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 81" type="float" />
+        <property ID="0xF122CD97" name="Unknown 82" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 83" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 84" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 85" type="float" />
+        <property ID="0x388D2E46" name="Unknown 86" type="UNKNOWN" />
+    </struct>
+    <struct ID="0x12F14C5A" name="Unknown 87" />
+        <count>7</count>
+        <property ID="0xC3E75C5F" name="Unknown 88" type="UNKNOWN" />
+        <property ID="0x4D283AC5" name="Unknown 89" type="float" />
+        <property ID="0xF122CD97" name="Unknown 90" type="varied_length_struct" />
+        <property ID="0x2927E544" name="Unknown 91" type="varied_length_struct" />
+        <property ID="0x7CFA4678" name="Unknown 92" type="varied_length_struct" />
+        <property ID="0x8B51E23F" name="Unknown 93" type="float" />
+        <property ID="0x388D2E46" name="Unknown 94" type="UNKNOWN" />
+    </struct>
+</struct>
+</TweakPlayerGunMulti>

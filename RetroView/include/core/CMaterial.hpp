@@ -14,27 +14,16 @@
 
 enum MaterialFlags
 {
-    Unused1        = (1 <<  0), // ??? always set
-    Unused2        = (1 <<  1), // ""
-    Unused3        = (1 <<  2), // ??? always unset
-    EnableKonst    = (1 <<  3),
-    Transparent    = (1 <<  4),
-    PunchThrough   = (1 <<  5),
-    Reflective     = (1 <<  6),
-    DepthWrite     = (1 <<  7),
-    Unknown1       = (1 <<  8),
-    Invisible      = (1 <<  9),
-    EnableUnknown2 = (1 << 10),
-    Unknown2       = (1 << 11),
-    Unknown3       = (1 << 12),
-    Lightmaps      = (1 << 13),
-    Unknown4       = (1 << 14),
-    Unknown5       = (1 << 15),
-    Unknown6       = (1 << 16),
-    Unknown7       = (1 << 17),
-    Unknown8       = (1 << 18),
-    Unknown9       = (1 << 19),
-    // Next 13 bits are unused
+    EnableKonst      = (1 <<  3),
+    DepthSort        = (1 <<  4),
+    PunchThrough     = (1 <<  5),
+    Reflection       = (1 <<  6),
+    DepthWrite       = (1 <<  7),
+    SurfaceReflection= (1 <<  8),
+    Occluder         = (1 <<  9),
+    IndStage         = (1 << 10),
+    Lightmap         = (1 << 11),
+    ShortUV          = (1 << 13),
 };
 
 bool operator==(const SAnimation& left, const SAnimation& right);

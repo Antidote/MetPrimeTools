@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<LayerSwitch>
+	<property name="Room ID" type="long" />
+	<property name="Layer no" type="long" />
+</LayerSwitch>

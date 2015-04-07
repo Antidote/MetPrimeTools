@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<DamageInfo>
+	<count>4</count>
+	<property name="Weapon Type" type="long" />
+	<property name="Damage" type="float" />
+	<property name="Radius" type="float" />
+	<property name="Knockback Power" type="float" />
+</DamageInfo>

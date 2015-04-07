@@ -140,7 +140,7 @@ void CPakFileModel::setupModelData()
         {
             for (CWorldFile* world : worlds)
             {
-                areaName = QString::fromStdString(world->areaName(res.id));
+                areaName = QString::fromStdString(world->areaName(res.id, m_pakFile));
                 if (!areaName.isEmpty())
                     break;
             }

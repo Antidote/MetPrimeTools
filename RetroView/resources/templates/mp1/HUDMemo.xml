@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<HUDMemo>
+	<count>6</count>
+	<property name="Name" type="string" />
+	<property name="First message timer" type="float" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Memo type" type="long" />
+	<property name="STRG" type="file" ext="STRG" />
+	<property name="Active" type="bool" />
+</HUDMemo>

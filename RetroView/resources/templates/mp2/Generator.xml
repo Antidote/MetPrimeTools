@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<Generator>
+<struct ID="0xFFFFFFFF" name="Generator" />
+    <count>8</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x3FA67145" name="Unknown 1" type="long" />
+    <property ID="0x88978E49" name="Unknown 2" type="bool" />
+    <property ID="0x1EB8E254" name="Unknown 3" type="bool" />
+    <property ID="0x035A5E10" name="Unknown 4" type="bool" />
+    <property ID="0x46477064" name="Unknown 5" type="vector3f" />
+    <property ID="0xC3861B64" name="Unknown 6" type="float" />
+    <property ID="0x25E6B485" name="Unknown 7" type="float" />
+</struct>
+</Generator>

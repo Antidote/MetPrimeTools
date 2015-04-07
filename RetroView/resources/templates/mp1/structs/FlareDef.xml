@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<FlareDef>
+	<count>4</count>
+	<property name="Texture" type="file" ext="TXTR" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="color" />
+</FlareDef>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<PatternedInfo>
+	<count>38</count>
+	<property name="Mass" type="float" />
+	<property name="Speed" type="float" />
+	<property name="Turn Speed" type="float" />
+	<property name="Detection Range" type="float" />
+	<property name="Detection Height Range" type="float" />
+	<property name="Detection Angle" type="float" />
+	<property name="Min Attack Range" type="float" />
+	<property name="Max Attack Range" type="float" />
+	<property name="Average Attack Time" type="float" />
+	<property name="Attack Time Variation" type="float" />
+	<property name="Leash Radius" type="float" />
+	<property name="Player Leash Radius" type="float" />
+	<property name="Player Leash Time" type="float" />
+	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
+	<property name="Damage Wait Time" type="float" />
+	<struct name="HealthInfo" template="mp1/structs/HealthInfo.xml" />
+	<struct name="DamageVulnerability" template="mp1/structs/DamageVulnerability.xml" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="vector3f" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Sound? 1" type="long" />
+	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
+	<property name="Active" type="bool" />
+	<property name="AFSM" type="file" ext="AFSM" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="long" />
+	<property name="Unknown 12" type="vector3f" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="Unknown 13" type="long" />
+	<property name="Unknown 14" type="vector3f" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Sound? 2" type="long" />
+</PatternedInfo>

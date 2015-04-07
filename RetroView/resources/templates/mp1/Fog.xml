@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<Fog>
+	<count>8</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="long" />
+	<property name="Unknown 2" type="color" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="vector3f" />
+	<property name="Unknown 6" type="bool" />
+	<property name="Unknown 7" type="bool" />
+</Fog>

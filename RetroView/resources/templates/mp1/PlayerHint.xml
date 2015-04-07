@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<PlayerHint>
+	<count>6</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<struct name="PlayerHintStruct" template="mp1/structs/PlayerHintStruct.xml" />
+	<property name="Unknown 2" type="long" />
+</PlayerHint>

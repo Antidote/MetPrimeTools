@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<PickupGenerator>
+	<count>4</count>
+	<property name="Name" type="string" />
+	<property name="Offset" type="vector3f" />
+	<property name="Active" type="bool" />
+	<property name="Frequency" type="float" />
+</PickupGenerator>

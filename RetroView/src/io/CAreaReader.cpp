@@ -205,7 +205,6 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
                         CModelData& model = ret->m_models[m];
                         readModelData(ret, model, sectionStart, i);
                         readMeshes(ret, model, sectionStart, i, m);
-                        model.indexIBOs(ret->m_materialSets[0]);
                     }
                 }
                 else if (!idx.tag.compare("AABB"))
@@ -419,12 +418,11 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
     mesh.m_pivot.x    = in.readFloat();
     mesh.m_pivot.y    = in.readFloat();
     mesh.m_pivot.z    = in.readFloat();
-    atUint16 dataSize = 0;
     if (ret->m_version != CAreaFile::DKCR)
     {
         mesh.m_materialID = in.readUint32();
         mesh.m_mantissa   = in.readUint16();
-        dataSize = in.readUint16();
+        in.readUint16();
         atUint32 extraDataSize = 0;
         if (ret->m_version == CAreaFile::MetroidPrime3)
         {
@@ -465,7 +463,7 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
     else
     {
         mesh.m_mantissa = in.readUint16();
-        dataSize = in.readUint16();
+        in.readUint16();
         in.readUint32();
         in.readUint32();
         in.readUint16();

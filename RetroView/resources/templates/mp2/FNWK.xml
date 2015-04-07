@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<FNWK>
+<struct ID="0xFFFFFFFF" name="FNWK" />
+    <count>27</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0x5C3C9E4A" name="Unknown 1" type="bool" />
+    <property ID="0x77F59F4A" name="Unknown 2" type="bool" />
+    <property ID="0x29C0CB7F" name="Unknown 3" type="bool" />
+    <property ID="0x02E74CBA" name="Unknown 4" type="bool" />
+    <property ID="0xA2AC58E9" name="Unknown 5" type="bool" />
+    <property ID="0xDEE730F5" name="Disable" type="bool" />
+    <property ID="0x8B8FA0FE" name="Unknown 6" type="bool" />
+    <property ID="0xD0F2D612" name="Unknown 7" type="bool" />
+    <property ID="0x5EBC97FD" name="Unknown 8" type="float" />
+    <property ID="0x3E5727AA" name="TXTR" type="UNKNOWN" />
+    <property ID="0x547FFFC3" name="TXTR" type="file" ext="TXTR" />
+    <property ID="0xCDAABA00" name="TXTR" type="file" ext="TXTR" />
+    <property ID="0x7F62DA5B" name="Unknown 9" type="color" />
+    <property ID="0xED286CE4" name="Unknown 10" type="color" />
+    <property ID="0xAD671492" name="Unknown 11" type="color" />
+    <property ID="0xB44D4C70" name="Unknown 12" type="color" />
+    <property ID="0x2D23720F" name="Unknown 13" type="long" />
+    <property ID="0xEC45879E" name="Unknown 14" type="varied_length_struct" />
+    <property ID="0xFA20775D" name="Unknown 15" type="float" />
+    <property ID="0x5E30354A" name="Unknown 16" type="varied_length_struct" />
+    <property ID="0x3C1FA2CA" name="Unknown 17" type="float" />
+    <property ID="0xB492C2AF" name="Unknown 18" type="varied_length_struct" />
+    <property ID="0x6D5198B4" name="Unknown 19" type="float" />
+    <property ID="0xDF1B312C" name="Unknown 20" type="varied_length_struct" />
+    <property ID="0xBAC12CA0" name="Unknown 21" type="float" />
+    <property ID="0x4DA90D36" name="Unknown 22" type="long" />
+</struct>
+</FNWK>

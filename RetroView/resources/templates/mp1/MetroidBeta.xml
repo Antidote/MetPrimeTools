@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<MetroidBeta>
+	<count>23</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<struct name="DamageVulnerability 1" template="mp1/structs/DamageVulnerability.xml" />
+	<struct name="DamageVulnerability 2" template="mp1/structs/DamageVulnerability.xml" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="SWHC" type="file" ext="SWHC" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Particle 3" type="file" ext="PART" />
+	<property name="Particle 4" type="file" ext="PART" />
+	<property name="Unknown 10" type="bool" />
+
+	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+</MetroidBeta>

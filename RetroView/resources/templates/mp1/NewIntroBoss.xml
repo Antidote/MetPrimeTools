@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<NewIntroBoss>
+	<count>13</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Scale" type="vector3f" />
+	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
+	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
+	<property name="Unknown 1" type="float" />
+	<property name="Unknown 2" type="float" />
+	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Texture 1" type="file" ext="TXTR" />
+	<property name="Texture 2" type="file" ext="TXTR" />
+
+	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
+	<attrib type="model" target="ActorParameters::X-Ray model" />
+	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+</NewIntroBoss>

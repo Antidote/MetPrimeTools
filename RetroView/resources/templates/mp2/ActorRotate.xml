@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<ActorRotate>
+<struct ID="0xFFFFFFFF" name="ActorRotate" />
+    <count>5</count>
+    <struct ID="0x255A4580" name="Main properties" />
+        <count>4</count>
+        <property ID="0x494E414D" name="Name" type="string" />
+        <struct ID="0x5846524D" name="Xform" />
+            <property name="Position" type="vector3f" />
+            <property name="Rotation" type="vector3f" />
+            <property name="Scale" type="vector3f" />
+        </struct>
+        <property ID="0x41435456" name="Active" type="bool" />
+        <property ID="0x5D298A43" name="Unknown" type="long" />
+    </struct>
+    <property ID="0xF11C6C2B" name="Unknown 1" type="long" />
+    <property ID="0x8B51E23F" name="Unknown 2" type="float" />
+    <struct ID="0xEFE4EA57" name="Unknown 3" />
+        <count>3</count>
+        <property ID="0x69D8447D" name="Unknown 4" type="varied_length_struct" />
+        <property ID="0xD0239F95" name="Unknown 5" type="varied_length_struct" />
+        <property ID="0xC15EF5EC" name="Unknown 6" type="varied_length_struct" />
+    </struct>
+    <struct ID="0x2F7EC0A2" name="Unknown 7" />
+        <count>3</count>
+        <property ID="0xF437A62F" name="Unknown 8" type="varied_length_struct" />
+        <property ID="0x6F92EA40" name="Unknown 9" type="varied_length_struct" />
+        <property ID="0x180C38B0" name="Unknown 10" type="varied_length_struct" />
+    </struct>
+</struct>
+</ActorRotate>
