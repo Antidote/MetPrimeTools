@@ -20,13 +20,13 @@ struct SPointOfInterest
 struct SMapAreaPrimitive
 {
     atUint32              type; // GL primitive NOT GX
-    std::vector<atInt16> indices;
+    std::vector<atUint16> indices;
     atUint32              elementBuffer;
 };
 
 struct SMapBorder
 {
-    std::vector<atInt16> indices;
+    std::vector<atUint16> indices;
     atUint32              elementBuffer;
 };
 

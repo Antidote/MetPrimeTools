@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>MPxViewer.png</file>
+        <file>mainicon.png</file>
         <file>DoorUnlock.png</file>
         <file>PlayerSpawn.png</file>
         <file>Trigger.png</file>

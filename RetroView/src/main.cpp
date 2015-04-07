@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     // initialize settings info so that default QSettings() access works
-    a.setWindowIcon(QIcon(":/MPxViewer.png"));
+    a.setWindowIcon(QIcon(":/mainicon.png"));
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
 
@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
     fmt.setDepthBufferSize(24);
     fmt.setMajorVersion(3);
-    fmt.setMinorVersion(2);
+    fmt.setMinorVersion(3);
 #ifdef __APPLE__
     fmt.setProfile(QSurfaceFormat::CoreProfile);
 #endif
-    fmt.setSwapBehavior(QSurfaceFormat::SingleBuffer);
+
     QSurfaceFormat::setDefaultFormat(fmt);
 
     CMainWindow w;

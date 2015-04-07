@@ -13,6 +13,7 @@ CVertexBuffer::~CVertexBuffer()
 {
     if (m_buffered)
     {
+        release();
         glDeleteVertexArrays(1, &m_vao);
         glDeleteBuffers(1, &m_attribBuffer);
     }
@@ -86,6 +87,7 @@ void CVertexBuffer::bind()
 void CVertexBuffer::release()
 {
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 bool CVertexBuffer::isBuffered() const

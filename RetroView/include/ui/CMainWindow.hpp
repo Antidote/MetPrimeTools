@@ -30,8 +30,7 @@ protected:
     bool event(QEvent *event);
 
 private slots:
-    void onModeToggled(bool value);
-    void onToggled(bool);
+    void onToggled(bool checked);
     void onMaterialSetChanged(int set);
     void onViewerInitialized();
     void onExport();

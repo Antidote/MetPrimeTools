@@ -6,8 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 CModelFile::CModelFile()
-    : m_currentSet(0),
-      m_sourcesDumped(false)
+    : m_currentSet(0)
 {
     setAmbient(.5f, .5f, .5f);
 }
@@ -24,12 +23,6 @@ void CModelFile::draw()
     glm::mat4 model = glm::mat4(1);
     CModelData::drawIbos(false, currentMaterialSet(), model);
     CModelData::drawIbos(true,  currentMaterialSet(), model);
-
-    if (!m_sourcesDumped)
-    {
-        m_sourcesDumped = true;
-        currentMaterialSet().dumpSources(m_assetID);
-    }
 }
 
 void CModelFile::drawBoundingBox()

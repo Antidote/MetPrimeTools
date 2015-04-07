@@ -30,7 +30,7 @@ void CMapArea::draw()
     if (!m_vboBuilt)
         buildVbo();
 
-    glPrimitiveRestartIndex(~0);
+    glPrimitiveRestartIndex((atUint16)0xFFFF);
 
     CMaterial& mat = CMaterialCache::instance()->material(m_materialID);
     if (!mat.bind())
@@ -57,14 +57,14 @@ void CMapArea::draw()
     glLineWidth(2.f);
     mat.setKonstColor(0, m_color.lighter());
 
-    for (const SMapAreaDetail& detail : m_details)
-    {
-        for (const SMapBorder& border : detail.borders)
-        {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
-            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-        }
-    }
+//    for (const SMapAreaDetail& detail : m_details)
+//    {
+//        for (const SMapBorder& border : detail.borders)
+//        {
+//            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
+//            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+//        }
+//    }
 
     mat.release();
     glLineWidth(1.f);

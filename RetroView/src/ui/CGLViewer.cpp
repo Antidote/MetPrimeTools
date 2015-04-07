@@ -34,7 +34,7 @@ CGLViewer::CGLViewer(QWidget* parent)
     QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_updateTimer.start(0);
+    m_updateTimer.start(1);
 
     // Set our scene bounds
     m_sceneBounds.min = glm::vec3(-100.f);
@@ -292,6 +292,7 @@ void CGLViewer::resetCamera()
     m_camera.setPitch(0.f);
     m_camera.setYaw(-90.f);
     m_camera.setPosition(glm::vec3(0.0f, 10.0f, 3.0f));
+    update();
 }
 
 void CGLViewer::setAxisIsDrawn(bool drawn)

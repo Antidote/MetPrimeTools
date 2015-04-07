@@ -159,9 +159,9 @@ CMapArea* CMapAreaReader::read()
             for (atUint32 j = 0; j < primitiveCount; j++)
             {
                 SMapAreaPrimitive primitive;
-                EPrimitive type = (EPrimitive)base::readUint32();
+                atUint32 type = base::readUint32();
 
-                switch(type)
+                switch((EPrimitive)type)
                 {
                     case EPrimitive::Quads:
                         primitive.type = GL_QUADS;
@@ -188,14 +188,17 @@ CMapArea* CMapAreaReader::read()
 
                 atUint32 indexCount = base::readUint32();
 
-                for (atUint32 k = 0; k < indexCount; k++)
+                for (atUint32 k = 0; k < indexCount; ++k)
                 {
-                    atUint16 idx =(atUint16)base::readUByte();
+                    atUint16 idx = (atUint16)base::readUByte();
                     primitive.indices.push_back(idx);
                 }
 
-                primitive.indices.push_back(-1);
-                detail.primitives.push_back(primitive);
+                if (type != 0)
+                {
+                    primitive.indices.push_back(0xFFFF);
+                    detail.primitives.push_back(primitive);
+                }
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }
             base::seek(primDataEnd + headerSize, Athena::SeekOrigin::Begin);
@@ -206,13 +209,13 @@ CMapArea* CMapAreaReader::read()
             {
                 SMapBorder border;
                 atUint32 borderIndexCount = base::readUint32();
-                for (atUint32 k = 0; k < borderIndexCount; k++)
+                for (atUint32 k = 0; k < borderIndexCount; ++k)
                 {
                     atInt16 idx =(atInt16)base::readUByte();
                     border.indices.push_back(idx);
                 }
 
-                border.indices.push_back(~0);
+                border.indices.push_back(0xFFFF);
                 detail.borders.push_back(border);
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }

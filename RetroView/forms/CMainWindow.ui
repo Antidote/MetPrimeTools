@@ -44,7 +44,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -77,131 +77,57 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionExport"/>
+   <addaction name="actionEnableTextures"/>
+   <addaction name="actionDrawPoints"/>
+   <addaction name="actionDrawJointNames"/>
+   <addaction name="actionDrawBoundingBox"/>
+   <addaction name="actionDrawCollision"/>
+   <addaction name="actionWireframe"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
    <property name="windowTitle">
-    <string>Setti&amp;ngs</string>
+    <string>I&amp;nfo</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="4" column="0" colspan="2">
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="tabPosition">
-        <enum>QTabWidget::West</enum>
-       </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <property name="documentMode">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
       <widget class="QLabel" name="fpsLabel">
        <property name="text">
         <string>FPS</string>
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="materialSetLbl">
+       <property name="text">
+        <string>Material Set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="materialSetComboBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::West</enum>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="0" colspan="2">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="drawCollisionCheckBox">
-         <property name="text">
-          <string>Draw Collision</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPushButton" name="resetCameraPushButton">
-         <property name="text">
-          <string>Reset Camera</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="transActors">
-         <property name="text">
-          <string>Draw Translucent Actors</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="enableTexturesCheckBox">
-         <property name="text">
-          <string>Enable Textures</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="boundingBoxChkBox">
-         <property name="text">
-          <string>Draw Bounding Box</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="jointNamesCheckBox">
-         <property name="text">
-          <string>Draw Joint Names</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="pointsCheckBox">
-         <property name="text">
-          <string>Draw Points</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="enableLightingCheckBox">
-         <property name="text">
-          <string>Enable Lighting</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="wireframeCheckBox">
-         <property name="text">
-          <string>WireFrame</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="gridCheckBox">
-         <property name="text">
-          <string>Draw Grid</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="axisCheckBox">
-         <property name="text">
-          <string>Draw Axis</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QComboBox" name="materialSetComboBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="materialSetLbl">
-         <property name="text">
-          <string>Material Set</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QPushButton" name="resetCameraButton">
+       <property name="text">
+        <string>Reset Camera</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -222,9 +148,6 @@
   <action name="actionMode1">
    <property name="checkable">
     <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>false</bool>
    </property>
    <property name="text">
     <string>Mode &amp;1</string>
@@ -275,6 +198,57 @@
     <string>Mode &amp;7</string>
    </property>
   </action>
+  <action name="actionEnableTextures">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable &amp;Textures</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable Textures</string>
+   </property>
+  </action>
+  <action name="actionDrawPoints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw &amp;Points</string>
+   </property>
+  </action>
+  <action name="actionDrawJointNames">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw Joint Names</string>
+   </property>
+  </action>
+  <action name="actionDrawBoundingBox">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw Bounding Box</string>
+   </property>
+  </action>
+  <action name="actionWireframe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Wireframe</string>
+   </property>
+  </action>
+  <action name="actionDrawCollision">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw Collision</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -307,7 +281,7 @@
    <sender>actionMode0</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -323,7 +297,7 @@
    <sender>actionMode1</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -339,7 +313,7 @@
    <sender>actionMode2</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -355,7 +329,7 @@
    <sender>actionMode3</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -371,7 +345,7 @@
    <sender>actionMode4And5</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -387,7 +361,7 @@
    <sender>actionMode6</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -419,7 +393,7 @@
    <sender>actionMode7</sender>
    <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onModeToggled(bool)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -432,14 +406,78 @@
    </hints>
   </connection>
   <connection>
-   <sender>materialSetComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
+   <sender>actionEnableTextures</sender>
+   <signal>toggled(bool)</signal>
    <receiver>CMainWindow</receiver>
-   <slot>onMaterialSetChanged(int)</slot>
+   <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>268</x>
-     <y>285</y>
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDrawBoundingBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDrawCollision</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDrawPoints</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionWireframe</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>447</x>
@@ -450,7 +488,7 @@
  </connections>
  <slots>
   <slot>onExport()</slot>
-  <slot>onModeToggled(bool)</slot>
+  <slot>onToggled(bool)</slot>
   <slot>onLoadPak()</slot>
   <slot>onMaterialSetChanged(int)</slot>
  </slots>

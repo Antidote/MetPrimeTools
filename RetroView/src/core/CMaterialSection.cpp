@@ -67,33 +67,33 @@ QStringList SPASSCommand::fragmentSource(atUint32 idx)
     if (textureId == CAssetID::InvalidAsset)
         return output;
 
-    if (subCommand == EMaterialCommand::BLOL || subCommand == EMaterialCommand::RIML)
+    if (subCommand == EMaterialCommand::BLOL || subCommand == EMaterialCommand::RIML || subCommand == EMaterialCommand::XRAY || subCommand == EMaterialCommand::BLOD || subCommand == EMaterialCommand::BLOI)
         return output;
 
     if (subCommand == EMaterialCommand::TRAN)
     {
         output << "// TRAN";
         output << QString("prev = vec4(prev.rgb, 1.0 - texture(texs[%1], texCoord%1.st).r);").arg(idx);
-        output << QString("if (punchThrough && prev.a <= .25) discard;");
+        output << QString("if (punchThrough > 0.5 && prev.a <= .25) discard;");
     }
     else if (subCommand == EMaterialCommand::INCA)
     {
         output << "// INCA";
         if (idx == 0)
             output << "prev = vec4(0, 0, 0, prev.a);";
-        output << QString("prev = clamp(prev * vec4(0.5, 0.5, 0.5, 1.0) +"
-                          " texture(texs[%1], texCoord%1.st) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
+        output << QString("prev = prev * vec4(0.5, 0.5, 0.5, 1.0) +"
+                          " texture(texs[%1], texCoord%1.st);").arg(idx);
     }
-    else if (subCommand == EMaterialCommand::RFLV || subCommand == EMaterialCommand::LURD)
+    else if (subCommand == EMaterialCommand::RFLV || subCommand == EMaterialCommand::LRLD)
     {
         output << "// RFLV, LURD";
         output << QString("c0 = texture(texs[%1], texCoord%1.st);").arg(idx);
     }
-    else if (subCommand == EMaterialCommand::RFLD || subCommand == EMaterialCommand::LRLD || subCommand == EMaterialCommand::XRAY)
+    else if (subCommand == EMaterialCommand::RFLD || subCommand == EMaterialCommand::LURD)
     {
         output << "// RFLD, LRLD, XRAY";
-        output << QString("prev = clamp(prev * vec4(0.5, 0.5, 0.5, 1.0) + "
-                          "(c0 * texture(texs[%1], texCoord%1.st)) + vec4(.0, .0, .0, 1), vec4(0), vec4(1));").arg(idx);
+        output << QString("prev = prev * vec4(1.0, 1.0, 1.0, 1.0) + "
+                          "(c0 * texture(texs[%1], texCoord%1.st));").arg(idx);
     }
     else
     {
@@ -126,25 +126,25 @@ atInt32 passCommandToIndex(EMaterialCommand cmd)
 {
     switch(cmd)
     {
-        case EMaterialCommand::DIFF:
-            return 0;
         case EMaterialCommand::BLOL:
-            return 1;
-        case EMaterialCommand::CLR:
-            return 2;
-        case EMaterialCommand::INCA:
-            return 3;
-        case EMaterialCommand::RFLV:
-            return 4;
-        case EMaterialCommand::RFLD:
-            return 5;
-        case EMaterialCommand::LRLD:
-            return 6;
-        case EMaterialCommand::LURD:
-            return 7;
+            return 0;
         case EMaterialCommand::BLOD:
-            return 9;
+            return 1;
         case EMaterialCommand::BLOI:
+            return 2;
+        case EMaterialCommand::DIFF:
+            return 3;
+        case EMaterialCommand::CLR:
+            return 4;
+        case EMaterialCommand::INCA:
+            return 5;
+        case EMaterialCommand::RFLV:
+            return 6;
+        case EMaterialCommand::RFLD:
+            return 7;
+        case EMaterialCommand::LRLD:
+            return 8;
+        case EMaterialCommand::LURD:
             return 9;
         case EMaterialCommand::XRAY:
             return 10;

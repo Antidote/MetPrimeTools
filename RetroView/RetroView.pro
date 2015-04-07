@@ -157,6 +157,3 @@ RESOURCES += \
 
 win32:RC_FILE += \
     resources/mainicon.rc
-
-DISTFILES += \
-    RetroView.supp

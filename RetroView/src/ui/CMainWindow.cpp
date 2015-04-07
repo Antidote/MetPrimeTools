@@ -24,15 +24,23 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
     connect(resourceManager, SIGNAL(newPak(CPakTreeWidget*)), this, SLOT(onNewPak(CPakTreeWidget*)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabChanged()));
+    ui->tabWidget->setElideMode(Qt::ElideNone);
+    ui->tabWidget->setUsesScrollButtons(true);
 
     installEventFilter(CKeyboardManager::instance());
-    ui->actionMode0->setChecked(QSettings().value("mode0").toBool());
-    ui->actionMode1->setChecked(QSettings().value("mode1").toBool());
-    ui->actionMode2->setChecked(QSettings().value("mode2").toBool());
-    ui->actionMode3->setChecked(QSettings().value("mode3").toBool());
-    ui->actionMode4And5->setChecked(QSettings().value("mode4And5").toBool());
-    ui->actionMode6->setChecked(QSettings().value("mode6").toBool());
-    ui->actionMode7->setChecked(QSettings().value("mode7").toBool());
+    ui->actionMode0          ->setChecked(QSettings().value("mode0",           true ).toBool());
+    ui->actionMode1          ->setChecked(QSettings().value("mode1",           true ).toBool());
+    ui->actionMode2          ->setChecked(QSettings().value("mode2",           true ).toBool());
+    ui->actionMode3          ->setChecked(QSettings().value("mode3",           true ).toBool());
+    ui->actionMode4And5      ->setChecked(QSettings().value("mode4And5",       true ).toBool());
+    ui->actionMode6          ->setChecked(QSettings().value("mode6",           true ).toBool());
+    ui->actionMode7          ->setChecked(QSettings().value("mode7",           true ).toBool());
+    ui->actionEnableTextures ->setChecked(QSettings().value("enableTextures",  true ).toBool());
+    ui->actionDrawPoints     ->setChecked(QSettings().value("drawPoints",      false).toBool());
+    ui->actionDrawJointNames ->setChecked(QSettings().value("drawJointNames",  false).toBool());
+    ui->actionDrawBoundingBox->setChecked(QSettings().value("drawBoundingBox", false).toBool());
+    ui->actionDrawCollision  ->setChecked(QSettings().value("drawCollision",   false).toBool());
+    ui->actionWireframe      ->setChecked(QSettings().value("wireframe",       false).toBool());
 
     QString basePath = QFileDialog::getExistingDirectory(nullptr, "Specify Basepath");
 
@@ -72,58 +80,34 @@ bool CMainWindow::event(QEvent* e)
     return QMainWindow::event(e);
 }
 
-void CMainWindow::onModeToggled(bool value)
-{
-    if (sender() == ui->actionMode0)
-        QSettings().setValue("mode0", value);
-    else if (sender() == ui->actionMode1)
-        QSettings().setValue("mode1", value);
-    else if (sender() == ui->actionMode2)
-        QSettings().setValue("mode2", value);
-    else if (sender() == ui->actionMode3)
-        QSettings().setValue("mode3", value);
-    else if (sender() == ui->actionMode4And5)
-        QSettings().setValue("mode4And5", value);
-    else if (sender() == ui->actionMode6)
-        QSettings().setValue("mode6", value);
-    else if (sender() == ui->actionMode7)
-        QSettings().setValue("mode7", value);
-}
-
 void CMainWindow::onToggled(bool checked)
 {
-    if (sender() == ui->pointsCheckBox)
-    {
-        QSettings().setValue("drawPoints", checked);
-    }
-    else if (sender() == ui->jointNamesCheckBox)
-    {
-        QSettings().setValue("drawJointNames", checked);
-    }
-    else if (sender() == ui->boundingBoxChkBox)
-    {
-        QSettings().setValue("drawBoundingBox", checked);
-    }
-    else if (sender() == ui->enableLightingCheckBox)
-    {
-        QSettings().setValue("enableLighting", checked);
-    }
-    else if (sender() == ui->enableTexturesCheckBox)
-    {
+    if (sender() == ui->actionMode0)
+        QSettings().setValue("mode0", checked);
+    else if (sender() == ui->actionMode1)
+        QSettings().setValue("mode1", checked);
+    else if (sender() == ui->actionMode2)
+        QSettings().setValue("mode2", checked);
+    else if (sender() == ui->actionMode3)
+        QSettings().setValue("mode3", checked);
+    else if (sender() == ui->actionMode4And5)
+        QSettings().setValue("mode4And5", checked);
+    else if (sender() == ui->actionMode6)
+        QSettings().setValue("mode6", checked);
+    else if (sender() == ui->actionMode7)
+        QSettings().setValue("mode7", checked);
+    else if (sender() == ui->actionEnableTextures)
         QSettings().setValue("enableTextures", checked);
-    }
-    else if (sender() == ui->drawCollisionCheckBox)
-    {
+    else if (sender() == ui->actionDrawPoints)
+        QSettings().setValue("drawPoints", checked);
+    else if (sender() == ui->actionDrawJointNames)
+        QSettings().setValue("drawJointNames", checked);
+    else if (sender() == ui->actionDrawBoundingBox)
+        QSettings().setValue("drawBoundingBox", checked);
+    else if (sender() == ui->actionDrawCollision)
         QSettings().setValue("drawCollision", checked);
-    }
-    else if (sender() == ui->transActors)
-    {
-        QSettings().setValue("drawTranslucent", checked);
-    }
-    else if (sender() == ui->wireframeCheckBox)
-    {
+    else if (sender() == ui->actionWireframe)
         QSettings().setValue("wireframe", checked);
-    }
     ui->glView->update();
 }
 
@@ -136,31 +120,8 @@ void CMainWindow::onMaterialSetChanged(int set)
 
 void CMainWindow::onViewerInitialized()
 {
-    connect(ui->pointsCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->jointNamesCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->enableTexturesCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->boundingBoxChkBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->gridCheckBox, SIGNAL(toggled(bool)), ui->glView, SLOT(setGridIsDrawn(bool)));
-    connect(ui->drawCollisionCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->axisCheckBox, SIGNAL(toggled(bool)), ui->glView, SLOT(setAxisIsDrawn(bool)));
-    connect(ui->enableLightingCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->wireframeCheckBox, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->transActors, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
-    connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(resetCamera()));
-    connect(ui->resetCameraPushButton, SIGNAL(clicked()), ui->glView, SLOT(update()));
+    connect(ui->resetCameraButton, SIGNAL(clicked()), ui->glView, SLOT(resetCamera()));
     connect(&m_fpsUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFPS()));
-    
-    ui->pointsCheckBox->setChecked(QSettings().value("drawPoints").toBool());
-    ui->jointNamesCheckBox->setChecked(QSettings().value("drawJointNames").toBool());
-    ui->wireframeCheckBox->setChecked(QSettings().value("wireframe").toBool());
-    ui->boundingBoxChkBox->setChecked(QSettings().value("drawBoundingBox").toBool());
-    ui->enableLightingCheckBox->setChecked(QSettings().value("enableLighting").toBool());
-    ui->enableTexturesCheckBox->setChecked(QSettings().value("enableTextures", true).toBool());
-    ui->drawCollisionCheckBox->setChecked(QSettings().value("drawCollision").toBool());
-    ui->transActors->setChecked(QSettings().value("drawTranslucent").toBool());
-    ui->axisCheckBox->setChecked(QSettings().value("axisDrawn", true).toBool());
-    ui->gridCheckBox->setChecked(QSettings().value("gridDrawn", true).toBool());
-    
     m_fpsUpdateTimer.start();
 }
 

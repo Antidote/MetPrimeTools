@@ -41,7 +41,6 @@ private:
     atUint32                  m_flags;
     std::vector<CMaterialSet> m_materialSets;
     atUint32                  m_currentSet;
-    bool                      m_sourcesDumped;
 };
 
 #endif // CMDLFILE_HPP
