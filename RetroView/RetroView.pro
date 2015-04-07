@@ -157,3 +157,8 @@ RESOURCES += \
 
 win32:RC_FILE += \
     resources/mainicon.rc
+
+QMAKE_INFO_PLIST = resources/Info.plist
+RESFILES.files = resources/icons/mainicon.icns resources/icons/pakicon.icns
+RESFILES.path = Contents/Resources
+QMAKE_BUNDLE_DATA += RESFILES

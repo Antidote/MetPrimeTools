@@ -19,6 +19,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     m_currentTab(nullptr)
 {
     ui->setupUi(this);
+    ui->tabWidget->setUsesScrollButtons(true);
+    ui->tabWidget->setElideMode(Qt::ElideNone);
     connect(ui->glView, SIGNAL(initialized()), this, SLOT(onViewerInitialized()));
     CResourceManager* resourceManager = CResourceManager::instance().get();
 
