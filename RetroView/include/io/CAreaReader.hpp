@@ -1,6 +1,8 @@
 #ifndef MREAREADER_HPP
 #define MREAREADER_HPP
 #include "core/CResourceManager.hpp"
+#include "core/CScriptObject.hpp"
+#include "core/CScene.hpp"
 
 #include <Athena/MemoryReader.hpp>
 
@@ -43,6 +45,8 @@ private:
     void readTexCoords  (CModelData& model, Athena::io::MemoryReader& in, bool isLightmap);
     void readMesh       (CModelData& model, CAreaFile* ret, Athena::io::MemoryReader& in);
     void readMeshes     (CAreaFile* ret, CModelData& model, atUint64& sectionStart, atUint32& i, atUint32 m);
+    void readSCLY       (CAreaFile* ret, Athena::io::MemoryReader& in);
+    CScene* readObjectLayer(Athena::io::MemoryReader& in, EScriptVersion version);
 
     std::vector<std::vector<atUint32>> m_modelMeshOffsets;
     std::vector<atUint32>    m_sectionSizes;
@@ -62,7 +66,6 @@ private:
 
     // Same information, just for MP3 and DKCR
     std::vector<SAreaSectionIndex> m_sectionIndices;
-
 };
 
 #endif // MREAREADER_HPP

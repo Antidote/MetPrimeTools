@@ -2,9 +2,10 @@
 #define SCENE_HPP
 
 #include <map>
-#include "CMaterial.hpp"
-#include "CMesh.hpp"
-#include "CModelData.hpp"
+#include "core/CMaterial.hpp"
+#include "core/CMesh.hpp"
+#include "core/CModelData.hpp"
+#include "core/CScriptObject.hpp"
 
 class CScene
 {
@@ -12,11 +13,10 @@ public:
     CScene();
     ~CScene();
 
-    void addModel(CModelData& model);
 private:
-    std::vector<CModelData> m_models;
-    std::vector<CMesh> m_opaqueMeshes;
-    std::vector<CMesh> m_transparentMeshes;
+    friend class CAreaReader;
+    friend class CAreaFile;
+    std::vector<CScriptObject> m_objects;
 };
 
 #endif // SCENE_HPP

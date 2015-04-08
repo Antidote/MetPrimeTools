@@ -43,21 +43,21 @@ IPropertyBase* CStructProperty::propertyByName(const std::string& name)
     }
     else
     {
-        auto it = std::find_if(m_properties.begin(), m_properties.end(),
-                               [&name](IPropertyBase* p)->bool{ return p->name() == name;});
-        if (it == m_properties.end())
-            return nullptr;
-
-        return *it;
+        for (IPropertyBase* prop : m_properties)
+        {
+            if (prop && prop->name() == name)
+                return prop;
+        }
+        return nullptr;
     }
 }
 
 CStructProperty* CStructProperty::structByIndex(atUint32 idx)
 {
-    return static_cast<CStructProperty*>(propertyByIndex(idx));
+    return dynamic_cast<CStructProperty*>(propertyByIndex(idx));
 }
 
 CStructProperty* CStructProperty::structByName(const std::string& name)
 {
-    return static_cast<CStructProperty*>(propertyByName(name));
+    return dynamic_cast<CStructProperty*>(propertyByName(name));
 }

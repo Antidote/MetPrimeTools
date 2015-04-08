@@ -34,12 +34,7 @@ CGLViewer::CGLViewer(QWidget* parent)
     QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_updateTimer.start(1);
-
-    // Set our scene bounds
-    m_sceneBounds.min = glm::vec3(-100.f);
-    m_sceneBounds.max = glm::vec3( 100.f);
-    
+    m_updateTimer.start(1);   
 }
 
 CGLViewer::~CGLViewer()

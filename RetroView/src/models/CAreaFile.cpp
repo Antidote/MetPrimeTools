@@ -68,6 +68,9 @@ void CAreaFile::draw()
 
     drawIbos(false, materialSet, model);
     drawIbos(true, materialSet, model);
+
+    for (CScriptObject obj : m_scriptLayers[0]->m_objects)
+        obj.draw();
 }
 
 void CAreaFile::drawBoundingBox()

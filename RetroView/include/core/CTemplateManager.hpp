@@ -11,6 +11,8 @@
 #define MASTER_TEMPLATE_FILENAME "MasterTemplate.xml"
 
 class TiXmlDocument;
+class TiXmlElement;
+class CPropertyTemplate;
 class CStructPropertyTemplate;
 class CTemplateManager
 {
@@ -19,11 +21,14 @@ public:
     static std::shared_ptr<CTemplateManager> instance();
 
     CStructPropertyTemplate* rootTemplateByType(const std::string& type);
+
 protected:
     CTemplateManager();
     ~CTemplateManager();
 private:
     void loadTemplates();
+    CPropertyTemplate* loadProperty(TiXmlElement* child);
+    CPropertyTemplate* loadStruct(TiXmlElement* child);
     void loadMasterTemplate(const std::string& tmpPath);
     CStructPropertyTemplate* loadTemplate(const std::string& templatePath, const std::string& name);
     std::unordered_map<std::string, CStructPropertyTemplate*> m_templateRoots;

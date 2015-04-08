@@ -167,6 +167,12 @@ void CAreaReader::readSections(CAreaFile* ret)
             for (atUint32 j = 0; j < m_modelMeshOffsets.size(); j++)
                 readModelHeader(ret, sectionStart, i);
         }
+        else if (i == m_sclySection)
+        {
+            atUint8* data = base::readUBytes(m_sectionSizes[i]);
+            m_sectionReader.setData(data, m_sectionSizes[i]);
+            readSCLY(ret, m_sectionReader);
+        }
 
         base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
     }
@@ -441,7 +447,7 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
             assert(in.readUint32() == 0);
             extraDataSize = in.readUint32();
             for (atUint32 i = 0; i < 3; i++)
-                mesh.m_unkVector[i] = in.readFloat(); // normalized?
+                mesh.m_reflectionDirection[i] = in.readFloat();
         }
 
         if (ret->m_version == CAreaFile::MetroidPrime2)
@@ -500,6 +506,52 @@ void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectio
         sectionStart = base::position();
         i++;
     }
+}
+
+void CAreaReader::readSCLY(CAreaFile* ret, Athena::io::MemoryReader& in)
+{
+    if (ret->m_version == CAreaFile::MetroidPrime1)
+    {
+        atUint32 magic = in.readUint32();
+        if (magic != 0x53434C59)
+            return;
+
+        atUint32 version = in.readUint32();
+        EScriptVersion scriptVersion;
+        if (version != 1)
+            return;
+
+        scriptVersion = eSCLY_MetroidPrime1;
+
+        atUint32 layerCount = in.readUint32();
+
+        std::vector<atUint32> layerSizes;
+        layerSizes.reserve(layerCount);
+        while ((layerCount--) > 0)
+            layerSizes.push_back(in.readUint32());
+
+        ret->m_scriptLayers.resize(layerSizes.size());
+        for (atUint32 i = 0; i < layerSizes.size(); i++)
+        {
+            atUint8* layerData = in.readUBytes(layerSizes[i]);
+            Athena::io::MemoryReader layerReader(layerData, layerSizes[i]);
+            layerReader.setEndian(Athena::Endian::BigEndian);
+
+            ret->m_scriptLayers[i] = readObjectLayer(layerReader, scriptVersion);
+        }
+    }
+}
+
+CScene* CAreaReader::readObjectLayer(Athena::io::MemoryReader& in, EScriptVersion version)
+{
+    in.readByte(); // unknown;
+    atUint32 objectCount = in.readUint32();
+    CScene* ret = new CScene;
+    ret->m_objects.resize(objectCount);
+    for (atUint32 i =0; i < objectCount; i++)
+        ret->m_objects[i] = CScriptObject(in, version);
+
+    return ret;
 }
 
 REGISTER_RESOURCE_LOADER(CAreaReader, "mrea", loadByData);

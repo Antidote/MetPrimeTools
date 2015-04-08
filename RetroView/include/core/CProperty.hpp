@@ -38,19 +38,63 @@ public:
     EPropertyType type() const { return _type; }
 
 protected:
-    friend class CScriptLoader;
+    friend class CScriptObject;
     T m_value;
 };
 
-typedef IProperty<std::string, String>  CStringProperty;
-typedef IProperty<atUint8,     Byte  >  CByteProperty;
-typedef IProperty<bool,        Bool>    CBoolProperty;
-typedef IProperty<atUint32,    Long>    CLongProperty;
-typedef IProperty<float,       Float>   CFloatProperty;
-typedef IProperty<atUint16,    Short>   CShortProperty;
-typedef IProperty<glm::vec3,   Vector3> CVector3Property;
-typedef IProperty<QColor,      Color>   CColorProperty;
-typedef IProperty<IResource*,  Asset>   CAssetProperty;
+class CStringProperty : public IProperty<std::string, String>
+{
+public:
+    virtual ~CStringProperty() {}
+};
+
+class CByteProperty : public IProperty<atUint8, Byte>
+{
+public:
+    virtual ~CByteProperty() {}
+};
+
+class CBoolProperty : public IProperty<bool, Bool>
+{
+public:
+    virtual ~CBoolProperty() {}
+};
+
+class CLongProperty : public IProperty<atUint32, Long>
+{
+public:
+    virtual ~CLongProperty() {}
+};
+
+class CFloatProperty : public IProperty<float,  Float>
+{
+public:
+    virtual ~CFloatProperty() {}
+};
+
+class CShortProperty : public IProperty<atUint16, Short>
+{
+public:
+    virtual ~CShortProperty() {}
+};
+
+class CVector3Property : public IProperty<glm::vec3, Vector3>
+{
+public:
+    virtual ~CVector3Property() {}
+};
+
+class CColorProperty : public IProperty<QColor, Color>
+{
+public:
+    virtual ~CColorProperty() {}
+};
+
+class CAssetProperty : public IProperty<IResource*,  Asset>
+{
+public:
+    virtual ~CAssetProperty() {}
+};
 
 class CStructProperty : IPropertyBase
 {
@@ -69,6 +113,7 @@ public:
 
     inline IPropertyBase* operator[](atUint32 idx) { return propertyByIndex(idx); }
 private:
+    friend class CScriptObject;
     std::vector<IPropertyBase*> m_properties;
 
 };

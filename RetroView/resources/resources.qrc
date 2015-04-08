@@ -143,5 +143,28 @@
         <file>templates/mp1/structs/ScannableParameters.xml</file>
         <file>templates/mp1/structs/SpindleCameraStruct.xml</file>
         <file>templates/mp1/structs/VisorParameters.xml</file>
+        <file>templates/mp1/MetroidPrimeStage1.xml</file>
+        <file>templates/mp1/Ridley.xml</file>
+        <file>templates/mp1/Water.xml</file>
+        <file>templates/mp1/CameraHint.xml</file>
+        <file>templates/mp1/NewCameraShaker.xml</file>
+        <file>templates/mp1/EnergyBall.xml</file>
+        <file>templates/mp1/ScriptBeam.xml</file>
+        <file>templates/mp1/PuddleToadGamma.xml</file>
+        <file>templates/mp1/Debris.xml</file>
+        <file>templates/mp1/IceZoomer.xml</file>
+        <file>templates/mp1/Steam.xml</file>
+        <file>templates/mp1/DistanceFog.xml</file>
+        <file>templates/mp1/AIKeyframe.xml</file>
+        <file>templates/mp1/FogVolume.xml</file>
+        <file>templates/mp1/ActorKeyframe.xml</file>
+        <file>templates/mp1/DebugCameraWaypoint.xml</file>
+        <file>templates/mp1/DockAreaChange.xml</file>
+        <file>templates/mp1/structs/PrimeStruct4.xml</file>
+        <file>templates/mp1/structs/PrimeStruct1.xml</file>
+        <file>templates/mp1/structs/RidleyStruct2.xml</file>
+        <file>templates/mp1/structs/PrimeStruct3.xml</file>
+        <file>templates/mp1/structs/PrimeStruct2.xml</file>
+        <file>templates/mp1/structs/PrimeStruct6.xml</file>
     </qresource>
 </RCC>

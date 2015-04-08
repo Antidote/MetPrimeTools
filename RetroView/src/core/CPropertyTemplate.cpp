@@ -27,6 +27,7 @@ CFourCC CAssetPropertyTemplate::assetType() const
 
 
 CStructPropertyTemplate::CStructPropertyTemplate()
+    : m_hasCount(false)
 {
     m_propertyType = EPropertyType::Struct;
 }

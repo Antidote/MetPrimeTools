@@ -58,7 +58,7 @@ private:
     SBoundingBox            m_boundingBox;
     glm::vec3               m_pivot;
     atUint32                m_materialID;
-    glm::vec3               m_unkVector;
+    glm::vec3               m_reflectionDirection;
     atUint16                m_mantissa;
     atUint16                m_uvSource;
     std::vector<CPrimitive> m_primitives;

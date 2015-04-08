@@ -343,7 +343,7 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
         atUint32 extraDataSize = in.readUint32();
 
         for (atUint32 i = 0; i < 3; i++)
-            mesh.m_unkVector[i] = in.readFloat();
+            mesh.m_reflectionDirection[i] = in.readFloat();
 
         in.seek(extraDataSize);
     }

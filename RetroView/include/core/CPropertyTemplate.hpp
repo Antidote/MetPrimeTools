@@ -39,9 +39,11 @@ public:
     CStructPropertyTemplate();
     virtual ~CStructPropertyTemplate();
 
+    bool hasCount() const { return m_hasCount; }
     std::vector<CPropertyTemplate*> propertyTemplates() const;
 private:
     friend class CTemplateManager;
+    bool m_hasCount;
     std::vector<CPropertyTemplate*> m_propertyTemplates; // child properties
 };
 

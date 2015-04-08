@@ -8,7 +8,3 @@ CScene::~CScene()
 {
 }
 
-void CScene::addModel(CModelData& model)
-{
-}
-

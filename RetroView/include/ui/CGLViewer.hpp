@@ -63,7 +63,6 @@ protected:
 private:
     void updateCamera();
     QTime                            m_frameTimer;
-    SBoundingBox                     m_sceneBounds;
     IRenderableModel*                m_currentRenderable;
     IRenderableModel*                m_skybox;
     static CGLViewer*                m_instance;

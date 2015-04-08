@@ -8,9 +8,9 @@ QT       += core gui xml opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #DEFINES += GLEW_STATIC
-QMAKE_CXXFLAGS_RELEASE -= -O2
-QMAKE_CXXFLAGS_RELEASE += -Os
-QMAKE_CXXFLAGS += -std=c++11 -g
+#QMAKE_CXXFLAGS_RELEASE -= -O2
+#QMAKE_CXXFLAGS_RELEASE += -Os
+QMAKE_CXXFLAGS += -std=c++11
 #QMAKE_CXXFLAGS += -std=c++11 -fopenmp
 mac:QMAKE_LFLAGS += -stdlib=libc++
 #QMAKE_LFLAGS += -fopenmp

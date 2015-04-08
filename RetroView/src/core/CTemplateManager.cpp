@@ -28,7 +28,7 @@ std::shared_ptr<CTemplateManager> CTemplateManager::instance()
 CStructPropertyTemplate* CTemplateManager::rootTemplateByType(const std::string& type)
 {
     std::string tmp(type);
-    Athena::utility::tolower(tmp);
+    Athena::utility::toupper(tmp);
     if (m_templateRoots.find(tmp) != m_templateRoots.end())
         return m_templateRoots[tmp];
 
@@ -54,21 +54,100 @@ void CTemplateManager::loadTemplates()
     //loadMasterTemplate(MP2_TEMPLATE_DIR);
 }
 
+CPropertyTemplate* CTemplateManager::loadProperty(TiXmlElement* child)
+{
+    CPropertyTemplate* childProp = nullptr;
+    std::string childName = child->Attribute("name");
+    std::string type = child->Attribute("type");
+    Athena::utility::tolower(type);
+    if (type == "file")
+    {
+        childProp = new CAssetPropertyTemplate;
+        CAssetPropertyTemplate* assetProp = dynamic_cast<CAssetPropertyTemplate*>(childProp);
+        assetProp->m_assetType = child->Attribute("ext");
+        assetProp->m_name = childName;
+        child = child->NextSiblingElement();
+        return childProp;
+    }
+    else
+    {
+        childProp = new CPropertyTemplate;
+        childProp->m_name = childName;
+    }
+
+    if (!type.compare("string"))
+        childProp->m_propertyType = EPropertyType::String;
+    else if (!type.compare("vector3f"))
+        childProp->m_propertyType = EPropertyType::Vector3;
+    else if (!type.compare("float"))
+        childProp->m_propertyType = EPropertyType::Float;
+    else if (!type.compare("bool"))
+        childProp->m_propertyType = EPropertyType::Bool;
+    else if (!type.compare("long"))
+        childProp->m_propertyType = EPropertyType::Long;
+    else if (!type.compare("file"))
+        childProp->m_propertyType = EPropertyType::Asset;
+    else if (!type.compare("color"))
+        childProp->m_propertyType = EPropertyType::Color;
+    else if (!type.compare("byte"))
+        childProp->m_propertyType = EPropertyType::Byte;
+    else if (!type.compare("enum"))
+        childProp->m_propertyType = EPropertyType::Enum;
+    else if (!type.compare("array"))
+        childProp->m_propertyType = EPropertyType::Array;
+
+    return childProp;
+}
+
+CPropertyTemplate* CTemplateManager::loadStruct(TiXmlElement* child)
+{
+    CPropertyTemplate* childProp = nullptr;
+    std::string childName = child->Attribute("name");
+    const char* tmp = child->Attribute("template");
+    if (tmp == nullptr)
+    {
+        childProp = new CStructPropertyTemplate();
+        CStructPropertyTemplate* strTemp = dynamic_cast<CStructPropertyTemplate*>(childProp);
+        strTemp->m_name = childName;
+        strTemp->m_hasCount = (child->FirstChild("count") != nullptr);
+
+        TiXmlElement* subChild = child->FirstChildElement();;
+        while (subChild != nullptr)
+        {
+            CPropertyTemplate* subChildProp = nullptr;
+            if (!subChild->ValueStr().compare("property"))
+            {
+                subChildProp = loadProperty(subChild);
+            }
+            else if (!subChild->ValueStr().compare("struct"))
+            {
+                subChildProp = loadStruct(subChild);
+            }
+
+            if (subChildProp)
+                strTemp->m_propertyTemplates.push_back(subChildProp);
+
+            subChild = subChild->NextSiblingElement();
+        }
+    }
+    else
+    {
+        childProp = loadTemplate("/" + std::string(tmp), childName);
+    }
+
+    return childProp;
+}
+
 CStructPropertyTemplate* CTemplateManager::loadTemplate(const std::string& templatePath, const std::string& name)
 {
     CStructPropertyTemplate* ret = nullptr;
-    std::cout << templatePath << std::endl;
     TiXmlDocument objTemplate(m_templatePath + templatePath);
     if (objTemplate.LoadFile())
     {
         TiXmlElement* root = objTemplate.RootElement();
         ret = new CStructPropertyTemplate;
         ret->m_name = name;
-
-        TiXmlElement* countElement = root->FirstChildElement("count");
-        if (countElement == nullptr)
-            return nullptr;
-
+        ret->m_hasCount = (root->FirstChild("count") != nullptr);
 
         TiXmlElement* child = root->FirstChildElement();
 
@@ -77,53 +156,15 @@ CStructPropertyTemplate* CTemplateManager::loadTemplate(const std::string& templ
             CPropertyTemplate* childProp = nullptr;
             if (!child->ValueStr().compare("property"))
             {
-                std::string childName = child->Attribute("name");
-                std::string type = child->Attribute("type");
-                Athena::utility::tolower(type);
-                if (type == "file")
-                {
-                    childProp = new CAssetPropertyTemplate;
-                    CAssetPropertyTemplate* assetProp = dynamic_cast<CAssetPropertyTemplate*>(childProp);
-                    assetProp->m_assetType = child->Attribute("ext");
-                    assetProp->m_name = childName;
-                    child = child->NextSiblingElement();
-                    ret->m_propertyTemplates.push_back(childProp);
-                    continue;
-                }
-                else
-                {
-                    childProp = new CPropertyTemplate;
-                    childProp->m_name = childName;
-                }
-
-                if (!type.compare("string"))
-                    childProp->m_propertyType = EPropertyType::String;
-                else if (!type.compare("vector3f"))
-                    childProp->m_propertyType = EPropertyType::Vector3;
-                else if (!type.compare("float"))
-                    childProp->m_propertyType = EPropertyType::Float;
-                else if (!type.compare("bool"))
-                    childProp->m_propertyType = EPropertyType::Bool;
-                else if (!type.compare("long"))
-                    childProp->m_propertyType = EPropertyType::Long;
-                else if (!type.compare("file"))
-                    childProp->m_propertyType = EPropertyType::Asset;
-                else if (!type.compare("color"))
-                    childProp->m_propertyType = EPropertyType::Color;
-
-                ret->m_propertyTemplates.push_back(childProp);
+                childProp = loadProperty(child);
             }
             else if (!child->ValueStr().compare("struct"))
             {
-                std::string childName = child->Attribute("name");
-                std::string path = child->Attribute("template");
-                childProp = loadTemplate("/" + path, childName);
-                if (childProp)
-                {
-                    ret->m_propertyTemplates.push_back(childProp);
-                }
+                childProp = loadStruct(child);
             }
 
+            if (childProp)
+                ret->m_propertyTemplates.push_back(childProp);
             child = child->NextSiblingElement();
         }
     }
@@ -152,10 +193,11 @@ void CTemplateManager::loadMasterTemplate(const std::string& gamePath)
                 std::string id = std::string(element->Attribute("ID"));
                 std::string name = std::string(element->Attribute("name"));
                 CStructPropertyTemplate* objTemplate = loadTemplate(gamePath + name + ".xml", name);
-                Athena::utility::tolower(id);
+                Athena::utility::toupper(id);
                 if (objTemplate != nullptr)
                     m_templateRoots[id] = objTemplate;
-                std::cout << id << " " << name << std::endl;
+                else
+                    std::cout << "Failed to load template for " << name << std::endl;
                 element = element->NextSiblingElement("object");
             }
         }

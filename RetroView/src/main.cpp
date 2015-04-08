@@ -5,8 +5,26 @@
 #include <QMessageBox>
 #include <glm/glm.hpp>
 #include <QDir>
+#include <QDirIterator>
 #include <QStandardPaths>
 #include <QDebug>
+
+QString getSource(QString Filename)
+{
+    QFile file(Filename);
+
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        std::cout << "could not open file for read: " << Filename.toStdString() << std::endl;
+        return QString();
+    }
+
+    QTextStream in(&file);
+    QString source = in.readAll();
+
+    file.close();
+    return source;
+}
 
 int main(int argc, char *argv[])
 {
@@ -17,20 +35,44 @@ int main(int argc, char *argv[])
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
 
-    QFileInfo fi(a.applicationDirPath());
-    if (!fi.isWritable())
-        CTemplateManager::instance()->initialize("../templates");
+    QFileInfo fi(a.applicationDirPath() + "/templates");
+    if (fi.exists() && fi.isWritable())
+        CTemplateManager::instance()->initialize(fi.absolutePath().toStdString());
     else
     {
         QString homeLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
         QDir homeDir = QDir(homeLocation + "/.retroview");
-        if (!homeDir.exists())
+
+        if (!homeDir.exists("templates"))
         {
-            homeDir.mkpath("templates");
-            homeDir.cd("templates");
+            QDirIterator iter(":templates", QDirIterator::Subdirectories);
+            while (iter.hasNext())
+            {
+                QString file = iter.next();
+                QFileInfo fileInfo(file);
+                file = file.remove(0, 1);
+                if (fileInfo.isDir())
+                {
+                    homeDir.mkpath(file);
+                }
+                else
+                {
+                    QString outPath = homeDir.absolutePath() + "/" + file;
+                    QFile out(outPath);
+                    QString data = getSource(":" + file);
+                    if (out.open(QFile::WriteOnly))
+                    {
+                        out.write(data.toLocal8Bit());
+                        out.close();
+                    }
+                }
+            }
         }
 
-        CTemplateManager::instance()->initialize(QString(homeLocation + "/retroview/templates").toStdString());
+        homeDir.cd("templates");
+
+        std::cout << homeDir.absolutePath().toStdString() << std::endl;
+        CTemplateManager::instance()->initialize(homeDir.absolutePath().toStdString());
     }
     QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
     fmt.setDepthBufferSize(24);

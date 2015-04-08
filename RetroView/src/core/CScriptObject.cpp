@@ -1,10 +1,179 @@
 #include "core/CScriptObject.hpp"
+#include "core/CTemplateManager.hpp"
+#include "core/CResourceManager.hpp"
+#include "models/CModelFile.hpp"
 
 CScriptObject::CScriptObject()
 {
 }
 
+CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion version)
+    : m_version(version)
+{
+    in.setEndian(Athena::Endian::BigEndian);
+    atUint32 objType;
+    if (version == eSCLY_MetroidPrime1)
+    {
+        objType = in.readUByte();
+        atUint32 length = in.readUint32();
+        atUint64 position = in.position();
+        m_id = CAssetID(in, CAssetID::E_32Bits);
+
+        atUint32 connectedObjectCount = in.readUint32();
+        m_connectedObjects.reserve(connectedObjectCount);
+
+        while((connectedObjectCount--) > 0)
+        {
+            SConnectedObject obj;
+            obj.state = in.readUint32();
+            obj.message = in.readUint32();
+            obj.target = CAssetID(in, CAssetID::E_32Bits);
+            m_connectedObjects.push_back(obj);
+        }
+
+        std::string typeStr = Athena::utility::sprintf("0x%X", objType);
+        CStructPropertyTemplate* rootTemplate = CTemplateManager::instance()->rootTemplateByType(typeStr);
+        m_rootProperty.m_propertyTemplate = rootTemplate;
+
+        loadStruct(in, &m_rootProperty, rootTemplate);
+        in.seek(position + length, Athena::SeekOrigin::Begin);
+    }
+    else
+    {
+        std::cout << "Only Metroid prime 1 objects at this time" << std::endl;
+    }
+}
+
+void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* parent, CStructPropertyTemplate* parentTemplate)
+{
+    if (parentTemplate->hasCount())
+    {
+        atUint32 propertyCount = in.readUint32();
+//        if (propertyCount != parentTemplate->propertyTemplates().size())
+//        {
+//            std::cout << std::dec << "Stored property count does not match expected count: " << propertyCount << " != " << parentTemplate->propertyTemplates().size() << std::endl;
+//            return;
+//        }
+    }
+
+    for (CPropertyTemplate* propertyTemplate : parentTemplate->propertyTemplates())
+    {
+        switch(propertyTemplate->propertyType())
+        {
+            case EPropertyType::Struct:
+            {
+                CStructProperty* prop = new CStructProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                loadStruct(in, prop, dynamic_cast<CStructPropertyTemplate*>(propertyTemplate));
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Vector3:
+            {
+                CVector3Property* prop = new CVector3Property;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value.x = in.readFloat();
+                prop->m_value.y = in.readFloat();
+                prop->m_value.z = in.readFloat();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Bool:
+            {
+                CBoolProperty* prop = new CBoolProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value = in.readBool();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Long:
+            {
+                CLongProperty* prop = new CLongProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value = in.readUint32();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Byte:
+            {
+                CByteProperty* prop = new CByteProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value = in.readByte();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Float:
+            {
+                CFloatProperty* prop = new CFloatProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value = in.readFloat();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::String:
+            {
+                CStringProperty* prop = new CStringProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value = in.readString();
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Asset:
+            {
+                CAssetProperty* prop = new CAssetProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(propertyTemplate);
+                CAssetID assetID;
+                if (m_version == eSCLY_MetroidPrime1 || m_version == eSCLY_MetroidPrime2)
+                    assetID = CAssetID(in, CAssetID::E_32Bits);
+                else
+                    assetID = CAssetID(in, CAssetID::E_64Bits);
+
+                prop->m_value = CResourceManager::instance()->loadResource(assetID, assetTemplate->assetType().toString());
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            case EPropertyType::Color:
+            {
+                CColorProperty* prop = new CColorProperty;
+                prop->m_propertyTemplate = propertyTemplate;
+                prop->m_value.setRedF(in.readFloat());
+                prop->m_value.setGreenF(in.readFloat());
+                prop->m_value.setBlueF(in.readFloat());
+                prop->m_value.setAlphaF(in.readFloat());
+                parent->m_properties.push_back(prop);
+            }
+                break;
+            default:
+                std::cout << "todo" << std::endl;
+        }
+    }
+}
+
 CScriptObject::~CScriptObject()
 {
+}
+
+void CScriptObject::draw()
+{
+    CAssetProperty* assetProp = static_cast<CAssetProperty*>(m_rootProperty.propertyByName("Model"));
+    if (assetProp)
+    {
+        CModelFile* model = dynamic_cast<CModelFile*>(assetProp->value());
+        if (model)
+        {
+            CVector3Property* posProperty      = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Position"));
+            CVector3Property* rotationProperty = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Rotation"));
+            CVector3Property* scaleProperty    = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Scale"));
+            if (posProperty)
+                model->setPosition(posProperty->value());
+            if (rotationProperty)
+                model->setRotation(rotationProperty->value());
+            if (scaleProperty)
+                model->setScale(scaleProperty->value());
+            model->draw();
+            model->restoreDefaults();
+        }
+    }
 }
 
