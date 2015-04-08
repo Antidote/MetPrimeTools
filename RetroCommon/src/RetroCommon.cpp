@@ -98,7 +98,7 @@ void decompressFile(aIO::IStreamWriter& outbuf, const atUint8* data, atUint32 sr
         atUint32 uncompressedLength = *(atUint32*)(data);
         Athena::utility::BigUint32(uncompressedLength);
         atUint8* tmp = new atUint8[srcLength];
-        memcpy(tmp, data, srcLength);
+        memcpy(tmp, data + 4, srcLength - 4);
         decompressData(outbuf, (const atUint8*)tmp, srcLength - 4, uncompressedLength);
         delete[] tmp;
     }

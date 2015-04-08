@@ -9,17 +9,15 @@
 	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
 	<property name="Unknown 1" type="float" />
 	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="long" />
-	<property name="Unknown 4" type="long" />
-	<property name="Unknown 5" type="float" />
-	<property name="Unknown 6" type="float" />
+	<property name="Unknown 3" type="vector3f" />
+	<property name="Unknown 4" type="float" />
 	<struct name="DamageVulnerability 1" template="mp1/structs/DamageVulnerability.xml" />
 	<struct name="DamageVulnerability 2" template="mp1/structs/DamageVulnerability.xml" />
 	<struct name="DamageVulnerability 3" template="mp1/structs/DamageVulnerability.xml" />
 	<property name="WPSC 1" type="file" ext="WPSC" />
 	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
-	<property name="Unknown 7" type="float" />
-	<property name="Unknown 8" type="long" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
 	<property name="WPSC 2" type="file" ext="WPSC" />
 	<property name="Particle 1" type="file" ext="PART" />
 	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
@@ -28,18 +26,20 @@
 	<property name="Particle 4" type="file" ext="PART" />
 	<property name="Particle 5" type="file" ext="PART" />
 	<property name="ELSC" type="file" ext="ELSC" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<struct name="DamageInfo 3" template="mp1/structs/DamageInfo.xml" />
+	<property name="Sound ID 1" type="long" />
 	<property name="Unknown 9" type="float" />
 	<property name="Unknown 10" type="float" />
-	<struct name="DamageInfo 3" template="mp1/structs/DamageInfo.xml" />
-	<property name="Unknown 11" type="long" />
-	<property name="RandomGuessCouldBeWrongAboutThisBeingAVec3" type="vector3f" />
+	<property name="Unknown 11" type="float" />
 	<property name="Texture" type="file" ext="TXTR" />
-	<property name="Unknown 12" type="long" />
+	<property name="Sound ID 2" type="long" />
 	<property name="Particle 6" type="file" ext="PART" />
+	<property name="Unknown 12" type="bool" />
 	<property name="Unknown 13" type="bool" />
-	<property name="Unknown 14" type="bool" />
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </IceSheegoth>

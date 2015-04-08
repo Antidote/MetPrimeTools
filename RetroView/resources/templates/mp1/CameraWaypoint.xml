@@ -6,5 +6,5 @@
 	<property name="Rotation" type="vector3f" />
 	<property name="Unknown 1" type="bool" />
 	<property name="Unknown 2" type="float" />
-	<property name="Always 0" type="long" />
+	<property name="Unknown 3" type="long" />
 </CameraWaypoint>

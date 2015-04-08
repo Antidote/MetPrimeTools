@@ -18,11 +18,18 @@
 	<property name="Unknown 5" type="bool" />
 	<property name="Unknown 6" type="bool" />
 	<property name="Unknown 7" type="bool" />
-	<struct name="PlayerActorStruct" template="mp1/structs/PlayerActorStruct.xml" />
-	<property name="Unknown 8" type="long" />
+	<struct name="PlayerActorStruct">
+		<count>5</count>
+		<property name="Unknown 8" type="bool" />
+		<property name="Unknown 9" type="bool" />
+		<property name="Unknown 10" type="bool" />
+		<property name="Unknown 11" type="bool" />
+		<property name="Unknown 12" type="bool" />
+	</struct>
+	<property name="Unknown 13" type="long" />
 
 	<attrib type="animset" target="AnimationParameters" forcenode="2" />
 	<attrib type="model" target="Model" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </PlayerActor>

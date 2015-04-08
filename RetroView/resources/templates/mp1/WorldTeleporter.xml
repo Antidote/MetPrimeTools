@@ -12,16 +12,16 @@
 	<property name="Model 2" type="file" ext="CMDL" />
 	<property name="Unknown 4" type="vector3f" />
 	<property name="Unknown 5" type="bool" />
+	<property name="Sound?" type="long" />
 	<property name="Unknown 6" type="long" />
 	<property name="Unknown 7" type="long" />
-	<property name="Unknown 8" type="long" />
-	<property name="Unknown 9" type="bool" />
+	<property name="Unknown 8" type="bool" />
 	<property name="FONT" type="file" ext="FONT" />
 	<property name="STRG" type="file" ext="STRG" />
-	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 9" type="bool" />
+	<property name="Unknown 10" type="float" />
 	<property name="Unknown 11" type="float" />
 	<property name="Unknown 12" type="float" />
-	<property name="Unknown 13" type="float" />
 
 	<attrib type="animset" target="AnimationParameters" />
 	<attrib type="model" target="Model 1" />

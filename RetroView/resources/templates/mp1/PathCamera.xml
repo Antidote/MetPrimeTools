@@ -5,11 +5,19 @@
 	<property name="Position" type="vector3f" />
 	<property name="Rotation" type="vector3f" />
 	<property name="Unknown 1" type="bool" />
-	<struct name="PathCameraStruct" template="mp1/structs/PathCameraStruct.xml" />
-	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="float" />
-	<property name="Unknown 4" type="float" />
-	<property name="Unknown 5" type="long" />
-	<property name="Unknown 6" type="float" />
-	<property name="Unknown 7" type="float" />
+	<struct name="PathCameraStruct">
+		<count>6</count>
+		<property name="Unknown 2" type="bool" />
+		<property name="Unknown 3" type="bool" />
+		<property name="Unknown 4" type="bool" />
+		<property name="Unknown 5" type="bool" />
+		<property name="Unknown 6" type="bool" />
+		<property name="Unknown 7" type="bool" />
+	</struct>
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="long" />
+	<property name="Unknown 12" type="float" />
+	<property name="Unknown 13" type="float" />
 </PathCamera>

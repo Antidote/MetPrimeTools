@@ -2,12 +2,14 @@
 <AreaAttributes>
 	<count>9</count>
 	<property name="Unknown 1" type="long" />
-	<property name="Unknown 2" type="bool" />
-	<property name="Unknown 3" type="long" />
+	<property name="Skybox toggle" type="bool" />
+	<property name="Unknown 2" type="long" />
+	<property name="Unknown 3" type="float" />
 	<property name="Unknown 4" type="float" />
 	<property name="Unknown 5" type="float" />
 	<property name="Unknown 6" type="float" />
-	<property name="Unknown 7" type="float" />
-	<property name="Unknown 8" type="long" />
-	<property name="Unknown 9" type="long" />
+	<property name="Skybox model (uses MLVL skybox if not specified)" type="file" ext="CMDL" />
+	<property name="Unknown 7" type="long" />
+
+	<attrib type="model" target="Skybox model (uses MLVL skybox if not specified)" />
 </AreaAttributes>

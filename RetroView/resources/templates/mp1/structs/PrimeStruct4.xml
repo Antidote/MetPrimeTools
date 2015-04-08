@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<PrimeStruct4>
+	<property name="Unknown 1" type="long" />
+	<property name="Unknown 2" type="long" />
+	<property name="Particle 1" type="file" ext="PART" />
+	<property name="Particle 2" type="file" ext="PART" />
+	<property name="Texture 1" type="file" ext="TXTR" />
+	<property name="Texture 2" type="file" ext="TXTR" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="float" />
+	<property name="Unknown 6" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="float" />
+	<property name="Unknown 12" type="color" />
+	<property name="Unknown 13" type="color" />
+	<property name="WPSC" type="file" ext="WPSC" />
+	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
+	<struct name="PrimeStruct5">
+		<count>8</count>
+		<property name="Unknown 14" type="file" ext="Unkn" />
+		<property name="Unknown 15" type="long" />
+		<property name="Unknown 16" type="file" ext="Unkn" />
+		<property name="Unknown 17" type="file" ext="Unkn" />
+		<property name="Unknown 18" type="long" />
+		<property name="Unknown 19" type="long" />
+		<property name="Unknown 20" type="long" />
+		<property name="Unknown 21" type="long" />
+	</struct>
+	<property name="Unknown 22" type="float" />
+	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
+</PrimeStruct4>

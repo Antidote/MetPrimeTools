@@ -29,5 +29,5 @@
 	<attrib type="animset" target="AnimationParameters" />
 	<attrib type="model" target="Model" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </Actor>

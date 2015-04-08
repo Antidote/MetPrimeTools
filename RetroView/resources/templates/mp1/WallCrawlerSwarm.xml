@@ -35,14 +35,14 @@
 	<property name="Unknown 19" type="long" />
 	<property name="Unknown 20" type="float" />
 	<property name="Unknown 21" type="float" />
-	<property name="Always 0" type="long" />
+	<property name="Unknown 22" type="float" />
 	<struct name="HealthInfo" template="mp1/structs/HealthInfo.xml" />
 	<struct name="DamageVulnerability" template="mp1/structs/DamageVulnerability.xml" />
-	<property name="Unknown 22" type="long" />
-	<property name="Unknown 23" type="long" />
+	<property name="Sound? 1" type="long" />
+	<property name="Sound? 2" type="long" />
 
 	<attrib type="animset" target="AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 	<attrib type="volume" target="Volume" />
 </WallCrawlerSwarm>

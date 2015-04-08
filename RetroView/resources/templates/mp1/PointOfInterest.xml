@@ -5,6 +5,9 @@
 	<property name="Position" type="vector3f" />
 	<property name="Rotation" type="vector3f" />
 	<property name="Unknown 1" type="bool" />
-	<struct name="ScannableParameters" template="mp1/structs/ScannableParameters.xml" />
+	<struct name="ScannableParameters">
+		<count>1</count>
+		<property name="SCAN" type="file" ext="SCAN" />
+	</struct>
 	<property name="Unknown 2" type="float" />
 </PointOfInterest>

@@ -11,18 +11,18 @@
 	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
 	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
 	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="bool" />
+	<property name="Active" type="bool" />
 	<property name="DCLN" type="file" ext="DCLN" />
 	<struct name="HealthInfo" template="mp1/structs/HealthInfo.xml" />
 	<struct name="DamageVulnerability" template="mp1/structs/DamageVulnerability.xml" />
-	<property name="Unknown 4" type="bool" />
-	<property name="Unknown 5" type="float" />
-	<property name="Unknown 6" type="bool" />
+	<property name="Unknown 3" type="bool" />
+	<property name="Unknown 4" type="float" />
+	<property name="Unknown 5" type="bool" />
+	<property name="Unknown 6" type="long" />
 	<property name="Unknown 7" type="long" />
-	<property name="Unknown 8" type="long" />
 
 	<attrib type="animset" target="AnimationParameters" />
 	<attrib type="model" target="Model" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </Platform>

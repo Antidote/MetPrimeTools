@@ -4,6 +4,6 @@
 	<property name="Name" type="string" />
 	<property name="Position" type="vector3f" />
 	<property name="Rotation" type="vector3f" />
-	<property name="Unknown 1" type="bool" />
+	<property name="Active" type="bool" />
 	<struct name="GrappleParameters" template="mp1/structs/GrappleParameters.xml" />
 </GrapplePoint>

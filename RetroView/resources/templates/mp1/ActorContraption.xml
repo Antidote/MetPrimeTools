@@ -8,7 +8,7 @@
 	<property name="Unknown 1" type="vector3f" />
 	<property name="Scan Offset" type="vector3f" />
 	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="long" />
+	<property name="Unknown 3" type="float" />
 	<struct name="HealthInfo" template="mp1/structs/HealthInfo.xml" />
 	<struct name="DamageVulnerability" template="mp1/structs/DamageVulnerability.xml" />
 	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
@@ -19,5 +19,5 @@
 
 	<attrib type="animset" target="AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </ActorContraption>

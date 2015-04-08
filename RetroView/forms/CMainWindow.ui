@@ -44,7 +44,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>23</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -184,10 +184,16 @@
    <property name="text">
     <string>Mode &amp;6</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="actionLoadPak">
    <property name="text">
     <string>Load &amp;Pak</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionMode7">
@@ -196,6 +202,9 @@
    </property>
    <property name="text">
     <string>Mode &amp;7</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionEnableTextures">
@@ -208,6 +217,9 @@
    <property name="toolTip">
     <string>Enable Textures</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="actionDrawPoints">
    <property name="checkable">
@@ -215,6 +227,9 @@
    </property>
    <property name="text">
     <string>Draw &amp;Points</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionDrawJointNames">
@@ -224,6 +239,9 @@
    <property name="text">
     <string>Draw Joint Names</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="actionDrawBoundingBox">
    <property name="checkable">
@@ -231,6 +249,9 @@
    </property>
    <property name="text">
     <string>Draw Bounding Box</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionWireframe">
@@ -240,6 +261,9 @@
    <property name="text">
     <string>Wireframe</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="actionDrawCollision">
    <property name="checkable">
@@ -247,6 +271,9 @@
    </property>
    <property name="text">
     <string>Draw Collision</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>
@@ -476,8 +503,24 @@
    <slot>onToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
      <x>447</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>materialSetComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onMaterialSetChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>138</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>447</x>

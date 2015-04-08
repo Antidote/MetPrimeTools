@@ -32,16 +32,16 @@
 	<property name="Unknown 21" type="vector3f" />
 	<property name="Unknown 22" type="bool" />
 	<property name="Unknown 23" type="bool" />
-	<property name="Always 0 1" type="long" />
+	<property name="Unknown 24" type="long" />
 	<property name="Particle 3" type="file" ext="PART" />
-	<property name="Unknown 24" type="vector3f" />
-	<property name="Always 0 2" type="long" />
-	<property name="Unknown 25" type="bool" />
-	<property name="Unknown 26" type="bool" />
+	<property name="Unknown 25" type="vector3f" />
+	<property name="Unknown 26" type="long" />
 	<property name="Unknown 27" type="bool" />
 	<property name="Unknown 28" type="bool" />
+	<property name="Unknown 29" type="bool" />
+	<property name="Unknown 30" type="bool" />
 
 	<attrib type="model" target="Model" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </DebrisExtended>

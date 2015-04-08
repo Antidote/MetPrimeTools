@@ -3,13 +3,13 @@
 	<count>9</count>
 	<property name="Name" type="string" />
 	<property name="Position" type="vector3f" />
-	<property name="TriggerVolume" type="vector3f" />
+	<property name="Volume" type="vector3f" />
 	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
-	<property name="Unknown 1" type="vector3f" />
-	<property name="Unknown 2" type="long" />
+	<property name="Force" type="vector3f" />
+	<property name="Unknown 1" type="long" />
 	<property name="Active" type="bool" />
+	<property name="Unknown 2" type="bool" />
 	<property name="Unknown 3" type="bool" />
-	<property name="Unknown 4" type="bool" />
-	
-	<attrib type="volume" target="TriggerVolume" />
+
+	<attrib type="volume" target="Volume" />
 </Trigger>

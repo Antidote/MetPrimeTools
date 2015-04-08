@@ -4,8 +4,10 @@
 	<property name="Name" type="string" />
 	<property name="Position" type="vector3f" />
 	<property name="Rotation" type="vector3f" />
-	<property name="Scale" type="vector3f" />
+	<property name="Volume" type="vector3f" />
 	<property name="Unknown 1" type="bool" />
 	<property name="Unknown 2" type="bool" />
 	<property name="Unknown 3" type="bool" />
+
+	<attrib type="volume" target="Volume" />
 </CameraHintTrigger>

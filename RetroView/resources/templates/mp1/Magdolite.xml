@@ -19,13 +19,21 @@
 	<property name="Unknown 4" type="float" />
 	<property name="Unknown 5" type="float" />
 	<property name="Unknown 6" type="float" />
-	<struct name="MagdoliteStruct" template="mp1/structs/MagdoliteStruct.xml" />
-	<property name="Unknown 7" type="float" />
-	<property name="Unknown 8" type="float" />
-	<property name="Unknown 9" type="float" />
+	<struct name="MagdoliteStruct">
+		<count>6</count>
+		<property name="Unknown 7" type="long" />
+		<property name="Particle" type="file" ext="PART" />
+		<property name="Unknown 8" type="long" />
+		<property name="Unknown 9" type="float" />
+		<property name="Unknown 10" type="float" />
+		<property name="Unknown 11" type="float" />
+	</struct>
+	<property name="Unknown 12" type="float" />
+	<property name="Unknown 13" type="float" />
+	<property name="Unknown 14" type="float" />
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 	<attrib type="model" target="Model" />
 </Magdolite>

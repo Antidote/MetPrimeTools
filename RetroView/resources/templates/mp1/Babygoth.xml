@@ -8,7 +8,7 @@
 	<struct name="PatternedInfo" template="mp1/structs/PatternedInfo.xml" />
 	<struct name="ActorParameters" template="mp1/structs/ActorParameters.xml" />
 	<property name="Unknown 1" type="float" />
-	<property name="Always 0" type="long" />
+	<property name="Unknown 2" type="float" />
 	<property name="WPSC 1" type="file" ext="WPSC" />
 	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
 	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
@@ -19,24 +19,24 @@
 	<struct name="DamageVulnerability 2" template="mp1/structs/DamageVulnerability.xml" />
 	<property name="Model" type="file" ext="CMDL" />
 	<property name="CSKR" type="file" ext="CSKR" />
-	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="long" />
+	<property name="Unknown 3" type="float" />
+	<property name="Unknown 4" type="long" />
 	<property name="Particle 2" type="file" ext="PART" />
 	<property name="Particle 3" type="file" ext="PART" />
 	<property name="Particle 4" type="file" ext="PART" />
 	<property name="Particle 5" type="file" ext="PART" />
-	<property name="Unknown 4" type="long" />
 	<property name="Unknown 5" type="long" />
 	<property name="Unknown 6" type="long" />
-	<property name="Unknown 7" type="float" />
+	<property name="Unknown 7" type="long" />
 	<property name="Unknown 8" type="float" />
 	<property name="Unknown 9" type="float" />
+	<property name="Unknown 10" type="float" />
 	<property name="Texture" type="file" ext="TXTR" />
-	<property name="Unknown 10" type="long" />
+	<property name="Unknown 11" type="long" />
 	<property name="Particle 6" type="file" ext="PART" />
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 	<attrib type="model" target="Model" />
 </Babygoth>

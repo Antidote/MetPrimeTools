@@ -18,22 +18,22 @@
 	<struct name="BehaveChance 1" template="mp1/structs/BehaveChance.xml" />
 	<struct name="BehaveChance 2" template="mp1/structs/BehaveChance.xml" />
 	<struct name="BehaveChance 3" template="mp1/structs/BehaveChance.xml" />
-	<property name="Always FFFFFFFF" type="long" />
+	<property name="Sound ID 1" type="long" />
 	<property name="Unknown 5" type="float" />
+	<property name="Sound ID 2" type="long" />
+	<property name="Sound ID 3" type="long" />
 	<property name="Unknown 6" type="long" />
-	<property name="Unknown 7" type="long" />
+	<property name="Unknown 7" type="float" />
 	<property name="Unknown 8" type="long" />
 	<property name="Unknown 9" type="float" />
-	<property name="Unknown 10" type="long" />
-	<property name="Unknown 11" type="float" />
 	<property name="Particle" type="file" ext="PART" />
+	<property name="Sound ID 4" type="long" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="float" />
 	<property name="Unknown 12" type="long" />
-	<property name="Unknown 13" type="float" />
-	<property name="Unknown 14" type="float" />
-	<property name="Unknown 15" type="long" />
-	<property name="Unknown 16" type="long" />
+	<property name="Unknown 13" type="long" />
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </ChozoGhost>

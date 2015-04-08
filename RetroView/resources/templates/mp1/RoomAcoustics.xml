@@ -9,13 +9,13 @@
 	<property name="Unknown 5" type="float" />
 	<property name="Unknown 6" type="float" />
 	<property name="Unknown 7" type="float" />
-	<property name="Unknown 8" type="long" />
-	<property name="Unknown 9" type="long" />
+	<property name="Unknown 8" type="float" />
+	<property name="Unknown 9" type="float" />
 	<property name="Unknown 10" type="float" />
 	<property name="Unknown 11" type="bool" />
-	<property name="Unknown 12" type="long" />
-	<property name="Unknown 13" type="long" />
-	<property name="Unknown 14" type="long" />
+	<property name="Unknown 12" type="float" />
+	<property name="Unknown 13" type="float" />
+	<property name="Unknown 14" type="float" />
 	<property name="Unknown 15" type="bool" />
 	<property name="Unknown 16" type="bool" />
 	<property name="Unknown 17" type="float" />

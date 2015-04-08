@@ -108,11 +108,33 @@ void CGLViewer::paintGL()
 
     glDisable(GL_LINE_SMOOTH);
 #endif
+    if (m_skybox)
+    {
+        //glDepthRangef(0.0090001f, 1.0f);
+        glm::mat4 viewRot = m_camera.rotationMatrix();
+        m_skybox->setAmbient(1, 1, 1);
+        m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
+        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
+        m_skybox->draw();
+        glClear(GL_DEPTH_BUFFER_BIT);
+    }
+
     if (m_currentRenderable)
     {
         m_currentRenderable->updateViewProjectionUniforms(viewMat, projectionMat);
         bool texturesEnabled = (QSettings().value("enableTextures").toBool() && !QSettings().value("drawPoints").toBool() && !QSettings().value("wireframe").toBool());
         m_currentRenderable->updateTexturesEnabled(texturesEnabled);
+
+        if (QSettings().value("drawBoundingBox").toBool())
+            m_currentRenderable->drawBoundingBox();
+
+        if (QSettings().value("wireframe").toBool() && !QSettings().value("drawPoints").toBool())
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else if (QSettings().value("drawPoints").toBool())
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         m_currentRenderable->draw();
     }
     

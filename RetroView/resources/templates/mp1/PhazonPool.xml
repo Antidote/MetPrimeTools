@@ -12,13 +12,13 @@
 	<property name="Particle 2" type="file" ext="PART" />
 	<property name="Unknown 2" type="long" />
 	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
-	<property name="Let'sSayThisIsAVec3BecauseWhyNot" type="vector3f" />
-	<property name="Unknown 3" type="long" />
-	<property name="Unknown 4" type="float" />
+	<property name="Unknown 3" type="vector3f" />
+	<property name="Unknown 4" type="long" />
 	<property name="Unknown 5" type="float" />
 	<property name="Unknown 6" type="float" />
-	<property name="Unknown 7" type="bool" />
-	<property name="Unknown 8" type="float" />
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="bool" />
+	<property name="Unknown 9" type="float" />
 
 	<attrib type="model" target="Model 1" />
 	<attrib type="model" target="Model 2" />

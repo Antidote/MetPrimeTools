@@ -18,5 +18,5 @@
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </Seedling>

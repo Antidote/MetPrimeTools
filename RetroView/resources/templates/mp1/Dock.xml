@@ -4,10 +4,10 @@
 	<property name="Name" type="string" />
 	<property name="Unknown 1" type="bool" />
 	<property name="Position" type="vector3f" />
-	<property name="DockVolume" type="vector3f" />
+	<property name="Volume" type="vector3f" />
 	<property name="Dock number" type="long" />
 	<property name="This room" type="long" />
 	<property name="Unknown 2" type="bool" />
-	
-	<attrib type="volume" target="DockVolume" />
+
+	<attrib type="volume" target="Volume" />
 </Dock>

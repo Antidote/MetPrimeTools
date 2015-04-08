@@ -25,7 +25,7 @@
 	<property name="Unknown 5" type="float" />
 	<property name="Unknown 6" type="float" />
 	<property name="Unknown 7" type="float" />
-	<property name="Sound? 1" type="long" />
+	<property name="Sound ID 1" type="long" />
 	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
 	<property name="Active" type="bool" />
 	<property name="AFSM" type="file" ext="AFSM" />
@@ -38,5 +38,5 @@
 	<property name="Unknown 13" type="long" />
 	<property name="Unknown 14" type="vector3f" />
 	<property name="Particle 2" type="file" ext="PART" />
-	<property name="Sound? 2" type="long" />
+	<property name="Sound ID 2" type="long" />
 </PatternedInfo>

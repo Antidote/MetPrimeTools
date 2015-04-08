@@ -20,7 +20,7 @@
 	<struct name="FlareDef 3" template="mp1/structs/FlareDef.xml" />
 	<struct name="FlareDef 4" template="mp1/structs/FlareDef.xml" />
 	<struct name="FlareDef 5" template="mp1/structs/FlareDef.xml" />
-	<property name="Unknown 7" type="long" />
+	<property name="Unknown 7" type="float" />
 	<property name="Unknown 8" type="float" />
 	<property name="Unknown 9" type="float" />
 	<property name="Unknown 10" type="float" />
@@ -44,10 +44,10 @@
 	<property name="Unknown 27" type="float" />
 	<property name="Unknown 28" type="float" />
 	<property name="Unknown 29" type="float" />
-	<property name="Unknown 30" type="long" />
-	<property name="Unknown 31" type="bool" />
+	<property name="Sound?" type="long" />
+	<property name="Unknown 30" type="bool" />
 
 	<attrib type="animset" target="PatternedInfo::AnimationParameters" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </Drone>

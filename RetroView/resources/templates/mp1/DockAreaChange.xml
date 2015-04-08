@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<DockAreaChange>
+	<count>3</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="long" />
+	<property name="Unknown 2" type="bool" />
+</DockAreaChange>

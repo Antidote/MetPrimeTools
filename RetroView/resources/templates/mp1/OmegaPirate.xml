@@ -16,33 +16,33 @@
 	<property name="Unknown 7" type="float" />
 	<property name="Unknown 8" type="float" />
 	<property name="Particle 1" type="file" ext="PART" />
-	<property name="Unknown 9" type="long" />
+	<property name="Sound ID 1" type="long" />
 	<struct name="ActorParameters 2" template="mp1/structs/ActorParameters.xml" />
 	<struct name="AnimationParameters" template="mp1/structs/AnimationParameters.xml" />
 	<property name="Particle 2" type="file" ext="PART" />
-	<property name="Unknown 10" type="long" />
+	<property name="Sound ID 2" type="long" />
 	<property name="Model 1" type="file" ext="CMDL" />
 	<struct name="DamageInfo 1" template="mp1/structs/DamageInfo.xml" />
-	<property name="Unknown 11" type="float" />
+	<property name="Unknown 9" type="float" />
 	<property name="Particle 3" type="file" ext="PART" />
 	<property name="Particle 4" type="file" ext="PART" />
 	<property name="Particle 5" type="file" ext="PART" />
 	<property name="Particle 6" type="file" ext="PART" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="float" />
 	<property name="Unknown 12" type="float" />
 	<property name="Unknown 13" type="float" />
 	<property name="Unknown 14" type="float" />
 	<property name="Unknown 15" type="float" />
 	<property name="Unknown 16" type="long" />
-	<property name="Unknown 17" type="float" />
-	<property name="Unknown 18" type="long" />
-	<property name="Unknown 19" type="long" />
-	<property name="Unknown 20" type="long" />
+	<property name="Sound ID 3" type="long" />
+	<property name="Sound ID 4" type="long" />
 	<property name="Particle 7" type="file" ext="PART" />
 	<struct name="DamageInfo 2" template="mp1/structs/DamageInfo.xml" />
 	<property name="ELSC" type="file" ext="ELSC" />
-	<property name="Unknown 21" type="long" />
-	<property name="Unknown 22" type="bool" />
-	<property name="Unknown 23" type="bool" />
+	<property name="Sound ID 5" type="long" />
+	<property name="Unknown 17" type="bool" />
+	<property name="Unknown 18" type="bool" />
 	<property name="Model 2" type="file" ext="CMDL" />
 	<property name="CSKR" type="file" ext="CSKR" />
 	<property name="CINF" type="file" ext="CINF" />

@@ -28,5 +28,5 @@
 	<attrib type="animset" target="AnimationParameters 3" />
 	<attrib type="animset" target="AnimationParameters 4" />
 	<attrib type="model" target="ActorParameters::X-Ray model" />
-	<attrib type="model" target="ActorParameters::X-Ray model 2" />
+	<attrib type="model" target="ActorParameters::Thermal model" />
 </MetroidAlpha>

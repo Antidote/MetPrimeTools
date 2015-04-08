@@ -2,9 +2,9 @@
 <Timer>
 	<count>6</count>
 	<property name="Name" type="string" />
-	<property name="Unknown 1" type="float" />
-	<property name="Unknown 2" type="float" />
-	<property name="Unknown 3" type="bool" />
-	<property name="Unknown 4" type="bool" />
-	<property name="Unknown 5" type="bool" />
+	<property name="Start time" type="float" />
+	<property name="Max random addition" type="float" />
+	<property name="Reset on zero" type="bool" />
+	<property name="Start immediately" type="bool" />
+	<property name="Active" type="bool" />
 </Timer>

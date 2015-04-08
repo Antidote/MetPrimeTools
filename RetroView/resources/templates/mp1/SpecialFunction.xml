@@ -9,7 +9,10 @@
 	<property name="Unknown 2" type="float" />
 	<property name="Unknown 3" type="float" />
 	<property name="Unknown 4" type="float" />
-	<struct name="LayerSwitch" template="mp1/structs/LayerSwitch.xml" />
+	<struct name="LayerSwitch">
+		<property name="Room ID" type="long" />
+		<property name="Layer no" type="long" />
+	</struct>
 	<property name="Item ID" type="long" />
 	<property name="Unknown 5" type="bool" />
 	<property name="Unknown 6" type="float" />

@@ -10,7 +10,7 @@
 	<property name="Unknown 7" type="float" />
 	<property name="Unknown 8" type="float" />
 	<property name="Unknown 9" type="float" />
-	<property name="Always 0 1" type="long" />
-	<property name="Always 0 2" type="long" />
-	<property name="Unknown 10" type="bool" />
+	<property name="Unknown 10" type="float" />
+	<property name="Unknown 11" type="float" />
+	<property name="Disable turning" type="bool" />
 </GrappleParameters>

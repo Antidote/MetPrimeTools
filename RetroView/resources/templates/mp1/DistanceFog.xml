@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<DistanceFog>
+	<count>8</count>
+	<property name="Name" type="string" />
+	<property name="Unknown 1" type="long" />
+	<property name="Unknown 2" type="color" />
+	<struct name="FloatFloat 1">
+		<property name="Unknown 3" type="float" />
+		<property name="Unknown 4" type="float" />
+	</struct>
+	<struct name="FloatFloat 2">
+		<property name="Unknown 5" type="float" />
+		<property name="Unknown 6" type="float" />
+	</struct>
+	<property name="Unknown 7" type="float" />
+	<property name="Unknown 8" type="bool" />
+	<property name="Unknown 9" type="bool" />
+</DistanceFog>

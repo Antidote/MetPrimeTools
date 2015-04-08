@@ -27,7 +27,7 @@
   <object ID="0x1A" name="DamageableTrigger" />
   <object ID="0x1B" name="Debris" />
   <object ID="0x1C" name="CameraShaker" />
-  <object ID="0x1D" name="ActorKeyFrame" />
+  <object ID="0x1D" name="ActorKeyframe" />
   <object ID="0x20" name="Water" />
   <object ID="0x21" name="Warwasp" />
   <object ID="0x24" name="SpacePirate" />
@@ -42,11 +42,13 @@
   <object ID="0x2F" name="PathCamera" />
   <object ID="0x30" name="GrapplePoint" />
   <object ID="0x31" name="PuddleSpore" />
+  <object ID="0x32" name="DebugCameraWaypoint" />
   <object ID="0x33" name="SpiderBallAttractionSurface" />
   <object ID="0x34" name="PuddleToadGamma" />
-  <object ID="0x35" name="Fog" />
+  <object ID="0x35" name="DistanceFog" />
   <object ID="0x36" name="FireFlea" />
   <object ID="0x37" name="MetareeAlpha" />
+  <object ID="0x38" name="DockAreaChange" />
   <object ID="0x39" name="ActorRotate" />
   <object ID="0x3A" name="SpecialFunction" />
   <object ID="0x3B" name="SpankWeed" />
@@ -54,6 +56,7 @@
   <object ID="0x3E" name="PlayerHint" />
   <object ID="0x3F" name="Ripper" />
   <object ID="0x40" name="PickupGenerator" />
+  <object ID="0x41" name="AIKeyframe" />
   <object ID="0x42" name="PointOfInterest" />
   <object ID="0x43" name="Drone" />
   <object ID="0x44" name="MetroidAlpha" />
@@ -70,6 +73,7 @@
   <object ID="0x4F" name="FishCloud" />
   <object ID="0x50" name="FishCloudModifier" />
   <object ID="0x51" name="VisorFlare" />
+  <object ID="0x52" name="WorldTeleporter" />
   <object ID="0x53" name="VisorGoo" />
   <object ID="0x54" name="JellyZap" />
   <object ID="0x55" name="ControllerAction" />
@@ -87,6 +91,7 @@
   <object ID="0x62" name="WorldTeleporter" />
   <object ID="0x63" name="Repulsor" />
   <object ID="0x64" name="GunTurret" />
+  <object ID="0x65" name="FogVolume" />
   <object ID="0x66" name="Babygoth" />
   <object ID="0x67" name="Eyeball" />
   <object ID="0x68" name="RadialDamage" />
@@ -104,6 +109,7 @@
   <object ID="0x74" name="RumbleEffect" />
   <object ID="0x75" name="AmbientAI" />
   <object ID="0x77" name="AtomicBeta" />
+  <object ID="0x78" name="IceZoomer" />
   <object ID="0x79" name="Puffer" />
   <object ID="0x7A" name="Tryclops" />
   <object ID="0x7B" name="Ridley" />
@@ -113,12 +119,12 @@
   <object ID="0x81" name="ScriptBeam" />
   <object ID="0x82" name="WorldLightFader" />
   <object ID="0x83" name="MetroidPrimeStage2" />
-  <object ID="0x84" name="MetroidPrimeRelay" />
+  <object ID="0x84" name="MetroidPrimeStage1" />
   <object ID="0x85" name="MazeNode" />
   <object ID="0x86" name="OmegaPirate" />
   <object ID="0x87" name="PhazonPool" />
   <object ID="0x88" name="PhazonHealingNodule" />
   <object ID="0x89" name="NewCameraShaker" />
   <object ID="0x8A" name="ShadowProjector" />
-  <object ID="0x8B" name="BeamEnergyBall" />
+  <object ID="0x8B" name="EnergyBall" />
 </MasterTemplate>

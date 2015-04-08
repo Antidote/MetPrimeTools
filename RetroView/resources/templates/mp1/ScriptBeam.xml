@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<ScriptBeam>
+	<count>7</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="WPSC" type="file" ext="WPSC" />
+	<struct name="ScriptBeamStruct">
+		<count>16</count>
+		<property name="Unknown 2" type="long" />
+		<property name="Particle 1" type="file" ext="PART" />
+		<property name="Particle 2" type="file" ext="PART" />
+		<property name="Texture 1" type="file" ext="TXTR" />
+		<property name="Texture 2" type="file" ext="TXTR" />
+		<property name="Unknown 3" type="float" />
+		<property name="Unknown 4" type="float" />
+		<property name="Unknown 5" type="float" />
+		<property name="Unknown 6" type="float" />
+		<property name="Unknown 7" type="float" />
+		<property name="Unknown 8" type="float" />
+		<property name="Unknown 9" type="float" />
+		<property name="Unknown 10" type="float" />
+		<property name="Unknown 11" type="float" />
+		<property name="Unknown 12" type="color" />
+		<property name="Unknown 13" type="color" />
+	</struct>
+	<struct name="DamageInfo" template="mp1/structs/DamageInfo.xml" />
+</ScriptBeam>

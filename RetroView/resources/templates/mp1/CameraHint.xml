@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<CameraHint>
+	<count>23</count>
+	<property name="Name" type="string" />
+	<property name="Position" type="vector3f" />
+	<property name="Rotation" type="vector3f" />
+	<property name="Unknown 1" type="bool" />
+	<property name="Unknown 2" type="long" />
+	<property name="Unknown 3" type="long" />
+	<struct name="CameraHintStruct">
+		<count>22</count>
+		<property name="Unknown 4" type="bool" />
+		<property name="Unknown 5" type="bool" />
+		<property name="Unknown 6" type="bool" />
+		<property name="Unknown 7" type="bool" />
+		<property name="Unknown 8" type="bool" />
+		<property name="Unknown 9" type="bool" />
+		<property name="Unknown 10" type="bool" />
+		<property name="Unknown 11" type="bool" />
+		<property name="Unknown 12" type="bool" />
+		<property name="Unknown 13" type="bool" />
+		<property name="Unknown 14" type="bool" />
+		<property name="Unknown 15" type="bool" />
+		<property name="Unknown 16" type="bool" />
+		<property name="Unknown 17" type="bool" />
+		<property name="Unknown 18" type="bool" />
+		<property name="Unknown 19" type="bool" />
+		<property name="Unknown 20" type="bool" />
+		<property name="Unknown 21" type="bool" />
+		<property name="Unknown 22" type="bool" />
+		<property name="Unknown 23" type="bool" />
+		<property name="Unknown 24" type="bool" />
+		<property name="Unknown 25" type="bool" />
+	</struct>
+	<struct name="BoolFloat 1">
+		<property name="Unknown 26" type="bool" />
+		<property name="Unknown 27" type="float" />
+	</struct>
+	<struct name="BoolFloat 2">
+		<property name="Unknown 28" type="bool" />
+		<property name="Unknown 29" type="float" />
+	</struct>
+	<struct name="BoolFloat 3">
+		<property name="Unknown 30" type="bool" />
+		<property name="Unknown 31" type="float" />
+	</struct>
+	<struct name="BoolVec3f 1">
+		<property name="Unknown 32" type="bool" />
+		<property name="Unknown 33" type="vector3f" />
+	</struct>
+	<struct name="BoolVec3f 2">
+		<property name="Unknown 34" type="bool" />
+		<property name="Unknown 35" type="vector3f" />
+	</struct>
+	<property name="Unknown 36" type="vector3f" />
+	<struct name="BoolFloat 4">
+		<property name="Unknown 37" type="bool" />
+		<property name="Unknown 38" type="float" />
+	</struct>
+	<struct name="BoolFloat 5">
+		<property name="Unknown 39" type="bool" />
+		<property name="Unknown 40" type="float" />
+	</struct>
+	<struct name="BoolFloat 6">
+		<property name="Unknown 41" type="bool" />
+		<property name="Unknown 42" type="float" />
+	</struct>
+	<struct name="BoolFloat 7">
+		<property name="Unknown 43" type="bool" />
+		<property name="Unknown 44" type="float" />
+	</struct>
+	<property name="Unknown 45" type="float" />
+	<property name="Unknown 46" type="float" />
+	<struct name="BoolFloat 8">
+		<property name="Unknown 47" type="bool" />
+		<property name="Unknown 48" type="float" />
+	</struct>
+	<property name="Unknown 49" type="float" />
+	<property name="Unknown 50" type="float" />
+	<property name="Unknown 51" type="float" />
+</CameraHint>

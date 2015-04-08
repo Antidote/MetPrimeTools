@@ -3,7 +3,7 @@
 	<count>12</count>
 	<property name="Name" type="string" />
 	<property name="Position" type="vector3f" />
-	<property name="TriggerVolume" type="vector3f" />
+	<property name="Volume" type="vector3f" />
 	<struct name="HealthInfo" template="mp1/structs/HealthInfo.xml" />
 	<struct name="DamageVulnerability" template="mp1/structs/DamageVulnerability.xml" />
 	<property name="Unknown 1" type="long" />
@@ -13,5 +13,6 @@
 	<property name="Unknown 2" type="bool" />
 	<property name="Active" type="bool" />
 	<struct name="VisorParameters" template="mp1/structs/VisorParameters.xml" />
-	<attrib type="volume" target="TriggerVolume" />
+
+	<attrib type="volume" target="Volume" />
 </DamageableTrigger>
