@@ -29,7 +29,8 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_skybox(nullptr),
       m_camera(glm::vec3(0.0f, 10.0f, 3.0f)),
       m_mouseEnabled(false),
-      m_isInitialized(false)
+      m_isInitialized(false),
+      m_skyVisible(false)
 {
     QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
@@ -44,6 +45,25 @@ CGLViewer::~CGLViewer()
 }
 
 // TODO: Clean this up
+void CGLViewer::drawSky()
+{
+    if (m_skybox)
+    {
+        //glDepthRangef(0.0090001f, 1.0f);
+        glm::mat4 viewRot = m_camera.rotationMatrix();
+        m_skybox->setAmbient(1, 1, 1);
+        m_skybox->updateViewProjectionUniforms(viewRot, m_camera.projectionMatrix());
+        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
+        m_skybox->draw();
+        glClear(GL_DEPTH_BUFFER_BIT);
+    }
+}
+
+void CGLViewer::setSkyVisible(bool visible)
+{
+    m_skyVisible = visible;
+}
+
 void CGLViewer::paintGL()
 {
     m_currentTime = 1.f * hiresTimeMS();
@@ -103,16 +123,8 @@ void CGLViewer::paintGL()
 
     glDisable(GL_LINE_SMOOTH);
 #endif
-    if (m_skybox)
-    {
-        //glDepthRangef(0.0090001f, 1.0f);
-        glm::mat4 viewRot = m_camera.rotationMatrix();
-        m_skybox->setAmbient(1, 1, 1);
-        m_skybox->updateViewProjectionUniforms(viewRot, projectionMat);
-        m_skybox->updateTexturesEnabled(QSettings().value("enableTextures").toBool());
-        m_skybox->draw();
-        glClear(GL_DEPTH_BUFFER_BIT);
-    }
+
+    //drawSky();
 
     if (m_currentRenderable)
     {

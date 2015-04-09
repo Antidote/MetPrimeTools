@@ -2,13 +2,15 @@
 #include "core/CTemplateManager.hpp"
 #include "core/CResourceManager.hpp"
 #include "models/CModelFile.hpp"
+#include "ui/CGLViewer.hpp"
 
 CScriptObject::CScriptObject()
 {
 }
 
 CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion version)
-    : m_version(version)
+    : m_version(version),
+      m_rootProperty(nullptr)
 {
     in.setEndian(Athena::Endian::BigEndian);
     atUint32 objType;
@@ -33,9 +35,12 @@ CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion versi
 
         std::string typeStr = Athena::utility::sprintf("0x%X", objType);
         CStructPropertyTemplate* rootTemplate = CTemplateManager::instance()->rootTemplateByType(typeStr);
-        m_rootProperty.m_propertyTemplate = rootTemplate;
-
-        loadStruct(in, &m_rootProperty, rootTemplate);
+        m_rootProperty = new CStructProperty;
+        if (rootTemplate)
+        {
+            m_rootProperty->m_propertyTemplate = rootTemplate;
+            loadStruct(in, m_rootProperty, rootTemplate);
+        }
         in.seek(position + length, Athena::SeekOrigin::Begin);
     }
     else
@@ -49,11 +54,11 @@ void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* p
     if (parentTemplate->hasCount())
     {
         atUint32 propertyCount = in.readUint32();
-//        if (propertyCount != parentTemplate->propertyTemplates().size())
-//        {
-//            std::cout << std::dec << "Stored property count does not match expected count: " << propertyCount << " != " << parentTemplate->propertyTemplates().size() << std::endl;
-//            return;
-//        }
+        //        if (propertyCount != parentTemplate->propertyTemplates().size())
+        //        {
+        //            std::cout << std::dec << "Stored property count does not match expected count: " << propertyCount << " != " << parentTemplate->propertyTemplates().size() << std::endl;
+        //            return;
+        //        }
     }
 
     for (CPropertyTemplate* propertyTemplate : parentTemplate->propertyTemplates())
@@ -154,23 +159,46 @@ CScriptObject::~CScriptObject()
 {
 }
 
+bool CScriptObject::isAreaAttributes()
+{
+    return !m_rootProperty->name().compare("AreaAttributes");
+}
+
+bool CScriptObject::skyEnabled()
+{
+    CBoolProperty* useSkyboxProp = dynamic_cast<CBoolProperty*>(m_rootProperty->propertyByName("Skybox toggle"));
+    if (useSkyboxProp)
+        return useSkyboxProp->value();
+
+    return false;
+}
+
+std::string CScriptObject::typeName() const
+{
+    return m_rootProperty->name();
+}
+
 void CScriptObject::draw()
 {
-    CAssetProperty* assetProp = static_cast<CAssetProperty*>(m_rootProperty.propertyByName("Model"));
+    if (!m_rootProperty)
+        return;
+
+    CAssetProperty* assetProp = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("Model"));
     if (assetProp)
     {
         CModelFile* model = dynamic_cast<CModelFile*>(assetProp->value());
         if (model)
         {
-            CVector3Property* posProperty      = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Position"));
-            CVector3Property* rotationProperty = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Rotation"));
-            CVector3Property* scaleProperty    = static_cast<CVector3Property*>(m_rootProperty.propertyByName("Scale"));
+            CVector3Property* posProperty      = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
+            CVector3Property* rotationProperty = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
+            CVector3Property* scaleProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Scale"));
             if (posProperty)
                 model->setPosition(posProperty->value());
             if (rotationProperty)
                 model->setRotation(rotationProperty->value());
             if (scaleProperty)
                 model->setScale(scaleProperty->value());
+            model->updateViewProjectionUniforms(CGLViewer::instance()->viewMatrix(), CGLViewer::instance()->projectionMatrix());
             model->draw();
             model->restoreDefaults();
         }

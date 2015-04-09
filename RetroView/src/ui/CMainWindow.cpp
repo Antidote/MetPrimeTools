@@ -167,20 +167,20 @@ void CMainWindow::onTabChanged()
     CResourceManager::instance()->clear();
 
 
-//    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
-//    if (ptw && ptw->pak()->isWorldPak())
-//    {
-//        m_currentTab = ptw;
-//        std::vector<SPakResource> res = m_currentTab->pak()->resourcesByType("mlvl");
-//        CWorldFile* world = nullptr;
-//        if (res.size() > 0)
-//            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
-//        if (world)
-//        {
-//            CGLViewer::instance()->setSkybox(world->skyboxModel());
-//            world->destroy();
-//        }
-//    }
+    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
+    if (ptw && ptw->pak()->isWorldPak())
+    {
+        m_currentTab = ptw;
+        std::vector<SPakResource> res = m_currentTab->pak()->resourcesByType("mlvl");
+        CWorldFile* world = nullptr;
+        if (res.size() > 0)
+            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
+        if (world)
+        {
+            CGLViewer::instance()->setSkybox(world->skyboxModel());
+            world->destroy();
+        }
+    }
 }
 
 void CMainWindow::onResourceChanged(IResource* res)

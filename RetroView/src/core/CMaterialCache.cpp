@@ -40,10 +40,7 @@ atUint32 CMaterialCache::addMaterial(const CMaterial& mat)
     ConstMaterialIterator iter = std::find_if(m_cachedMaterials.begin(), m_cachedMaterials.end(),
                                               [&mat](CMaterial m)->bool{return m == mat; });
     if (iter != m_cachedMaterials.end())
-    {
-        std::cout << "Duplicate material detected" << std::endl;
         return iter - m_cachedMaterials.begin();
-    }
 
     m_cachedMaterials.push_back(mat);
 

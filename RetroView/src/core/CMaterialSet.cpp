@@ -50,4 +50,3 @@ void CMaterialSet::dumpSources(const CAssetID& id)
         i++;
     }
 }
-

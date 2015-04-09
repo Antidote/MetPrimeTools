@@ -378,7 +378,7 @@ bool CMaterial::bind()
         m_program->addShader(fragmentShader);
         m_program->link();
         m_program->bind();
-        
+
         std::string texsName = QString("texs").toStdString();
         int texsLoc = m_program->uniformLocation(texsName.c_str());
         if (texsLoc >= 0)
@@ -721,6 +721,5 @@ bool operator==(const SAnimation& left, const SAnimation& right)
 {
     return !memcmp(&left, &right, sizeof(SAnimation));
 }
-
 
 

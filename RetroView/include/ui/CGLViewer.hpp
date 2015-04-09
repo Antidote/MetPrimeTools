@@ -36,6 +36,9 @@ public:
     float frameRate() const;
 
     IRenderableModel* currentModel();
+    void drawSky();
+
+    void setSkyVisible(bool visible);
 public slots:
     void stopUpdates();
     void startUpdates();
@@ -70,6 +73,7 @@ private:
     QTimer                           m_updateTimer;
     bool                             m_mouseEnabled;
     bool                             m_isInitialized;
+    bool                             m_skyVisible;
     float                            m_lastTime;
     float                            m_currentTime;
     float                            m_deltaTime;

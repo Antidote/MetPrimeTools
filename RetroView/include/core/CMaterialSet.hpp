@@ -17,6 +17,7 @@ public:
     void setAmbient(const QColor& amb);
 
     void dumpSources(const CAssetID& id);
+
 private:
     friend class CMaterialReader;
     friend struct SPASSCommand;

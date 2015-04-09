@@ -166,5 +166,19 @@
         <file>templates/mp1/structs/PrimeStruct3.xml</file>
         <file>templates/mp1/structs/PrimeStruct2.xml</file>
         <file>templates/mp1/structs/PrimeStruct6.xml</file>
+        <file>icons/64x64/apps/retroview.png</file>
+        <file>icons/512x512/apps/retroview.png</file>
+        <file>icons/48x48/apps/retroview.png</file>
+        <file>icons/32x32/apps/retroview.png</file>
+        <file>icons/256x256/apps/retroview.png</file>
+        <file>icons/16x16/apps/retroview.png</file>
+        <file>icons/1024x1024/apps/retroview.png</file>
+        <file>icons/64x64/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/512x512/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/48x48/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/32x32/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/256x256/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/16x16/mimetypes/mime_application_retro-pak.png</file>
+        <file>icons/1024x1024/mimetypes/mime_application_retro-pak.png</file>
     </qresource>
 </RCC>

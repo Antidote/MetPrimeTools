@@ -54,7 +54,7 @@ public:
     void setCurrentMaterialSet(atUint32 set);
 private:
     friend class CAreaReader;
-    void drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 model);
+    void drawIbos(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix);
     void buildBBox();
 
     Version                         m_version;

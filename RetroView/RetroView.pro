@@ -97,7 +97,10 @@ SOURCES += \
     src/core/CPropertyTemplate.cpp \
     src/core/CProperty.cpp \
     src/core/CTemplateManager.cpp \
-    src/core/IResource.cpp
+    src/core/IResource.cpp \
+    src/generic/CAnimCharacterSet.cpp \
+    src/generic/CAnimCharacterNode.cpp \
+    src/generic/CPASDatabase.cpp
 
 HEADERS += \
     include/core/CCamera.hpp \
@@ -147,7 +150,10 @@ HEADERS += \
     include/core/CTemplateManager.hpp \
     include/core/SAnimation.hpp \
     include/core/SVertex.hpp \
-    include/core/GLInclude.hpp
+    include/core/GLInclude.hpp \
+    include/generic/CAnimCharacterSet.hpp \
+    include/generic/CAnimCharacterNode.hpp \
+    include/generic/CPASDatabase.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \

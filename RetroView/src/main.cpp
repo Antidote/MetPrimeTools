@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setAttribute(Qt::AA_DontUseNativeMenuBar);
     // initialize settings info so that default QSettings() access works
-    a.setWindowIcon(QIcon(":/icons/mainicon.png"));
+    a.setWindowIcon(QIcon(":/icons/64x64/apps/retroview.png"));
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
 
