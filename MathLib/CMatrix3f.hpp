@@ -16,6 +16,7 @@ public:
 
     ~CMatrix3f();
 
+protected:
     float v[3][3];
 };
 

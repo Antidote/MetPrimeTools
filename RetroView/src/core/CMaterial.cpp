@@ -421,7 +421,7 @@ bool CMaterial::bind()
     atUint32 pass = 0;
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
-        for (CAssetID& texID : m_textures)
+        for (CUniqueID& texID : m_textures)
         {
             CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(texID, "txtr"));
 

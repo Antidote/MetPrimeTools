@@ -2,9 +2,9 @@
 
 #include <Athena/InvalidDataException.hpp>
 
-CDependencyGroup::CDependencyGroup(Athena::io::IStreamReader& input, CAssetID::EIDBits bits)
+CDependencyGroup::CDependencyGroup(Athena::io::IStreamReader& input, CUniqueID::EIDBits bits)
 {
-    if (bits == CAssetID::E_Invalid)
+    if (bits == CUniqueID::E_Invalid)
         THROW_INVALID_DATA_EXCEPTION("AssetID bit length is invalid, expected 32, 64, or 128 bits");
 
     input.setEndian(Athena::Endian::BigEndian);
@@ -13,7 +13,7 @@ CDependencyGroup::CDependencyGroup(Athena::io::IStreamReader& input, CAssetID::E
     {
         SDependency dep;
         dep.type = CFourCC(input);
-        dep.id   = CAssetID(input, bits);
+        dep.id   = CUniqueID(input, bits);
         m_dependencies.push_back(dep);
     }
 }

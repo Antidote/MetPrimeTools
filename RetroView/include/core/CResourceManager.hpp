@@ -12,10 +12,10 @@
 #include <CPakFile.hpp>
 #include "IResource.hpp"
 
-class CAssetIDHash final
+class CUniqueIDHash final
 {
 public:
-    std::size_t operator()(CAssetID const& id) const
+    std::size_t operator()(CUniqueID const& id) const
     {
         size_t hash = 0;
         atUint8* tmp = id.raw();
@@ -25,10 +25,10 @@ public:
     }
 };
 
-class CAssetIDComparison final
+class CUniqueIDComparison final
 {
 public:
-    bool operator()(CAssetID const& left, CAssetID const& right) const
+    bool operator()(CUniqueID const& left, CUniqueID const& right) const
     {
         return (left == right);
     }
@@ -55,15 +55,15 @@ class CResourceManager : public QObject
     Q_OBJECT
 public:
     virtual ~CResourceManager();
-    typedef std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison>::iterator         CachedResourceIterator;
-    typedef std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison>::const_iterator   ConstCachedResourceIterator;
+    typedef std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison>::iterator         CachedResourceIterator;
+    typedef std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison>::const_iterator   ConstCachedResourceIterator;
 
     void initialize(const std::string& baseDirectory);
     bool addPack(const std::string& pak);
     std::vector<SPakResource*> resourcesForPack(const std::string& pak);
 
-    IResource* loadResource(const CAssetID& assetID, const std::string& type = std::string());
-    IResource* loadResourceFromPak(CPakFile* pak, const CAssetID& assetID, const std::string& type = std::string());
+    IResource* loadResource(const CUniqueID& assetID, const std::string& type = std::string());
+    IResource* loadResourceFromPak(CPakFile* pak, const CUniqueID& assetID, const std::string& type = std::string());
     void destroyResource(IResource* res);
 
     void registerLoader(std::string tag, ResourceDataLoaderCallback byData);
@@ -84,10 +84,10 @@ protected:
 private:
     std::unordered_map<std::string, ResourceLoaderDesc> m_loaders;
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
-    std::unordered_map<CAssetID, IResource*, CAssetIDHash, CAssetIDComparison> m_cachedResources;
+    std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
     std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
-    std::vector<CAssetID>                    m_failedAssets;
+    std::vector<CUniqueID>                    m_failedAssets;
     std::string                              m_baseDirectory;
 };
 

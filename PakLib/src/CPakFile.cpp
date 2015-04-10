@@ -29,7 +29,7 @@ std::string CPakFile::filename() const
     return m_filename;
 }
 
-atUint8* CPakFile::loadData(CAssetID assetID, const std::string& type)
+atUint8* CPakFile::loadData(CUniqueID assetID, const std::string& type)
 {
     ConstResourceIterator iter = std::find_if(m_resources.begin(), m_resources.end(),
                                               [&assetID](SPakResource res)->bool{return res.id == assetID; });
@@ -149,7 +149,7 @@ bool CPakFile::isWorldPak()
     return m_isWorldPak;
 }
 
-bool CPakFile::resourceExists(const CAssetID& assetID)
+bool CPakFile::resourceExists(const CUniqueID& assetID)
 {
     std::vector<SPakResource>::iterator iter = std::find_if(m_resources.begin(), m_resources.end(),
                                                             [&assetID](const SPakResource& res)->bool{return res.id == assetID;});

@@ -1,12 +1,12 @@
-#ifndef CASSETID_HPP
-#define CASSETID_HPP
+#ifndef CUNIQUEID_HPP
+#define CUNIQUEID_HPP
 
 #include <Athena/IStreamReader.hpp>
 
-class CAssetID
+class CUniqueID
 {
 public:
-    static const CAssetID InvalidAsset;
+    static const CUniqueID InvalidAsset;
     enum EIDBits
     {
         E_Invalid,
@@ -15,13 +15,13 @@ public:
         E_128Bits
     };
 
-    CAssetID();
-    CAssetID(Athena::io::IStreamReader& input, EIDBits idLength);
-    CAssetID(const atUint8* assetID, EIDBits idLength);
-    CAssetID(const atUint32& assetID);
-    CAssetID(const atUint64& assetID);
+    CUniqueID();
+    CUniqueID(Athena::io::IStreamReader& input, EIDBits idLength);
+    CUniqueID(const atUint8* assetID, EIDBits idLength);
+    CUniqueID(const atUint32& assetID);
+    CUniqueID(const atUint64& assetID);
 
-    ~CAssetID();
+    ~CUniqueID();
     atUint32 toUint32() const;
     atUint64 toUint64() const;
     atUint32 idLength() const;
@@ -29,15 +29,15 @@ public:
 
     std::string toString() const;
 
-    CAssetID& operator=(atUint32 other);
-    CAssetID& operator=(atUint64 other);
+    CUniqueID& operator=(atUint32 other);
+    CUniqueID& operator=(atUint64 other);
 
     bool operator==(atUint32 right) const;
     bool operator!=(atUint32 right) const;
     bool operator==(atUint64 right) const;
     bool operator!=(atUint64 right) const;
-    bool operator==(const CAssetID& right)const;
-    bool operator!=(const CAssetID& right)const;
+    bool operator==(const CUniqueID& right)const;
+    bool operator!=(const CUniqueID& right)const;
     void fromUint32(const atUint32& other);
     void fromUint64(const atUint64& other);
 
@@ -47,4 +47,4 @@ private:
     atUint8  m_idVal[16];
 };
 
-#endif // CASSETID_HPP
+#endif // CUNIQUEID_HPP

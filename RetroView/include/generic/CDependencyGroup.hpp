@@ -1,21 +1,21 @@
 #ifndef CDEPENDENCYGROUP_HPP
 #define CDEPENDENCYGROUP_HPP
 
-#include "CAssetID.hpp"
+#include "CUniqueID.hpp"
 #include "CFourCC.hpp"
 #include <Athena/IStreamReader.hpp>
 
 struct SDependency final
 {
     CFourCC  type;
-    CAssetID id;
+    CUniqueID id;
 };
 
 class CDependencyGroup final
 {
 public:
     CDependencyGroup() = default;
-    CDependencyGroup(Athena::io::IStreamReader& input, CAssetID::EIDBits bits);
+    CDependencyGroup(Athena::io::IStreamReader& input, CUniqueID::EIDBits bits);
 
     std::vector<SDependency> dependencies() const;
 private:

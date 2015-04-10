@@ -19,7 +19,7 @@ CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion versi
         objType = in.readUByte();
         atUint32 length = in.readUint32();
         atUint64 position = in.position();
-        m_id = CAssetID(in, CAssetID::E_32Bits);
+        m_id = CUniqueID(in, CUniqueID::E_32Bits);
 
         atUint32 connectedObjectCount = in.readUint32();
         m_connectedObjects.reserve(connectedObjectCount);
@@ -29,7 +29,7 @@ CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion versi
             SConnectedObject obj;
             obj.state = in.readUint32();
             obj.message = in.readUint32();
-            obj.target = CAssetID(in, CAssetID::E_32Bits);
+            obj.target = CUniqueID(in, CUniqueID::E_32Bits);
             m_connectedObjects.push_back(obj);
         }
 
@@ -128,11 +128,11 @@ void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* p
                 CAssetProperty* prop = new CAssetProperty;
                 prop->m_propertyTemplate = propertyTemplate;
                 CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(propertyTemplate);
-                CAssetID assetID;
+                CUniqueID assetID;
                 if (m_version == eSCLY_MetroidPrime1 || m_version == eSCLY_MetroidPrime2)
-                    assetID = CAssetID(in, CAssetID::E_32Bits);
+                    assetID = CUniqueID(in, CUniqueID::E_32Bits);
                 else
-                    assetID = CAssetID(in, CAssetID::E_64Bits);
+                    assetID = CUniqueID(in, CUniqueID::E_64Bits);
 
                 prop->m_value = CResourceManager::instance()->loadResource(assetID, assetTemplate->assetType().toString());
                 parent->m_properties.push_back(prop);

@@ -83,8 +83,6 @@ void CAreaFile::draw()
 
             obj.draw();
         }
-
-        break;
     }
 }
 

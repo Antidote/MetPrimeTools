@@ -35,7 +35,7 @@ void CMaterialSet::setAmbient(const QColor& amb)
     }
 }
 
-void CMaterialSet::dumpSources(const CAssetID& id)
+void CMaterialSet::dumpSources(const CUniqueID& id)
 {
     atUint32 i = 0;
     for (atUint32 matId : m_materials)

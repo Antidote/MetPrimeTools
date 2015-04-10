@@ -1,7 +1,7 @@
 #ifndef CMATERIALSECTION_HPP
 #define CMATERIALSECTION_HPP
 
-#include <CAssetID.hpp>
+#include <CUniqueID.hpp>
 #include <QColor>
 #include "core/SAnimation.hpp"
 
@@ -41,7 +41,7 @@ struct SPASSCommand final : IMaterialCommand
 
     virtual ~SPASSCommand() {}
     atUint32 unknown1;
-    CAssetID textureId;
+    CUniqueID textureId;
     atUint32 uvSource;
     atUint16 animUvSource;
     atUint16 postMtx;

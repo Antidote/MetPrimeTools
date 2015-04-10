@@ -11,7 +11,7 @@ class IResource
 {
 public:
     virtual ~IResource() {}
-    CAssetID assetId() const { return m_assetID; }
+    CUniqueID assetId() const { return m_assetID; }
     CFourCC assetType() const { return m_assetType; }
 
     CPakFile* source() const { return m_source; }
@@ -19,7 +19,7 @@ public:
     void destroy();
 protected:
     friend class CResourceManager;
-    CAssetID m_assetID;
+    CUniqueID m_assetID;
     CFourCC  m_assetType;
     CPakFile* m_source;
 };
