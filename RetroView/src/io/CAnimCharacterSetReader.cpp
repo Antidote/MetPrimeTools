@@ -64,8 +64,8 @@ void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
     CAnimCharacterNode* node = new CAnimCharacterNode;
     node->m_id = base::readUint32();
     node->m_enumVal = base::readUint16();
-
     node->m_name    = base::readString();
+
     node->m_modelId = CUniqueID(*this, CUniqueID::E_32Bits);
     node->m_skinId  = CUniqueID(*this, CUniqueID::E_32Bits);
     node->m_rigId   = CUniqueID(*this, CUniqueID::E_32Bits);
@@ -87,7 +87,7 @@ void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
     {
         atUint32 unkCount = base::readUint32();
         while((unkCount--) > 0)
-            node->m_unkIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+            node->m_unkIds1.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
     }
 
     if (node->m_enumVal > 5)
@@ -95,6 +95,20 @@ void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
         atUint32 electricCount = base::readUint32();
         while((electricCount--) > 0)
             node->m_electricIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+    }
+
+    if (node->m_enumVal == 10)
+    {
+        atUint32 unkCount = base::readUint32();
+        while((unkCount--) > 0)
+            node->m_unkIds2.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+    }
+
+    if (node->m_enumVal == 10)
+    {
+        atUint32 unkCount = base::readUint32();
+        while((unkCount--) > 0)
+            node->m_unkIds3.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
     }
 
     node->m_attachementMeta = base::readUint32();
@@ -113,6 +127,21 @@ void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
     atUint32 actionIDCount = base::readUint32();
     while ((actionIDCount--) > 0)
         node->m_actionIds.push_back(base::readUint32());
+
+    if (node->m_enumVal == 10)
+    {
+        node->m_unknown1 = base::readUint32();
+        node->m_unknown2 = base::readUByte();
+        atUint32 actionExtentsCount = base::readUint32();
+        while((actionExtentsCount--) > 0)
+        {
+            SActionExtentsMP2 actionExtents;
+            actionExtents.id = base::readUint32();
+            actionExtents.extents = SBoundingBox(*this);
+            node->m_actionExtents.push_back(actionExtents);
+        }
+    }
+
     ret->m_characterNodes.push_back(node);
 }
 
@@ -140,7 +169,11 @@ void CAnimCharacterSetReader::readAttachement(CAnimCharacterNode* node)
         subAttachment.name = base::readString();
         subAttachment.type = CFourCC(*this);
         subAttachment.id =  CUniqueID(*this, CUniqueID::E_32Bits);
-        subAttachment.name2 = base::readString();
+        if (node->m_enumVal != 10)
+            subAttachment.name2 = base::readString();
+        else
+            subAttachment.unkIntMP2 = base::readUint32();
+
         subAttachment.unkFloat = base::readFloat();
         subAttachment.unkInt1 = base::readUint32();
         subAttachment.unkInt2 = base::readUint32();

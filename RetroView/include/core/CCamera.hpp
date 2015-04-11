@@ -40,6 +40,7 @@ public:
     void setPitch(float pitch);
     void setPosition(const glm::vec3& pos);
     glm::vec3 position() const;
+    void setRotation(const glm::vec3& pos);
 
     void setViewport(int width, int height);
 
@@ -50,7 +51,6 @@ public:
 
     void increaseSpeed();
     void decreaseSpeed();
-
 
 private:
     // Calculates the front vector from the Camera's (updated) Eular Angles

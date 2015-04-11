@@ -21,12 +21,19 @@ struct SActionAABB
     SBoundingBox aabb;
 };
 
+struct SActionExtentsMP2
+{
+    atUint32 id;
+    SBoundingBox extents;
+};
+
 struct SSubEffectAttachement
 {
     std::string name;
     CFourCC     type;
     CUniqueID   id;
     std::string name2;
+    atUint32    unkIntMP2;
     float       unkFloat;
     atUint32    unkInt1;
     atUint32    unkInt2;
@@ -60,15 +67,19 @@ private:
     CPASDatabase* m_pasDatabase;
     std::vector<CUniqueID> m_particleIds;
     std::vector<CUniqueID> m_swooshIds;
-    std::vector<CUniqueID> m_unkIds;
+    std::vector<CUniqueID> m_unkIds1;
     std::vector<CUniqueID> m_electricIds;
+    std::vector<CUniqueID> m_unkIds2;
+    std::vector<CUniqueID> m_unkIds3;
     atUint32               m_attachementMeta;
     std::vector<SActionAABB> m_actionAABBs;
     std::vector<SEffectAttachement> m_effectAttachments;
     CUniqueID m_modelOverride;
     CUniqueID m_skinOverride;
     std::vector<atUint32> m_actionIds;
-
+    atUint32 m_unknown1;
+    atUint8  m_unknown2;
+    std::vector<SActionExtentsMP2> m_actionExtents;
 };
 
 #endif // CANIMCHARACTERNODE_HPP

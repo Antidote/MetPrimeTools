@@ -7,6 +7,12 @@
 class CAnimCharacterSet : public IResource
 {
 public:
+    enum Version
+    {
+        MetroidPrime1,
+        MetroidPrime2
+    };
+
     CAnimCharacterSet();
     ~CAnimCharacterSet();
 
@@ -15,6 +21,7 @@ public:
 private:
     friend class CAnimCharacterSetReader;
     std::vector<CAnimCharacterNode*> m_characterNodes;
+    Version m_version;
 };
 
 #endif // CANIMCHARACTERSET_HPP

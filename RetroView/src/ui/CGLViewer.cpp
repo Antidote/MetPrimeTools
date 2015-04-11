@@ -16,6 +16,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "models/CAreaFile.hpp"
 #include "core/CResourceManager.hpp"
 #include "core/CMaterialCache.hpp"
 #include "core/GXCommon.hpp"
@@ -35,7 +36,7 @@ CGLViewer::CGLViewer(QWidget* parent)
     QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_updateTimer.start(1);   
+    m_updateTimer.start(1);
 }
 
 CGLViewer::~CGLViewer()
@@ -269,6 +270,15 @@ glm::mat4 CGLViewer::viewMatrix()
 void CGLViewer::setCurrent(IRenderableModel* renderable)
 {
     m_currentRenderable = renderable;
+    CAreaFile* area = dynamic_cast<CAreaFile*>(m_currentRenderable);
+    if (area)
+    {
+        glm::vec3 pos;
+        glm::vec3 rot;
+        area->nearestSpawnPoint(m_camera.position(), pos, rot);
+        m_camera.setPosition(pos);
+        m_camera.setRotation(rot);
+    }
 }
 
 void CGLViewer::setSkybox(IRenderableModel* renderable)
