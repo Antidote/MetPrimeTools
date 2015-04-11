@@ -2,7 +2,7 @@
 #define CAREABSPTREE_HPP
 
 #include <Athena/Types.hpp>
-#include "core/SboundingBox.hpp"
+#include "core/SBoundingBox.hpp"
 #include "core/CWordBitmap.hpp"
 
 #define CAREABSPTREE_NODE_MAX_CHILDREN 8

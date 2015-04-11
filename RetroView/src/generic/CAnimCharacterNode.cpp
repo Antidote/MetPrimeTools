@@ -2,9 +2,11 @@
 
 CAnimCharacterNode::CAnimCharacterNode()
 {
+
 }
 
 CAnimCharacterNode::~CAnimCharacterNode()
 {
+
 }
 

@@ -69,27 +69,6 @@ SOURCES += \
     src/core/GXCommon.cpp \
     src/core/STEVStage.cpp \
     src/core/CWordBitmap.cpp \
-    src/ui/CMainWindow.cpp \
-    src/ui/CGLViewer.cpp \
-    src/ui/CMaterialViewer.cpp \
-    src/ui/CPakTreeWidget.cpp \
-    src/io/CAreaReader.cpp \
-    src/io/CMaterialReader.cpp \
-    src/io/CModelReader.cpp \
-    src/io/CWorldFileReader.cpp \
-    src/generic/CDependencyGroup.cpp \
-    src/generic/CTexture.cpp \
-    src/generic/CWorldFile.cpp \
-    src/models/CAreaFile.cpp \
-    src/models/CAreaBspTree.cpp \
-    src/models/CModelFile.cpp \
-    src/main.cpp \
-    src/io/CMapUniverseReader.cpp \
-    src/models/CMapUniverse.cpp \
-    src/io/CMapAreaReader.cpp \
-    src/models/CMapArea.cpp \
-    src/io/CStringTableReader.cpp \
-    src/generic/CStringTable.cpp \
     src/core/CVertexBuffer.cpp \
     src/core/CMaterialSection.cpp \
     src/core/IMaterial.cpp \
@@ -100,9 +79,31 @@ SOURCES += \
     src/core/CProperty.cpp \
     src/core/CTemplateManager.cpp \
     src/core/IResource.cpp \
+    src/core/CPASDatabase.cpp \
+    src/ui/CMainWindow.cpp \
+    src/ui/CGLViewer.cpp \
+    src/ui/CMaterialViewer.cpp \
+    src/ui/CPakTreeWidget.cpp \
+    src/io/CAreaReader.cpp \
+    src/io/CMaterialReader.cpp \
+    src/io/CModelReader.cpp \
+    src/io/CWorldFileReader.cpp \
+    src/io/CMapUniverseReader.cpp \
+    src/io/CStringTableReader.cpp \
+    src/io/CMapAreaReader.cpp \
+    src/io/CAnimCharacterSetReader.cpp \
+    src/generic/CDependencyGroup.cpp \
+    src/generic/CTexture.cpp \
+    src/generic/CWorldFile.cpp \
+    src/generic/CStringTable.cpp \
     src/generic/CAnimCharacterSet.cpp \
     src/generic/CAnimCharacterNode.cpp \
-    src/generic/CPASDatabase.cpp
+    src/models/CAreaFile.cpp \
+    src/models/CAreaBspTree.cpp \
+    src/models/CModelFile.cpp \
+    src/models/CMapArea.cpp \
+    src/models/CMapUniverse.cpp \
+    src/main.cpp
 
 HEADERS += \
     include/core/CCamera.hpp \
@@ -122,26 +123,6 @@ HEADERS += \
     include/core/SBoundingBox.hpp \
     include/core/STEVStage.hpp \
     include/core/CWordBitmap.hpp \
-    include/io/CAreaReader.hpp \
-    include/io/CMaterialReader.hpp \
-    include/io/CModelReader.hpp \
-    include/io/CWorldFileReader.hpp \
-    include/ui/CGLViewer.hpp \
-    include/ui/CMainWindow.hpp \
-    include/ui/CMaterialViewer.hpp \
-    include/ui/CPakTreeWidget.hpp \
-    include/generic/CDependencyGroup.hpp \
-    include/generic/CTexture.hpp \
-    include/generic/CWorldFile.hpp \
-    include/models/CAreaFile.hpp \
-    include/models/CAreaBspTree.hpp \
-    include/models/CModelFile.hpp \
-    include/io/CMapUniverseReader.hpp \
-    include/models/CMapUniverse.hpp \
-    include/io/CMapAreaReader.hpp \
-    include/models/CMapArea.hpp \
-    include/io/CStringTableReader.hpp \
-    include/generic/CStringTable.hpp \
     include/core/CVertexBuffer.hpp \
     include/core/CMaterialSection.hpp \
     include/core/IMaterial.hpp \
@@ -155,9 +136,32 @@ HEADERS += \
     include/core/SAnimation.hpp \
     include/core/SVertex.hpp \
     include/core/GLInclude.hpp \
+    include/core/CPASDatabase.hpp \
+    include/core/CPASParameter.hpp \
+    include/core/SBoundingBox.hpp \
+    include/io/CAreaReader.hpp \
+    include/io/CMaterialReader.hpp \
+    include/io/CModelReader.hpp \
+    include/io/CWorldFileReader.hpp \
+    include/io/CMapUniverseReader.hpp \
+    include/io/CMapAreaReader.hpp \
+    include/io/CStringTableReader.hpp \
+    include/io/CAnimCharacterSetReader.hpp \
+    include/ui/CGLViewer.hpp \
+    include/ui/CMainWindow.hpp \
+    include/ui/CMaterialViewer.hpp \
+    include/ui/CPakTreeWidget.hpp \
+    include/generic/CDependencyGroup.hpp \
+    include/generic/CTexture.hpp \
+    include/generic/CWorldFile.hpp \
+    include/models/CAreaFile.hpp \
+    include/models/CAreaBspTree.hpp \
+    include/models/CModelFile.hpp \
+    include/models/CMapUniverse.hpp \
+    include/models/CMapArea.hpp \
+    include/generic/CStringTable.hpp \
     include/generic/CAnimCharacterSet.hpp \
-    include/generic/CAnimCharacterNode.hpp \
-    include/generic/CPASDatabase.hpp
+    include/generic/CAnimCharacterNode.hpp
 
 FORMS += \
     forms/CPakTreeWidget.ui \
