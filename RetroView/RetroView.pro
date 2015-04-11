@@ -46,7 +46,7 @@ include(../RetroCommon/RetroCommon.pri)
 include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
 
-TARGET    = RetroView
+TARGET    = retroview
 CONFIG   += console
 CONFIG   += app_bundle
 

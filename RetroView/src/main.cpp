@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QStandardPaths>
+#include <QSettings>
 #include <QDebug>
 
 QString getSource(QString Filename)
@@ -34,6 +35,8 @@ int main(int argc, char *argv[])
     a.setWindowIcon(QIcon(":/icons/64x64/apps/retroview.png"));
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
+
+    QSettings().setValue("applicationRootPath", a.applicationDirPath());
 
     QFileInfo fi(a.applicationDirPath() + "/templates");
     if (fi.exists() && fi.isWritable())
