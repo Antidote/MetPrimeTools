@@ -174,7 +174,7 @@ void CMainWindow::onTabChanged()
         std::vector<SPakResource> res = m_currentTab->pak()->resourcesByType("mlvl");
         CWorldFile* world = nullptr;
         if (res.size() > 0)
-            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "mlvl"));
+            world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(ptw->pak(), res.at(0).id, "MLVL"));
         if (world)
         {
             CGLViewer::instance()->setSkybox(world->skyboxModel());

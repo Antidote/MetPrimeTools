@@ -239,4 +239,4 @@ IResource* CMapAreaReader::loadByData(const atUint8* data, atUint64 length)
     return CMapAreaReader(data, length).read();
 }
 
-REGISTER_RESOURCE_LOADER(CMapAreaReader, "mapa", loadByData);
+REGISTER_RESOURCE_LOADER(CMapAreaReader, "MAPA", loadByData);

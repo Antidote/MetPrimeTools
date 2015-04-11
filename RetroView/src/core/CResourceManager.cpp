@@ -181,9 +181,7 @@ std::vector<CPakTreeWidget*> CResourceManager::pakWidgets() const
 
 IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
 {
-    std::string tag = res.tag.toString();
-    Athena::utility::tolower(tag);
-    if (m_loaders.find(tag) == m_loaders.end())
+    if (m_loaders.find(res.tag) == m_loaders.end())
         return nullptr;
 
     atUint8* data = pak->loadData(res.id, res.tag.toString());
@@ -193,7 +191,7 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
     IResource* ret = nullptr;
     try
     {
-        ret = m_loaders[tag].byData(data, res.size);
+        ret = m_loaders[res.tag].byData(data, res.size);
         if (ret)
         {
             ret->m_assetType = res.tag;
@@ -213,23 +211,22 @@ IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)
     return ret;
 }
 
-void CResourceManager::registerLoader(std::string tag, ResourceDataLoaderCallback byData)
+void CResourceManager::registerLoader(const CFourCC& tag, ResourceDataLoaderCallback byData)
 {
     if (m_loaders.find(tag) != m_loaders.end())
     {
-        std::cout << "Already had a loader for " << tag << " registered, ignored registration attempt" << std::endl;
+        std::cout << "Already had a loader for " << tag.toString() << " registered, ignored registration attempt" << std::endl;
         return;
     }
 
-    std::cout << "Loader for resource " << tag << " registered" << std::endl;
-    Athena::utility::tolower(tag);
+    std::cout << "Loader for resource " << tag.toString() << " registered" << std::endl;
     ResourceLoaderDesc desc;
-    tag = tag;
+    desc.tag = tag;
     desc.byData = byData;
     m_loaders[tag] = desc;
 }
 
-SResourceLoaderRegistrator::SResourceLoaderRegistrator(std::string tag, ResourceDataLoaderCallback byData)
+SResourceLoaderRegistrator::SResourceLoaderRegistrator(const CFourCC& tag, ResourceDataLoaderCallback byData)
 {
     CResourceManager::instance().get()->registerLoader(tag, byData);
 }

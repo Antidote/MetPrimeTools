@@ -48,9 +48,7 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
         atUint32 nodeCount = base::readUint32();
 
         while ((nodeCount--) > 0)
-        {
             readCharacterNode(ret);
-        }
     }
     catch(...)
     {
@@ -60,8 +58,6 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
 
     return ret;
 }
-
-
 
 void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
 {
@@ -166,5 +162,5 @@ IResource* CAnimCharacterSetReader::loadByData(const atUint8* data, atUint64 len
     return CAnimCharacterSetReader(data, length).read();
 }
 
-REGISTER_RESOURCE_LOADER(CAnimCharacterSetReader, "ancs", loadByData);
+REGISTER_RESOURCE_LOADER(CAnimCharacterSetReader, "ANCS", loadByData);
 

@@ -219,7 +219,7 @@ void CScriptObject::draw()
 
                 CAnimCharacterNode* node = charSet->nodeByIndex(nodeId);
                 if (node)
-                    m_model = dynamic_cast<CModelFile*>(CResourceManager::instance()->loadResource(node->modelID(), "cmdl"));
+                    m_model = dynamic_cast<CModelFile*>(CResourceManager::instance()->loadResource(node->modelID(), "CMDL"));
             }
         }
 

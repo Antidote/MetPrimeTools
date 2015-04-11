@@ -12,40 +12,18 @@
 #include <CPakFile.hpp>
 #include "IResource.hpp"
 
-class CUniqueIDHash final
-{
-public:
-    std::size_t operator()(CUniqueID const& id) const
-    {
-        size_t hash = 0;
-        atUint8* tmp = id.raw();
-        for (; *tmp; ++tmp)
-            hash = (hash << 2)  + *tmp;
-        return hash;
-    }
-};
-
-class CUniqueIDComparison final
-{
-public:
-    bool operator()(CUniqueID const& left, CUniqueID const& right) const
-    {
-        return (left == right);
-    }
-};
-
 typedef IResource* (*ResourceDataLoaderCallback)(const atUint8*, atUint64);
 
 struct ResourceLoaderDesc final
 {
-    std::string                tag;
+    CFourCC                    tag;
     ResourceDataLoaderCallback byData;
 };
 
 
 struct SResourceLoaderRegistrator final
 {
-    SResourceLoaderRegistrator(std::string tag, ResourceDataLoaderCallback byData);
+    SResourceLoaderRegistrator(const CFourCC&, ResourceDataLoaderCallback byData);
 };
 
 class CPakFile;
@@ -66,7 +44,7 @@ public:
     IResource* loadResourceFromPak(CPakFile* pak, const CUniqueID& assetID, const std::string& type = std::string());
     void destroyResource(IResource* res);
 
-    void registerLoader(std::string tag, ResourceDataLoaderCallback byData);
+    void registerLoader(const CFourCC& tag, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();
 
     std::vector<CPakTreeWidget*> pakWidgets() const;
@@ -82,7 +60,7 @@ protected:
     CResourceManager& operator =(const CResourceManager&)=delete;
 
 private:
-    std::unordered_map<std::string, ResourceLoaderDesc> m_loaders;
+    std::unordered_map<CFourCC, ResourceLoaderDesc, CFourCCHash, CFourCC_Comparison> m_loaders;
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
     std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;

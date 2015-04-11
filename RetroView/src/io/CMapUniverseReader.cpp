@@ -96,4 +96,4 @@ IResource* CMapUniverseReader::loadByData(const atUint8* data, atUint64 length)
     return reader.read();
 }
 
-REGISTER_RESOURCE_LOADER(CMapUniverseReader, "mapu", loadByData);
+REGISTER_RESOURCE_LOADER(CMapUniverseReader, "MAPU", loadByData);

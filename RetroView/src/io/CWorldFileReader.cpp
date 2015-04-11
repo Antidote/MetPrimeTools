@@ -241,4 +241,4 @@ IResource* CWorldFileReader::loadByData(const atUint8 *data, atUint64 length)
     return reader.read();
 }
 
-REGISTER_RESOURCE_LOADER(CWorldFileReader, "mlvl", loadByData);
+REGISTER_RESOURCE_LOADER(CWorldFileReader, "MLVL", loadByData);
