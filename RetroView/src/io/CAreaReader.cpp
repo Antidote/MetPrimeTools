@@ -173,6 +173,12 @@ void CAreaReader::readSections(CAreaFile* ret)
             m_sectionReader.setData(data, m_sectionSizes[i]);
             readSCLY(ret, m_sectionReader);
         }
+        else if (i == m_arotSection)
+        {
+            atUint8* data = base::readUBytes(m_sectionSizes[i]);
+            m_sectionReader.setData(data, m_sectionSizes[i]);
+            ret->m_bspTree.readAROT(m_sectionReader);
+        }
 
         base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
     }

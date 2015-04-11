@@ -1,6 +1,7 @@
 #ifndef BOUNDINGBOX_HPP
 #define BOUNDINGBOX_HPP
 #include <glm/glm.hpp>
+#include <Athena/IStreamReader.hpp>
 
 struct SBoundingBox final
 {
@@ -25,6 +26,17 @@ struct SBoundingBox final
           max(maxX, maxY, maxZ)
     {
     }
+    
+    inline void readBoundingBox(Athena::io::IStreamReader& in)
+    {
+        min[0] = in.readFloat();
+        min[1] = in.readFloat();
+        min[2] = in.readFloat();
+        max[0] = in.readFloat();
+        max[1] = in.readFloat();
+        max[2] = in.readFloat();
+    }
+    SBoundingBox(Athena::io::IStreamReader& in) {readBoundingBox(in);}
 };
 
 inline bool operator ==(const SBoundingBox& left, const SBoundingBox& right)

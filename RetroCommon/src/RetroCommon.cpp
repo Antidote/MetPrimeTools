@@ -16,7 +16,7 @@ void decompressData(aIO::IStreamWriter& outbuf,  const atUint8* srcData, atUint3
     if (compressionMethod == 0x78DA || compressionMethod == 0x7801 || compressionMethod == 0x789C)
     {
         atUint8*  decompData = new atUint8[uncompressedLength];
-        if ((atUint32)aIO::Compression::decompressZlib(srcData, srcLength,  decompData, uncompressedLength) == uncompressedLength)
+        if (aIO::Compression::decompressZlib(srcData, srcLength,  decompData, uncompressedLength) == uncompressedLength)
             outbuf.writeUBytes(decompData, uncompressedLength);
         delete[] decompData;
     }

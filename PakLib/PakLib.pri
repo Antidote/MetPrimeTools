@@ -10,5 +10,4 @@ HEADERS += \
 SOURCES += \
     $$PWD/src/CPakFile.cpp \
     $$PWD/src/CPakFileReader.cpp \
-    $$PWD/src/CFourCC.cpp \
     $$PWD/src/CAssetID.cpp
