@@ -68,6 +68,7 @@ SOURCES += \
     src/core/CScene.cpp \
     src/core/GXCommon.cpp \
     src/core/STEVStage.cpp \
+    src/core/CWordBitmap.cpp \
     src/ui/CMainWindow.cpp \
     src/ui/CGLViewer.cpp \
     src/ui/CMaterialViewer.cpp \
@@ -80,6 +81,7 @@ SOURCES += \
     src/generic/CTexture.cpp \
     src/generic/CWorldFile.cpp \
     src/models/CAreaFile.cpp \
+    src/models/CAreaBspTree.cpp \
     src/models/CModelFile.cpp \
     src/main.cpp \
     src/io/CMapUniverseReader.cpp \
@@ -119,6 +121,7 @@ HEADERS += \
     include/core/IResource.hpp \
     include/core/SBoundingBox.hpp \
     include/core/STEVStage.hpp \
+    include/core/CWordBitmap.hpp \
     include/io/CAreaReader.hpp \
     include/io/CMaterialReader.hpp \
     include/io/CModelReader.hpp \
@@ -131,6 +134,7 @@ HEADERS += \
     include/generic/CTexture.hpp \
     include/generic/CWorldFile.hpp \
     include/models/CAreaFile.hpp \
+    include/models/CAreaBspTree.hpp \
     include/models/CModelFile.hpp \
     include/io/CMapUniverseReader.hpp \
     include/models/CMapUniverse.hpp \

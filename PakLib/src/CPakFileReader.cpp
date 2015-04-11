@@ -166,10 +166,7 @@ std::vector<SSectionEntry> CPakFileReader::loadSectionTable()
     std::vector<SSectionEntry> sections;
     sections.resize(sectionCount);
 
-    atUint8* data = base::readUBytes(sizeof(SSectionEntry) * sectionCount);
-
-    memcpy(sections.data(), data, sizeof(SSectionEntry) * sectionCount);
-    delete[] data;
-
+    base::readUBytesToBuf(sections.data(), sizeof(SSectionEntry) * sectionCount);
+    
     return sections;
 }

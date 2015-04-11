@@ -99,7 +99,7 @@ CModelFile* CModelReader::read()
         for (atUint32 i = 0; i < sectionCount; i++)
             m_sectionSizes[i] = base::readUint32();
 
-        base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+        base::seekAlign32();
 
         const atUint32 sectionBias = ((m_result->m_version == CModelFile::DKCR || m_result->m_version == CModelFile::MetroidPrime3)
                                       ? 1 : materialCount);
@@ -361,7 +361,7 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
         in.readByte();
     }
 
-    in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    in.seekAlign32();
 
     CMaterial& material = m_result->m_materialSets[0].material(mesh.m_materialID);
     readPrimitives(mesh, *m_result, material, in);

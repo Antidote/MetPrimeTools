@@ -6,6 +6,7 @@
 #include "core/IResource.hpp"
 #include "core/GXCommon.hpp"
 #include "core/CScene.hpp"
+#include "CAreaBspTree.hpp"
 
 #include <vector>
 #include <string>
@@ -68,6 +69,7 @@ private:
     std::vector<SAABB>              m_aabbs;
     glm::mat3x4                     m_transformMatrix;
     SBoundingBox                    m_boundingBox;
+    CAreaBspTree                    m_bspTree;
     // HACK: CAreaFile should be part of CScene, not the other way around
     std::vector<CScene*>            m_scriptLayers; // NOT FINAL!!!
 };

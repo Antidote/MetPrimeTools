@@ -37,7 +37,6 @@ private:
     void readModelHeader(CAreaFile*  file, atUint64& sectionStart, atUint32& i);
     void readModelData  (CAreaFile* file,  CModelData& model, atUint64& sectionStart, atUint32& i);
     void readMeshOffsets(CModelData& model, Athena::io::MemoryReader& in);
-    void readAROT       (CAreaFile*  file,  Athena::io::MemoryReader& in);
     void readAABB       (CAreaFile*  file,  Athena::io::MemoryReader& in);
     void readVertices   (CModelData& model, Athena::io::MemoryReader& in);
     void readNormals    (CModelData& model, Athena::io::MemoryReader& in);
