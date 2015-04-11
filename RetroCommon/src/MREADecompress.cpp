@@ -43,8 +43,10 @@ bool decompressMREA(Athena::io::IStreamReader& in, Athena::io::IStreamWriter& ou
 
         out.writeUint32(magic);
         out.writeUint32(version);
-
-        out.writeBytes(in.readBytes(sizeof(float[3][4])), sizeof(float[3][4]));
+        
+        atInt8* mtxData = in.readBytes(sizeof(float[3][4]));
+        out.writeBytes(mtxData, sizeof(float[3][4]));
+        delete[] mtxData;
         out.writeUint32(in.readUint32()); // mesh count
         out.writeUint32(in.readUint32()); // scly count
 

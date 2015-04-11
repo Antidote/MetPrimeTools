@@ -16,9 +16,7 @@ CUniqueID::CUniqueID(Athena::io::IStreamReader& input, CUniqueID::EIDBits idLeng
     if (idLength != E_Invalid && bytes > 0)
     {
         memset(m_idVal, 0, 16);
-        atUint8* tmp = input.readUBytes(bytes);
-        memcpy(m_idVal, tmp, bytes);
-        delete[] tmp;
+        input.readUBytesToBuf(m_idVal, bytes);
     }
     else
     {
