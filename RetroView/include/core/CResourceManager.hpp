@@ -87,7 +87,7 @@ private:
     std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
     std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
-    std::vector<CUniqueID>                    m_failedAssets;
+    std::vector<CUniqueID>                   m_failedAssets;
     std::string                              m_baseDirectory;
 };
 
