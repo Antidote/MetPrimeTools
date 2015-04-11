@@ -4,6 +4,7 @@
 #include "core/CProperty.hpp"
 #include <vector>
 
+
 struct SConnectedObject
 {
     atUint32 state;
@@ -20,6 +21,7 @@ enum EScriptVersion
 };
 
 
+class CModelFile;
 class CScriptObject
 {
 public:
@@ -34,8 +36,13 @@ public:
 private:
     void loadStruct(Athena::io::IStreamReader &in, CStructProperty* parent, CStructPropertyTemplate* parentTemplate);
     CStructProperty* m_rootProperty;
-    EScriptVersion  m_version;
+    EScriptVersion   m_version;
     CUniqueID        m_id;
+    bool             m_objectInitialized;
+    CModelFile*      m_model;
+    CVector3Property* m_posProperty;
+    CVector3Property* m_rotProperty;
+    CVector3Property* m_scaleProperty;
     std::vector<SConnectedObject> m_connectedObjects;
 };
 

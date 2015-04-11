@@ -2,15 +2,26 @@
 #include "core/CTemplateManager.hpp"
 #include "core/CResourceManager.hpp"
 #include "models/CModelFile.hpp"
+#include "generic/CAnimCharacterSet.hpp"
 #include "ui/CGLViewer.hpp"
 
 CScriptObject::CScriptObject()
+    : m_objectInitialized(false),
+      m_model(nullptr),
+      m_posProperty(nullptr),
+      m_rotProperty(nullptr),
+      m_scaleProperty(nullptr)
 {
 }
 
 CScriptObject::CScriptObject(Athena::io::IStreamReader &in, EScriptVersion version)
     : m_version(version),
-      m_rootProperty(nullptr)
+      m_rootProperty(nullptr),
+      m_objectInitialized(false),
+      m_model(nullptr),
+      m_posProperty(nullptr),
+      m_rotProperty(nullptr),
+      m_scaleProperty(nullptr)
 {
     in.setEndian(Athena::Endian::BigEndian);
     atUint32 objType;
@@ -65,92 +76,92 @@ void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* p
     {
         switch(propertyTemplate->propertyType())
         {
-            case EPropertyType::Struct:
-            {
-                CStructProperty* prop = new CStructProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                loadStruct(in, prop, dynamic_cast<CStructPropertyTemplate*>(propertyTemplate));
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Vector3:
-            {
-                CVector3Property* prop = new CVector3Property;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value.x = in.readFloat();
-                prop->m_value.y = in.readFloat();
-                prop->m_value.z = in.readFloat();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Bool:
-            {
-                CBoolProperty* prop = new CBoolProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value = in.readBool();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Long:
-            {
-                CLongProperty* prop = new CLongProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value = in.readUint32();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Byte:
-            {
-                CByteProperty* prop = new CByteProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value = in.readByte();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Float:
-            {
-                CFloatProperty* prop = new CFloatProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value = in.readFloat();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::String:
-            {
-                CStringProperty* prop = new CStringProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value = in.readString();
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Asset:
-            {
-                CAssetProperty* prop = new CAssetProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(propertyTemplate);
-                CUniqueID assetID;
-                if (m_version == eSCLY_MetroidPrime1 || m_version == eSCLY_MetroidPrime2)
-                    assetID = CUniqueID(in, CUniqueID::E_32Bits);
-                else
-                    assetID = CUniqueID(in, CUniqueID::E_64Bits);
+        case EPropertyType::Struct:
+        {
+            CStructProperty* prop = new CStructProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            loadStruct(in, prop, dynamic_cast<CStructPropertyTemplate*>(propertyTemplate));
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Vector3:
+        {
+            CVector3Property* prop = new CVector3Property;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value.x = in.readFloat();
+            prop->m_value.y = in.readFloat();
+            prop->m_value.z = in.readFloat();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Bool:
+        {
+            CBoolProperty* prop = new CBoolProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value = in.readBool();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Long:
+        {
+            CLongProperty* prop = new CLongProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value = in.readUint32();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Byte:
+        {
+            CByteProperty* prop = new CByteProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value = in.readByte();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Float:
+        {
+            CFloatProperty* prop = new CFloatProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value = in.readFloat();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::String:
+        {
+            CStringProperty* prop = new CStringProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value = in.readString();
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Asset:
+        {
+            CAssetProperty* prop = new CAssetProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(propertyTemplate);
+            CUniqueID assetID;
+            if (m_version == eSCLY_MetroidPrime1 || m_version == eSCLY_MetroidPrime2)
+                assetID = CUniqueID(in, CUniqueID::E_32Bits);
+            else
+                assetID = CUniqueID(in, CUniqueID::E_64Bits);
 
-                prop->m_value = CResourceManager::instance()->loadResource(assetID, assetTemplate->assetType().toString());
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            case EPropertyType::Color:
-            {
-                CColorProperty* prop = new CColorProperty;
-                prop->m_propertyTemplate = propertyTemplate;
-                prop->m_value.setRedF(in.readFloat());
-                prop->m_value.setGreenF(in.readFloat());
-                prop->m_value.setBlueF(in.readFloat());
-                prop->m_value.setAlphaF(in.readFloat());
-                parent->m_properties.push_back(prop);
-            }
-                break;
-            default:
-                std::cout << "todo" << std::endl;
+            prop->m_value = assetID;
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        case EPropertyType::Color:
+        {
+            CColorProperty* prop = new CColorProperty;
+            prop->m_propertyTemplate = propertyTemplate;
+            prop->m_value.setRedF(in.readFloat());
+            prop->m_value.setGreenF(in.readFloat());
+            prop->m_value.setBlueF(in.readFloat());
+            prop->m_value.setAlphaF(in.readFloat());
+            parent->m_properties.push_back(prop);
+        }
+            break;
+        default:
+            std::cout << "todo" << std::endl;
         }
     }
 }
@@ -183,25 +194,59 @@ void CScriptObject::draw()
     if (!m_rootProperty)
         return;
 
-    CAssetProperty* assetProp = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("Model"));
-    if (assetProp)
+    if (m_model == nullptr && !m_objectInitialized)
     {
-        CModelFile* model = dynamic_cast<CModelFile*>(assetProp->value());
-        if (model)
+        CAssetProperty* characterSetProp   = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("AnimationParameters::AnimSet"));
+        if (!characterSetProp)
+            characterSetProp   = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("PatternedInfo::AnimationParameters::AnimSet"));
+
+        if (characterSetProp)
         {
-            CVector3Property* posProperty      = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
-            CVector3Property* rotationProperty = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
-            CVector3Property* scaleProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Scale"));
-            if (posProperty)
-                model->setPosition(posProperty->value());
-            if (rotationProperty)
-                model->setRotation(rotationProperty->value());
-            if (scaleProperty)
-                model->setScale(scaleProperty->value());
-            model->updateViewProjectionUniforms(CGLViewer::instance()->viewMatrix(), CGLViewer::instance()->projectionMatrix());
-            model->draw();
-            model->restoreDefaults();
+            CAnimCharacterSet* charSet = dynamic_cast<CAnimCharacterSet*>(characterSetProp->load());
+
+            if (charSet)
+            {
+                atUint32 nodeId = 0;
+                if (m_rootProperty->name() != "PlayerActor")
+                {
+                    CLongProperty* nodeProp = dynamic_cast<CLongProperty*>(m_rootProperty->propertyByName("PatternedInfo::AnimationParameters::Node"));
+
+                    if (!nodeProp)
+                        nodeProp = dynamic_cast<CLongProperty*>(m_rootProperty->propertyByName("AnimationParameters::Node"));
+                    if (nodeProp)
+                        nodeId = nodeProp->value();
+                }
+
+                CAnimCharacterNode* node = charSet->nodeByIndex(nodeId);
+                if (node)
+                    m_model = dynamic_cast<CModelFile*>(CResourceManager::instance()->loadResource(node->modelID(), "cmdl"));
+            }
         }
+
+        if (!m_model)
+        {
+            CAssetProperty* assetProp = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("Model"));
+            if (assetProp)
+                m_model = dynamic_cast<CModelFile*>(assetProp->load());
+        }
+
+        m_posProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
+        m_rotProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
+        m_scaleProperty  = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Scale"));
+        m_objectInitialized = true;
+    }
+
+    if (m_model)
+    {
+        if (m_posProperty)
+            m_model->setPosition(m_posProperty->value());
+        if (m_rotProperty)
+            m_model->setRotation(m_rotProperty->value());
+        if (m_scaleProperty)
+            m_model->setScale(m_scaleProperty->value());
+        m_model->updateViewProjectionUniforms(CGLViewer::instance()->viewMatrix(), CGLViewer::instance()->projectionMatrix());
+        m_model->draw();
+        m_model->restoreDefaults();
     }
 }
 

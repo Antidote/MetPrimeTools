@@ -90,13 +90,16 @@ public:
     virtual ~CColorProperty() {}
 };
 
-class CAssetProperty : public IProperty<IResource*,  Asset>
+class CAssetProperty : public IProperty<CUniqueID,  Asset>
 {
 public:
     virtual ~CAssetProperty() {}
+
+    IResource* load();
+private:
 };
 
-class CStructProperty : IPropertyBase
+class CStructProperty : public IPropertyBase
 {
 public:
     virtual ~CStructProperty();
