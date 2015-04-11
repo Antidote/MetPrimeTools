@@ -1,6 +1,6 @@
 #ifndef MATERIALCONTAINER_HPP
 #define MATERIALCONTAINER_HPP
-#include "CAssetID.hpp"
+#include "CUniqueID.hpp"
 #include "CMaterial.hpp"
 #include <vector>
 
@@ -16,7 +16,8 @@ public:
 
     void setAmbient(const QColor& amb);
 
-    void dumpSources(const CAssetID& id);
+    void dumpSources(const CUniqueID& id);
+
 private:
     friend class CMaterialReader;
     friend struct SPASSCommand;

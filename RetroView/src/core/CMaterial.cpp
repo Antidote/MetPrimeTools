@@ -378,7 +378,7 @@ bool CMaterial::bind()
         m_program->addShader(fragmentShader);
         m_program->link();
         m_program->bind();
-        
+
         std::string texsName = QString("texs").toStdString();
         int texsLoc = m_program->uniformLocation(texsName.c_str());
         if (texsLoc >= 0)
@@ -421,7 +421,7 @@ bool CMaterial::bind()
     atUint32 pass = 0;
     if (m_version != MetroidPrime3 && m_version != DKCR)
     {
-        for (CAssetID& texID : m_textures)
+        for (CUniqueID& texID : m_textures)
         {
             CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(texID, "txtr"));
 
@@ -721,6 +721,5 @@ bool operator==(const SAnimation& left, const SAnimation& right)
 {
     return !memcmp(&left, &right, sizeof(SAnimation));
 }
-
 
 

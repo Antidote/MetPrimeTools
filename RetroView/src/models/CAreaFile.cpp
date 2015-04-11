@@ -61,16 +61,29 @@ void CAreaFile::buildBBox()
 
 void CAreaFile::draw()
 {
-    currentMaterialSet().setAmbient(m_ambient);
 
+    if (m_scriptLayers.size() > 0)
+    {
+        if (m_scriptLayers[0]->isSkyEnabled())
+            CGLViewer::instance()->drawSky();
+    }
+
+    currentMaterialSet().setAmbient(m_ambient);
     CMaterialSet materialSet = currentMaterialSet();
     glm::mat4 model = glm::mat4(1);
-
     drawIbos(false, materialSet, model);
     drawIbos(true, materialSet, model);
 
-    for (CScriptObject obj : m_scriptLayers[0]->m_objects)
-        obj.draw();
+    for (CScene* scene : m_scriptLayers)
+    {
+        for (CScriptObject obj : scene->m_objects)
+        {
+            if (obj.isAreaAttributes())
+                continue;
+
+            obj.draw();
+        }
+    }
 }
 
 void CAreaFile::drawBoundingBox()
@@ -139,13 +152,13 @@ atUint32 CAreaFile::currentMaterialSetIndex() const
 
 void CAreaFile::setCurrentMaterialSet(atUint32 set)
 {
-    m_currentSet = set % m_materialSets.size();;
+    m_currentSet = set % m_materialSets.size();
 }
 
-void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, glm::mat4 modelMat)
+void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix)
 {
-    std::for_each(m_models.begin(), m_models.end(), [&transparents, &materialSet, &modelMat](CModelData& model)
+    std::for_each(m_models.begin(), m_models.end(), [&transparents, &materialSet, &modelMatrix](CModelData& model)
     {
-        model.drawIbos(transparents, materialSet, modelMat);
+        model.drawIbos(transparents, materialSet, modelMatrix);
     });
 }

@@ -8,7 +8,7 @@ struct SConnectedObject
 {
     atUint32 state;
     atUint32 message;
-    CAssetID target;
+    CUniqueID target;
 };
 
 enum EScriptVersion
@@ -27,12 +27,15 @@ public:
     CScriptObject(Athena::io::IStreamReader& input, EScriptVersion version);
     ~CScriptObject();
 
+    bool isAreaAttributes();
+    bool skyEnabled();
+    std::string typeName() const;
     void draw();
 private:
     void loadStruct(Athena::io::IStreamReader &in, CStructProperty* parent, CStructPropertyTemplate* parentTemplate);
-    CStructProperty m_rootProperty;
+    CStructProperty* m_rootProperty;
     EScriptVersion  m_version;
-    CAssetID        m_id;
+    CUniqueID        m_id;
     std::vector<SConnectedObject> m_connectedObjects;
 };
 

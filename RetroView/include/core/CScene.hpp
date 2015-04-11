@@ -13,6 +13,10 @@ public:
     CScene();
     ~CScene();
 
+    bool isSkyEnabled();
+
+    CScriptObject* objectByTypeName(const std::string& name);
+
 private:
     friend class CAreaReader;
     friend class CAreaFile;

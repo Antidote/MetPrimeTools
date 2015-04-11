@@ -1,15 +1,15 @@
-#include "CAssetID.hpp"
+#include "CUniqueID.hpp"
 #include <memory.h>
 
-const CAssetID CAssetID::InvalidAsset;
+const CUniqueID CUniqueID::InvalidAsset;
 
-CAssetID::CAssetID()
+CUniqueID::CUniqueID()
     : m_idLen(E_Invalid)
 {
     memset(m_idVal, 0xFF, 16);
 }
 
-CAssetID::CAssetID(Athena::io::IStreamReader& input, CAssetID::EIDBits idLength)
+CUniqueID::CUniqueID(Athena::io::IStreamReader& input, CUniqueID::EIDBits idLength)
     : m_idLen(idLength)
 {
     atUint32 bytes = this->idLength();
@@ -27,7 +27,7 @@ CAssetID::CAssetID(Athena::io::IStreamReader& input, CAssetID::EIDBits idLength)
     }
 }
 
-CAssetID::CAssetID(const atUint8* assetID, CAssetID::EIDBits idLength)
+CUniqueID::CUniqueID(const atUint8* assetID, CUniqueID::EIDBits idLength)
     : m_idLen(idLength)
 {
     atUint32 bytes = this->idLength();
@@ -43,21 +43,21 @@ CAssetID::CAssetID(const atUint8* assetID, CAssetID::EIDBits idLength)
     }
 }
 
-CAssetID::CAssetID(const atUint32& assetID)
+CUniqueID::CUniqueID(const atUint32& assetID)
 {
     fromUint32(assetID);
 }
 
-CAssetID::CAssetID(const atUint64& assetID)
+CUniqueID::CUniqueID(const atUint64& assetID)
 {
     fromUint64(assetID);
 }
 
-CAssetID::~CAssetID()
+CUniqueID::~CUniqueID()
 {
 }
 
-atUint32 CAssetID::toUint32() const
+atUint32 CUniqueID::toUint32() const
 {
     atUint32 id = *(atUint32*)(m_idVal);
     Athena::utility::BigUint32(id);
@@ -65,7 +65,7 @@ atUint32 CAssetID::toUint32() const
     return id;
 }
 
-atUint64 CAssetID::toUint64() const
+atUint64 CUniqueID::toUint64() const
 {
     atUint64 id = *(atUint64*)(m_idVal);
     Athena::utility::BigUint64(id);
@@ -73,7 +73,7 @@ atUint64 CAssetID::toUint64() const
     return id;
 }
 
-atUint32 CAssetID::idLength() const
+atUint32 CUniqueID::idLength() const
 {
     switch(m_idLen)
     {
@@ -85,12 +85,12 @@ atUint32 CAssetID::idLength() const
 
 }
 
-atUint8* CAssetID::raw() const
+atUint8* CUniqueID::raw() const
 {
     return (atUint8*)m_idVal;
 }
 
-void CAssetID::fromUint32(const atUint32& other)
+void CUniqueID::fromUint32(const atUint32& other)
 {
     atUint32 tmp = other;
     Athena::utility::BigUint32(tmp);
@@ -99,13 +99,13 @@ void CAssetID::fromUint32(const atUint32& other)
     m_idLen = E_32Bits;
 }
 
-CAssetID& CAssetID::operator=(atUint32 other)
+CUniqueID& CUniqueID::operator=(atUint32 other)
 {
     fromUint32(other);
     return *this;
 }
 
-void CAssetID::fromUint64(const atUint64& other)
+void CUniqueID::fromUint64(const atUint64& other)
 {
     atUint64 tmp = other;
     Athena::utility::BigUint64(tmp);
@@ -114,14 +114,14 @@ void CAssetID::fromUint64(const atUint64& other)
     m_idLen = E_64Bits;
 }
 
-CAssetID& CAssetID::operator=(atUint64 other)
+CUniqueID& CUniqueID::operator=(atUint64 other)
 {
     fromUint64(other);
     return *this;
 }
 
 
-std::string CAssetID::toString() const
+std::string CUniqueID::toString() const
 {
     std::string ret = "";
     atUint32 idLen = idLength();
@@ -130,32 +130,32 @@ std::string CAssetID::toString() const
     return ret;
 }
 
-bool CAssetID::operator==(atUint32 right) const
+bool CUniqueID::operator==(atUint32 right) const
 {
     return (toUint32() == right);
 }
 
-bool CAssetID::operator!=(atUint32 right) const
+bool CUniqueID::operator!=(atUint32 right) const
 {
     return (toUint32() != right);
 }
 
-bool CAssetID::operator==(atUint64 right) const
+bool CUniqueID::operator==(atUint64 right) const
 {
     return (toUint64() == right);
 }
 
-bool CAssetID::operator!=(atUint64 right) const
+bool CUniqueID::operator!=(atUint64 right) const
 {
     return (toUint64() != right);
 }
 
-bool CAssetID::operator==(const CAssetID& right) const
+bool CUniqueID::operator==(const CUniqueID& right) const
 {
     return !memcmp(m_idVal, right.m_idVal, 16);
 }
 
-bool CAssetID::operator!=(const CAssetID& right) const
+bool CUniqueID::operator!=(const CUniqueID& right) const
 {
     return memcmp(m_idVal, right.m_idVal, 16) != 0;
 }

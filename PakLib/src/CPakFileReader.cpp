@@ -96,11 +96,11 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
             if (nameLength > 1024) // While the engine doesn't cap it to 1024, it's a reasonable to assume nobody will be using names this long
             {
                 ret->m_version = EPakVersion::MetroidPrime3Beta;
-                res.id = CAssetID(*this, CAssetID::E_64Bits);
+                res.id = CUniqueID(*this, CUniqueID::E_64Bits);
             }
             else
             {
-                res.id = CAssetID(*this, CAssetID::E_32Bits);
+                res.id = CUniqueID(*this, CUniqueID::E_32Bits);
             }
 
             nameLength = base::readUint32();
@@ -117,7 +117,7 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
             SPakNamedResource name;
             name.name = base::readString();
             name.tag = CFourCC(*this);
-            name.id = CAssetID(*this, CAssetID::E_64Bits);
+            name.id = CUniqueID(*this, CUniqueID::E_64Bits);
             ret->m_namedResources.push_back(name);
         }
     }
@@ -141,7 +141,7 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
         {
             ret->m_resources[i].compressed = base::readUint32();
             ret->m_resources[i].tag        = CFourCC(*this);
-            ret->m_resources[i].id         = CAssetID(*this, CAssetID::E_32Bits);
+            ret->m_resources[i].id         = CUniqueID(*this, CUniqueID::E_32Bits);
             ret->m_resources[i].size       = base::readUint32();
             ret->m_resources[i].offset     = base::readUint32();
         }
@@ -152,7 +152,7 @@ void CPakFileReader::loadResourceTable(CPakFile* ret)
         {
             ret->m_resources[i].compressed = base::readUint32();
             ret->m_resources[i].tag        = CFourCC(*this);
-            ret->m_resources[i].id         = CAssetID(*this, CAssetID::E_64Bits);
+            ret->m_resources[i].id         = CUniqueID(*this, CUniqueID::E_64Bits);
             ret->m_resources[i].size       = base::readUint32();
             ret->m_resources[i].offset     = base::readUint32();
         }

@@ -27,7 +27,7 @@ CResourceManager::CResourceManager()
 
 CResourceManager::~CResourceManager()
 {
-    for (std::pair<CAssetID, IResource*> res : m_cachedResources)
+    for (std::pair<CUniqueID, IResource*> res : m_cachedResources)
         delete res.second;
 
     for (CPakFile* pak : m_pakFiles)
@@ -71,7 +71,7 @@ void CResourceManager::loadPak(std::string filepath)
 
 void CResourceManager::clear()
 {
-    for (std::pair<CAssetID, IResource*> res : m_cachedResources)
+    for (std::pair<CUniqueID, IResource*> res : m_cachedResources)
         delete res.second;
     m_cachedResources.clear();
     m_failedAssets.clear();
@@ -110,12 +110,12 @@ void CResourceManager::initialize(const std::string& baseDirectory)
     }
 }
 
-IResource* CResourceManager::loadResource(const CAssetID& assetID, const std::string& type)
+IResource* CResourceManager::loadResource(const CUniqueID& assetID, const std::string& type)
 {
-    if (assetID == CAssetID::InvalidAsset)
+    if (assetID == CUniqueID::InvalidAsset)
         return nullptr;
 
-    std::vector<CAssetID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
+    std::vector<CUniqueID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
     if (failedIter != m_failedAssets.end())
         return nullptr;
 
@@ -133,12 +133,12 @@ IResource* CResourceManager::loadResource(const CAssetID& assetID, const std::st
     return nullptr;
 }
 
-IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CAssetID& assetID, const std::string& type)
+IResource* CResourceManager::loadResourceFromPak(CPakFile* pak, const CUniqueID& assetID, const std::string& type)
 {
-    if (assetID == CAssetID::InvalidAsset)
+    if (assetID == CUniqueID::InvalidAsset)
         return nullptr;
 
-    std::vector<CAssetID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
+    std::vector<CUniqueID>::iterator failedIter = std::find(m_failedAssets.begin(), m_failedAssets.end(), assetID);
     if (failedIter != m_failedAssets.end())
         return nullptr;
 

@@ -9,7 +9,7 @@
 struct SMapWorld final
 {
     std::string name;
-    CAssetID    mlvlID;
+    CUniqueID    mlvlID;
     glm::mat4   transform;
     std::vector<glm::mat4> hexagonTransforms;
     QColor      color;
@@ -39,7 +39,7 @@ private:
     glm::mat4 m_projectionMatrix;
     atUint32 m_materialID;
 
-    CAssetID m_mapAreaID; // Hexagon
+    CUniqueID m_mapAreaID; // Hexagon
 
     std::vector<SMapWorld> m_worlds;
 

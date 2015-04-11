@@ -38,7 +38,7 @@ CMapUniverse* CMapUniverseReader::read()
 
         ret = new CMapUniverse;
 
-        ret->m_mapAreaID = CAssetID(*this, CAssetID::E_32Bits);
+        ret->m_mapAreaID = CUniqueID(*this, CUniqueID::E_32Bits);
 
         atUint32 worldCount = base::readUint32();
 
@@ -46,7 +46,7 @@ CMapUniverse* CMapUniverseReader::read()
         {
             SMapWorld world;
             world.name = base::readString();
-            world.mlvlID = CAssetID(*this, CAssetID::E_32Bits);
+            world.mlvlID = CUniqueID(*this, CUniqueID::E_32Bits);
             glm::mat3x4 transform;
             for (atUint32 i = 0; i < 3; i++)
             {

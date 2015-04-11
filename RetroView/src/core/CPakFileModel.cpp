@@ -2,7 +2,7 @@
 #include "core/CResourceManager.hpp"
 #include "generic/CWorldFile.hpp"
 
-#include <CAssetID.hpp>
+#include <CUniqueID.hpp>
 
 CPakFileModel::CPakFileModel(CPakFile* pak, QObject* parent)
     : QAbstractItemModel(parent),
@@ -11,7 +11,7 @@ CPakFileModel::CPakFileModel(CPakFile* pak, QObject* parent)
     QList<QVariant> rootData;
     rootData << "Contents";
 
-    m_rootItem = new CResourceTreeItem(rootData, CAssetID(nullptr, CAssetID::E_Invalid));
+    m_rootItem = new CResourceTreeItem(rootData, CUniqueID(nullptr, CUniqueID::E_Invalid));
 
     setupModelData();
 }
@@ -153,7 +153,7 @@ void CPakFileModel::setupModelData()
         {
             QList<QVariant> nodeTag;
             nodeTag << parentNodeTag;
-            parents[parentNodeTag] = new CResourceTreeItem(nodeTag, CAssetID(), m_rootItem);
+            parents[parentNodeTag] = new CResourceTreeItem(nodeTag, CUniqueID(), m_rootItem);
             m_rootItem->appendChild(parents[parentNodeTag]);
         }
 

@@ -21,7 +21,7 @@ void CModelFile::draw()
 {
     currentMaterialSet().setAmbient(m_ambient);
 
-    glm::mat4 model = glm::mat4(m_rotation) * glm::scale(glm::mat4(1), m_scale) * glm::translate(glm::mat4(1), m_position);
+    glm::mat4 model = glm::translate(glm::mat4(1), m_position) * glm::mat4(m_rotation) * glm::scale(glm::mat4(1), m_scale);
     CModelData::drawIbos(false, currentMaterialSet(), model);
     CModelData::drawIbos(true,  currentMaterialSet(), model);
 }
@@ -117,4 +117,3 @@ SBoundingBox& CModelFile::boundingBox()
 
     return bbox;
 }
-

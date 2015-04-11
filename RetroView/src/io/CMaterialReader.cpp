@@ -50,7 +50,7 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
             atUint32 textureCount = base::readUint32();
             m_textures.resize(textureCount);
             for (atUint32 i = 0; i < textureCount; i++)
-                m_textures[i] =  CAssetID(*this, CAssetID::E_32Bits);
+                m_textures[i] =  CUniqueID(*this, CUniqueID::E_32Bits);
 
             atUint32 materialCount = base::readUint32();
 

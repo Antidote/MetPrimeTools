@@ -18,7 +18,7 @@ SPASSCommand::SPASSCommand(Athena::io::IStreamReader& reader, CMaterialSet& set)
     atUint32 sectionStart = reader.position();
     subCommand = (EMaterialCommand)reader.readUint32();
     unknown1 = reader.readUint32();
-    textureId = CAssetID(reader, CAssetID::E_64Bits);
+    textureId = CUniqueID(reader, CUniqueID::E_64Bits);
     uvSource = reader.readUint32();
     atUint32 animationSize = reader.readUint32();
     if (subCommand == EMaterialCommand::RFLD)
@@ -64,7 +64,7 @@ QStringList SPASSCommand::fragmentSource(atUint32 idx)
 {
     QStringList output;
 
-    if (textureId == CAssetID::InvalidAsset)
+    if (textureId == CUniqueID::InvalidAsset)
         return output;
 
     if (subCommand == EMaterialCommand::BLOL || subCommand == EMaterialCommand::RIML || subCommand == EMaterialCommand::XRAY || subCommand == EMaterialCommand::BLOD || subCommand == EMaterialCommand::BLOI)

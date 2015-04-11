@@ -34,11 +34,11 @@ struct SRelocatableObjectInfo
 
 struct SWorldArea
 {
-    CAssetID nameID;
+    CUniqueID nameID;
     glm::mat4 transformMatrix;
     SBoundingBox boundingBox;
-    CAssetID mreaID;
-    CAssetID areaID;
+    CUniqueID mreaID;
+    CUniqueID areaID;
     std::vector<atUint16> attachedAreas;
     atUint32 unknown1; // not in MP3
     CDependencyGroup dependencies; // Not in MP3/DKCR (stored in MREA)
@@ -52,7 +52,7 @@ struct SWorldArea
 
 struct SWorldMap
 {
-    CAssetID id;
+    CUniqueID id;
     atUint32 unknown1;
     bool unknown2;
 };
@@ -60,7 +60,7 @@ struct SWorldMap
 struct SAudioGroup
 {
     atUint32 unknown;
-    CAssetID id;
+    CUniqueID id;
 };
 
 struct SLayerFlags
@@ -85,13 +85,13 @@ public:
     CWorldFile();
     virtual ~CWorldFile();
 
-    std::string areaName(const CAssetID& assetId, CPakFile* pak = nullptr);
+    std::string areaName(const CUniqueID& assetId, CPakFile* pak = nullptr);
     IRenderableModel* skyboxModel();
 private:
     friend class CWorldFileReader;
     Version                   m_version;
-    CAssetID                  m_worldName;
-    CAssetID                  m_darkWorldName;  // MP2 only
+    CUniqueID                  m_worldName;
+    CUniqueID                  m_darkWorldName;  // MP2 only
     atUint32                  m_unknown1;       // MP2 and 3 only
     bool                      m_hasLevelNumber; // Begin Donkey Kong Country Returns only
     std::string               m_levelNumber;
@@ -99,8 +99,8 @@ private:
     float                     m_unknownFloat2;
     float                     m_unknownFloat3;
     float                     m_unknownFloat4; // End Donkey Kong Country Returns only
-    CAssetID                  m_saveWorldID;
-    CAssetID                  m_skyboxID;
+    CUniqueID                  m_saveWorldID;
+    CUniqueID                  m_skyboxID;
     std::vector<SMemoryRelay> m_memoryRelays;  // only in MP1
     atUint32                  m_unknown2;      // only in MP1
     std::vector<SWorldArea>   m_areas;
@@ -108,7 +108,7 @@ private:
     std::vector<SAudioGroup>  m_audioGroups;
     std::vector<SLayerFlags>  m_layerFlags;
     std::vector<std::string>  m_layerNames;
-    std::vector<CAssetID>     m_layerIds;         // MP3 and DKCR only
+    std::vector<CUniqueID>     m_layerIds;         // MP3 and DKCR only
     std::vector<atUint32>     m_layerNameIndices; // First index for each room
 };
 

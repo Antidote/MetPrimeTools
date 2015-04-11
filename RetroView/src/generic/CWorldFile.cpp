@@ -13,7 +13,7 @@ CWorldFile::~CWorldFile()
 
 }
 
-std::string CWorldFile::areaName(const CAssetID& assetId, CPakFile* pak)
+std::string CWorldFile::areaName(const CUniqueID& assetId, CPakFile* pak)
 {
     std::vector<SWorldArea>::iterator iter = std::find_if(m_areas.begin(), m_areas.end(),
                                                             [&assetId](const SWorldArea r)->bool{return r.mreaID == assetId; });
@@ -22,7 +22,7 @@ std::string CWorldFile::areaName(const CAssetID& assetId, CPakFile* pak)
 
     SWorldArea area = (SWorldArea)(*iter);
 
-    if (area.nameID != CAssetID::InvalidAsset)
+    if (area.nameID != CUniqueID::InvalidAsset)
     {
         CStringTable* table;
         if (pak != nullptr)

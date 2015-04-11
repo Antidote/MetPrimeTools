@@ -18,7 +18,7 @@ public:
     CMaterialSet read(CMaterial::Version version);
 private:
     bool readMaterialCommand(CMaterialSet& set, CMaterial& material);
-    std::vector<CAssetID> m_textures;
+    std::vector<CUniqueID> m_textures;
 };
 
 #endif // MATERIALREADER_HPP

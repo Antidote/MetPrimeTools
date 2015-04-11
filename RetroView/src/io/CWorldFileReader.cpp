@@ -36,12 +36,12 @@ CWorldFile* CWorldFileReader::read()
             THROW_INVALID_DATA_EXCEPTION("Invalid World File version expected 0x0D, 0x11, 0x14, 0x19, 0x1B; got 0x%8.X", (atUint32)version);
 
         ret = new CWorldFile();
-        const CAssetID::EIDBits bits = ((version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)
-                                        ? CAssetID::E_64Bits :  CAssetID::E_32Bits);
+        const CUniqueID::EIDBits bits = ((version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)
+                                        ? CUniqueID::E_64Bits :  CUniqueID::E_32Bits);
 
-        ret->m_worldName   = CAssetID(*this, bits);
+        ret->m_worldName   = CUniqueID(*this, bits);
         if (version == CWorldFile::Version::MetroidPrime2)
-            ret->m_darkWorldName = CAssetID(*this, bits);
+            ret->m_darkWorldName = CUniqueID(*this, bits);
 
         if (version != CWorldFile::Version::MetroidPrime1 && version != CWorldFile::Version::DonkeyKongCountryReturns)
             ret->m_unknown1 = base::readUint32();
@@ -59,8 +59,8 @@ CWorldFile* CWorldFileReader::read()
             }
         }
 
-        ret->m_saveWorldID = CAssetID(*this, bits);
-        ret->m_skyboxID    = CAssetID(*this, bits);
+        ret->m_saveWorldID = CUniqueID(*this, bits);
+        ret->m_skyboxID    = CUniqueID(*this, bits);
 
         if (version == CWorldFile::Version::MetroidPrime1)
         {
@@ -84,7 +84,7 @@ CWorldFile* CWorldFileReader::read()
         while((areaCount--) > 0)
         {
             SWorldArea area;
-            area.nameID = CAssetID(*this, bits);
+            area.nameID = CUniqueID(*this, bits);
             glm::mat3x4 transformMatrix;
             for (atUint32 i = 0; i < 3; i++)
             {
@@ -104,8 +104,8 @@ CWorldFile* CWorldFileReader::read()
             }
             area.boundingBox = SBoundingBox(boundingBox);
 
-            area.mreaID = CAssetID(*this, bits);
-            area.areaID = CAssetID(*this, bits);
+            area.mreaID = CUniqueID(*this, bits);
+            area.areaID = CUniqueID(*this, bits);
 
             if (version != CWorldFile::Version::DonkeyKongCountryReturns)
             {
@@ -178,7 +178,7 @@ CWorldFile* CWorldFileReader::read()
 
         if (version != CWorldFile::Version::DonkeyKongCountryReturns)
         {
-            ret->m_worldMap.id = CAssetID(*this, bits);
+            ret->m_worldMap.id = CUniqueID(*this, bits);
             ret->m_worldMap.unknown1 = base::readUint32();
             ret->m_worldMap.unknown2 = base::readBool();
         }
@@ -190,7 +190,7 @@ CWorldFile* CWorldFileReader::read()
             {
                 SAudioGroup audioGroup;
                 audioGroup.unknown = base::readUint32();
-                audioGroup.id = CAssetID(*this, bits);
+                audioGroup.id = CUniqueID(*this, bits);
             }
 
             base::readBool();
@@ -216,7 +216,7 @@ CWorldFile* CWorldFileReader::read()
             layerCount = base::readUint32();
             while ((layerCount--) > 0)
             {
-                CAssetID id = CAssetID(*this, CAssetID::E_128Bits);
+                CUniqueID id = CUniqueID(*this, CUniqueID::E_128Bits);
                 ret->m_layerIds.push_back(id);
             }
         }

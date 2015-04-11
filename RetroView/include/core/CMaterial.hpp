@@ -117,7 +117,7 @@ private:
     bool                           m_texturesEnabled;
     SPASSCommand*                  m_passes[12];
     std::vector<CMaterialSection*> m_materialSections;
-    std::vector<CAssetID>          m_textures;
+    std::vector<CUniqueID>          m_textures;
     QString                        m_fragmentSource;
     QString                        m_vertexSource;
 };
