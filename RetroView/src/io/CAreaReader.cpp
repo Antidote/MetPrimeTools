@@ -96,13 +96,13 @@ CAreaFile* CAreaReader::read()
     if (version == CAreaFile::MetroidPrime3 || version == CAreaFile::DKCR)
         sectionIndexCount = base::readUint32();
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
 
     m_sectionSizes.resize(sectionCount);
     for (atUint32 i = 0; i < sectionCount; i++)
         m_sectionSizes[i] = base::readUint32();
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
 
     if (version != CAreaFile::MetroidPrime1 && version != CAreaFile::MetroidPrimeDemo)
     {
@@ -115,7 +115,7 @@ CAreaFile* CAreaReader::read()
         }
     }
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
 
     if (version == CAreaFile::MetroidPrime3 || version == CAreaFile::DKCR)
     {
@@ -129,7 +129,7 @@ CAreaFile* CAreaReader::read()
         }
     }
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
 
     m_modelMeshOffsets.resize(modelCount);
 
@@ -152,6 +152,7 @@ void CAreaReader::readSections(CAreaFile* ret)
     for (atUint32 i = 0; i < m_sectionSizes.size(); i++)
     {
         atUint64 sectionStart = base::position();
+        bool needsAdvance = true;
 
         if (i == 0)
         {
@@ -166,12 +167,8 @@ void CAreaReader::readSections(CAreaFile* ret)
         {
             for (atUint32 j = 0; j < m_modelMeshOffsets.size(); j++)
                 readModelHeader(ret, sectionStart, i);
-        }
-        else if (i == m_sclySection)
-        {
-            atUint8* data = base::readUBytes(m_sectionSizes[i]);
-            m_sectionReader.setData(data, m_sectionSizes[i]);
-            readSCLY(ret, m_sectionReader);
+            --i; /* Reverses the final increment (which this loop performs anyway) */
+            needsAdvance = false;
         }
         else if (i == m_arotSection)
         {
@@ -179,8 +176,15 @@ void CAreaReader::readSections(CAreaFile* ret)
             m_sectionReader.setData(data, m_sectionSizes[i]);
             ret->m_bspTree.readAROT(m_sectionReader);
         }
-
-        base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
+        else if (i == m_sclySection)
+        {
+            atUint8* data = base::readUBytes(m_sectionSizes[i]);
+            m_sectionReader.setData(data, m_sectionSizes[i]);
+            readSCLY(ret, m_sectionReader);
+        }
+        
+        if (needsAdvance)
+            base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
     }
 }
 
@@ -210,7 +214,13 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
             if (iter != m_sectionIndices.end())
             {
                 SAreaSectionIndex idx = *iter;
-                if (!idx.tag.compare("GPUD"))
+                if (!idx.tag.compare("AABB"))
+                {
+                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
+                    m_sectionReader.setData(data, m_sectionSizes[i]);
+                    readAABB(ret, m_sectionReader);
+                }
+                else if (!idx.tag.compare("GPUD"))
                 {
                     for (atUint32 m = 0; m < ret->m_models.size(); m++)
                     {
@@ -218,12 +228,6 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
                         readModelData(ret, model, sectionStart, i);
                         readMeshes(ret, model, sectionStart, i, m);
                     }
-                }
-                else if (!idx.tag.compare("AABB"))
-                {
-                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
-                    m_sectionReader.setData(data, m_sectionSizes[i]);
-                    readAABB(ret, m_sectionReader);
                 }
             }
         }
@@ -254,7 +258,7 @@ void CAreaReader::readModelHeader(CAreaFile* ret, atUint64& sectionStart, atUint
     model.m_boundingBox.max.y = base::readFloat();
     model.m_boundingBox.max.z = base::readFloat();
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
     sectionStart = base::position();
     i++;
 
@@ -266,7 +270,7 @@ void CAreaReader::readModelHeader(CAreaFile* ret, atUint64& sectionStart, atUint
     while((meshCount--) > 0)
         m_modelMeshOffsets[ret->m_models.size() - 1].push_back(base::readUint32());
 
-    base::seek((base::position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    base::seekAlign32();
     sectionStart = base::position();
     i++;
 
@@ -491,7 +495,7 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
         mesh.m_boundingBox.max.z = in.readFloat();
     }
 
-    in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+    in.seekAlign32();
 
     const CMaterial& material = ret->m_materialSets[0].material(mesh.m_materialID);
 

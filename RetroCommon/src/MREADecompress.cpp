@@ -64,14 +64,14 @@ bool decompressMREA(Athena::io::IStreamReader& in, Athena::io::IStreamWriter& ou
             sectionNumberCount = in.readUint32();
         out.writeUint32(sectionNumberCount);
 
-        in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
-        out.seek((out.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+        in.seekAlign32();
+        out.seekAlign32();
 
         for (atUint32 i = 0; i < sectionCount; i++)
             out.writeUint32(in.readUint32());
 
-        in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
-        out.seek((out.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+        in.seekAlign32();
+        out.seekAlign32();
 
         std::vector<CompressedBlockInfo> blockInfo;
 
@@ -90,16 +90,16 @@ bool decompressMREA(Athena::io::IStreamReader& in, Athena::io::IStreamWriter& ou
         }
 
         // We only need to seek in, out is already where it needs to be
-        in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
-        out.seek((out.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+        in.seekAlign32();
+        out.seekAlign32();
 
         if (version == MetroidPrime3 || version == DKCR)
         {
             for (atUint32 i = 0; i < sectionNumberCount * 2; i++)
                 out.writeUint32(in.readUint32());
 
-            in.seek((in.position() + 31) & ~31, Athena::SeekOrigin::Begin);
-            out.seek((out.position() + 31) & ~31, Athena::SeekOrigin::Begin);
+            in.seekAlign32();
+            out.seekAlign32();
         }
 
         for (CompressedBlockInfo info : blockInfo)
@@ -129,9 +129,9 @@ bool decompressBlock(CompressedBlockInfo& info, Athena::io::IStreamReader& in, A
         {
             // We have compressed data, this is a bit tricky since the compression header isn't always located at the start of the data
             // Retro did something unorthodox, instead of padding the end of the block, they padded the beginning
-            atUint32 blockStart = ((info.dataCompSize + 31) & ~31) - info.dataCompSize;
+            atUint32 blockStart = ROUND_UP_32(info.dataCompSize) - info.dataCompSize;
 
-            atUint8* rawData = in.readUBytes((info.dataCompSize + 31) & ~31);
+            atUint8* rawData = in.readUBytes(ROUND_UP_32(info.dataCompSize));
             atUint8* dataStart = rawData;
             rawData += blockStart;
 
