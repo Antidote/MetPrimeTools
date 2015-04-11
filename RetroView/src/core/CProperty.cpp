@@ -1,4 +1,5 @@
 #include "core/CProperty.hpp"
+#include "core/CResourceManager.hpp"
 #include <algorithm>
 #include <memory>
 
@@ -60,4 +61,11 @@ CStructProperty* CStructProperty::structByIndex(atUint32 idx)
 CStructProperty* CStructProperty::structByName(const std::string& name)
 {
     return dynamic_cast<CStructProperty*>(propertyByName(name));
+}
+
+
+IResource* CAssetProperty::load()
+{
+    CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(m_propertyTemplate);
+    return CResourceManager::instance()->loadResource(m_value, assetTemplate->assetType().toString());
 }
