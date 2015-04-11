@@ -20,6 +20,7 @@ CAnimCharacterSetReader::~CAnimCharacterSetReader()
 {
 }
 
+
 CAnimCharacterSet* CAnimCharacterSetReader::read()
 {
     CAnimCharacterSet* ret = nullptr;
@@ -48,95 +49,7 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
 
         while ((nodeCount--) > 0)
         {
-            CAnimCharacterNode* node = new CAnimCharacterNode;
-            node->m_id = base::readUint32();
-            node->m_enumVal = base::readUint16();
-
-            node->m_name    = base::readString();
-            node->m_modelId = CUniqueID(*this, CUniqueID::E_32Bits);
-            node->m_skinId  = CUniqueID(*this, CUniqueID::E_32Bits);
-            node->m_rigId   = CUniqueID(*this, CUniqueID::E_32Bits);
-
-            atUint32 actionCount = base::readUint32();
-            while ((actionCount--) > 0)
-            {
-                SAction action;
-                action.id = base::readUint32();
-                action.unk = base::readUByte();
-                action.name = base::readString();
-                node->m_actions.push_back(action);
-            }
-
-            node->m_pasDatabase = new CPASDatabase(*this);
-
-            atUint32 particleCount = base::readUint32();
-
-            while((particleCount--) > 0)
-                node->m_particleIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
-
-            atUint32 swooshCount = base::readUint32();
-            while((swooshCount--) > 0)
-                node->m_swooshIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
-
-            if (node->m_enumVal > 4)
-            {
-                atUint32 unkCount = base::readUint32();
-                while((unkCount--) > 0)
-                    node->m_unkIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
-            }
-
-            if (node->m_enumVal > 5)
-            {
-                atUint32 electricCount = base::readUint32();
-                while((electricCount--) > 0)
-                    node->m_electricIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
-            }
-
-            node->m_attachementMeta = base::readUint32();
-
-            atUint32 actionAABBCount = base::readUint32();
-            while((actionAABBCount--) > 0)
-            {
-                SActionAABB aabb;
-                aabb.name = base::readString();
-                std::cout << "AABox name: " << aabb.name << std::endl;
-                aabb.aabb.min[0] = base::readFloat();
-                aabb.aabb.min[1] = base::readFloat();
-                aabb.aabb.min[2] = base::readFloat();
-                aabb.aabb.max[0] = base::readFloat();
-                aabb.aabb.max[1] = base::readFloat();
-                aabb.aabb.max[2] = base::readFloat();
-                node->m_actionAABBs.push_back(aabb);
-            }
-
-            atUint32 attachmentCount = base::readUint32();
-            while ((attachmentCount--) > 0)
-            {
-                SEffectAttachement attachment;
-                attachment.name = base::readString();
-                atUint32 subAttachmentCount = base::readUint32();
-                while((subAttachmentCount--) > 0)
-                {
-                    SSubEffectAttachement subAttachment;
-                    subAttachment.name = base::readString();
-                    subAttachment.type = CFourCC(*this);
-                    subAttachment.id =  CUniqueID(*this, CUniqueID::E_32Bits);
-                    subAttachment.name2 = base::readString();
-                    subAttachment.unkFloat = base::readFloat();
-                    subAttachment.unkInt1 = base::readUint32();
-                    subAttachment.unkInt2 = base::readUint32();
-                    attachment.subAttachments.push_back(subAttachment);
-                }
-                node->m_effectAttachments.push_back(attachment);
-            }
-
-            node->m_modelOverride = CUniqueID(*this, CUniqueID::E_32Bits);
-            node->m_skinOverride  = CUniqueID(*this, CUniqueID::E_32Bits);
-
-            atUint32 actionIDCount = base::readUint32();
-            while ((actionIDCount--) > 0)
-                node->m_actionIds.push_back(base::readUint32());
-            ret->m_characterNodes.push_back(node);
+            readCharacterNode(ret);
         }
     }
     catch(...)
@@ -146,6 +59,106 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
     }
 
     return ret;
+}
+
+
+
+void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
+{
+    CAnimCharacterNode* node = new CAnimCharacterNode;
+    node->m_id = base::readUint32();
+    node->m_enumVal = base::readUint16();
+
+    node->m_name    = base::readString();
+    node->m_modelId = CUniqueID(*this, CUniqueID::E_32Bits);
+    node->m_skinId  = CUniqueID(*this, CUniqueID::E_32Bits);
+    node->m_rigId   = CUniqueID(*this, CUniqueID::E_32Bits);
+
+    readActions(node);
+
+    node->m_pasDatabase = new CPASDatabase(*this);
+
+    atUint32 particleCount = base::readUint32();
+
+    while((particleCount--) > 0)
+        node->m_particleIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+
+    atUint32 swooshCount = base::readUint32();
+    while((swooshCount--) > 0)
+        node->m_swooshIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+
+    if (node->m_enumVal > 4)
+    {
+        atUint32 unkCount = base::readUint32();
+        while((unkCount--) > 0)
+            node->m_unkIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+    }
+
+    if (node->m_enumVal > 5)
+    {
+        atUint32 electricCount = base::readUint32();
+        while((electricCount--) > 0)
+            node->m_electricIds.emplace_back(CUniqueID(*this, CUniqueID::E_32Bits));
+    }
+
+    node->m_attachementMeta = base::readUint32();
+
+    atUint32 actionAABBCount = base::readUint32();
+    while((actionAABBCount--) > 0)
+        readActionBoundingBox(node);
+
+    atUint32 attachmentCount = base::readUint32();
+    while ((attachmentCount--) > 0)
+        readAttachement(node);
+
+    node->m_modelOverride = CUniqueID(*this, CUniqueID::E_32Bits);
+    node->m_skinOverride  = CUniqueID(*this, CUniqueID::E_32Bits);
+
+    atUint32 actionIDCount = base::readUint32();
+    while ((actionIDCount--) > 0)
+        node->m_actionIds.push_back(base::readUint32());
+    ret->m_characterNodes.push_back(node);
+}
+
+void CAnimCharacterSetReader::readActions(CAnimCharacterNode* node)
+{
+    atUint32 actionCount = base::readUint32();
+    while ((actionCount--) > 0)
+    {
+        SAction action;
+        action.id = base::readUint32();
+        action.unk = base::readUByte();
+        action.name = base::readString();
+        node->m_actions.push_back(action);
+    }
+}
+
+void CAnimCharacterSetReader::readAttachement(CAnimCharacterNode* node)
+{
+    SEffectAttachement attachment;
+    attachment.name = base::readString();
+    atUint32 subAttachmentCount = base::readUint32();
+    while((subAttachmentCount--) > 0)
+    {
+        SSubEffectAttachement subAttachment;
+        subAttachment.name = base::readString();
+        subAttachment.type = CFourCC(*this);
+        subAttachment.id =  CUniqueID(*this, CUniqueID::E_32Bits);
+        subAttachment.name2 = base::readString();
+        subAttachment.unkFloat = base::readFloat();
+        subAttachment.unkInt1 = base::readUint32();
+        subAttachment.unkInt2 = base::readUint32();
+        attachment.subAttachments.push_back(subAttachment);
+    }
+    node->m_effectAttachments.push_back(attachment);
+}
+
+void CAnimCharacterSetReader::readActionBoundingBox(CAnimCharacterNode* node)
+{
+    SActionAABB aabb;
+    aabb.name = base::readString();
+    aabb.aabb = SBoundingBox(*this);
+    node->m_actionAABBs.push_back(aabb);
 }
 
 IResource* CAnimCharacterSetReader::loadByData(const atUint8* data, atUint64 length)
