@@ -84,6 +84,7 @@ CAreaFile* CAreaReader::read()
         m_arotSection      = base::readUint32();
         if (version == CAreaFile::MetroidPrime2)
         {
+            m_arotSection -= 2;
             m_ptlaSection  = base::readUint32();
             m_egmcSection  = base::readUint32();
         }

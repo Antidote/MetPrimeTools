@@ -10,8 +10,8 @@
 
 struct SAction
 {
-    atUint32 id;
-    atUint8  unk;
+    atUint32    id;
+    atUint8     unk;
     std::string name;
 };
 
