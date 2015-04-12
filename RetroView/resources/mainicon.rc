@@ -1,4 +1,4 @@
-﻿// This file is part of Sakura Suite.
+// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,15 +15,7 @@
 
 #include "winver.h"
 
-IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
-
-// Only ONE of these may be defined
-//#define CMDL_PREVIEW
-//#define CMDL_INTERNAL
-
-#if !defined(CMDL_DEBUG) && !defined(CMDL_INTERNAL) && !defined(CMDL_PREVIEW)
-
-#warning Set version in release mode
+IDI_ICON1  ICON DISCARDABLE "icons/mainicon.ico"
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,0,0,0
@@ -38,14 +30,14 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "CompanyName", "Wiiking2.com"
-            VALUE "FileDescription", "MPxViewer"
-            VALUE "FileVersion", "1.0.0" 
-            VALUE "LegalCopyright", "Copyright (C) 2014 Wiiking2.com"
-            VALUE "InternalName", "mpxviewer"
-            VALUE "OriginalFilename", "mpxviewer.exe"
-            VALUE "ProductName", "Sakura Suite"
-            VALUE "ProductVersion", "1.0.0"
+            VALUE "CompanyName", "Antidote / Jackoalan"
+            VALUE "FileDescription", "Retro View"
+            VALUE "FileVersion", "BETA" 
+            VALUE "LegalCopyright", "Copyright (C) 2015 Antidote / Jackoalan"
+            VALUE "InternalName", "retroview"
+            VALUE "OriginalFilename", "retroview.exe"
+            VALUE "ProductName", "RetroView"
+            VALUE "ProductVersion", "BETA"
         END
     END
     BLOCK "VarFileInfo"
@@ -53,5 +45,3 @@ BEGIN
         VALUE "Translation", 0x0, 1200
     END
 END
-
-#endif

@@ -48,7 +48,7 @@ void CAreaBspTree::readAROT(Athena::io::IStreamReader& in)
     }
     
     /* Read in temporary indirection table */
-    atUint32 nodeIndTable[m_octantNodeCount];
+    atUint32* nodeIndTable = new atUint32[m_octantNodeCount];
     for (i=0 ; i<m_octantNodeCount ; ++i)
         nodeIndTable[i] = in.readUint32();
     
@@ -63,6 +63,8 @@ void CAreaBspTree::readAROT(Athena::io::IStreamReader& in)
         entry.readNodeEntry(in);
         m_nodes.push_back(entry);
     }
+
+    delete[] nodeIndTable;
     
 }
 

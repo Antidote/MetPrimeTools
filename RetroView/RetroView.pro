@@ -17,23 +17,16 @@ mac:QMAKE_LFLAGS += -stdlib=libc++
 
 unix:{
     CONFIG += link_pkgconfig
-    LIBS += -ltinyxml
+    #LIBS += -ltinyxml
 }
 
 win32:LIBS += \
     -lopengl32 \
-    -lglu32 \
-    -L../External/glew/lib/win32 \
-    -L../External/lzo/lib \
-    -lglew32 \
-    -lz
+    -lglu32
 
 unix:LIBS += \
     -lGL \
-    -lGLU \
-    -lGLEW \
-    -lpng \
-    -lz
+    -lGLU
 
 mac:LIBS -= \
     -lGL \
@@ -46,6 +39,10 @@ include(../Athena/AthenaCore.pri)
 include(../RetroCommon/RetroCommon.pri)
 include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
+include(../External/tinyxml/tinyxml.pri)
+include(../External/libpng/png.pri)
+include(../External/zlib/zlib.pri)
+include(../External/glew/glew.pri)
 
 TARGET    = retroview
 CONFIG   += console
@@ -53,8 +50,12 @@ CONFIG   += app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += $$PWD/include
-win32:INCLUDEPATH += ../External/glm ../External/glew/include ../External/lzo/include
+INCLUDEPATH += \
+    $$PWD/include
+
+win32:INCLUDEPATH += \
+    $$PWD/../External/glm \
+    $$PWD/../External/glew/include
 
 SOURCES += \
     src/core/CCamera.cpp \

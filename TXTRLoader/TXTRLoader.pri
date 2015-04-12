@@ -1,7 +1,5 @@
 !contains(CONFIG, -std=c++11):CONFIG += -std=c++11
 
-LIBS += -lpng -lz
-
 INCLUDEPATH += $$PWD/include $$PWD/Externals/pngpp/include
 
 SOURCES += \
