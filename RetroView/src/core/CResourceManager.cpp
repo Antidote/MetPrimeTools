@@ -8,7 +8,12 @@
 #include <Athena/Utility.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if _WIN32
+#include <platforms/win_dirent.h>
+#define stat64 _stat64
+#else
 #include <dirent.h>
+#endif
 #include <QMessageBox>
 #include <QLabel>
 

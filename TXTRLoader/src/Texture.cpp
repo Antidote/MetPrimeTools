@@ -1,6 +1,5 @@
 #include "Texture.hpp"
 #include <Athena/MemoryWriter.hpp>
-#include <sys/cdefs.h>
 #include <memory.h>
 #include <dds.h>
 #include <squish.h>
