@@ -3,6 +3,8 @@
 #include <float.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include "core/GLInclude.hpp"
 
 CCamera::CCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
@@ -114,6 +116,14 @@ void CCamera::setPosition(const glm::vec3& pos)
 glm::vec3 CCamera::position() const
 {
     return m_position;
+}
+
+void CCamera::setRotation(const glm::vec3& rot)
+{
+    glm::quat tmp(glm::radians(rot));
+    m_yaw   = glm::yaw(tmp);
+    m_pitch = glm::pitch(tmp);
+    updateCameraVectors();
 }
 
 void CCamera::setViewport(int width, int height)

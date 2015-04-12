@@ -20,7 +20,7 @@ CMapUniverse::~CMapUniverse()
 
 void CMapUniverse::draw()
 {
-    CMapArea* hex = dynamic_cast<CMapArea*>(CResourceManager::instance()->loadResourceFromPak(m_source, m_mapAreaID, "mapa"));
+    CMapArea* hex = dynamic_cast<CMapArea*>(CResourceManager::instance()->loadResourceFromPak(m_source, m_mapAreaID, "MAPA"));
 
     if (!hex)
         return;

@@ -33,6 +33,9 @@ public:
     bool skyEnabled();
     std::string typeName() const;
     void draw();
+
+    glm::vec3 position();
+    glm::vec3 rotation();
 private:
     void loadStruct(Athena::io::IStreamReader &in, CStructProperty* parent, CStructPropertyTemplate* parentTemplate);
     CStructProperty* m_rootProperty;

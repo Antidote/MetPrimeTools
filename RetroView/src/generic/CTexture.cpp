@@ -111,4 +111,4 @@ QImage CTexture::toQImage()
     return ret;
 }
 
-REGISTER_RESOURCE_LOADER(CTexture, "txtr", loadByData);
+REGISTER_RESOURCE_LOADER(CTexture, "TXTR", loadByData);

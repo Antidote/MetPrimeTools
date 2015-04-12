@@ -84,6 +84,7 @@ CAreaFile* CAreaReader::read()
         m_arotSection      = base::readUint32();
         if (version == CAreaFile::MetroidPrime2)
         {
+            m_arotSection -= 2;
             m_ptlaSection  = base::readUint32();
             m_egmcSection  = base::readUint32();
         }
@@ -518,12 +519,14 @@ void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectio
     }
 }
 
+static const CFourCC skSCLYFourCC("SCLY");
+
 void CAreaReader::readSCLY(CAreaFile* ret, Athena::io::MemoryReader& in)
 {
     if (ret->m_version == CAreaFile::MetroidPrime1)
     {
-        atUint32 magic = in.readUint32();
-        if (magic != 0x53434C59)
+        CFourCC magic(in);
+        if (magic != skSCLYFourCC)
             return;
 
         atUint32 version = in.readUint32();
@@ -564,4 +567,4 @@ CScene* CAreaReader::readObjectLayer(Athena::io::MemoryReader& in, EScriptVersio
     return ret;
 }
 
-REGISTER_RESOURCE_LOADER(CAreaReader, "mrea", loadByData);
+REGISTER_RESOURCE_LOADER(CAreaReader, "MREA", loadByData);

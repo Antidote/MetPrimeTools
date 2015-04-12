@@ -47,4 +47,25 @@ private:
     atUint8  m_idVal[16];
 };
 
+
+class CUniqueIDHash final
+{
+public:
+    std::size_t operator()(CUniqueID const& id) const
+    {
+        std::string tmp = id.toString();
+        std::hash<std::string> hashFn;
+        return hashFn(tmp);
+    }
+};
+
+class CUniqueIDComparison final
+{
+public:
+    bool operator()(CUniqueID const& left, CUniqueID const& right) const
+    {
+        return (left == right);
+    }
+};
+
 #endif // CUNIQUEID_HPP

@@ -72,7 +72,6 @@ void CAreaFile::draw()
     CMaterialSet materialSet = currentMaterialSet();
     glm::mat4 model = glm::mat4(1);
     drawIbos(false, materialSet, model);
-    drawIbos(true, materialSet, model);
 
     for (CScene* scene : m_scriptLayers)
     {
@@ -84,6 +83,7 @@ void CAreaFile::draw()
             obj.draw();
         }
     }
+    drawIbos(true, materialSet, model);
 }
 
 void CAreaFile::drawBoundingBox()
@@ -153,6 +153,17 @@ atUint32 CAreaFile::currentMaterialSetIndex() const
 void CAreaFile::setCurrentMaterialSet(atUint32 set)
 {
     m_currentSet = set % m_materialSets.size();
+}
+
+void CAreaFile::nearestSpawnPoint(const glm::vec3& pos, glm::vec3& targetPos, glm::vec3& rot)
+{
+    if (m_scriptLayers.size() == 0)
+    {
+        targetPos = pos;
+        return;
+    }
+
+    return m_scriptLayers[0]->nearestSpawnPoint(pos, targetPos, rot);
 }
 
 void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix)

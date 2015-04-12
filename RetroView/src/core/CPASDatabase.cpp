@@ -1,5 +1,8 @@
 #include "core/CPASDatabase.hpp"
 #include <Athena/InvalidDataException.hpp>
+#include <CFourCC.hpp>
+
+static const CFourCC skPAS4FourCC("PAS4");
 
 CPASDatabase::CPASDatabase()
 {
@@ -7,9 +10,9 @@ CPASDatabase::CPASDatabase()
 
 CPASDatabase::CPASDatabase(Athena::io::IStreamReader& in)
 {
-    atUint32 magic = in.readUint32();
-    if (magic != 0x50415334)
-        THROW_INVALID_DATA_EXCEPTION("Invalid PASDatabase magic expected 0x50415334 0x%X", magic);
+    CFourCC magic(in);
+    if (magic != skPAS4FourCC)
+        THROW_INVALID_DATA_EXCEPTION("Invalid PASDatabase magic expected 'PAS4'' got 0x%.4s", magic);
 
     atUint32 stateCount = in.readUint32();
     m_defaultState = in.readInt32();

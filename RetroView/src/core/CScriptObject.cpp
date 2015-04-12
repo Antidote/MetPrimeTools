@@ -138,7 +138,6 @@ void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* p
         {
             CAssetProperty* prop = new CAssetProperty;
             prop->m_propertyTemplate = propertyTemplate;
-            CAssetPropertyTemplate* assetTemplate = dynamic_cast<CAssetPropertyTemplate*>(propertyTemplate);
             CUniqueID assetID;
             if (m_version == eSCLY_MetroidPrime1 || m_version == eSCLY_MetroidPrime2)
                 assetID = CUniqueID(in, CUniqueID::E_32Bits);
@@ -219,7 +218,7 @@ void CScriptObject::draw()
 
                 CAnimCharacterNode* node = charSet->nodeByIndex(nodeId);
                 if (node)
-                    m_model = dynamic_cast<CModelFile*>(CResourceManager::instance()->loadResource(node->modelID(), "cmdl"));
+                    m_model = dynamic_cast<CModelFile*>(CResourceManager::instance()->loadResource(node->modelID(), "CMDL"));
             }
         }
 
@@ -230,9 +229,11 @@ void CScriptObject::draw()
                 m_model = dynamic_cast<CModelFile*>(assetProp->load());
         }
 
-        m_posProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
-        m_rotProperty    = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
-        m_scaleProperty  = static_cast<CVector3Property*>(m_rootProperty->propertyByName("Scale"));
+        m_posProperty    = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
+        m_rotProperty    = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
+        m_scaleProperty  = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Scale"));
+        if (!m_scaleProperty)
+            m_scaleProperty = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Volume"));
         m_objectInitialized = true;
     }
 
@@ -248,5 +249,20 @@ void CScriptObject::draw()
         m_model->draw();
         m_model->restoreDefaults();
     }
+}
+
+glm::vec3 CScriptObject::position()
+{
+    if (!m_posProperty)
+        m_posProperty = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Position"));
+
+    return m_posProperty->value();
+}
+
+glm::vec3 CScriptObject::rotation()
+{
+    if (!m_rotProperty)
+        m_rotProperty = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
+    return m_rotProperty->value();
 }
 

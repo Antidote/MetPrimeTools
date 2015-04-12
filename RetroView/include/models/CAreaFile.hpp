@@ -53,6 +53,8 @@ public:
     atUint32 materialSetCount() const;
     atUint32 currentMaterialSetIndex() const;
     void setCurrentMaterialSet(atUint32 set);
+
+    void nearestSpawnPoint(const glm::vec3& pos, glm::vec3& targetPos, glm::vec3& rot);
 private:
     friend class CAreaReader;
     void drawIbos(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix);
