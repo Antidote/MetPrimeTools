@@ -26,9 +26,7 @@ win32:LIBS += \
 
 unix:LIBS += \
     -lGL \
-    -lGLU \
-    -lGLEW \
-    -lz
+    -lGLU
 
 mac:LIBS -= \
     -lGL \
@@ -43,8 +41,8 @@ include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
 include(../External/tinyxml/tinyxml.pri)
 include(../External/libpng/png.pri)
-win32:include(../External/zlib-win64/zlib.pri)
-win32:include(../External/glew/glew.pri)
+include(../External/zlib/zlib.pri)
+include(../External/glew/glew.pri)
 
 TARGET    = retroview
 CONFIG   += console
