@@ -10,6 +10,12 @@
 #include <QSettings>
 #include <QDebug>
 
+#if __APPLE__
+extern "C" {
+void osx_init();
+}
+#endif
+
 QString getSource(QString Filename)
 {
     QFile file(Filename);
@@ -35,6 +41,10 @@ int main(int argc, char *argv[])
     a.setWindowIcon(QIcon(":/icons/64x64/apps/retroview.png"));
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
+    
+#if __APPLE__
+    osx_init();
+#endif
 
     QSettings().setValue("applicationRootPath", a.applicationDirPath());
 
