@@ -39,6 +39,7 @@ mac:LIBS -= \
     -lGL \
     -lGLU
 
+mac:LIBS += -lobjc -framework Foundation
 
 DEFINES += _LARGEFILE64_SOURCE _FILE_OFFSET_BITS
 include(../Athena/AthenaCore.pri)
@@ -174,6 +175,7 @@ RESOURCES += \
 win32:RC_FILE += \
     resources/mainicon.rc
 
+mac:OBJECTIVE_SOURCES += platforms/osx_extra.m
 QMAKE_INFO_PLIST = resources/Info.plist
 RESFILES.files = resources/icons/mainicon.icns resources/icons/pakicon.icns
 RESFILES.path = Contents/Resources
