@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QStandardPaths>
+#include <QSettings>
 #include <QDebug>
 
 #if __APPLE__
@@ -44,6 +45,8 @@ int main(int argc, char *argv[])
 #if __APPLE__
     osx_init();
 #endif
+
+    QSettings().setValue("applicationRootPath", a.applicationDirPath());
 
     QFileInfo fi(a.applicationDirPath() + "/templates");
     if (fi.exists() && fi.isWritable())
