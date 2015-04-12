@@ -423,7 +423,7 @@ bool CMaterial::bind()
     {
         for (CUniqueID& texID : m_textures)
         {
-            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(texID, "txtr"));
+            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(texID, "TXTR"));
 
             if (texture)
             {
@@ -457,7 +457,7 @@ bool CMaterial::bind()
             if (pass == 0 && m_passes[i]->subCommand == EMaterialCommand::INCA)
                 glBlendFunc(GL_ONE, GL_ONE);
 
-            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(m_passes[i]->textureId, "txtr"));
+            CTexture* texture = dynamic_cast<CTexture*>(CResourceManager::instance()->loadResource(m_passes[i]->textureId, "TXTR"));
 
             if (texture)
             {

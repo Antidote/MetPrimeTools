@@ -26,9 +26,9 @@ std::string CWorldFile::areaName(const CUniqueID& assetId, CPakFile* pak)
     {
         CStringTable* table;
         if (pak != nullptr)
-            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResourceFromPak(pak, area.nameID, "strg"));
+            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResourceFromPak(pak, area.nameID, "STRG"));
         else
-            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResource(area.nameID, "strg"));
+            table = dynamic_cast<CStringTable*>(CResourceManager::instance()->loadResource(area.nameID, "STRG"));
 
         if (table)
         {
@@ -46,6 +46,6 @@ std::string CWorldFile::areaName(const CUniqueID& assetId, CPakFile* pak)
 
 IRenderableModel* CWorldFile::skyboxModel()
 {
-    return dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_source, m_skyboxID, "cmdl"));
+    return dynamic_cast<IRenderableModel*>(CResourceManager::instance()->loadResourceFromPak(m_source, m_skyboxID, "CMDL"));
 }
 

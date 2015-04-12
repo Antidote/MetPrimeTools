@@ -1,5 +1,6 @@
 #include "core/CScene.hpp"
 #include <algorithm>
+#include <float.h>
 
 CScene::CScene()
 {
@@ -29,5 +30,28 @@ CScriptObject* CScene::objectByTypeName(const std::string& name)
     }
 
     return nullptr;
+}
+
+void CScene::nearestSpawnPoint(const glm::vec3& pos, glm::vec3& targetPos, glm::vec3& rot)
+{
+    float minDist = FLT_MAX;
+
+    glm::vec3 nearestPos = pos;
+    for (CScriptObject obj : m_objects)
+    {
+        if (obj.typeName() != "SpawnPoint")
+            continue;
+
+        glm::vec3 tmp = obj.position() - pos;
+        float sqrDist = glm::dot(tmp, tmp);
+        if (sqrDist < minDist)
+        {
+            minDist = sqrDist;
+            nearestPos = obj.position();
+            rot = obj.rotation();
+        }
+    }
+    nearestPos.z += 3.f;
+    targetPos = nearestPos;
 }
 

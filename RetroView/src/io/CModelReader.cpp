@@ -368,4 +368,4 @@ void CModelReader::readMesh(Athena::io::MemoryReader& in)
     m_result->m_meshes.push_back(mesh);
 }
 
-REGISTER_RESOURCE_LOADER(CModelReader, "cmdl", loadByData);
+REGISTER_RESOURCE_LOADER(CModelReader, "CMDL", loadByData);

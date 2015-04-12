@@ -17,6 +17,8 @@ public:
 
     CScriptObject* objectByTypeName(const std::string& name);
 
+    void nearestSpawnPoint(const glm::vec3& pos, glm::vec3& targetPos, glm::vec3& rot);
+
 private:
     friend class CAreaReader;
     friend class CAreaFile;

@@ -206,4 +206,4 @@ void CStringTableReader::readNameTable(CStringTable* ret)
     }
 }
 
-REGISTER_RESOURCE_LOADER(CStringTableReader, "strg", loadByData);
+REGISTER_RESOURCE_LOADER(CStringTableReader, "STRG", loadByData);

@@ -56,11 +56,30 @@ public:
     inline bool valid()
     {
         for (atUint32 i = 0; i < 4; i++)
-            // only capital letters are excepted
-            if (fourCC[i] < 'A' || fourCC[i] > 'Z')
+            if (!(isalpha(fourCC[i]) || isdigit(fourCC[i])))
                 return false;
-        
+
         return true;
+    }
+};
+
+class CFourCCHash final
+{
+public:
+    std::size_t operator()(CFourCC const& fourCC) const
+    {
+        std::string tmp = fourCC.toString();
+        std::hash<std::string> hashFn;
+        return hashFn(tmp);
+    }
+};
+
+class CFourCC_Comparison final
+{
+public:
+    bool operator()(CFourCC const& left, CFourCC const& right) const
+    {
+        return (left == right);
     }
 };
 
