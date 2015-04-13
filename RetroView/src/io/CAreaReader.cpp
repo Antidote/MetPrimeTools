@@ -196,6 +196,7 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
     for (atUint32 i = 0; i < m_sectionSizes.size(); i++)
     {
         atUint64 sectionStart = base::position();
+        bool needsAdvance = true;
         if (i == 0)
         {
             atUint8* data = base::readUBytes(m_sectionSizes[i]);
@@ -206,6 +207,8 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
         {
             for (atUint32 m = 0; m < m_modelMeshOffsets.size(); m++)
                 readModelHeader(ret, sectionStart, i);
+            --i; /* Reverses the final increment (which this loop performs anyway) */
+            needsAdvance = false;
         }
         else
         {
@@ -215,7 +218,13 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
             if (iter != m_sectionIndices.end())
             {
                 SAreaSectionIndex idx = *iter;
-                if (!idx.tag.compare("AABB"))
+                if (!idx.tag.compare("ROCT"))
+                {
+                    atUint8* data = base::readUBytes(m_sectionSizes[i]);
+                    m_sectionReader.setData(data, m_sectionSizes[i]);
+                    ret->m_bspTree.readAROT(m_sectionReader);
+                }
+                else if (!idx.tag.compare("AABB"))
                 {
                     atUint8* data = base::readUBytes(m_sectionSizes[i]);
                     m_sectionReader.setData(data, m_sectionSizes[i]);
@@ -233,7 +242,8 @@ void CAreaReader::readSectionsMP3DKCR(CAreaFile* ret)
             }
         }
 
-        base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
+        if (needsAdvance)
+            base::seek(sectionStart + m_sectionSizes[i], Athena::SeekOrigin::Begin);
     }
 }
 
@@ -511,6 +521,7 @@ void CAreaReader::readMeshes(CAreaFile* ret, CModelData& model, atUint64& sectio
     for (atUint32 s = 0; s < meshCount; s++)
     {
         atUint8* data = base::readUBytes(m_sectionSizes[i]);
+
         m_sectionReader.setData(data, m_sectionSizes[i]);
         readMesh(model, ret, m_sectionReader);
         base::seek(meshStart + m_modelMeshOffsets[m][s], Athena::SeekOrigin::Begin);

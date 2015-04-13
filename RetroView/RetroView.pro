@@ -163,6 +163,7 @@ HEADERS += \
     include/generic/CAnimCharacterSet.hpp \
     include/generic/CAnimCharacterNode.hpp
 
+win32:HEADERS += platforms/win_dirent.h
 FORMS += \
     forms/CPakTreeWidget.ui \
     forms/CMainWindow.ui \
@@ -173,6 +174,7 @@ RESOURCES += \
 
 win32:RC_FILE += \
     resources/mainicon.rc
+OTHER_FILES += resources/mainicon.rc
 
 mac:OBJECTIVE_SOURCES += platforms/osx_extra.m
 QMAKE_INFO_PLIST = resources/Info.plist

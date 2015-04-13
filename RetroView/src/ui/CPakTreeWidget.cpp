@@ -16,6 +16,8 @@ CPakTreeWidget::CPakTreeWidget(CPakFile* pak, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->treeView->setModel(m_model);
+    setStatusTip(m_model->filepath());
+    setToolTip(m_model->filepath());
     QItemSelectionModel* selectionModel = ui->treeView->selectionModel();
     connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onSelectionChanged(QItemSelection,QItemSelection)));
 }

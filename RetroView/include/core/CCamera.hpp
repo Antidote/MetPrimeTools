@@ -53,8 +53,7 @@ public:
     void setMovementSpeed(float speed);
     float movementSpeed() const;
 
-    void increaseSpeed();
-    void decreaseSpeed();
+    void changeSpeed(float delta);
 
 private:
     // Calculates the front vector from the Camera's (updated) Eular Angles

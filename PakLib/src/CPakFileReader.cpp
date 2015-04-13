@@ -125,9 +125,24 @@ void CPakFileReader::loadNameTable(CPakFile* ret)
 
 CPakFile* CPakFileReader::load(const std::string& filename)
 {
-    CPakFileReader reader(filename);
+    return CPakFileReader(filename).read();
+}
 
-    return reader.read();
+bool CPakFileReader::canLoad(const std::string& filename)
+{
+    try
+    {
+        Athena::io::FileReader reader(filename);
+        reader.setEndian(Athena::Endian::BigEndian);
+
+        atUint32 magic = reader.readUint32();
+
+        return (magic == EPakVersion::MetroidPrime1_2 || magic == EPakVersion::MetroidPrime3);
+    }
+    catch(...)
+    {
+        return false;
+    }
 }
 
 void CPakFileReader::loadResourceTable(CPakFile* ret)
