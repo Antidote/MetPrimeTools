@@ -23,7 +23,7 @@
 #endif
 */
 
-#ifdef WIN32
+#if defined(WIN32) && defined(_MSC_VER)
 #  define Z_ONCE __pragma( warning(push) ) \
     __pragma(warning(disable:4127)) \
 while (0) \

@@ -88,12 +88,10 @@ int main(int argc, char *argv[])
         CTemplateManager::instance()->initialize(homeDir.absolutePath().toStdString());
     }
     QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
-    fmt.setDepthBufferSize(24);
+    fmt.setDepthBufferSize(32);
     fmt.setMajorVersion(3);
     fmt.setMinorVersion(3);
-#ifdef __APPLE__
     fmt.setProfile(QSurfaceFormat::CoreProfile);
-#endif
 
     fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     QSurfaceFormat::setDefaultFormat(fmt);

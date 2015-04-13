@@ -7,3 +7,5 @@ HEADERS += \
     $$PWD/include/GL/wglew.h
     
 INCLUDEPATH += $$PWD/include
+
+DEFINES += GLEW_STATIC
