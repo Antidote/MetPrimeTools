@@ -51,9 +51,7 @@ CONFIG   += app_bundle
 TEMPLATE = app
 
 INCLUDEPATH += \
-    $$PWD/include
-
-win32:INCLUDEPATH += \
+    $$PWD/include \
     $$PWD/../External/glm \
     $$PWD/../External/glew/include
 
