@@ -29,7 +29,7 @@
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks</set>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="focusPolicy">
@@ -180,10 +180,16 @@
      </item>
      <item row="2" column="1">
       <widget class="QSlider" name="horizontalSlider">
+       <property name="minimum">
+        <number>0</number>
+       </property>
        <property name="maximum">
         <number>100</number>
        </property>
-       <property name="sliderPosition">
+       <property name="singleStep">
+        <number>0</number>
+       </property>
+       <property name="value">
         <number>0</number>
        </property>
        <property name="tracking">
