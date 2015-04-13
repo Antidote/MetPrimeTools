@@ -42,7 +42,7 @@ include(../TXTRLoader/TXTRLoader.pri)
 include(../External/tinyxml/tinyxml.pri)
 include(../External/libpng/png.pri)
 include(../External/zlib/zlib.pri)
-include(../External/glew/glew.pri)
+!mac:include(../External/glew/glew.pri)
 
 TARGET    = retroview
 CONFIG   += console
