@@ -29,6 +29,7 @@ public:
     glm::mat4 projectionMatrix();
     glm::mat4 modelMatrix();
     glm::mat4 viewMatrix();
+    glm::vec3 cameraPosition();
 
     void setCurrent(IRenderableModel* renderable);
     void setSkybox(IRenderableModel* renderable);
@@ -39,6 +40,8 @@ public:
     void drawSky();
 
     void setSkyVisible(bool visible);
+    float movementSpeed() const;
+    void setMovementSpeed(float speed);
 public slots:
     void stopUpdates();
     void startUpdates();
@@ -50,6 +53,7 @@ signals:
     void initialized();
     void closing();
     void fileAdded(QString);
+    void movementSpeedChanged(float);
 
 protected :
     void paintGL();
@@ -58,20 +62,16 @@ protected :
     virtual void initializeGL();
 
 protected:
-    void closeEvent(QCloseEvent *);
-    void mouseMoveEvent(QMouseEvent* e);
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
+    void closeEvent(QCloseEvent*);
     void wheelEvent(QWheelEvent* e);
 private:
-    void updateCamera();
+    void updateCamera(float delta);
     QTime                            m_frameTimer;
     IRenderableModel*                m_currentRenderable;
     IRenderableModel*                m_skybox;
     static CGLViewer*                m_instance;
     CCamera                          m_camera;
     QTimer                           m_updateTimer;
-    bool                             m_mouseEnabled;
     Qt::MouseButtons                 m_buttons;
     bool                             m_isInitialized;
     bool                             m_skyVisible;

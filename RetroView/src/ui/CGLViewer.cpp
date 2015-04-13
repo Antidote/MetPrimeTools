@@ -29,7 +29,6 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_currentRenderable(nullptr),
       m_skybox(nullptr),
       m_camera(glm::vec3(0.0f, 10.0f, 3.0f)),
-      m_mouseEnabled(false),
       m_buttons(Qt::NoButton),
       m_isInitialized(false),
       m_skyVisible(false)
@@ -42,6 +41,7 @@ CGLViewer::CGLViewer(QWidget* parent)
 
 CGLViewer::~CGLViewer()
 {
+    QSettings().setValue("movementSpeed", m_camera.movementSpeed());
     m_updateTimer.stop();
     std::cout << "I'M DYING!!!" << std::endl;
 }
@@ -66,19 +66,48 @@ void CGLViewer::setSkyVisible(bool visible)
     m_skyVisible = visible;
 }
 
+float CGLViewer::movementSpeed() const
+{
+    return m_camera.movementSpeed();
+}
+
+void CGLViewer::setMovementSpeed(float speed)
+{
+    m_camera.setMovementSpeed(speed);
+    emit movementSpeedChanged(m_camera.movementSpeed());
+}
+
 void CGLViewer::paintGL()
 {
     m_currentTime = 1.f * hiresTimeMS();
     m_deltaTime = m_currentTime - m_lastTime;
     m_lastTime = m_currentTime;
-    
-    updateCamera();
+    m_buttons = qApp->mouseButtons();
+    static QPoint lastPos = QCursor::pos();
+    QPoint curPos = QCursor::pos();
+    if (m_buttons != Qt::NoButton && this->hasFocus())
+    {
+        float xoffset = curPos.x() - lastPos.x();
+        float yoffset = lastPos.y() - curPos.y();
+
+
+        if (m_buttons & Qt::LeftButton)
+            m_camera.processMouseMovement(xoffset, yoffset);
+        else if (m_buttons & Qt::MiddleButton)
+            m_camera.processMouseDolly(yoffset);
+        else if (m_buttons & Qt::RightButton)
+            m_camera.processMouseStrafe(xoffset);
+    }
+    lastPos = curPos;
+
+    updateCamera(m_deltaTime);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
     glm::mat4 modelMat = modelMatrix();
     glm::mat4 viewMat = viewMatrix();
     glm::mat4 projectionMat = projectionMatrix();
     glm::mat4 mvp = projectionMat * viewMat * modelMat;
+
 #if 0
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -174,8 +203,8 @@ void CGLViewer::initializeGL()
         glDepthFunc(GL_LEQUAL);
         QColor clearColor = QColor(32, 32, 32);
         glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
-        emit initialized();
-        
+        setMovementSpeed(QSettings().value("movementSpeed", 0.5f).toFloat());
+        emit initialized();        
     }
 
     m_frameTimer.start();
@@ -187,81 +216,32 @@ void CGLViewer::closeEvent(QCloseEvent* ce)
     QOpenGLWidget::closeEvent(ce);
 }
 
-void CGLViewer::mouseMoveEvent(QMouseEvent* e)
-{
-    static QPoint lastPos = e->pos();
-    QPoint curPos = e->pos();
-
-    float xoffset = curPos.x() - lastPos.x();
-    float yoffset = lastPos.y() - curPos.y();
-
-    lastPos = curPos;
-
-    if (m_mouseEnabled)
-    {
-        if ((m_buttons & Qt::LeftButton) && !(m_buttons & (Qt::MiddleButton | Qt::RightButton)))
-            m_camera.processMouseMovement(xoffset, yoffset);
-        else if ((m_buttons & Qt::MiddleButton) && !(m_buttons & (Qt::LeftButton | Qt::RightButton)))
-            m_camera.processMouseDolly(yoffset);
-        else if ((m_buttons & Qt::RightButton) && !(m_buttons & (Qt::LeftButton | Qt::MiddleButton)))
-            m_camera.processMouseStrafe(xoffset);
-
-//        QPoint newPos = curPos;
-//        if (curPos.x() <= 0)
-//            newPos.setX(size().width());
-//        else if (curPos.x() >= size().width())
-//            newPos.setX(1);
-
-//        if (newPos != curPos)
-//        {
-//            cursor().setPos(mapToGlobal(newPos));
-//            lastPos = newPos;
-//        }
-    }
-    QOpenGLWidget::mouseMoveEvent(e);
-}
-
-void CGLViewer::mousePressEvent(QMouseEvent* e)
-{
-    m_mouseEnabled = true;
-    m_buttons = e->buttons();
-    QOpenGLWidget::mousePressEvent(e);
-    cursor().setShape(Qt::BlankCursor);
-}
-
-void CGLViewer::mouseReleaseEvent(QMouseEvent* e)
-{
-    m_mouseEnabled = false;
-    m_buttons = e->buttons();
-    QOpenGLWidget::mousePressEvent(e);
-    cursor().setShape(Qt::ArrowCursor);
-}
-
 void CGLViewer::wheelEvent(QWheelEvent* e)
 {
-    if (e->delta() > 0)
-        m_camera.increaseSpeed();
+    if (e->delta() < 0)
+        m_camera.changeSpeed(-1.f);
     else
-        m_camera.decreaseSpeed();
+        m_camera.changeSpeed(1.f);
 
+    emit movementSpeedChanged(m_camera.movementSpeed());
     QOpenGLWidget::wheelEvent(e);
 }
 
-void CGLViewer::updateCamera()
+void CGLViewer::updateCamera(float delta)
 {
     CKeyboardManager* km = CKeyboardManager::instance();
     if (km->isKeyPressed(Qt::Key_W))
-        m_camera.processKeyboard(CCamera::FORWARD, 1.f);
+        m_camera.processKeyboard(CCamera::FORWARD, delta);
     if (km->isKeyPressed(Qt::Key_S))
-        m_camera.processKeyboard(CCamera::BACKWARD, 1.f);
+        m_camera.processKeyboard(CCamera::BACKWARD, delta);
     if (km->isKeyPressed(Qt::Key_A))
-        m_camera.processKeyboard(CCamera::LEFT, 1.f);
+        m_camera.processKeyboard(CCamera::LEFT, delta);
     if (km->isKeyPressed(Qt::Key_D))
-        m_camera.processKeyboard(CCamera::RIGHT, 1.f);
+        m_camera.processKeyboard(CCamera::RIGHT, delta);
     if (km->isKeyPressed(Qt::Key_Q))
-        m_camera.processKeyboard(CCamera::UP, 1.f);
+        m_camera.processKeyboard(CCamera::UP, delta);
     if (km->isKeyPressed(Qt::Key_E))
-        m_camera.processKeyboard(CCamera::DOWN, 1.f);
+        m_camera.processKeyboard(CCamera::DOWN, delta);
 }
 
 glm::mat4 CGLViewer::projectionMatrix()
@@ -277,6 +257,11 @@ glm::mat4 CGLViewer::modelMatrix()
 glm::mat4 CGLViewer::viewMatrix()
 {
     return m_camera.viewMatrix();
+}
+
+glm::vec3 CGLViewer::cameraPosition()
+{
+    return m_camera.position();
 }
 
 void CGLViewer::setCurrent(IRenderableModel* renderable)

@@ -397,7 +397,6 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
         primitive.vertexFormatIdx = primitiveFlags & 0x07;
 
         atUint32 startReadBytes = readBytes;
-        atUint32 currentPos = reader.position();
 
         bool valid = false;
         primitive.indices.resize(indexCount);
@@ -405,7 +404,6 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
 
         if (mainAttributes)
         {
-            reader.seek(currentPos, Athena::SeekOrigin::Begin);
             readBytes = startReadBytes;
 
             atUint32 attributes = 0;
@@ -433,13 +431,13 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
                 readBytes += readAttribute(pFaces[v].normal, attributes, 1, reader);
                 vertex.norm = model.m_normals[pFaces[v].normal];
 
-                for (int iColor = 0; iColor < 2; ++iColor)
+                for (atUint32 iColor = 0; iColor < 2; ++iColor)
                 {
                     readBytes += readAttribute(pFaces[v].clr[iColor], attributes, iColor + 2, reader);
                     vertex.color[iColor] = model.m_colors[pFaces[v].clr[iColor]];
                 }
 
-                for (int iUV = 0; iUV < 8; ++iUV)
+                for (atUint32 iUV = 0; iUV < 8; ++iUV)
                 {
                     readBytes += readAttribute(pFaces[v].texCoord[iUV], attributes, iUV + 4, reader);
                     if (material.hasUV(iUV))
@@ -451,7 +449,7 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
                     }
                 }
 
-                for (int iUnk = 0; iUnk < 4; ++iUnk)
+                for (atUint32 iUnk = 0; iUnk < 4; ++iUnk)
                 {
                     readBytes += readAttribute(pFaces[v].unkIndex[iUnk], attributes, iUnk + 12, reader);
                 }
@@ -471,7 +469,7 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
         if (!valid)
         {
             primitive.primitive = (EPrimitive)0;
-            break;
+            return;
         }
         mesh.m_primitives.push_back(primitive);
     }

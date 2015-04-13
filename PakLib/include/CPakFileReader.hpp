@@ -16,6 +16,7 @@ public:
     CPakFile* read();
 
     static CPakFile* load(const std::string& filename);
+    static bool canLoad(const std::string& filename);
     void loadResourceTable(CPakFile* ret);
     void loadNameTable(CPakFile* ret);
     std::vector<SSectionEntry> loadSectionTable();

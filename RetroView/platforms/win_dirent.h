@@ -143,6 +143,14 @@
  * only defined for compatibility.  These macros should always return false
  * on Windows.
  */
+#undef S_ISFIFO
+#undef S_ISDIR
+#undef S_ISREG
+#undef S_ISLNK
+#undef S_ISSOCK
+#undef S_ISCHR
+#undef S_ISBLK
+
 #define	S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
 #define	S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
 #define	S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
