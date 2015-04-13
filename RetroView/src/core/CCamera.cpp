@@ -9,7 +9,7 @@
 
 CCamera::CCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
-      m_movementSpeed(5.0f),
+      m_movementSpeed(0.5f),
       m_mouseSensitivity(0.25f),
       m_zoom(55.0f)
 {
@@ -22,7 +22,7 @@ CCamera::CCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 
 CCamera::CCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
     : m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
-      m_movementSpeed(1.5f),
+      m_movementSpeed(1.0f),
       m_mouseSensitivity(0.25f),
       m_zoom(55.0f)
 {
@@ -154,18 +154,28 @@ glm::vec3 CCamera::front() const
     return m_front;
 }
 
-void CCamera::increaseSpeed()
+void CCamera::setMovementSpeed(float speed)
 {
-    m_movementSpeed += 0.25f;
-    if (m_movementSpeed > 5.0f)
-        m_movementSpeed = 5.0f;
+    m_movementSpeed = speed;
+    if (m_movementSpeed > 1.0f)
+        m_movementSpeed = 1.0f;
+    if (m_movementSpeed < 0.0075f)
+        m_movementSpeed = 0.0075f;
 }
 
-void CCamera::decreaseSpeed()
+float CCamera::movementSpeed() const
 {
-    m_movementSpeed -= 0.25f;
-    if (m_movementSpeed < 0.005f)
-        m_movementSpeed = 0.005f;
+    return m_movementSpeed;
+}
+
+void CCamera::changeSpeed(float delta)
+{
+    m_movementSpeed += 0.045f * delta;
+
+    if (m_movementSpeed > 1.0f)
+        m_movementSpeed = 1.0f;
+    if (m_movementSpeed < 0.0075f)
+        m_movementSpeed = 0.0075f;
 }
 
 void CCamera::updateCameraVectors()
