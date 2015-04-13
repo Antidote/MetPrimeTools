@@ -103,12 +103,6 @@ bool CMainWindow::canShow()
 
 void CMainWindow::initialize()
 {
-    QSettings settings("Metrowerks", "CodeWarrior");
-    settings.beginGroup("4.1");
-        settings.beginGroup("IDE");
-            std::cout << settings.value("MDI").toBool() << std::endl;
-        settings.endGroup();
-    settings.endGroup();
     QSettings().setValue("applicationRootPath", qApp->applicationDirPath());
     QSettings().setValue("applicationFilename", QFileInfo(qApp->applicationFilePath()).fileName());
 
@@ -190,11 +184,11 @@ bool CMainWindow::event(QEvent* e)
     {
 
         case QEvent::WindowActivate:
-            ui->glView->startUpdates();
+            //ui->glView->startUpdates();
             break;
 
         case QEvent::WindowDeactivate:
-            ui->glView->stopUpdates();
+           // ui->glView->stopUpdates();
             break;
         default:
             break;
