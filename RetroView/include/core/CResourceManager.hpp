@@ -36,7 +36,7 @@ public:
     typedef std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison>::iterator         CachedResourceIterator;
     typedef std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison>::const_iterator   ConstCachedResourceIterator;
 
-    void initialize(const std::string& baseDirectory);
+    void loadBasepath(const std::string& baseDirectory);
     bool addPack(const std::string& pak);
     std::vector<SPakResource*> resourcesForPack(const std::string& pak);
 
@@ -47,11 +47,14 @@ public:
     void registerLoader(const CFourCC& tag, ResourceDataLoaderCallback byData);
     static std::shared_ptr<CResourceManager> instance();
 
-    std::vector<CPakTreeWidget*> pakWidgets() const;
-
     void loadPak(std::string filepath);
 
     void clear();
+
+    bool hasPaks() const;
+
+    static bool canLoad(const std::string& filename);
+    void removePak(CPakFile* pak);
 signals:
     void newPak(CPakTreeWidget*);
 protected:
@@ -64,9 +67,7 @@ private:
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
     std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison> m_cachedResources;
     std::vector<CPakFile*>                   m_pakFiles;
-    std::vector<CPakTreeWidget*>             m_pakTreeWidgets;
     std::vector<CUniqueID>                   m_failedAssets;
-    std::string                              m_baseDirectory;
 };
 
 

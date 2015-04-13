@@ -1,37 +1,12 @@
 #include "ui/CMainWindow.hpp"
-#include "core/CTemplateManager.hpp"
 #include <QApplication>
-#include <QSurfaceFormat>
-#include <QMessageBox>
-#include <glm/glm.hpp>
-#include <QDir>
-#include <QDirIterator>
-#include <QStandardPaths>
-#include <QSettings>
-#include <QDebug>
+#include <QTimer>
 
 #if __APPLE__
 extern "C" {
 void osx_init();
 }
 #endif
-
-QString getSource(QString Filename)
-{
-    QFile file(Filename);
-
-    if(!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        std::cout << "could not open file for read: " << Filename.toStdString() << std::endl;
-        return QString();
-    }
-
-    QTextStream in(&file);
-    QString source = in.readAll();
-
-    file.close();
-    return source;
-}
 
 int main(int argc, char *argv[])
 {
@@ -46,57 +21,9 @@ int main(int argc, char *argv[])
     osx_init();
 #endif
 
-    QSettings().setValue("applicationRootPath", a.applicationDirPath());
-
-    QFileInfo fi(a.applicationDirPath() + "/templates");
-    if (fi.exists() && fi.isWritable())
-        CTemplateManager::instance()->initialize(fi.absolutePath().toStdString());
-    else
-    {
-        QString homeLocation = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
-        QDir homeDir = QDir(homeLocation + "/.retroview");
-
-        if (!homeDir.exists("templates"))
-        {
-            QDirIterator iter(":templates", QDirIterator::Subdirectories);
-            while (iter.hasNext())
-            {
-                QString file = iter.next();
-                QFileInfo fileInfo(file);
-                file = file.remove(0, 1);
-                if (fileInfo.isDir())
-                {
-                    homeDir.mkpath(file);
-                }
-                else
-                {
-                    QString outPath = homeDir.absolutePath() + "/" + file;
-                    QFile out(outPath);
-                    QString data = getSource(":" + file);
-                    if (out.open(QFile::WriteOnly))
-                    {
-                        out.write(data.toLocal8Bit());
-                        out.close();
-                    }
-                }
-            }
-        }
-
-        homeDir.cd("templates");
-
-        std::cout << homeDir.absolutePath().toStdString() << std::endl;
-        CTemplateManager::instance()->initialize(homeDir.absolutePath().toStdString());
-    }
-    QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
-    fmt.setDepthBufferSize(32);
-    fmt.setMajorVersion(3);
-    fmt.setMinorVersion(3);
-    fmt.setProfile(QSurfaceFormat::CoreProfile);
-
-    fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    QSurfaceFormat::setDefaultFormat(fmt);
-
     CMainWindow w;
+    QTimer::singleShot(0, &w, SLOT(initialize()));
+
     w.show();
 
     return a.exec();

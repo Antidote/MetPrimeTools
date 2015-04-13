@@ -69,6 +69,7 @@ public:
     int version() const;
 
     void removeDuplicates();
+
 private:
     friend class CPakFileReader;
 

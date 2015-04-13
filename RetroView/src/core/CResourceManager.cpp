@@ -23,11 +23,13 @@ struct concrete_ResourceManager : public CResourceManager
 {
 };
 
+QThread* resourceManagerThread = nullptr;
 }
 
 CResourceManager::CResourceManager()
 {
     std::cout << "ResourceManager created" << std::endl;
+    m_cachedResources.clear();
 }
 
 CResourceManager::~CResourceManager()
@@ -45,12 +47,28 @@ CResourceManager::~CResourceManager()
 
 void CResourceManager::loadPak(std::string filepath)
 {
+    size_t off = filepath.rfind("/");
+    if (off == std::string::npos)
+        off = filepath.rfind("\\");
+    off += 1;
+    std::string filename = filepath.substr(off, filepath.size() - off);
+    std::cout << "Found pak " << filename << " ...";
+    std::cout.flush();
+
+    if (!canLoad(filepath))
+    {
+        std::cout << " invalid" << std::endl;
+        return;
+    }
 
     std::vector<CPakFile*>::iterator iter = std::find_if(m_pakFiles.begin(), m_pakFiles.end(),
                                                             [&filepath](const CPakFile* r)->bool{return r->filename() == filepath; });
 
     if (iter != m_pakFiles.end())
+    {
+        std::cout << " already loaded" << std::endl;
         return;
+    }
 
     CPakFile* pak = nullptr;
     try
@@ -60,9 +78,6 @@ void CResourceManager::loadPak(std::string filepath)
         pak->removeDuplicates();
         m_pakFiles.push_back(pak);
         CPakTreeWidget* widget = new CPakTreeWidget(pak);
-
-        m_pakTreeWidgets.push_back(widget);
-
         emit newPak(widget);
 
         std::cout << " loaded" << std::endl;
@@ -82,14 +97,45 @@ void CResourceManager::clear()
     m_failedAssets.clear();
 }
 
-void CResourceManager::initialize(const std::string& baseDirectory)
+bool CResourceManager::hasPaks() const
 {
-    m_baseDirectory = baseDirectory;
+    return m_pakFiles.size() > 0;
+}
 
-    std::cout << "ResourceManager initialized @ " << m_baseDirectory << std::endl;
-    std::cout << "Searching for paks..." << std::endl;
+bool CResourceManager::canLoad( const std::string& filename)
+{
+    return CPakFileReader::canLoad(filename);
+}
 
-    DIR* dir = opendir(m_baseDirectory.c_str());
+void CResourceManager::removePak(CPakFile* pak)
+{
+    auto it = std::find(m_pakFiles.begin(), m_pakFiles.end(), pak);
+    if (it == m_pakFiles.end())
+        return;
+
+    bool clearCache = false;
+    for (std::pair<CUniqueID, IResource*> pair : m_cachedResources)
+    {
+        if (pair.second && pair.second->source() == *it)
+        {
+            clearCache = true;
+            break;
+        }
+    }
+
+    CPakFile* tmp = *it;
+    m_pakFiles.erase(it);
+    delete tmp;
+
+    if (clearCache)
+        clear();
+}
+
+void CResourceManager::loadBasepath(const std::string& baseDirectory)
+{
+    std::cout << "Searching for paks @ " << baseDirectory << "..." << std::endl;
+
+    DIR* dir = opendir(baseDirectory.c_str());
     if (dir)
     {
         struct dirent * dp;
@@ -97,7 +143,7 @@ void CResourceManager::initialize(const std::string& baseDirectory)
         while((dp = readdir(dir)) != NULL)
         {
             struct stat64 st;
-            std::string filepath = m_baseDirectory + "/" + std::string(dp->d_name);
+            std::string filepath = baseDirectory + "/" + std::string(dp->d_name);
             stat64(filepath.c_str(), &st);
             if(S_ISREG(st.st_mode))
             {
@@ -106,7 +152,6 @@ void CResourceManager::initialize(const std::string& baseDirectory)
                 Athena::utility::tolower(ext);
                 if (!ext.compare("pak"))
                 {
-                    std::cout << "Found pak " << filename << " ...";
                     loadPak(filepath);
                 }
             }
@@ -177,11 +222,6 @@ std::shared_ptr<CResourceManager> CResourceManager::instance()
     static std::shared_ptr<CResourceManager> instance = std::make_shared<concrete_ResourceManager>();
 
     return instance;
-}
-
-std::vector<CPakTreeWidget*> CResourceManager::pakWidgets() const
-{
-    return m_pakTreeWidgets;
 }
 
 IResource* CResourceManager::attemptLoad(SPakResource res, CPakFile* pak)

@@ -13,8 +13,23 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>RetroView</string>
+  </property>
+  <property name="documentMode">
+   <bool>true</bool>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks</set>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="focusPolicy">
@@ -34,7 +49,11 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="CGLViewer" name="glView" native="true"/>
+     <widget class="CGLViewer" name="glView" native="true">
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -44,13 +63,14 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionLoad_Basepath"/>
     <addaction name="actionLoadPak"/>
     <addaction name="actionExport"/>
    </widget>
@@ -70,12 +90,17 @@
    <addaction name="menu_Animations"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>Main Toolbar</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionLoad_Basepath"/>
+   <addaction name="actionLoadPak"/>
    <addaction name="actionExport"/>
    <addaction name="actionEnableTextures"/>
    <addaction name="actionDrawPoints"/>
@@ -85,26 +110,57 @@
    <addaction name="actionWireframe"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="infoDockWidget">
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
    <property name="windowTitle">
-    <string>I&amp;nfo</string>
+    <string>Info</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
+     <property name="leftMargin">
+      <number>4</number>
+     </property>
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>4</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="4" column="0" colspan="2">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::West</enum>
+       </property>
+       <property name="documentMode">
+        <bool>false</bool>
+       </property>
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+       <property name="movable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="fpsLabel">
        <property name="text">
         <string>FPS</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="materialSetLbl">
+     <item row="3" column="0" colspan="2">
+      <widget class="QPushButton" name="resetCameraButton">
        <property name="text">
-        <string>Material Set</string>
+        <string>Reset Camera</string>
        </property>
       </widget>
      </item>
@@ -115,17 +171,36 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="tabPosition">
-        <enum>QTabWidget::West</enum>
+     <item row="1" column="0">
+      <widget class="QLabel" name="materialSetLbl">
+       <property name="text">
+        <string>Material Set</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QPushButton" name="resetCameraButton">
+     <item row="2" column="1">
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="sliderPosition">
+        <number>0</number>
+       </property>
+       <property name="tracking">
+        <bool>true</bool>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::NoTicks</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Reset Camera</string>
+        <string>Speed</string>
        </property>
       </widget>
      </item>
@@ -274,6 +349,11 @@
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionLoad_Basepath">
+   <property name="text">
+    <string>Load &amp;Basepath</string>
    </property>
   </action>
  </widget>
@@ -528,11 +608,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tabWidget</sender>
+   <signal>tabCloseRequested(int)</signal>
+   <receiver>CMainWindow</receiver>
+   <slot>onTabClosed(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onExport()</slot>
   <slot>onToggled(bool)</slot>
   <slot>onLoadPak()</slot>
   <slot>onMaterialSetChanged(int)</slot>
+  <slot>onTabClosed(int)</slot>
  </slots>
 </ui>
