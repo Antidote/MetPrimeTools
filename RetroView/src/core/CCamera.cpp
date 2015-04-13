@@ -62,6 +62,10 @@ void CCamera::processKeyboard(EMovement direction, float deltaTime)
         m_position -= m_right * velocity;
     if(direction == RIGHT)
         m_position += m_right * velocity;
+    if (direction == UP)
+        m_position += m_worldUp * velocity;
+    if (direction == DOWN)
+        m_position -= m_worldUp * velocity;
 }
 
 void CCamera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch)
@@ -84,6 +88,19 @@ void CCamera::processMouseMovement(float xoffset, float yoffset, bool constrainP
     // Update Front, Right and Up Vectors using the updated Eular angles
     updateCameraVectors();
 }
+
+void CCamera::processMouseDolly(float offset)
+{
+    float velocity = offset * m_movementSpeed;
+    m_position += m_front * velocity;
+}
+
+void CCamera::processMouseStrafe(float offset)
+{
+    float velocity = offset * m_movementSpeed;
+    m_position += m_right * velocity;
+}
+
 
 void CCamera::processMouseScroll(float yoffset)
 {
@@ -147,8 +164,8 @@ void CCamera::increaseSpeed()
 void CCamera::decreaseSpeed()
 {
     m_movementSpeed -= 0.25f;
-    if (m_movementSpeed < 0.05f)
-        m_movementSpeed = 0.05f;
+    if (m_movementSpeed < 0.005f)
+        m_movementSpeed = 0.005f;
 }
 
 void CCamera::updateCameraVectors()

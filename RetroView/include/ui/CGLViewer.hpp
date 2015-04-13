@@ -72,6 +72,7 @@ private:
     CCamera                          m_camera;
     QTimer                           m_updateTimer;
     bool                             m_mouseEnabled;
+    Qt::MouseButtons                 m_buttons;
     bool                             m_isInitialized;
     bool                             m_skyVisible;
     float                            m_lastTime;
