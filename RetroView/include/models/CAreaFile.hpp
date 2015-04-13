@@ -58,6 +58,7 @@ public:
 private:
     friend class CAreaReader;
     void drawIbos(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix);
+    void drawUsingBSP(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix);
     void buildBBox();
 
     Version                         m_version;

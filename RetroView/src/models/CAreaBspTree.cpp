@@ -1,5 +1,7 @@
 #include "models/CAreaBspTree.hpp"
 #include "CFourCC.hpp"
+#include "models/CAreaFile.hpp"
+#include "ui/CGLViewer.hpp"
 #include <Athena/InvalidDataException.hpp>
 
 static const CFourCC skAROTFourCC("AROT");
@@ -61,10 +63,24 @@ void CAreaBspTree::readAROT(Athena::io::IStreamReader& in)
         SOctantNodeEntry entry;
         in.seek(nodeBaseOff + nodeIndTable[i], Athena::SeekOrigin::Begin);
         entry.readNodeEntry(in);
+        assert(entry.m_bitmapIdx < m_bitmapCount);
+        entry.m_bitmap = &m_bitmaps[entry.m_bitmapIdx];
         m_nodes.push_back(entry);
     }
-
+    
     delete[] nodeIndTable;
+    
+    /* Resolve octant links */
+    for (SOctantNodeEntry& node : m_nodes)
+        for (i=0 ; i<node.m_childCount ; ++i)
+            node.m_childNodes[i] = &m_nodes[node.m_childIdxs[i]];
+    
+}
+
+void CAreaBspTree::drawArea(const CAreaFile& area, bool transparents) const
+{
+    CGLViewer* g_viewer = CGLViewer::instance();
+    CCamera* g_camera = g_viewer->
     
 }
 

@@ -173,3 +173,15 @@ void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, const glm
         model.drawIbos(transparents, materialSet, modelMatrix);
     });
 }
+
+void CAreaFile::drawUsingBSP(bool transparents, CMaterialSet& materialSet, const glm::mat4& modelMatrix)
+{
+    
+    /* Pre-draw (objects behind octree) */
+    
+    /* Draw (objects within octree) */
+    m_bspTree.drawArea(*this, transparents);
+    
+    /* Post-draw (objects in front of octree) */
+    
+}
