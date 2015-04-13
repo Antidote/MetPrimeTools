@@ -30,6 +30,7 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_skybox(nullptr),
       m_camera(glm::vec3(0.0f, 10.0f, 3.0f)),
       m_mouseEnabled(false),
+      m_buttons(Qt::NoButton),
       m_isInitialized(false),
       m_skyVisible(false)
 {
@@ -198,7 +199,12 @@ void CGLViewer::mouseMoveEvent(QMouseEvent* e)
 
     if (m_mouseEnabled)
     {
-        m_camera.processMouseMovement(xoffset, yoffset);
+        if ((m_buttons & Qt::LeftButton) && !(m_buttons & (Qt::MiddleButton | Qt::RightButton)))
+            m_camera.processMouseMovement(xoffset, yoffset);
+        else if ((m_buttons & Qt::MiddleButton) && !(m_buttons & (Qt::LeftButton | Qt::RightButton)))
+            m_camera.processMouseDolly(yoffset);
+        else if ((m_buttons & Qt::RightButton) && !(m_buttons & (Qt::LeftButton | Qt::MiddleButton)))
+            m_camera.processMouseStrafe(xoffset);
 
 //        QPoint newPos = curPos;
 //        if (curPos.x() <= 0)
@@ -218,6 +224,7 @@ void CGLViewer::mouseMoveEvent(QMouseEvent* e)
 void CGLViewer::mousePressEvent(QMouseEvent* e)
 {
     m_mouseEnabled = true;
+    m_buttons = e->buttons();
     QOpenGLWidget::mousePressEvent(e);
     cursor().setShape(Qt::BlankCursor);
 }
@@ -225,6 +232,7 @@ void CGLViewer::mousePressEvent(QMouseEvent* e)
 void CGLViewer::mouseReleaseEvent(QMouseEvent* e)
 {
     m_mouseEnabled = false;
+    m_buttons = e->buttons();
     QOpenGLWidget::mousePressEvent(e);
     cursor().setShape(Qt::ArrowCursor);
 }
@@ -250,6 +258,10 @@ void CGLViewer::updateCamera()
         m_camera.processKeyboard(CCamera::LEFT, 1.f);
     if (km->isKeyPressed(Qt::Key_D))
         m_camera.processKeyboard(CCamera::RIGHT, 1.f);
+    if (km->isKeyPressed(Qt::Key_Q))
+        m_camera.processKeyboard(CCamera::UP, 1.f);
+    if (km->isKeyPressed(Qt::Key_E))
+        m_camera.processKeyboard(CCamera::DOWN, 1.f);
 }
 
 glm::mat4 CGLViewer::projectionMatrix()
