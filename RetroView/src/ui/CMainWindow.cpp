@@ -21,7 +21,6 @@
 #include <QSettings>
 #include <QShowEvent>
 #include <QStandardPaths>
-#include <QSurfaceFormat>
 
 #include <iostream>
 
@@ -41,13 +40,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     CResourceManager* resourceManager = CResourceManager::instance().get();
     connect(resourceManager, SIGNAL(newPak(CPakTreeWidget*)), this, SLOT(onNewPak(CPakTreeWidget*)));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabChanged()));
-    connect(ui->actionLoad_Basepath, &QAction::triggered, [=](){
-        QString basePath = QFileDialog::getExistingDirectory(this, "Specify Basepath");
-
-        if (!basePath.isEmpty())
-            CResourceManager::instance()->loadBasepath(basePath.toStdString());
-    });
-
+    connect(ui->actionLoad_Basepath, &QAction::triggered, this, &CMainWindow::_loadBasePath);
     connect(ui->glView, &CGLViewer::movementSpeedChanged, [=](float val){
         ui->horizontalSlider->setUpdatesEnabled(false);
         ui->horizontalSlider->setValue((int)((val * 100) / 1.0));
@@ -101,6 +94,8 @@ bool CMainWindow::canShow()
     return ui != nullptr;
 }
 
+
+
 void CMainWindow::initialize()
 {
     QSettings().setValue("applicationRootPath", qApp->applicationDirPath());
@@ -146,15 +141,6 @@ void CMainWindow::initialize()
         CTemplateManager::instance()->initialize(homeDir.absolutePath().toStdString());
     }
 
-    QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
-    fmt.setDepthBufferSize(32);
-    fmt.setMajorVersion(3);
-    fmt.setMinorVersion(3);
-    fmt.setProfile(QSurfaceFormat::CoreProfile);
-
-    fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    QSurfaceFormat::setDefaultFormat(fmt);
-
     QStringList arguments = qApp->arguments();
     if (!arguments.empty())
         arguments.removeFirst();
@@ -170,12 +156,7 @@ void CMainWindow::initialize()
     }
 
     if (!CResourceManager::instance()->hasPaks())
-    {
-        QString basePath = QFileDialog::getExistingDirectory(this, "Specify Basepath");
-
-        if (!basePath.isEmpty())
-            CResourceManager::instance()->loadBasepath(basePath.toStdString());
-    }
+        _loadBasePath();
 }
 
 bool CMainWindow::event(QEvent* e)
@@ -417,6 +398,16 @@ void CMainWindow::onTabClosed(int tabIdx)
             delete tabWidget;
         }
     }
+}
+
+void CMainWindow::_loadBasePath()
+{
+    CGLViewer::instance()->stopUpdates();
+    QString basePath = QFileDialog::getExistingDirectory(this, "Specify Basepath");
+    CGLViewer::instance()->startUpdates();
+
+    if (!basePath.isEmpty())
+        CResourceManager::instance()->loadBasepath(basePath.toStdString());
 }
 
 QString getSource(QString Filename)
