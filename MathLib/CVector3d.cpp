@@ -4,7 +4,7 @@
 
 CVector3d::CVector3d()
 {
-    memset(v, 0, sizeof(v));
+    memset(&v, 0, sizeof(v));
 }
 
 CVector3d::CVector3d(double x, double y, double z)
@@ -104,5 +104,5 @@ double CVector3d::magnitude() const
 
 CVector3f CVector3d::asVector3f()
 {
-    return CVector3f(x, y, z);
+    return CVector3f((float)x, (float)y, (float)z);
 }

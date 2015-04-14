@@ -36,8 +36,12 @@ public:
         {
             double x, y, z;
         };
-        double v[3];
+        __m128 v;
     };
-};
+}
+#if __SSE__
+_CRT_ALIGN(16)
+#endif
+;
 
 #endif // CVECTOR3D_HPP
