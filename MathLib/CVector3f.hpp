@@ -1,9 +1,10 @@
 #ifndef CVECTOR3F_HPP
 #define CVECTOR3F_HPP
 
+#include "Global.hpp"
 #include <Athena/IStreamReader.hpp>
 
-class CVector3f
+class ZE_ALIGN(16) CVector3f
 {
 public:
     CVector3f();
@@ -33,16 +34,32 @@ public:
     float     length() const;
     static float getAngleDiff(const CVector3f& a, const CVector3f& b);
 
-    static CVector3f lerp(const CVector3f& start, const CVector3f& end, float percent);
-    static CVector3f slerp(const CVector3f& start, const CVector3f& end, float percent);
+    static CVector3f lerp(const CVector3f& a, const CVector3f& b, float t);
+    static CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t);
+    static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
 
-    float x, y, z;
 
     inline float operator[](int idx) const
     {
         return (&x)[idx];
     }
 
+
+    union
+    {
+        struct
+        {
+            float x, y, z;
+        };
+#if __SSE__
+        __m128 v;
+#else
+        float v[4];
+#endif
+    };
+
+    static const CVector3f skOne;
+    static const CVector3f skZero;
 };
 
 CVector3f operator+(float lhs, const CVector3f& rhs);

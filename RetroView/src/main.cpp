@@ -1,6 +1,8 @@
 #include "ui/CMainWindow.hpp"
 #include <QApplication>
 #include <QTimer>
+#include <QSurfaceFormat>
+
 
 #if __APPLE__
 extern "C" {
@@ -20,6 +22,15 @@ int main(int argc, char *argv[])
 #if __APPLE__
     osx_init();
 #endif
+
+    QSurfaceFormat fmt = QSurfaceFormat::defaultFormat();
+    fmt.setDepthBufferSize(32);
+    fmt.setMajorVersion(3);
+    fmt.setMinorVersion(3);
+    fmt.setProfile(QSurfaceFormat::CoreProfile);
+
+    fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    QSurfaceFormat::setDefaultFormat(fmt);
 
     CMainWindow w;
     QTimer::singleShot(0, &w, SLOT(initialize()));

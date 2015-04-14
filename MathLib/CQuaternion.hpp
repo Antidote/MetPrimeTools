@@ -1,11 +1,13 @@
 #ifndef CQUATERNION_HPP
 #define CQUATERNION_HPP
 
+#include "Global.hpp"
+#include "CAxisAngle.hpp"
 #include "CVector3f.hpp"
 #include <math.h>
 #include <Athena/IStreamReader.hpp>
 
-class CQuaternion
+class ZE_ALIGN(16) CQuaternion
 {
 public:
     CQuaternion();
@@ -49,10 +51,7 @@ public:
         return CQuaternion(cosf(angle/2), axis*sinf(angle/2));
     }
 
-    void toAxisAngle(CVector3f& axis, float& angle) const;
-
-    float r;
-    CVector3f v;
+    CAxisAngle toAxisAngle();
 
     static inline CVector3f rotate(const CQuaternion& rotation, const CVector3f& v)
     {
@@ -65,6 +64,18 @@ public:
     CQuaternion log() const;
 
     CQuaternion exp() const;
+
+    float dot(const CQuaternion& quat);
+
+    static CQuaternion lerp(CQuaternion& a, CQuaternion& b, double t);
+    static CQuaternion slerp(CQuaternion& a, CQuaternion& b, double t);
+    static CQuaternion nlerp(CQuaternion& a, CQuaternion& b, double t);
+
+    float r;
+    CVector3f v;
 };
 
+CQuaternion operator+(float lhs, const CQuaternion& rhs);
+CQuaternion operator-(float lhs, const CQuaternion& rhs);
+CQuaternion operator*(float lhs, const CQuaternion& rhs);
 #endif // CQUATERNION_HPP

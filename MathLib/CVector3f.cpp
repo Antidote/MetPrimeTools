@@ -3,6 +3,9 @@
 #include <cmath>
 #include "Math.hpp"
 
+const CVector3f CVector3f::skOne = CVector3f(1);
+const CVector3f CVector3f::skZero;
+
 CVector3f::CVector3f()
     : x(0),y(0),z(0)
 {
@@ -179,33 +182,43 @@ float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
     return theta;
 }
 
-CVector3f CVector3f::lerp(const CVector3f& start, const CVector3f& end, float percent)
+CVector3f CVector3f::lerp(const CVector3f& a, const CVector3f& b, float t)
 {
-    return (start + percent * (end - start));
+    return (a + t * (b - a));
 }
 
-CVector3f CVector3f::slerp(const CVector3f& start, const CVector3f& end, float percent)
+CVector3f CVector3f::nlerp(const CVector3f& a, const CVector3f& b, float t)
 {
-    float dot, theta, sinTheta, scale0, scale1;
+    return lerp(a, b, t).normalized();
+}
 
-    if (percent <= 0.0f)
-        return start;
-    else if (percent >= 1.0f)
-        return end;
+CVector3f CVector3f::slerp(const CVector3f& a, const CVector3f& b, float t)
+{
+    if (t <= 0.0f)
+        return a;
+    if (t >= 1.0f)
+        return b;
 
-    dot = start.dot(end);
-    if ((1.0f - dot) > 1e-6)
+    CVector3f ret;
+
+    float mag = sqrtf(a.dot(a) * b.dot(b));
+
+    float prod = a.dot(b) / mag;
+
+    if (fabsf(prod) < 1.0)
     {
-        theta    = acos(dot);
-        sinTheta = sin(theta);
-        scale0   = sin((1.0f - percent) * dot) / sinTheta;
-        scale1   = sin(percent * theta) / sinTheta;
-    }
-    else
-    {
-        scale0 = 1.0f - percent;
-        scale1 = percent;
-    }
+        const double sign = (prod < 0.0) ? -1.0 : 1.0;
 
-    return (start * scale0 + end * scale1);
+        const double theta = acos(sign * prod);
+        const double s1 = sin (sign * t * theta);
+        const double d = 1.0 / sin(theta);
+        const double s0 = sin((1.0 - t) * theta);
+
+        ret.x = (float)(a.x * s0 + b.x * s1) * d;
+        ret.y = (float)(a.y * s0 + b.y * s1) * d;
+        ret.z = (float)(a.z * s0 + b.z * s1) * d;
+
+        return ret;
+    }
+    return a;
 }

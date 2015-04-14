@@ -5,7 +5,7 @@
 
 #include "CVector3f.hpp"
 
-class CVector3d
+class ZE_ALIGN(16) CVector3d
 {
 public:
     CVector3d();
@@ -36,7 +36,7 @@ public:
         {
             double x, y, z;
         };
-        double v[3];
+        __m128 v;
     };
 };
 

@@ -49,6 +49,7 @@ private slots:
     void updateFPS();
     void onTabClosed(int tabIdx);
 private:
+    void _loadBasePath();
     Ui::CMainWindow *ui;
     CPakTreeWidget*    m_currentTab;
     QStringList        m_filters;
