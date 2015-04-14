@@ -5,7 +5,7 @@
 #include "CVector3f.hpp"
 
 class CQuaternion;
-class CMatrix3f
+class ZE_ALIGN(16) CMatrix3f
 {
 public:
     explicit CMatrix3f(bool zero = false);
