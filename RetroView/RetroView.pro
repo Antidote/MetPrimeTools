@@ -41,7 +41,6 @@ include(../PakLib/PakLib.pri)
 include(../TXTRLoader/TXTRLoader.pri)
 include(../External/tinyxml/tinyxml.pri)
 include(../External/libpng/png.pri)
-include(../External/zlib/zlib.pri)
 !mac:include(../External/glew/glew.pri)
 
 TARGET    = retroview

@@ -2,7 +2,6 @@
 #include <math.h>
 
 CQuaternion::CQuaternion()
-    : r(1), v(0)
 {
 }
 
@@ -167,17 +166,20 @@ CQuaternion CQuaternion::inverse() const
     return CQuaternion(r, -v);
 }
 
-void CQuaternion::toAxisAngle(CVector3f& axis, float& angle) const
+CAxisAngle CQuaternion::toAxisAngle()
 {
-    angle = acosf(r);
+    CAxisAngle ret;
+    ret.angle = acosf(r);
 
-    float thetaInv = 1.0f/sinf(angle);
+    float thetaInv = 1.0f/sinf(ret.angle);
 
-    axis.x = v.x * thetaInv;
-    axis.y = v.y * thetaInv;
-    axis.z = v.z * thetaInv;
+    ret.axis.x = v.x * thetaInv;
+    ret.axis.y = v.y * thetaInv;
+    ret.axis.z = v.z * thetaInv;
 
-    angle *= 2;
+    ret.angle *= 2;
+
+    return ret;
 }
 
 CQuaternion CQuaternion::log() const
@@ -220,5 +222,64 @@ CQuaternion CQuaternion::exp() const
     return ret;
 }
 
+float CQuaternion::dot(const CQuaternion& b)
+{
+    return v.x * b.v.x + v.y * b.v.y + v.z * b.v.z + r * b.r;
+}
 
+CQuaternion CQuaternion::lerp(CQuaternion& a,  CQuaternion& b, double t)
+{
+    return (a + t * (b - a));
+}
 
+CQuaternion CQuaternion::nlerp(CQuaternion& a, CQuaternion& b, double t)
+{
+    return lerp(a, b, t).normalized();
+}
+
+CQuaternion CQuaternion::slerp(CQuaternion& a, CQuaternion& b, double t)
+{
+    if (t <= 0.0f)
+        return a;
+    if (t >= 1.0f)
+        return b;
+
+    CQuaternion ret;
+
+    float mag = sqrtf(a.dot(a) * b.dot(b));
+
+    float prod = a.dot(b) / mag;
+
+    if (fabsf(prod) < 1.0)
+    {
+        const double sign = (prod < 0.0) ? -1.0 : 1.0;
+
+        const double theta = acos(sign * prod);
+        const double s1 = sin (sign * t * theta);
+        const double d = 1.0 / sin(theta);
+        const double s0 = sin((1.0 - t) * theta);
+
+        ret.v.x = (float)(a.v.x * s0 + b.v.x * s1) * d;
+        ret.v.y = (float)(a.v.y * s0 + b.v.y * s1) * d;
+        ret.v.z = (float)(a.v.z * s0 + b.v.z * s1) * d;
+        ret.r   = (float)(a.r   * s0 + b.r   * s1) * d;
+
+        return ret;
+    }
+    return a;
+}
+
+CQuaternion operator+(float lhs, const CQuaternion& rhs)
+{
+    return CQuaternion(lhs + rhs.r, lhs * rhs.v);
+}
+
+CQuaternion operator-(float lhs, const CQuaternion& rhs)
+{
+    return CQuaternion(lhs - rhs.r, lhs * rhs.v);
+}
+
+CQuaternion operator*(float lhs, const CQuaternion& rhs)
+{
+    return CQuaternion(lhs * rhs.r, lhs * rhs.v);
+}

@@ -1,6 +1,5 @@
 #include "Math.hpp"
 
-
 void Math::clamp(float& val, float min, float max)
 {
     if (val < min)

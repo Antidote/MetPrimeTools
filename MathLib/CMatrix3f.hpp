@@ -1,23 +1,33 @@
 #ifndef CMATRIX3F_HPP
 #define CMATRIX3F_HPP
 
+#include "Global.hpp"
 #include "CVector3f.hpp"
 
-class CMatrix3f
+class CQuaternion;
+class ZE_ALIGN(16) CMatrix3f
 {
 public:
-    CMatrix3f();
-    CMatrix3f(bool zero);
+    explicit CMatrix3f(bool zero = false);
     CMatrix3f(float m00, float m01, float m02,
               float m10, float m11, float m12,
               float m20, float m21, float m22);
-    CMatrix3f(const CVector3f& u, const CVector3f& v, const CVector3f& w);
+    CMatrix3f(const CVector3f& u, const CVector3f& m, const CVector3f& w);
     CMatrix3f(const CVector3f& axis, float angle);
+    CMatrix3f(const CQuaternion& quat);
 
     ~CMatrix3f();
 
+    static const CMatrix3f skIdentityMatrix3f;
+
 protected:
-    float v[3][3];
+    union
+    {
+        float m[3][3];
+#ifdef __SSE__
+        __m128 _m[3];
+#endif
+    };
 };
 
 #endif // CMATRIX3F_HPP
