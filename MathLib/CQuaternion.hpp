@@ -7,7 +7,7 @@
 #include <math.h>
 #include <Athena/IStreamReader.hpp>
 
-class CQuaternion
+class ZE_ALIGN(16) CQuaternion
 {
 public:
     CQuaternion();
@@ -73,12 +73,7 @@ public:
 
     float r;
     CVector3f v;
-}
-#if __SSE__
-_CRT_ALIGN(16)
-#endif
-;
-
+};
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);
 CQuaternion operator-(float lhs, const CQuaternion& rhs);

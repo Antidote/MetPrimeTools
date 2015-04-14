@@ -5,7 +5,7 @@
 
 #include "CVector3f.hpp"
 
-class CVector3d
+class ZE_ALIGN(16) CVector3d
 {
 public:
     CVector3d();
@@ -38,10 +38,6 @@ public:
         };
         __m128 v;
     };
-}
-#if __SSE__
-_CRT_ALIGN(16)
-#endif
-;
+};
 
 #endif // CVECTOR3D_HPP

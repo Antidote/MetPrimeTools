@@ -4,7 +4,7 @@
 #include "Global.hpp"
 #include "CVector3f.hpp"
 
-struct CAxisAngle
+struct ZE_ALIGN(16) CAxisAngle
 {
     CAxisAngle()
         : axis(CVector3f::skOne),

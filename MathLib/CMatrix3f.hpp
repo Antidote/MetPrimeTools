@@ -28,10 +28,6 @@ protected:
         __m128 _m[3];
 #endif
     };
-}
-#if __SSE__
-_CRT_ALIGN(16)
-#endif
-;
+};
 
 #endif // CMATRIX3F_HPP

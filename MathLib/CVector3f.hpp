@@ -4,7 +4,7 @@
 #include "Global.hpp"
 #include <Athena/IStreamReader.hpp>
 
-class CVector3f
+class ZE_ALIGN(16) CVector3f
 {
 public:
     CVector3f();
@@ -60,11 +60,7 @@ public:
 
     static const CVector3f skOne;
     static const CVector3f skZero;
-}
-#if __SSE__
-_CRT_ALIGN(16)
-#endif
-;
+};
 
 CVector3f operator+(float lhs, const CVector3f& rhs);
 CVector3f operator-(float lhs, const CVector3f& rhs);
