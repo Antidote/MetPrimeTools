@@ -232,7 +232,10 @@ void CModelReader::readVertices(Athena::io::MemoryReader& in, bool isShort)
         atUint32 vertexCount = in.length() / (sizeof(atInt16) * 3);
         while ((vertexCount--) > 0)
         {
-            CVector3f vert(in.readInt16() / 32768.f, in.readInt16() / 32768.f, in.readInt16() / 32768.f);
+            CVector3f vert;
+            vert.x = in.readInt16() / 32768.f;
+            vert.y = in.readInt16() / 32768.f;
+            vert.z = in.readInt16() / 32768.f;
             m_result->m_vertices.push_back(vert);
         }
     }
@@ -256,7 +259,9 @@ void CModelReader::readNormals(Athena::io::MemoryReader& in)
         atUint32 normalCount = in.length() / (sizeof(atUint16) * 3);
         while ((normalCount--) > 0)
         {
-            CVector3f nrm(in.readInt16() / 32768.f, in.readInt16() / 32768.f, in.readInt16() / 32768.f);
+            CVector3f nrm;
+            nrm.x = in.readInt16() / 32768.f;
+            nrm.y = in.readInt16() / 32768.f;
             m_result->m_normals.push_back(nrm);
         }
     }
@@ -277,7 +282,9 @@ void CModelReader::readTexCoords(atUint32 slot, Athena::io::MemoryReader& in)
         atUint32 texCoordCount = in.length() / 8;
         while ((texCoordCount--) > 0)
         {
-            CVector3f tex(in.readFloat(), in.readFloat(), 0.0f);
+            CVector3f tex;
+            tex.x = in.readFloat();
+            tex.y = in.readFloat();
             m_result->m_texCoords0.push_back(tex);
         }
     }

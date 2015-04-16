@@ -410,7 +410,9 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in,
         {
             // really shouldn't do this here
             // but it's constant enough to be reliable
-            CVector3f texCoord(in.readInt16() / 32768.f, in.readInt16() / 32768.f, 0.0);
+            CVector3f texCoord;
+            texCoord.x = in.readInt16() / 32768.f;
+            texCoord.y = in.readInt16() / 32768.f;
             model.m_texCoords1.push_back(texCoord);
         }
     }
@@ -420,7 +422,9 @@ void CAreaReader::readTexCoords(CModelData& model, Athena::io::MemoryReader& in,
 
         while ((texCoordCount--) > 0)
         {
-            CVector3f texCoord(in.readFloat(), in.readFloat(), 0.0);
+            CVector3f texCoord;
+            texCoord.x = in.readFloat();
+            texCoord.y = in.readFloat();
             model.m_texCoords0.push_back(texCoord);
         }
     }
