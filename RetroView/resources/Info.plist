@@ -26,7 +26,9 @@
 	<key>CFBundleExecutable</key>
 	<string>RetroView</string>
 	<key>CFBundleGetInfoString</key>
-	<string>by Antidote</string>
+	<string>Version BETA</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2015 Antidote / Jackoalan</string>
 	<key>CFBundleIconFile</key>
 	<string>mainicon.icns</string>
 	<key>CFBundleIdentifier</key>

@@ -10,6 +10,8 @@
 class ZE_ALIGN(16) CQuaternion
 {
 public:
+    ZE_DECLARE_ALIGNED_ALLOCATOR();
+    
     CQuaternion();
     CQuaternion(float r, float x, float y, float z);
     CQuaternion(float x, float y, float z);
@@ -70,6 +72,21 @@ public:
     static CQuaternion lerp(CQuaternion& a, CQuaternion& b, double t);
     static CQuaternion slerp(CQuaternion& a, CQuaternion& b, double t);
     static CQuaternion nlerp(CQuaternion& a, CQuaternion& b, double t);
+    
+    inline float roll() const
+    {
+        return atan2f(2.0 * (v.x * v.y + r * v.z), r * r + v.x * v.x - v.y * v.y - v.z * v.z);
+    }
+    
+    inline float pitch() const
+    {
+        return atan2f(2.0 * (v.y * v.z + r * v.x), r * r - v.x * v.x - v.y * v.y + v.z * v.z);
+    }
+    
+    inline float yaw() const
+    {
+        return asinf(-2.0 * (v.x * v.z - r * v.y));
+    }
 
     float r;
     CVector3f v;

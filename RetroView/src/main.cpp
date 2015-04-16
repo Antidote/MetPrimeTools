@@ -27,7 +27,11 @@ int main(int argc, char *argv[])
     fmt.setDepthBufferSize(32);
     fmt.setMajorVersion(3);
     fmt.setMinorVersion(3);
+#if __linux__
+    fmt.setProfile(QSurfaceFormat::NoProfile);
+#else
     fmt.setProfile(QSurfaceFormat::CoreProfile);
+#endif
 
     fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     QSurfaceFormat::setDefaultFormat(fmt);

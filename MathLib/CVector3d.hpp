@@ -8,6 +8,8 @@
 class ZE_ALIGN(16) CVector3d
 {
 public:
+    ZE_DECLARE_ALIGNED_ALLOCATOR();
+    
     CVector3d();
     CVector3d(const CVector3f& vec3);
     CVector3d(double x, double y, double z);
