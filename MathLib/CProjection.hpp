@@ -119,6 +119,7 @@ protected:
     /* Projection intermediate */
     union
     {
+#ifdef _MSC_VER
         struct
         {
             SProjOrtho m_ortho;
@@ -127,6 +128,10 @@ protected:
         {
             SProjPersp m_persp;
         };
+#else
+        SProjOrtho m_ortho;
+        SProjPersp m_persp;
+#endif
     };
 
     /* Cached projection matrix */
