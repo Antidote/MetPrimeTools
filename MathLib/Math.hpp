@@ -1,6 +1,7 @@
 #ifndef MATH_HPP
 #define MATH_HPP
 
+#define _USE_MATH_DEFINES 1
 #include <math.h>
 #include "CVector3f.hpp"
 #include "CTransform.hpp"

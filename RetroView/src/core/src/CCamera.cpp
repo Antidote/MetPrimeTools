@@ -104,12 +104,12 @@ void CCamera::processMouseStrafe(float offset)
 void CCamera::processMouseScroll(float yoffset)
 {
     SProjPersp persp = m_projection.getPersp();
-    if(persp.fov >= 1.0f && persp.fov <= 45.0f)
-        persp.fov -= yoffset;
-    if(persp.fov <= 1.0f)
-        persp.fov = 1.0f;
-    if(persp.fov >= 45.0f)
-        persp.fov = 45.0f;
+    if(persp.m_fov >= 1.0f && persp.m_fov <= 45.0f)
+        persp.m_fov -= yoffset;
+    if(persp.m_fov <= 1.0f)
+        persp.m_fov = 1.0f;
+    if(persp.m_fov >= 45.0f)
+        persp.m_fov = 45.0f;
     m_projection.setPersp(persp);
 }
 

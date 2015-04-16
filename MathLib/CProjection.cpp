@@ -15,23 +15,23 @@ void CProjection::_updateCachedMatrix()
     {
         float tmp;
         
-        tmp = 1.0f / (m_ortho.right - m_ortho.left);
+        tmp = 1.0f / (m_ortho.m_right - m_ortho.m_left);
         m_mtx.m[0][0] = 2.0f * tmp;
         m_mtx.m[1][0] = 0.0f;
         m_mtx.m[2][0] = 0.0f;
-        m_mtx.m[3][0] = -(m_ortho.right + m_ortho.left) * tmp;
+        m_mtx.m[3][0] = -(m_ortho.m_right + m_ortho.m_left) * tmp;
         
-        tmp = 1.0f / (m_ortho.top - m_ortho.bottom);
+        tmp = 1.0f / (m_ortho.m_top - m_ortho.m_bottom);
         m_mtx.m[0][1] = 0.0f;
         m_mtx.m[1][1] = 2.0f * tmp;
         m_mtx.m[2][1] = 0.0f;
-        m_mtx.m[3][1] = -(m_ortho.top + m_ortho.bottom) * tmp;
+        m_mtx.m[3][1] = -(m_ortho.m_top + m_ortho.m_bottom) * tmp;
         
-        tmp = 1.0f / (m_ortho.far - m_ortho.near);
+        tmp = 1.0f / (m_ortho.m_far - m_ortho.m_near);
         m_mtx.m[0][2] = 0.0f;
         m_mtx.m[1][2] = 0.0f;
         m_mtx.m[2][2] = -(1.0f) * tmp;
-        m_mtx.m[3][2] = -m_ortho.far * tmp;
+        m_mtx.m[3][2] = -m_ortho.m_far * tmp;
         
         m_mtx.m[0][3] = 0.0f;
         m_mtx.m[1][3] = 0.0f;
@@ -41,11 +41,11 @@ void CProjection::_updateCachedMatrix()
     else if (m_projType == PROJ_PERSP)
     {
         float cot,tmp;
-        float t_fovy = tanf(m_persp.fov / 2.0);
+        float t_fovy = tanf(m_persp.m_fov / 2.0);
         
         cot = 1.0f / t_fovy;
         
-        m_mtx.m[0][0] = cot/m_persp.aspect;
+        m_mtx.m[0][0] = cot/m_persp.m_aspect;
         m_mtx.m[1][0] = 0.0f;
         m_mtx.m[2][0] = 0.0f;
         m_mtx.m[3][0] = 0.0f;
@@ -55,11 +55,11 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[2][1] = 0.0f;
         m_mtx.m[3][1] = 0.0f;
         
-        tmp = 1.0f / (m_persp.far - m_persp.near);
+        tmp = 1.0f / (m_persp.m_far - m_persp.m_near);
         m_mtx.m[0][2] = 0.0f;
         m_mtx.m[1][2] = 0.0f;
-        m_mtx.m[2][2] = -m_persp.far * tmp;
-        m_mtx.m[3][2] = -(m_persp.far * m_persp.near) * tmp;
+        m_mtx.m[2][2] = -m_persp.m_far * tmp;
+        m_mtx.m[3][2] = -(m_persp.m_far * m_persp.m_near) * tmp;
         
         m_mtx.m[0][3] = 0.0f;
         m_mtx.m[1][3] = 0.0f;

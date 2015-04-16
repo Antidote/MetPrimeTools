@@ -94,7 +94,10 @@ public:
     union
     {
         float m[3][4]; /* 4th row for union-alignment */
-        CVector3f vec[3];
+        struct
+        {
+            CVector3f vec[3];
+        };
     };
 };
 

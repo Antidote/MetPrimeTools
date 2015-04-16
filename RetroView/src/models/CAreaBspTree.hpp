@@ -27,7 +27,7 @@ struct SOctantNodeEntry
     void readNodeEntry(Athena::io::IStreamReader& in);
     
     CWordBitmap* m_bitmap = NULL;
-    SOctantNodeEntry* m_childNodes[CAREABSPTREE_NODE_MAX_CHILDREN] = {NULL};
+    SOctantNodeEntry* m_childNodes[CAREABSPTREE_NODE_MAX_CHILDREN];
     
 };
 

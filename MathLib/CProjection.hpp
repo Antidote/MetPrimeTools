@@ -3,6 +3,8 @@
 
 #include "Global.hpp"
 #include <stdexcept>
+
+#define _USE_MATH_DEFINES 1
 #include <math.h>
 
 typedef union
@@ -48,16 +50,16 @@ enum EProjType
 };
 struct SProjOrtho
 {
-    float top, bottom, left, right, near, far;
-    SProjOrtho(float top=1.0f, float bottom=-1.0f, float left=-1.0f, float right=1.0f,
-               float near=1.0f, float far=-1.0f) :
-    top(top), bottom(bottom), left(left), right(right), near(near), far(far) {}
+    float m_top, m_bottom, m_left, m_right, m_near, m_far;
+    SProjOrtho(float p_top=1.0f, float p_bottom=-1.0f, float p_left=-1.0f, float p_right=1.0f,
+               float p_near=1.0f, float p_far=-1.0f) :
+    m_top(p_top), m_bottom(p_bottom), m_left(p_left), m_right(p_right), m_near(p_near), m_far(p_far) {}
 };
 struct SProjPersp
 {
-    float fov, aspect, near, far;
-    SProjPersp(float fov=55.0f * M_PI / 180.0f, float aspect=1.0f, float near=0.1f, float far=4096.f) :
-    fov(fov), aspect(aspect), near(near), far(far) {}
+    float m_fov, m_aspect, m_near, m_far;
+    SProjPersp(float p_fov=55.0f * M_PI / 180.0f, float p_aspect=1.0f, float p_near=0.1f, float p_far=4096.f) :
+    m_fov(p_fov), m_aspect(p_aspect), m_near(p_near), m_far(p_far) {}
 };
 extern const SProjOrtho kOrthoIdentity;
 
@@ -108,19 +110,25 @@ public:
     }
     
     inline const TMatrix4f& getCachedMatrix() {return m_mtx;}
-
-protected:
     
+protected:
+
     /* Projection type */
     enum EProjType m_projType;
     
     /* Projection intermediate */
     union
     {
-        SProjOrtho m_ortho;
-        SProjPersp m_persp;
+        struct
+        {
+            SProjOrtho m_ortho;
+        };
+        struct
+        {
+            SProjPersp m_persp;
+        };
     };
-    
+
     /* Cached projection matrix */
     TMatrix4f m_mtx;
     

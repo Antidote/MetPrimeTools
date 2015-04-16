@@ -7,10 +7,10 @@
 
 #if __SSE__
 #   include <immintrin.h>
-#   include <mm_malloc.h>
 #   ifdef _MSC_VER
 #       define ZE_ALIGN(x) __declspec(align(x))
 #   else
+#       include <mm_malloc.h>
 #       define ZE_ALIGN(x) __attribute__((aligned(x)))
 #   endif
 #   define ZE_SHUFFLE(x,y,z,w) ((w)<<6 | (z)<<4 | (y)<<2 | (x))
