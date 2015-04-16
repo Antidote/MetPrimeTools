@@ -146,8 +146,11 @@ void CCamera::setRotation(const CVector3f& rot)
 
 void CCamera::setViewport(int width, int height)
 {
+    SProjPersp persp = m_projection.getPersp();
     m_viewportWidth = width;
     m_viewportHeight = height;
+    persp.m_aspect = (float)((float)width/(float)height);
+    m_projection.setPersp(persp);
 }
 
 const CVector3f& CCamera::front() const

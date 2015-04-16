@@ -176,7 +176,7 @@ QOpenGLShader* CMaterial::buildVertex()
             atUint32 texMtxSource = textureMatrixIdx(((m_texGenFlags[i] >> 9) & 0x1F) + 30);
             atUint32 postMtxSource = postTransformMatrixIdx(((m_texGenFlags[i] >> 15) & 0x1F) + 64);
             QString source = QString("texCoord%1").arg(i);
-            vertSource << QString("    %1 = vec3(vec4(%2, 1.0f) * texMtx[%3]);")
+            vertSource << QString("    %1 = vec3(texMtx[%3] * vec4(%2, 1.0f));")
                           .arg(source)
                           .arg(QString::fromLatin1(texcoordTransform[texcoordSource]))
                           .arg(texMtxSource);
@@ -184,7 +184,7 @@ QOpenGLShader* CMaterial::buildVertex()
             if ((m_texGenFlags[i] >> 14) & 1)
                 vertSource << QString("%1 = normalize(%1);").arg(source);
 
-            vertSource << QString("%1 = vec3(vec4(%1, 1.0) * postMtx[%2]);").arg(source).arg(postMtxSource);
+            vertSource << QString("%1 = vec3(postMtx[%2] * vec4(%1, 1.0));").arg(source).arg(postMtxSource);
 
         }
         source = source.replace("//{GXSHADERINFO}", QString("// %1 TEV Stages %2 TexGens").arg(m_tevStages.size()).arg(m_texGenFlags.size()));
@@ -207,16 +207,16 @@ QOpenGLShader* CMaterial::buildVertex()
                     }
 
                     if (m_passes[i]->anim.mode < 2 || m_passes[i]->anim.mode > 5)
-                        vertSource << QString("texCoord%1 = vec3(vec4(%2, 1.0) * texMtx[%1]);").arg(pass)
+                        vertSource << QString("texCoord%1 = vec3(texMtx[%1] * vec4(%2, 1.0));").arg(pass)
                                       .arg(texcoordTransformMP3[m_passes[i]->animUvSource]);
                     else
-                        vertSource << QString("texCoord%1 = vec3(vec4(vec3(in_TexCoord%2, 1.0), 1.0) * texMtx[%1]);").arg(pass)
+                        vertSource << QString("texCoord%1 = vec3(texMtx[%1] * vec4(vec3(in_TexCoord%2, 1.0), 1.0));").arg(pass)
                                       .arg(m_passes[i]->uvSource);
 
                     if (m_passes[i]->anim.mode < 2 || m_passes[i]->anim.mode > 5)
                         vertSource << QString("texCoord%1 = normalize(texCoord%1);").arg(pass);
 
-                    vertSource << QString("texCoord%1 = vec3(vec4(texCoord%1, 1.0) * postMtx[%1]);").arg(pass);
+                    vertSource << QString("texCoord%1 = vec3(postMtx[%1] * vec4(texCoord%1, 1.0));").arg(pass);
                 }
                 else
                     vertSource << QString("texCoord%1 = vec3(in_TexCoord%2, 1);").arg(pass).arg(m_passes[i]->uvSource);
