@@ -10,6 +10,7 @@ uniform vec4 konst[4];
 uniform float punchThrough;
 uniform float texturesEnabled;
 uniform float visualizeNormals;
+uniform vec4 addColor;
 
 // input
 in vec3 norm;
@@ -48,5 +49,5 @@ void main() {
         prev = vec4(norm * vec3(0.5) + 0.5, 1.0);
     }
 
-    colorOut = prev;
+    colorOut = prev + addColor;
 }

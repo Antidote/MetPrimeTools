@@ -6,6 +6,8 @@
 
 struct ZE_ALIGN(16) CAxisAngle
 {
+    ZE_DECLARE_ALIGNED_ALLOCATOR();
+    
     CAxisAngle()
         : axis(CVector3f::skOne),
           angle(0)

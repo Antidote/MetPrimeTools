@@ -2,6 +2,7 @@
 #include <math.h>
 
 CQuaternion::CQuaternion()
+    : r(1.0f)
 {
 }
 
