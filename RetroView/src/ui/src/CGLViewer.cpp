@@ -263,6 +263,11 @@ CVector3f CGLViewer::cameraVector()
     return m_camera.front();
 }
 
+CQuaternion CGLViewer::cameraRotation()
+{
+    return m_camera.rotationQuat();
+}
+
 void CGLViewer::setCurrent(IRenderableModel* renderable)
 {
     m_currentRenderable = renderable;

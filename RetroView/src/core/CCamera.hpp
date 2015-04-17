@@ -26,6 +26,7 @@ public:
     // Returns the view matrix calculated using Eular Angles and the LookAt Matrix
     CTransform view() const;
     CTransform rotation() const;
+    CQuaternion rotationAsQuaternion() const;
     const CProjection& projection() const;
 
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -53,6 +54,7 @@ public:
     float movementSpeed() const;
 
     void changeSpeed(float delta);
+
 
 private:
     // Calculates the front vector from the Camera's (updated) Eular Angles
