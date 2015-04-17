@@ -602,7 +602,7 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
             }
             else
             {
-                const CVector3f& viewOrigin = CGLViewer::instance()->view().m_origin;
+                const CVector3f& viewOrigin = CGLViewer::instance()->cameraPosition();
                 float xy = (viewOrigin[0] + viewOrigin[1]) * 0.025f * animation.parms[1];
                 xy = (xy - (int)xy);
                 float z = (viewOrigin[2]) * 0.05f * animation.parms[1];
