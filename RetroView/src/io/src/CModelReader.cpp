@@ -262,6 +262,7 @@ void CModelReader::readNormals(Athena::io::MemoryReader& in)
             CVector3f nrm;
             nrm.x = in.readInt16() / 32768.f;
             nrm.y = in.readInt16() / 32768.f;
+            nrm.z = in.readInt16() / 32768.f;
             m_result->m_normals.push_back(nrm);
         }
     }
