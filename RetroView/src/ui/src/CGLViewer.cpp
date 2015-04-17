@@ -265,7 +265,7 @@ CVector3f CGLViewer::cameraVector()
 
 CQuaternion CGLViewer::cameraRotation()
 {
-    return m_camera.rotationQuat();
+    return m_camera.rotationAsQuaternion();
 }
 
 void CGLViewer::setCurrent(IRenderableModel* renderable)

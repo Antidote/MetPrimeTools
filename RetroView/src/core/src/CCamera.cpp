@@ -42,7 +42,7 @@ CTransform CCamera::rotation() const
     return ret;
 }
 
-CQuaternion CCamera::rotationQuat() const
+CQuaternion CCamera::rotationAsQuaternion() const
 {
     return CQuaternion(m_pitch, 0.0f, m_yaw);
 }
