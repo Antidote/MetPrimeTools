@@ -58,7 +58,6 @@ TEMPLATE = app
 
 INCLUDEPATH += \
     $$PWD/src \
-    $$PWD/../External/glm \
     $$PWD/../External/glew/include
 
 SOURCES += \
