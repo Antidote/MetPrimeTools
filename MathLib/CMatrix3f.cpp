@@ -44,13 +44,13 @@ CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs)
     return CMatrix3f(resVec[0].mVec128, resVec[1].mVec128, resVec[2].mVec128);
 #else
     return CMatrix3f(lhs[0][0] * rhs[0][0] + lhs[1][0] * rhs[0][1] + lhs[2][0] * rhs[0][2],
-                     lhs[0][1] * rhs[0][0] + lhs[1][1] * rhs[0][1] + lhs[2][1] * rhs[0][2],
-                     lhs[0][2] * rhs[0][0] + lhs[1][2] * rhs[0][1] + lhs[2][2] * rhs[0][2],
                      lhs[0][0] * rhs[1][0] + lhs[1][0] * rhs[1][1] + lhs[2][0] * rhs[1][2],
-                     lhs[0][1] * rhs[1][0] + lhs[1][1] * rhs[1][1] + lhs[2][1] * rhs[1][2],
-                     lhs[0][2] * rhs[1][0] + lhs[1][2] * rhs[1][1] + lhs[2][2] * rhs[1][2],
                      lhs[0][0] * rhs[2][0] + lhs[1][0] * rhs[2][1] + lhs[2][0] * rhs[2][2],
+                     lhs[0][1] * rhs[0][0] + lhs[1][1] * rhs[0][1] + lhs[2][1] * rhs[0][2],
+                     lhs[0][1] * rhs[1][0] + lhs[1][1] * rhs[1][1] + lhs[2][1] * rhs[1][2],
                      lhs[0][1] * rhs[2][0] + lhs[1][1] * rhs[2][1] + lhs[2][1] * rhs[2][2],
+                     lhs[0][2] * rhs[0][0] + lhs[1][2] * rhs[0][1] + lhs[2][2] * rhs[0][2],
+                     lhs[0][2] * rhs[1][0] + lhs[1][2] * rhs[1][1] + lhs[2][2] * rhs[1][2],
                      lhs[0][2] * rhs[2][0] + lhs[1][2] * rhs[2][1] + lhs[2][2] * rhs[2][2]);
 #endif
 }
@@ -110,5 +110,30 @@ CMatrix3f CMatrix3f::transposed() const
     
     return ret;
 #endif
+}
+
+CMatrix3f CMatrix3f::inverted() const
+{
+    float det =
+    m[0][0] * m[1][1] * m[2][2] +
+    m[1][0] * m[2][1] * m[0][2] +
+    m[2][0] * m[0][1] * m[1][2] -
+    m[0][2] * m[1][1] * m[2][0] -
+    m[1][2] * m[2][1] * m[0][0] -
+    m[2][2] * m[0][1] * m[1][0];
+    
+    if (det == 0.0)
+        return CMatrix3f();
+    
+    det = 1.0f / det;
+    return CMatrix3f((m[1][1]*m[2][2] - m[1][2]*m[2][1]) * det,
+                     -(m[1][0]*m[2][2] - m[1][2]*m[2][0]) * det,
+                     (m[1][0]*m[2][1] - m[1][1]*m[2][0]) * det,
+                     -(m[0][1]*m[2][2] - m[0][2]*m[2][1]) * det,
+                     (m[0][0]*m[2][2] - m[0][2]*m[2][0]) * det,
+                     -(m[0][0]*m[2][1] - m[0][1]*m[2][0]) * det,
+                     (m[0][1]*m[1][2] - m[0][2]*m[1][1]) * det,
+                     -(m[0][0]*m[1][2] - m[0][2]*m[1][0]) * det,
+                     (m[0][0]*m[1][1] - m[0][1]*m[1][0]) * det);
 }
 
