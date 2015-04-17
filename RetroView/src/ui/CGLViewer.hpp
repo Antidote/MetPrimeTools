@@ -30,6 +30,7 @@ public:
     CTransform view();
     CVector3f cameraPosition();
     CVector3f cameraVector();
+    CQuaternion cameraRotation();
 
     void setCurrent(IRenderableModel* renderable);
     void setSkybox(IRenderableModel* renderable);
