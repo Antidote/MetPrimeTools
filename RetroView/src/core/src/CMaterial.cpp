@@ -590,7 +590,8 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
                     (animation.mode == 7 && !QSettings().value("mode7").toBool()))
                 break;
 
-            texMtx = (CGLViewer::instance()->view() * m_model).inverse();
+            texMtx = (CGLViewer::instance()->view() * m_model);
+            texMtx.m_basis.invert();
             texMtx.m_basis.transpose();
             if (animation.mode != 7)
             {
