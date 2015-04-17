@@ -590,7 +590,9 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
                     (animation.mode == 7 && !QSettings().value("mode7").toBool()))
                 break;
 
-            texMtx = (CGLViewer::instance()->view() * m_model).inverse();
+            texMtx = (CGLViewer::instance()->view() * m_model);
+            texMtx.m_basis.invert();
+            texMtx.m_basis.transpose();
             if (animation.mode != 7)
             {
                 postMtx = CTransform(CMatrix3f(0.5, 0.0, 0.0,
@@ -600,7 +602,7 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
             }
             else
             {
-                const CVector3f& viewOrigin = CGLViewer::instance()->view().m_origin;
+                const CVector3f& viewOrigin = CGLViewer::instance()->cameraPosition();
                 float xy = (viewOrigin[0] + viewOrigin[1]) * 0.025f * animation.parms[1];
                 xy = (xy - (int)xy);
                 float z = (viewOrigin[2]) * 0.05f * animation.parms[1];
@@ -609,8 +611,8 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
                 float halfA = animation.parms[0] * 0.5f;
 
                 postMtx = CTransform(CMatrix3f(halfA, 0.0, 0.0,
-                                               0.0, 0.0, 0.0,
-                                               0.0, halfA, 0.0),
+                                               0.0, 0.0, halfA,
+                                               0.0, 0.0, 0.0),
                                      CVector3f(xy, z, 1.0));
             }
 
@@ -641,8 +643,8 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
             float translateX = (1.0 - (acos - asin)) * 0.5;
             float translateY = (1.0 - (asin + acos)) * 0.5;
 
-            texMtx = CTransform(CMatrix3f(acos, asin, 0.0,
-                                          -asin, acos, 0.0,
+            texMtx = CTransform(CMatrix3f(acos, -asin, 0.0,
+                                          asin, acos, 0.0,
                                           0.0, 0.0, 1.0),
                                 CVector3f(translateX, translateY, 0.0));
         }
@@ -676,8 +678,8 @@ void CMaterial::updateAnimation(const SAnimation& animation, CTransform& texMtx,
             texMtx = m_model;
             texMtx.m_origin.zeroOut();
             postMtx = CTransform(CMatrix3f(0.5, 0.0, 0.0,
-                                           0.0, 0.0, 0.0,
-                                           0.0, 0.5, 0.0),
+                                           0.0, 0.0, 0.5,
+                                           0.0, 0.0, 0.0),
                                  CVector3f(m_model.m_origin[0] * 0.50000001,
                                            m_model.m_origin[1] * 0.50000001,
                                            1.0));

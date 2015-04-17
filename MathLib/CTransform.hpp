@@ -20,7 +20,7 @@ public:
     
     inline CTransform inverse() const
     {
-        CMatrix3f inv = m_basis.transposed();
+        CMatrix3f inv = m_basis.inverted();
         return CTransform(inv, inv * -m_origin);
     }
     
