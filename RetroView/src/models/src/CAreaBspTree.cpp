@@ -92,7 +92,8 @@ void CAreaBspTree::_drawNode(const SAreaBSPContext& context, const SOctantNodeEn
     size_t idx = 0;
     for (bool df : *node.m_bitmap)
     {
-        if (df && !context.staticBitmap[idx])
+        if (df && !context.staticBitmap[idx] &&
+            context.frustum.aabbFrustumTest(mreaMesh->getBoundingBox()))
         {
             mreaMesh->drawIbos(context.transparents, context.materialSet, context.modelMatrix);
             context.staticBitmap.set(idx);

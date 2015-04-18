@@ -31,7 +31,8 @@ public:
     void exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& normalOff, atUint32& texOff, CMaterialSet& ms);
 
     void drawBoundingBoxes();
-
+    
+    inline const SBoundingBox& getBoundingBox() const {return m_boundingBox;}
     void drawIbos(bool transparents, const CMaterialSet& materialSet, const CTransform& model);
     void drawTransparentBoxes();
 
