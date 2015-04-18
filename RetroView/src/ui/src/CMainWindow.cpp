@@ -258,12 +258,15 @@ void CMainWindow::onExport()
 
 void CMainWindow::onNewPak(CPakTreeWidget* pak)
 {
+    ui->tabWidget->setUpdatesEnabled(false);
     QFileInfo basePath(pak->filepath());
     QTabWidget* widget = nullptr;
     QString tmp = basePath.absolutePath();
 #ifdef Q_OS_WIN
     tmp = tmp.toLower();
 #endif
+    if (CResourceManager::instance()->currentBasepath() == std::string())
+        CResourceManager::instance()->setCurrentBasepath(tmp.toStdString());
 
     if (m_basePaths.contains(tmp))
         widget = m_basePaths[tmp];
@@ -286,6 +289,7 @@ void CMainWindow::onNewPak(CPakTreeWidget* pak)
     QString tabTitle = QFileInfo(pak->filepath()).fileName();
     int tabIdx = widget->addTab(pak, tabTitle);
     widget->setTabToolTip(tabIdx, pak->filepath());
+    ui->tabWidget->setUpdatesEnabled(true);
 }
 
 void CMainWindow::onLoadPak()
@@ -306,15 +310,19 @@ void CMainWindow::onLoadPak()
 
 void CMainWindow::onTabChanged()
 {
+    if (!ui->tabWidget->updatesEnabled())
+        return;
+
     if (m_currentTab != nullptr)
         m_currentTab->clearCurrent();
 
+    QTabWidget* tabWidget = qobject_cast<QTabWidget*>(sender());
     CGLViewer::instance()->setCurrent(nullptr);
     CGLViewer::instance()->setSkybox(nullptr);
     CResourceManager::instance()->clear();
 
 
-    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(ui->tabWidget->currentWidget());
+    CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(tabWidget->currentWidget());
     if (ptw && ptw->pak()->isWorldPak())
     {
         m_currentTab = ptw;
@@ -327,6 +335,12 @@ void CMainWindow::onTabChanged()
             CGLViewer::instance()->setSkybox(world->skyboxModel());
             world->destroy();
         }
+    }
+    else
+    {
+        QTabWidget* tmp = qobject_cast<QTabWidget*>(tabWidget->currentWidget());
+        if (tmp)
+            CResourceManager::instance()->setCurrentBasepath(m_basePaths.key(tmp).toStdString());
     }
 }
 
@@ -368,18 +382,19 @@ void CMainWindow::onTabClosed(int tabIdx)
     QTabWidget* tw = qobject_cast<QTabWidget*>(widget);
     if (tw)
     {
+        std::string basepath = m_basePaths.key(tw).toStdString();
         while (tw->count() > 0)
         {
             CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(tw->widget(tw->count() - 1));
             if (ptw)
             {
-                CResourceManager::instance()->removePak(ptw->pak());
+                CResourceManager::instance()->removePak(ptw->pak(), basepath);
                 delete ptw;
             }
         }
         if (m_basePaths.values().contains(tw))
             m_basePaths.remove(m_basePaths.key(tw));
-
+        CResourceManager::instance()->clear();
         delete tw;
     }
     else
@@ -387,7 +402,8 @@ void CMainWindow::onTabClosed(int tabIdx)
         CPakTreeWidget* ptw = qobject_cast<CPakTreeWidget*>(widget);
         if (ptw)
         {
-            CResourceManager::instance()->removePak(ptw->pak());
+            QFileInfo inf(QString::fromStdString(ptw->pak()->filename()));
+            CResourceManager::instance()->removePak(ptw->pak(), inf.absolutePath().toStdString());
             delete ptw;
         }
 

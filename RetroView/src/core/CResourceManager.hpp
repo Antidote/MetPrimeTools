@@ -53,8 +53,11 @@ public:
 
     bool hasPaks() const;
 
+    void setCurrentBasepath(const std::string& basepath);
+    std::string currentBasepath() const;
+
     static bool canLoad(const std::string& filename);
-    void removePak(CPakFile* pak);
+    void removePak(CPakFile* pak, const std::string& basepath);
 signals:
     void newPak(CPakTreeWidget*);
 protected:
@@ -66,8 +69,9 @@ private:
     std::unordered_map<CFourCC, ResourceLoaderDesc, CFourCCHash, CFourCC_Comparison> m_loaders;
     IResource* attemptLoad(SPakResource res, CPakFile* pak);
     std::unordered_map<CUniqueID, IResource*, CUniqueIDHash, CUniqueIDComparison> m_cachedResources;
-    std::vector<CPakFile*>                   m_pakFiles;
-    std::vector<CUniqueID>                   m_failedAssets;
+    std::unordered_map<std::string, std::vector<CPakFile*>> m_pakFiles;
+    std::vector<CUniqueID>                     m_failedAssets;
+    std::string                                m_currentBasepath;
 };
 
 
