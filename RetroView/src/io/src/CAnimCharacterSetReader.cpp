@@ -49,6 +49,7 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
 
         while ((nodeCount--) > 0)
             readCharacterNode(ret);
+        atUint16 unkEnum = base::readUint16();
     }
     catch(...)
     {

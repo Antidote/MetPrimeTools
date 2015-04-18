@@ -167,7 +167,8 @@ HEADERS += \
     src/models/CMapArea.hpp \
     src/generic/CStringTable.hpp \
     src/generic/CAnimCharacterSet.hpp \
-    src/generic/CAnimCharacterNode.hpp
+    src/generic/CAnimCharacterNode.hpp \
+    src/core/CAnimTreeTweenBase.hpp
 
 win32:HEADERS += platforms/win_dirent.h
 FORMS += \

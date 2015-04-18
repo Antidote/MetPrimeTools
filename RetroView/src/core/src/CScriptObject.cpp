@@ -65,11 +65,10 @@ void CScriptObject::loadStruct(Athena::io::IStreamReader &in, CStructProperty* p
     if (parentTemplate->hasCount())
     {
         atUint32 propertyCount = in.readUint32();
-        //        if (propertyCount != parentTemplate->propertyTemplates().size())
-        //        {
-        //            std::cout << std::dec << "Stored property count does not match expected count: " << propertyCount << " != " << parentTemplate->propertyTemplates().size() << std::endl;
-        //            return;
-        //        }
+        if (propertyCount != parentTemplate->propertyTemplates().size())
+        {
+            std::cout << std::dec << "WARNING: Stored property count for " << parentTemplate->name() << " does not match expected count: " << propertyCount << " != " << parentTemplate->propertyTemplates().size() << std::endl;
+        }
     }
 
     for (CPropertyTemplate* propertyTemplate : parentTemplate->propertyTemplates())
