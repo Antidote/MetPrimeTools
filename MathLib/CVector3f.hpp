@@ -19,7 +19,7 @@ class ZE_ALIGN(16) CVector3f
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
-    inline CVector3f() {}
+    inline CVector3f() {zeroOut();}
 #if __SSE__
     CVector3f(const __m128& mVec128) : mVec128(mVec128) {v[3] = 0.0f;}
 #endif
