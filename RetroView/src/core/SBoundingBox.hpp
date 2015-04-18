@@ -3,17 +3,13 @@
 #include <MathLib.hpp>
 #include <Athena/IStreamReader.hpp>
 
-struct SBoundingBox final
+struct SBoundingBox
 {
     CVector3f m_min;
     CVector3f m_max;
-
-    SBoundingBox()
-        : m_min( 1000000.f,  1000000.f, 1000000.f),
-          m_max(-1000000.f, -1000000.f,-1000000.f)
-    {
-    }
-
+    
+    inline SBoundingBox() {}
+    
     SBoundingBox(const CVector3f& min, const CVector3f& max)
         : m_min(min),
           m_max(max)
@@ -21,7 +17,7 @@ struct SBoundingBox final
     }
 
     SBoundingBox(const float& minX,const float& minY,const float& minZ,
-                const float& maxX,const float& maxY,const float& maxZ)
+                 const float& maxX,const float& maxY,const float& maxZ)
         : m_min(minX, minY, minZ),
           m_max(maxX, maxY, maxZ)
     {
@@ -38,7 +34,7 @@ struct SBoundingBox final
     }
     SBoundingBox(Athena::io::IStreamReader& in) {readBoundingBox(in);}
     
-    inline bool intersects(SBoundingBox& other)
+    inline bool intersects(SBoundingBox& other) const
     {
         if (m_max[0] < other.m_min[0]) return false;
         if (m_min[0] > other.m_max[0]) return false;
@@ -47,6 +43,39 @@ struct SBoundingBox final
         if (m_max[2] < other.m_min[2]) return false;
         if (m_min[2] > other.m_max[2]) return false;
         return true;
+    }
+    
+    inline void splitX(SBoundingBox& posX, SBoundingBox& negX) const
+    {
+        float midX = (m_max.x - m_min.x) / 2.0 + m_min.x;
+        posX.m_max = m_max;
+        posX.m_min = m_min;
+        posX.m_min.x = midX;
+        negX.m_max = m_max;
+        negX.m_max.x = midX;
+        negX.m_min = m_min;
+    }
+    
+    inline void splitY(SBoundingBox& posY, SBoundingBox& negY) const
+    {
+        float midY = (m_max.y - m_min.y) / 2.0 + m_min.y;
+        posY.m_max = m_max;
+        posY.m_min = m_min;
+        posY.m_min.y = midY;
+        negY.m_max = m_max;
+        negY.m_max.y = midY;
+        negY.m_min = m_min;
+    }
+    
+    inline void splitZ(SBoundingBox& posZ, SBoundingBox& negZ) const
+    {
+        float midZ = (m_max.z - m_min.z) / 2.0 + m_min.z;
+        posZ.m_max = m_max;
+        posZ.m_min = m_min;
+        posZ.m_min.z = midZ;
+        negZ.m_max = m_max;
+        negZ.m_max.z = midZ;
+        negZ.m_min = m_min;
     }
 };
 

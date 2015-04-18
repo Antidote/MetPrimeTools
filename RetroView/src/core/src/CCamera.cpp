@@ -198,4 +198,6 @@ void CCamera::updateCameraVectors()
     // Also re-calculate the Right and Up vector
     m_right = m_front.cross(m_worldUp).normalized();  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     m_up = m_right.cross(m_front).normalized();
+    
+    // Update frustum planes
 }

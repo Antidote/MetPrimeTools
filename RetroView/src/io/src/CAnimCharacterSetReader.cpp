@@ -137,7 +137,7 @@ void CAnimCharacterSetReader::readCharacterNode(CAnimCharacterSet* ret)
         {
             SActionExtentsMP2 actionExtents;
             actionExtents.id = base::readUint32();
-            actionExtents.extents = SBoundingBox(*this);
+            actionExtents.extents.readBoundingBox(*this);
             node->m_actionExtents.push_back(actionExtents);
         }
     }
@@ -186,7 +186,7 @@ void CAnimCharacterSetReader::readActionBoundingBox(CAnimCharacterNode* node)
 {
     SActionAABB aabb;
     aabb.name = base::readString();
-    aabb.aabb = SBoundingBox(*this);
+    aabb.aabb.readBoundingBox(*this);
     node->m_actionAABBs.push_back(aabb);
 }
 

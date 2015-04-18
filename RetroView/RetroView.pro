@@ -146,6 +146,7 @@ HEADERS += \
     src/core/CPASDatabase.hpp \
     src/core/CPASParameter.hpp \
     src/core/SBoundingBox.hpp \
+    src/core/CFrustum.hpp \
     src/io/CAreaReader.hpp \
     src/io/CMaterialReader.hpp \
     src/io/CModelReader.hpp \
