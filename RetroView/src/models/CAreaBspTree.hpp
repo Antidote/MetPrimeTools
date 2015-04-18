@@ -14,9 +14,9 @@ class CAreaFile;
 enum EAROTSubdivFlags : atUint16
 {
     SUB_NONE = 0x0,
-    SUB_Z = 0x1,
+    SUB_Z = 0x4,
     SUB_Y = 0x2,
-    SUB_X = 0x4
+    SUB_X = 0x1
 };
 
 struct SOctantNodeEntry
@@ -63,11 +63,11 @@ private:
     };
     
     void _drawNode(const SAreaBSPContext& context, const SOctantNodeEntry& node) const;
-    void _visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
-                     const SOctantNodeEntry*const* subdivBase) const;
+    void _visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
     void _visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
-                     const SOctantNodeEntry*const* subdivBase, int subdivCount) const;
-    void _visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
+                     int subdivOffset, int nextOffset) const;
+    void _visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                     int subdivOffset, int nextOffset) const;
 
 };
 
