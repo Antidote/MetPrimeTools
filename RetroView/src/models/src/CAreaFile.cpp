@@ -70,7 +70,7 @@ void CAreaFile::draw()
     CMaterialSet materialSet = currentMaterialSet();
     CTransform model;
     //drawIbos(false, materialSet, model);
-    //m_bspTree.drawArea(*this, false, materialSet, model);
+    m_bspTree.drawArea(*this, false, materialSet, model);
 
     for (CScene* scene : m_scriptLayers)
     {
