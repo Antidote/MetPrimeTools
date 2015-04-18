@@ -69,8 +69,8 @@ void CAreaFile::draw()
     currentMaterialSet().setAmbient(m_ambient);
     CMaterialSet materialSet = currentMaterialSet();
     CTransform model;
-    drawIbos(false, materialSet, model);
-    //m_bspTree.drawArea(*this, false, materialSet, model);
+    //drawIbos(false, materialSet, model);
+    m_bspTree.drawArea(*this, false, materialSet, model);
 
     for (CScene* scene : m_scriptLayers)
     {
@@ -82,8 +82,8 @@ void CAreaFile::draw()
             obj.draw();
         }
     }
-    drawIbos(true, materialSet, model);
-    //m_bspTree.drawArea(*this, true, materialSet, model);
+    //drawIbos(true, materialSet, model);
+    m_bspTree.drawArea(*this, true, materialSet, model);
 }
 
 void CAreaFile::drawBoundingBox()

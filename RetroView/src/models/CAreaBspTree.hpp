@@ -5,6 +5,7 @@
 #include "core/SBoundingBox.hpp"
 #include "core/CWordBitmap.hpp"
 #include "core/CMaterialSet.hpp"
+#include "core/CFrustum.hpp"
 
 class CAreaFile;
 
@@ -28,7 +29,6 @@ struct SOctantNodeEntry
     
     CWordBitmap* m_bitmap = NULL;
     SOctantNodeEntry* m_childNodes[CAREABSPTREE_NODE_MAX_CHILDREN];
-    
 };
 
 class CAreaBspTree
@@ -57,10 +57,16 @@ private:
         const CVector3f& viewPos;
         const CVector3f& viewVec;
         const CTransform& modelMatrix;
+        const CFrustum& frustum;
+        CWordBitmap& staticBitmap;
+        CWordBitmap& actorBitmap;
     };
     
-    void _visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
-    void _visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
+    void _drawNode(const SAreaBSPContext& context, const SOctantNodeEntry& node) const;
+    void _visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                     const SOctantNodeEntry*const* subdivBase) const;
+    void _visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                     const SOctantNodeEntry*const* subdivBase, int subdivCount) const;
     void _visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
 
 };

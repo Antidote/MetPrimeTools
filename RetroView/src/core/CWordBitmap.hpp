@@ -11,11 +11,10 @@ class CWordBitmap : public std::bitset<CWORDBITMAP_MAX_BITS>
 {
     atUint32 m_numBits;
 public:
+    CWordBitmap() : m_numBits(0) {}
     void readBitmapBits(Athena::io::IStreamReader& in, atUint32 bitCount);
     void readBitmapWords(Athena::io::IStreamReader& in, atUint32 wordCount)
-    {
-        readBitmapBits(in, wordCount * 32);
-    }
+    {readBitmapBits(in, wordCount * 32);}
     
     class CWordBitmapIterator : std::iterator<std::bidirectional_iterator_tag, bool>
     {

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <MathLib.hpp>
+#include "CFrustum.hpp"
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
 class CCamera
