@@ -37,8 +37,8 @@ CResourceManager::~CResourceManager()
     for (std::pair<CUniqueID, IResource*> res : m_cachedResources)
         delete res.second;
 
-    for (CPakFile* pak : m_pakFiles)
-        delete pak;
+    for (std::pair<std::string, std::vector<CPakFile*>> pak : m_pakFiles)
+        std::for_each(pak.second.begin(), pak.second.end(), std::default_delete<CPakFile>());
 
     m_pakFiles.clear();
 
@@ -52,6 +52,11 @@ void CResourceManager::loadPak(std::string filepath)
         off = filepath.rfind("\\");
     off += 1;
     std::string filename = filepath.substr(off, filepath.size() - off);
+    std::string basepath = filepath.substr(0, off - 1);
+#if _WIN32
+    Athena::utility::tolower(basepath);
+#endif
+
     std::cout << "Found pak " << filename << " ...";
     std::cout.flush();
 
@@ -61,13 +66,16 @@ void CResourceManager::loadPak(std::string filepath)
         return;
     }
 
-    std::vector<CPakFile*>::iterator iter = std::find_if(m_pakFiles.begin(), m_pakFiles.end(),
-                                                            [&filepath](const CPakFile* r)->bool{return r->filename() == filepath; });
-
-    if (iter != m_pakFiles.end())
+    if (m_pakFiles.find(basepath) != m_pakFiles.end())
     {
-        std::cout << " already loaded" << std::endl;
-        return;
+        std::vector<CPakFile*>::iterator iter = std::find_if(m_pakFiles[basepath].begin(), m_pakFiles[basepath].end(),
+                                                             [&filepath](const CPakFile* r)->bool{return r->filename() == filepath; });
+
+        if (iter != m_pakFiles[basepath].end())
+        {
+            std::cout << " already loaded" << std::endl;
+            return;
+        }
     }
 
     CPakFile* pak = nullptr;
@@ -76,7 +84,7 @@ void CResourceManager::loadPak(std::string filepath)
         CPakFileReader reader(filepath);
         pak = reader.read();
         pak->removeDuplicates();
-        m_pakFiles.push_back(pak);
+        m_pakFiles[basepath].push_back(pak);
         CPakTreeWidget* widget = new CPakTreeWidget(pak);
         emit newPak(widget);
 
@@ -102,15 +110,36 @@ bool CResourceManager::hasPaks() const
     return m_pakFiles.size() > 0;
 }
 
+void CResourceManager::setCurrentBasepath(const std::string& basepath)
+{
+    if (basepath == std::string())
+        return;
+
+    m_currentBasepath = basepath;
+#if _WIN32
+    Athena::utility::tolower(m_currentBasepath);
+#endif
+}
+
+std::string CResourceManager::currentBasepath() const
+{
+    return m_currentBasepath;
+}
+
 bool CResourceManager::canLoad( const std::string& filename)
 {
     return CPakFileReader::canLoad(filename);
 }
 
-void CResourceManager::removePak(CPakFile* pak)
+void CResourceManager::removePak(CPakFile* pak, const std::string& basepath)
 {
-    auto it = std::find(m_pakFiles.begin(), m_pakFiles.end(), pak);
-    if (it == m_pakFiles.end())
+#if _WIN32
+    Athena::utility::tolower(basepath);
+#endif
+
+    std::vector<CPakFile*>& basePathPaks = m_pakFiles[basepath];
+    auto it = std::find(basePathPaks.begin(), basePathPaks.end(), pak);
+    if (it == basePathPaks.end())
         return;
 
     bool clearCache = false;
@@ -124,8 +153,11 @@ void CResourceManager::removePak(CPakFile* pak)
     }
 
     CPakFile* tmp = *it;
-    m_pakFiles.erase(it);
+    basePathPaks.erase(it);
     delete tmp;
+
+    if (basePathPaks.size() == 0)
+        m_pakFiles.erase(m_pakFiles.find(basepath));
 
     if (clearCache)
         clear();
@@ -173,7 +205,7 @@ IResource* CResourceManager::loadResource(const CUniqueID& assetID, const std::s
     if (iter != m_cachedResources.end())
         return iter->second;
 
-    for (CPakFile* pak : m_pakFiles)
+    for (CPakFile* pak : m_pakFiles[m_currentBasepath])
     {
         IResource* ret = loadResourceFromPak(pak, assetID, type);
         if (ret)
