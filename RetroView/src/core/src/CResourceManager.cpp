@@ -57,6 +57,10 @@ void CResourceManager::loadPak(std::string filepath)
     Athena::utility::tolower(basepath);
 #endif
 
+    if (m_currentBasepath == std::string())
+        m_currentBasepath = basepath;
+
+
     std::cout << "Found pak " << filename << " ...";
     std::cout.flush();
 
