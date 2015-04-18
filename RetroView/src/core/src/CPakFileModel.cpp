@@ -126,7 +126,7 @@ void CPakFileModel::setupModelData()
         std::vector<SPakResource> mlvls = m_pakFile->resourcesByType("mlvl");
         for (SPakResource res : mlvls)
         {
-            CWorldFile* world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResource(res.id, "MLVL"));
+            CWorldFile* world = dynamic_cast<CWorldFile*>(CResourceManager::instance()->loadResourceFromPak(m_pakFile, res.id, "MLVL"));
             if (world)
                 worlds.push_back(world);
         }
