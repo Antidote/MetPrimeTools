@@ -7,3 +7,6 @@
 [submodule "libSquish"]
 	path = libSquish
 	url = https://github.com/jackoalan/libSquish
+[submodule "libBoo"]
+	path = libBoo
+	url = https://github.com/RetroView/libBoo.git
