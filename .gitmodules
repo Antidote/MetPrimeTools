@@ -10,3 +10,6 @@
 [submodule "libBoo"]
 	path = libBoo
 	url = https://github.com/RetroView/libBoo.git
+[submodule "RetroCommon"]
+	path = RetroCommon
+	url = https://github.com/RetroView/RetroCommon.git
