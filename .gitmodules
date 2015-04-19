@@ -13,3 +13,6 @@
 [submodule "RetroCommon"]
 	path = RetroCommon
 	url = https://github.com/RetroView/RetroCommon.git
+[submodule "TXTRLoader"]
+	path = TXTRLoader
+	url = https://github.com/RetroView/TXTRLoader.git
