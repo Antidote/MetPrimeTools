@@ -177,18 +177,18 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
 
 void CModelData::drawIbos(bool transparents, const CMaterialSet& materialSet, const CTransform& model)
 {
-    std::unordered_map<atUint32, CIndexBuffer> ibos;
+    std::unordered_map<atUint32, CIndexBuffer>* ibos = NULL;
     if (transparents)
     {
-        ibos = m_transparents;
+        ibos = &m_transparents;
         //sortTransparent(ibos);
     }
     else
-        ibos = m_opaques;
+        ibos = &m_opaques;
 
     m_vertexBuffer.initBuffer();
     m_vertexBuffer.bind();
-    for (std::pair<atUint32, CIndexBuffer> iboPair : ibos)
+    for (std::pair<atUint32, CIndexBuffer> iboPair : *ibos)
     {
         CMaterial& mat = materialSet.material(iboPair.first);
 

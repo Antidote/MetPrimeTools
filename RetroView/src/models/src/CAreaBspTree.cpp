@@ -86,53 +86,132 @@ void CAreaBspTree::readAROT(Athena::io::IStreamReader& in)
     
 }
 
-static const CVector3f skZeroVec(0.0);
-static const CVector3f skTwoVec(2.0);
-
-static inline unsigned vec3_cmpgt(const CVector3f& lval, const CVector3f& rval)
+void CAreaBspTree::_drawNode(const SAreaBSPContext& context, const SOctantNodeEntry& node) const
 {
-    unsigned res = 0;
-    if (lval[0] > rval[0])
-        res |= 1 << 0;
-    if (lval[1] > rval[1])
-        res |= 1 << 1;
-    if (lval[2] > rval[2])
-        res |= 1 << 2;
-    return res;
+    auto mreaMesh = context.area.m_models.begin();
+    size_t idx = 0;
+    for (bool df : *node.m_bitmap)
+    {
+        if (df && !context.staticBitmap[idx] &&
+            context.frustum.aabbFrustumTest(mreaMesh->getBoundingBox()))
+        {
+            mreaMesh->drawIbos(context.transparents, context.materialSet, context.modelMatrix);
+            context.staticBitmap.set(idx);
+        }
+        ++mreaMesh;
+        ++idx;
+    }
 }
-#define X_CMP(cmp) ((cmp) & 0x1)
-#define Y_CMP(cmp) ((cmp) & 0x2)
-#define Z_CMP(cmp) ((cmp) & 0x4)
 
 void CAreaBspTree::_visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const
 {
+    /* Check if node in frustum */
+    if (!context.frustum.aabbFrustumTest(nodeBox))
+        return;
     
+    if (!node.m_childCount)
+    {
+        /* Leaf node */
+        _drawNode(context, node);
+        return;
+    }
+    
+    /* Subdivide X */
+    if (node.m_subdivFlags & SUB_X)
+    {
+        SBoundingBox posX, negX;
+        nodeBox.splitX(posX, negX);
+        if (context.viewVec.z > 0.0f)
+        {
+            _visitNodeY(context, node, posX, 1, 2);
+            _visitNodeY(context, node, negX, 0, 2);
+        }
+        else
+        {
+            _visitNodeY(context, node, negX, 0, 2);
+            _visitNodeY(context, node, posX, 1, 2);
+        }
+    }
+    else
+    {
+        _visitNodeY(context, node, nodeBox, 0, 1);
+    }
+    
+    /* Draw remaining meshes */
+    _drawNode(context, node);
 }
-void CAreaBspTree::_visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const
+
+void CAreaBspTree::_visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                               int subdivOffset, int nextOffset) const
 {
-    
+    /* Subdivide Y */
+    if (node.m_subdivFlags & SUB_Y)
+    {
+        SBoundingBox posY, negY;
+        nodeBox.splitY(posY, negY);
+        int cNextOffset = nextOffset * 2;
+        if (context.viewVec.y > 0.0f)
+        {
+            _visitNodeZ(context, node, posY, subdivOffset + nextOffset, cNextOffset);
+            _visitNodeZ(context, node, negY, subdivOffset, cNextOffset);
+        }
+        else
+        {
+            _visitNodeZ(context, node, negY, subdivOffset, cNextOffset);
+            _visitNodeZ(context, node, posY, subdivOffset + nextOffset, cNextOffset);
+        }
+    }
+    else
+    {
+        _visitNodeZ(context, node, nodeBox, subdivOffset, nextOffset);
+    }
 }
-void CAreaBspTree::_visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const
+
+void CAreaBspTree::_visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                               int subdivOffset, int nextOffset) const
 {
-    
+    /* Subdivide Z */
+    if (node.m_subdivFlags & SUB_Z)
+    {
+        SBoundingBox posZ, negZ;
+        nodeBox.splitZ(posZ, negZ);
+        if (context.viewVec.x > 0.0f)
+        {
+            _visitNodeX(context, *node.m_childNodes[subdivOffset+nextOffset], posZ);
+            _visitNodeX(context, *node.m_childNodes[subdivOffset], negZ);
+        }
+        else
+        {
+            _visitNodeX(context, *node.m_childNodes[subdivOffset], negZ);
+            _visitNodeX(context, *node.m_childNodes[subdivOffset+nextOffset], posZ);
+        }
+    }
+    else
+    {
+        _visitNodeX(context, *node.m_childNodes[subdivOffset], nodeBox);
+    }
 }
 
 void CAreaBspTree::drawArea(CAreaFile& area, bool transparents,
                             CMaterialSet& materialSet, const CTransform& modelXf) const
 {
     CGLViewer* g_viewer = CGLViewer::instance();
+    CFrustum frustum;
+    frustum.updatePlanes(g_viewer->view(), g_viewer->projection());
     CVector3f viewPos = g_viewer->cameraPosition();
     CVector3f viewVec = g_viewer->cameraVector();
+    CWordBitmap staticBitmap, actorBitmap;
     
     SAreaBSPContext ctx =
     {
-        area, transparents, materialSet, viewPos, viewVec, modelXf
+        area, transparents, materialSet, viewPos, viewVec, modelXf, frustum, staticBitmap, actorBitmap
     };
     
     /* Pre-draw (objects behind octree) */
     
     /* Draw (objects within octree) */
-    _visitNodeX(ctx, m_nodes[0], m_boundingBox);
+    const SOctantNodeEntry& rootNode = m_nodes[0];
+    _visitNodeX(ctx, rootNode, m_boundingBox);
     
     
     /* Post-draw (objects in front of octree) */

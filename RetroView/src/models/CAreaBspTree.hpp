@@ -5,6 +5,7 @@
 #include "core/SBoundingBox.hpp"
 #include "core/CWordBitmap.hpp"
 #include "core/CMaterialSet.hpp"
+#include "core/CFrustum.hpp"
 
 class CAreaFile;
 
@@ -13,9 +14,9 @@ class CAreaFile;
 enum EAROTSubdivFlags : atUint16
 {
     SUB_NONE = 0x0,
-    SUB_Z = 0x1,
+    SUB_Z = 0x4,
     SUB_Y = 0x2,
-    SUB_X = 0x4
+    SUB_X = 0x1
 };
 
 struct SOctantNodeEntry
@@ -28,7 +29,6 @@ struct SOctantNodeEntry
     
     CWordBitmap* m_bitmap = NULL;
     SOctantNodeEntry* m_childNodes[CAREABSPTREE_NODE_MAX_CHILDREN];
-    
 };
 
 class CAreaBspTree
@@ -57,11 +57,17 @@ private:
         const CVector3f& viewPos;
         const CVector3f& viewVec;
         const CTransform& modelMatrix;
+        const CFrustum& frustum;
+        CWordBitmap& staticBitmap;
+        CWordBitmap& actorBitmap;
     };
     
+    void _drawNode(const SAreaBSPContext& context, const SOctantNodeEntry& node) const;
     void _visitNodeX(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
-    void _visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
-    void _visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox) const;
+    void _visitNodeY(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                     int subdivOffset, int nextOffset) const;
+    void _visitNodeZ(const SAreaBSPContext& context, const SOctantNodeEntry& node, const SBoundingBox& nodeBox,
+                     int subdivOffset, int nextOffset) const;
 
 };
 
