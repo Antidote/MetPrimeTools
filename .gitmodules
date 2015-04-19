@@ -7,3 +7,18 @@
 [submodule "libSquish"]
 	path = libSquish
 	url = https://github.com/jackoalan/libSquish
+[submodule "libBoo"]
+	path = libBoo
+	url = https://github.com/RetroView/libBoo.git
+[submodule "RetroCommon"]
+	path = RetroCommon
+	url = https://github.com/RetroView/RetroCommon.git
+[submodule "TXTRLoader"]
+	path = TXTRLoader
+	url = https://github.com/RetroView/TXTRLoader.git
+[submodule "MathLib"]
+	path = MathLib
+	url = https://github.com/RetroView/MathLib.git
+[submodule "PakLib"]
+	path = PakLib
+	url = https://github.com/RetroView/PakLib.git

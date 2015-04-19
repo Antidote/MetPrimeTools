@@ -89,7 +89,6 @@ void CVertexBuffer::bind()
 void CVertexBuffer::release()
 {
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 bool CVertexBuffer::isBuffered() const

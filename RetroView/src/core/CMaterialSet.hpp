@@ -14,7 +14,7 @@ public:
     CMaterial& material(const atUint32& index) const;
     std::vector<atUint32> materials();
 
-    void setAmbient(const QColor& amb);
+    void setAmbient(const CColor& amb);
 
     void dumpSources(const CUniqueID& id);
 

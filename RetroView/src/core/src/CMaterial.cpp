@@ -23,6 +23,7 @@ static const GLint TEX_UNIS[] =
 
 CMaterial::CMaterial()
     : m_program(nullptr),
+      m_addColor(CColor(0.f, 0.f, 0.f, 0.0f)),
       m_version(MetroidPrime1),
       m_materialFlags(0),
       m_unknown1_mp2(0),
@@ -97,7 +98,7 @@ void CMaterial::setBlendMode(EBlendMode dst, EBlendMode src)
     m_blendSrcFactor = src;
 }
 
-void CMaterial::setKonstColor(atUint32 id, const QColor& color)
+void CMaterial::setKonstColor(atUint32 id, const CColor& color)
 {
     atUint32 realIndex = id % 4;
     m_konstColor[realIndex] = color;
@@ -106,6 +107,12 @@ void CMaterial::setKonstColor(atUint32 id, const QColor& color)
         m_konstCount = realIndex + 1;
 
     assignKonstColor(realIndex);
+}
+
+void CMaterial::setAddColor(const CColor& color)
+{
+    m_addColor = color;
+    assignAddColor();
 }
 
 bool CMaterial::hasAttribute(atUint32 index) const
@@ -278,7 +285,16 @@ void CMaterial::assignKonstColor(atUint32 id)
 
     id = id % 4;
     const char* name = QString("konst[%1]").arg(id).toStdString().c_str();
-    m_program->setUniformValue(name, m_konstColor[id]);
+    m_program->setUniformValue(name, m_konstColor[id].r, m_konstColor[id].g, m_konstColor[id].b, m_konstColor[id].a);
+}
+
+void CMaterial::assignAddColor()
+{
+    if (!m_isBound)
+        return;
+
+    atUint32 addColorLoc = m_program->uniformLocation("addColor");
+    glUniform4f(addColorLoc, m_addColor.r, m_addColor.g, m_addColor.b, m_addColor.a);
 }
 
 void CMaterial::assignModelMatrix()
@@ -359,7 +375,7 @@ bool CMaterial::isTransparent() const
     return false;
 }
 
-void CMaterial::setAmbient(const QColor& ambient)
+void CMaterial::setAmbient(const CColor& ambient)
 {
     m_ambient = ambient;
 }
@@ -429,7 +445,11 @@ bool CMaterial::bind()
     assignViewMatrix();
     assignProjectionMatrix();
     assignTexturesEnabled();
+    //assignAddColor();
     updateAnimations();
+
+    for (atUint32 i = 0; i < 4; i++)
+        assignKonstColor(i);
 
     atUint32 pass = 0;
     if (m_version != MetroidPrime3 && m_version != DKCR)
@@ -448,7 +468,7 @@ bool CMaterial::bind()
         for (atUint32 i = 0; i < m_konstCount; i++)
             assignKonstColor(i);
 
-        m_program->setUniformValue("ambientLight", m_ambient);
+        m_program->setUniformValue("ambientLight", m_ambient.r, m_ambient.g, m_ambient.b, m_ambient.a);
         if (!(m_materialFlags & 0x80))
             glDepthMask(GL_FALSE);
 

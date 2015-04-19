@@ -9,6 +9,7 @@
 #include <QOpenGLShaderProgram>
 #include <vector>
 #include <QColor>
+#include "core/CColor.hpp"
 #include <MathLib.hpp>
 
 
@@ -58,14 +59,15 @@ public:
 
     void setBlendMode(EBlendMode dst, EBlendMode src);
 
-    void setKonstColor(atUint32 id, const QColor& color);
+    void setKonstColor(atUint32 id, const CColor& color);
 
+    void setAddColor(const CColor& color);
     bool hasPosition() const;
     bool hasNormal() const;
     bool hasColor(atUint8 slot) const;
     bool hasUV(atUint8 slot) const;
     bool isTransparent() const;
-    void setAmbient(const QColor& ambient);
+    void setAmbient(const CColor& ambient);
 
     bool bind();
     void release();
@@ -86,6 +88,7 @@ private:
     QOpenGLShader* buildVertex();
     QOpenGLShader* buildFragment();
     void assignKonstColor(atUint32 id);
+    void assignAddColor();
     void assignModelMatrix();
     void assignViewMatrix();
     void assignProjectionMatrix();
@@ -93,7 +96,8 @@ private:
     void assignTexTransformMatrices(atUint32 i, CTransform& texMtx, CTransform& postMtx);
 
     QOpenGLShaderProgram*          m_program;
-    QColor                         m_ambient;
+    CColor                         m_addColor;
+    CColor                         m_ambient;
     Version                        m_version;
     atUint32                       m_materialFlags;
     atUint32                       m_vertexAttributes;
@@ -101,7 +105,7 @@ private:
     atUint32                       m_unknown2_mp2;
     atUint32                       m_unknown1;
     atUint32                       m_konstCount;
-    QColor                         m_konstColor[4];
+    CColor                         m_konstColor[4];
     EBlendMode                     m_blendDstFactor;
     EBlendMode                     m_blendSrcFactor;
     atUint32                       m_unknown2;

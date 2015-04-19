@@ -179,6 +179,12 @@ void CAreaReader::readSections(CAreaFile* ret)
             m_sectionReader.setData(data, m_sectionSizes[i]);
             ret->m_bspTree.readAROT(m_sectionReader);
         }
+        else if (ret->m_version == CAreaFile::MetroidPrime2 && i == (m_arotSection + 1))
+        {
+            atUint8* data = base::readUBytes(m_sectionSizes[i]);
+            m_sectionReader.setData(data, m_sectionSizes[i]);
+            readAABB(ret, m_sectionReader);
+        }
         else if (i == m_sclySection)
         {
             atUint8* data = base::readUBytes(m_sectionSizes[i]);

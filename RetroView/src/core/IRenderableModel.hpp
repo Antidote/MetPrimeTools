@@ -1,6 +1,7 @@
 #ifndef IRENDERABLE_HPP
 #define IRENDERABLE_HPP
 #include "core/SBoundingBox.hpp"
+#include "core/CColor.hpp"
 
 #include <string>
 #include <Athena/Types.hpp>
@@ -25,10 +26,16 @@ public:
 
     void setAmbient(float r, float g, float b)
     {
-        setAmbient(QColor::fromRgbF(r, g, b));
+        CColor clr = {
+            .r = r,
+            .g = g,
+            .b = b,
+            .a = 1.f
+        };
+        setAmbient(clr);
     }
 
-    void setAmbient(const QColor& color)
+    void setAmbient(const CColor& color)
     {
         m_ambient = color;
     }
@@ -37,7 +44,7 @@ public:
 
 
 protected:
-    QColor m_ambient;
+    CColor m_ambient;
 };
 
 #endif // IRENDERABLE_HPP

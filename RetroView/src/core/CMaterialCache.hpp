@@ -20,11 +20,12 @@ public:
 
 
     void initialize();
+    CMaterial& defaultMaterial();
     static std::shared_ptr<CMaterialCache> instance();
     atUint32 addMaterial(const CMaterial& mat);
     CMaterial& material(atUint32 index);
 
-    void setAmbientOnMaterials(std::vector<atUint32> materials, const QColor& ambient);
+    void setAmbientOnMaterials(std::vector<atUint32> materials, const CColor& ambient);
 
     QOpenGLShader* shaderFromSource(const QString& source, QOpenGLShader::ShaderType type);
 

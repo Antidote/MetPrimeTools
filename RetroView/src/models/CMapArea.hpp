@@ -53,7 +53,7 @@ public:
     ~CMapArea();
 
     void setTransform(const CTransform& transform);
-    void setColor(const QColor& color);
+    void setColor(const CColor& color);
     void draw();
     void drawBoundingBox();
 
@@ -78,7 +78,7 @@ private:
 
     // Internal variables
     atUint32                       m_materialID;
-    QColor                         m_color;
+    CColor                         m_color;
     bool                           m_vboBuilt;
     CTransform                     m_transform;
 };

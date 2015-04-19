@@ -6,9 +6,10 @@
 #include "core/GXCommon.hpp"
 
 CMapArea::CMapArea()
-    : m_color(QColor(128, 128, 128)),
+    : m_color(CColor(.5, .5, .5)),
       m_vboBuilt(false)
 {
+    m_vertices.clear();
 }
 
 CMapArea::~CMapArea()
@@ -20,7 +21,7 @@ void CMapArea::setTransform(const CTransform& transform)
     m_transform = transform;
 }
 
-void CMapArea::setColor(const QColor& color)
+void CMapArea::setColor(const CColor& color)
 {
     m_color = color;
 }
@@ -43,7 +44,7 @@ void CMapArea::draw()
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     for (const SMapAreaDetail& detail : m_details)
     {
@@ -54,20 +55,18 @@ void CMapArea::draw()
         }
     }
 
-    glLineWidth(2.f);
-    mat.setKonstColor(0, m_color.lighter());
+    //mat.setKonstColor(0, m_color);
 
-//    for (const SMapAreaDetail& detail : m_details)
-//    {
-//        for (const SMapBorder& border : detail.borders)
-//        {
-//            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
-//            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-//        }
-//    }
+    for (const SMapAreaDetail& detail : m_details)
+    {
+        for (const SMapBorder& border : detail.borders)
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, border.elementBuffer);
+            glDrawElements(GL_LINE_STRIP, border.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+        }
+    }
 
     mat.release();
-    glLineWidth(1.f);
     glDisableVertexAttribArray(0);
 }
 

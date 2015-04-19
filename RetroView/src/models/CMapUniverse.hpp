@@ -11,7 +11,7 @@ struct SMapWorld final
     CUniqueID    mlvlID;
     CTransform   transform;
     std::vector<CTransform> hexagonTransforms;
-    QColor      color;
+    CColor      color;
 };
 
 class CMapUniverse final : public IResource, public IRenderableModel
