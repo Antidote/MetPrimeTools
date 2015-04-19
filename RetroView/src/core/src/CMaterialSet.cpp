@@ -26,7 +26,7 @@ std::vector<atUint32> CMaterialSet::materials()
     return m_materials;
 }
 
-void CMaterialSet::setAmbient(const QColor& amb)
+void CMaterialSet::setAmbient(const CColor& amb)
 {
     for (atUint32 matId : m_materials)
     {

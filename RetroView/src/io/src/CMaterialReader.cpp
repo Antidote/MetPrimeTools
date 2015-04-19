@@ -89,10 +89,7 @@ CMaterialSet CMaterialReader::read(CMaterial::Version version)
                     {
                         atUint32 tmpKColor = base::readUint32();
                         Athena::utility::BigUint32(tmpKColor);
-                        mat.m_konstColor[i] = QColor::fromRgba(tmpKColor);
-                        int b = mat.m_konstColor[i].red();
-                        mat.m_konstColor[i].setRed(mat.m_konstColor[i].blue());
-                        mat.m_konstColor[i].setBlue(b);
+                        mat.m_konstColor[i].fromRGBA32(tmpKColor);
                     }
                 }
 

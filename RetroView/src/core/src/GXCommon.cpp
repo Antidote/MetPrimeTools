@@ -3,6 +3,8 @@
 #include "core/CModelData.hpp"
 #include "core/CMesh.hpp"
 #include "core/CVertexBuffer.hpp"
+#include "core/CMaterial.hpp"
+#include "core/CMaterialCache.hpp"
 #include "ui/CGLViewer.hpp"
 
 #include <Athena/MemoryReader.hpp>
@@ -11,6 +13,7 @@
 #include <cmath>
 #include <chrono>
 #include <ctime>
+#include <QSettings>
 
 #ifndef M_PI
 #define M_PI    3.14159265358979323846
@@ -52,42 +55,74 @@ void drawOutlinedCube(const CVector3f& position, const CColor& mainColor, const 
     {
         -1.f, -1.f,  1.f,
         -1.f, -1.f, -1.f,
-         1.f, -1.f, -1.f,
-         1.f, -1.f,  1.f,
+        1.f, -1.f, -1.f,
+        1.f, -1.f,  1.f,
         -1.f,  1.f,  1.f,
         -1.f,  1.f, -1.f,
-         1.f,  1.f, -1.f,
-         1.f,  1.f,  1.f
+        1.f,  1.f, -1.f,
+        1.f,  1.f,  1.f,
     };
 
-    static GLuint cubeIndices[6*4] = {
-        4, 5, 1, 0,
-        5, 6, 2, 1,
-        6, 7, 3, 2,
-        7, 4, 0, 3,
-        0, 1, 2, 3,
-        7, 6, 5, 4
+    static GLuint cubeIndices[6*5] = {
+        4, 5, 1, 0, 0xFFFFFFFF,
+        5, 6, 2, 1, 0xFFFFFFFF,
+        6, 7, 3, 2, 0xFFFFFFFF,
+        7, 4, 0, 3, 0xFFFFFFFF,
+        0, 1, 2, 3, 0xFFFFFFFF,
+        7, 6, 5, 4, 0xFFFFFFFF,
     };
+    glEnable(GL_PRIMITIVE_RESTART);
+    glPrimitiveRestartIndex(0xFFFFFFFF);
 
+    CMaterial& mat = CMaterialCache::instance()->defaultMaterial();
+    mat.setProjection(CGLViewer::instance()->projection());
+    mat.setView(CGLViewer::instance()->view());
+    CTransform model;
+    model.m_origin = position;
+    model = model * CTransformFromScaleVector(scale);
+    mat.setModel(model);
+    mat.bind();
     static GLuint bufferObjs[2] = {0, 0};
+    static GLuint vao = 0;
     if (bufferObjs[0] == 0)
     {
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
         glGenBuffers(2, bufferObjs);
         glBindBuffer(GL_ARRAY_BUFFER, bufferObjs[0]);
+        glEnableVertexAttribArray(0);
         glBufferData(GL_ARRAY_BUFFER, sizeof(cubeCoords), cubeCoords, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
     }
 
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, bufferObjs[0]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+    glBindVertexArray(vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
-    glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
+    if (mainColor.a > 0)
+    {
+        mat.setKonstColor(0, mainColor);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
+    }
 
-    glDisableVertexAttribArray(0);
+    if (outlineColor.a > 0)
+    {
+        mat.setKonstColor(0, outlineColor);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
+    }
+    mat.release();
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    if (QSettings().value("wireframe").toBool() && !QSettings().value("drawPoints").toBool())
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else if (QSettings().value("drawPoints").toBool())
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 
@@ -273,41 +308,11 @@ atUint64 assetIdFromPath(const std::string& filepath)
 
 void drawBoundingBox(SBoundingBox bbox)
 {
-#if 0
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
-    glColor3f(255.0f, 0.0f, 0.0f);
-    glBegin(GL_QUADS);
-    {
-        // Back
-        glVertex3f(bbox.min.x, bbox.min.y, bbox.min.z);
-        glVertex3f(bbox.max.x, bbox.min.y, bbox.min.z);
-        glVertex3f(bbox.max.x, bbox.max.y, bbox.min.z);
-        glVertex3f(bbox.min.x, bbox.max.y, bbox.min.z);
-
-        // Front
-        glVertex3f(bbox.min.x, bbox.min.y, bbox.max.z);
-        glVertex3f(bbox.max.x, bbox.min.y, bbox.max.z);
-        glVertex3f(bbox.max.x, bbox.max.y, bbox.max.z);
-        glVertex3f(bbox.min.x, bbox.max.y, bbox.max.z);
-
-        // Right
-        glVertex3f(bbox.max.x, bbox.max.y, bbox.max.z);
-        glVertex3f(bbox.max.x, bbox.min.y, bbox.max.z);
-        glVertex3f(bbox.max.x, bbox.min.y, bbox.min.z);
-        glVertex3f(bbox.max.x, bbox.max.y, bbox.min.z);
-
-        // Left
-        glVertex3f(bbox.min.x, bbox.max.y, bbox.max.z);
-        glVertex3f(bbox.min.x, bbox.min.y, bbox.max.z);
-        glVertex3f(bbox.min.x, bbox.min.y, bbox.min.z);
-        glVertex3f(bbox.min.x, bbox.max.y, bbox.min.z);
-    }
-
-    glEnd();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-#endif
+    CVector3f position = (bbox.m_max + bbox.m_min) *.5f;
+    CVector3f scale = (bbox.m_max - bbox.m_min) * .5f;
+    drawOutlinedCube(position, CColor(0, 0, 0, 0), CColor(1.0f, 0.0f, 0.0f), scale);
+    glEnable(GL_CULL_FACE);
 }
 
 void drawCone(float width, float height, float offset)

@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QTimer>
 #include <QSurfaceFormat>
+#include "core/CColor.hpp"
 
 
 #if __APPLE__
@@ -12,6 +13,9 @@ void osx_init();
 
 int main(int argc, char *argv[])
 {
+    atUint32 test = 0xFFFFFFFe;
+    CColor tmp;
+    tmp.fromRGBA32(test);
     QApplication a(argc, argv);
     a.setAttribute(Qt::AA_DontUseNativeMenuBar);
     // initialize settings info so that default QSettings() access works

@@ -1,10 +1,10 @@
 #include "core/CScriptObject.hpp"
 #include "core/CTemplateManager.hpp"
 #include "core/CResourceManager.hpp"
+#include "core/GXCommon.hpp"
 #include "models/CModelFile.hpp"
 #include "generic/CAnimCharacterSet.hpp"
 #include "ui/CGLViewer.hpp"
-
 CScriptObject::CScriptObject()
     : m_objectInitialized(false),
       m_model(nullptr),
@@ -248,6 +248,16 @@ void CScriptObject::draw()
         m_model->updateViewProjectionUniforms(CGLViewer::instance()->view(), CGLViewer::instance()->projection());
         m_model->draw();
         m_model->restoreDefaults();
+    }
+    else
+    {
+        CVector3f position;
+        CVector3f scale(1);
+        if (m_posProperty)
+            position = m_posProperty->value();
+        if (m_scaleProperty)
+            scale = m_scaleProperty->value();
+        drawOutlinedCube(position, CColor(0.5, 0.5, 0.5, 0.25), CColor(1.f, 1.f, 0.5), scale);
     }
 }
 

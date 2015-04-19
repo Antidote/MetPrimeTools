@@ -28,6 +28,37 @@ void CMaterialCache::initialize()
     std::cout << "Material cache initialized" << std::endl;
 }
 
+CMaterial&CMaterialCache::defaultMaterial()
+{
+    static int matId = -1;
+    if (matId == -1)
+    {
+        CMaterial material;
+        atUint32 materialFlags = 0;
+        materialFlags |= 0x8;
+        materialFlags |= 0x80;
+        material.setMaterialFlags(materialFlags);
+        atUint32 vertexAttributes = 0;
+        vertexAttributes |= 3;
+        material.setVertexAttributes(vertexAttributes);
+        material.setBlendMode(EBlendMode::InvSrcAlpha, EBlendMode::SrcAlpha);
+
+        STEVStage tevStage;
+        tevStage.ColorInFlags = 0xE | (0xF << 5) | (0xF << 10) | (0xF << 15);
+        tevStage.AlphaInFlags = 0x6 | (0x7 << 5) | (0x7 << 10) | (0x7 << 15);
+
+        tevStage.ColorOpFlags = 0;
+        tevStage.AlphaOpFlags = 0;
+        tevStage.KonstColorIn  = 0x0C;
+        tevStage.KonstAlphaIn  = 0x1C;
+
+        material.addTevStage(tevStage, 0);
+        matId = addMaterial(material);
+    }
+
+    return material(matId);
+}
+
 std::shared_ptr<CMaterialCache> CMaterialCache::instance()
 {
     static std::shared_ptr<CMaterialCache> m_instance = std::make_shared<CMaterialCache>();
@@ -52,7 +83,7 @@ CMaterial& CMaterialCache::material(atUint32 index)
     return m_cachedMaterials.at(index);
 }
 
-void CMaterialCache::setAmbientOnMaterials(std::vector<atUint32> materials, const QColor& ambient)
+void CMaterialCache::setAmbientOnMaterials(std::vector<atUint32> materials, const CColor& ambient)
 {
     for (atUint32 mat : materials)
     {

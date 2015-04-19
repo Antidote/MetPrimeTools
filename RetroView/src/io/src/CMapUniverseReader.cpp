@@ -73,10 +73,7 @@ CMapUniverse* CMapUniverseReader::read()
                 world.hexagonTransforms.push_back(CTransform(transformBasis.transposed(), transformOffset));
             }
 
-            world.color.setRedF(base::readFloat());
-            world.color.setGreenF(base::readFloat());
-            world.color.setBlueF(base::readFloat());
-            world.color.setAlphaF(base::readFloat());
+            world.color.readBGRA(*this);
 
             ret->m_worlds.push_back(world);
         }

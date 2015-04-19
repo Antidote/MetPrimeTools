@@ -7,6 +7,7 @@
 CAreaFile::CAreaFile()
     : m_currentSet(0)
 {
+    m_ambient = CColor(0, 0, 0);
 }
 
 CAreaFile::~CAreaFile()
@@ -59,13 +60,6 @@ void CAreaFile::buildBBox()
 
 void CAreaFile::draw()
 {
-
-    if (m_scriptLayers.size() > 0)
-    {
-        if (m_scriptLayers[0]->isSkyEnabled())
-            CGLViewer::instance()->drawSky();
-    }
-
     currentMaterialSet().setAmbient(m_ambient);
     CMaterialSet materialSet = currentMaterialSet();
     CTransform model;
@@ -99,8 +93,8 @@ void CAreaFile::drawBoundingBox()
         for (CMesh& mesh : m.m_meshes)
         {
             CMaterial& mat = currentMaterialSet().material(mesh.m_materialID);
-            if (!mat.isTransparent())
-                continue;
+            //if (!mat.isTransparent())
+            //    continue;
             ::drawBoundingBox(mesh.m_boundingBox);
         }
     }
@@ -164,6 +158,16 @@ void CAreaFile::nearestSpawnPoint(const CVector3f& pos, CVector3f& targetPos, CV
     }
 
     return m_scriptLayers[0]->nearestSpawnPoint(pos, targetPos, rot);
+}
+
+bool CAreaFile::skyEnabled()
+{
+    if (m_scriptLayers.size() > 0)
+    {
+        return m_scriptLayers[0]->isSkyEnabled();
+    }
+
+    return false;
 }
 
 void CAreaFile::drawIbos(bool transparents, CMaterialSet& materialSet, const CTransform& modelXf)

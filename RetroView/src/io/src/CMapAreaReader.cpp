@@ -102,7 +102,7 @@ CMapArea* CMapAreaReader::read()
             }
             else
             {
-                pointOfInterest.unknown4.readBGRA(*this);
+                pointOfInterest.unknown4.readRGBA(*this);
             }
             base::seek(4); // padding;
 

@@ -55,6 +55,7 @@ public:
     void setCurrentMaterialSet(atUint32 set);
 
     void nearestSpawnPoint(const CVector3f& pos, CVector3f& targetPos, CVector3f& rot);
+    bool skyEnabled();
 private:
     friend class CAreaReader;
     friend class CAreaBspTree;

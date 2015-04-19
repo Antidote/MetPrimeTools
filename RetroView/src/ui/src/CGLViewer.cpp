@@ -153,6 +153,10 @@ void CGLViewer::paintGL()
 
     if (m_currentRenderable)
     {
+        CAreaFile* area = dynamic_cast<CAreaFile*>(m_currentRenderable);
+        if (area && area->skyEnabled())
+            drawSky();
+
         m_currentRenderable->updateViewProjectionUniforms(view(), projection());
         bool texturesEnabled = (QSettings().value("enableTextures").toBool() && !QSettings().value("drawPoints").toBool() && !QSettings().value("wireframe").toBool());
         m_currentRenderable->updateTexturesEnabled(texturesEnabled);
@@ -167,9 +171,9 @@ void CGLViewer::paintGL()
         else
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+
         m_currentRenderable->draw();
-    }
-    
+    }    
 }
 
 void CGLViewer::resizeGL(int w, int h)
