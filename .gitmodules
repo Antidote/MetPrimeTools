@@ -16,3 +16,9 @@
 [submodule "TXTRLoader"]
 	path = TXTRLoader
 	url = https://github.com/RetroView/TXTRLoader.git
+[submodule "MathLib"]
+	path = MathLib
+	url = https://github.com/RetroView/MathLib.git
+[submodule "PakLib"]
+	path = PakLib
+	url = https://github.com/RetroView/PakLib.git
