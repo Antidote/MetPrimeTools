@@ -95,6 +95,25 @@ void CGLViewer::paintGL()
             m_camera.processMouseDolly(yoffset);
         else if (m_buttons & Qt::RightButton)
             m_camera.processMouseStrafe(xoffset);
+
+        curPos = mapFromGlobal(curPos);
+        QPoint newPos = curPos;
+        if (curPos.x() <= 4)
+            newPos.setX(size().width() - 4);
+        else if (curPos.x() >= size().width() - 4)
+            newPos.setX(4);
+        if (curPos.y() <= 4)
+            newPos.setY(size().height() - 4);
+        else if (curPos.y() >= size().height() - 4)
+            newPos.setY(4);
+
+
+        if (newPos != curPos)
+        {
+            cursor().setPos(mapToGlobal(newPos));
+            curPos = newPos;
+        }
+        curPos = mapToGlobal(curPos);
     }
     lastPos = curPos;
 

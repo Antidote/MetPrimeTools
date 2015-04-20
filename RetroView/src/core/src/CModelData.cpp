@@ -17,10 +17,13 @@ CModelData::~CModelData()
 atUint32 CModelData::exportUVIdx(atUint32 texOff, SVertexDescriptor desc, CMaterial& mat, CMesh& mesh)
 {
     atUint32 ret;
-    if ((mat.materialFlags() & 0x2000) || (mesh.m_uvSource == 1))
+    if ((mat.materialFlags() & 0x2000))
         ret = desc.texCoord[1] + texOff;
     else
         ret = desc.texCoord[0] + texOff;
+
+    if ((mesh.m_uvSource == 1))
+        ret = 1;
 
     return ret;
 }
@@ -39,11 +42,23 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
     of << std::endl << std::endl;
 
     of << "# texture coordinates" << std::endl;
-    for (CVector3f uv : m_texCoords0)
+    if (m_texCoords0.size() > 0)
     {
-        uv /= 1.f;
-        of << "vt " << uv.x << " " << uv.y << std::endl;
+        for (CVector3f uv : m_texCoords0)
+        {
+            uv /= 1.f;
+            of << "vt " << uv.x << " " << uv.y << std::endl;
+        }
     }
+    else
+    {
+        for (CVector3f uv : m_texCoords1)
+        {
+            uv /= 1.f;
+            of << "vt " << uv.x << " " << uv.y << std::endl;
+        }
+    }
+
     of << std::endl << std::endl;
 
     of << "# vertex normals" << std::endl;
@@ -172,7 +187,7 @@ void CModelData::exportModel(std::ofstream& of, atUint32& vertexOff, atUint32& n
 
     vertexOff += m_vertices.size();
     normalOff += m_normals.size();
-    texOff    += m_texCoords0.size();
+    texOff    += (m_texCoords0.size() > 0 ? m_texCoords0.size() : m_texCoords1.size());
 }
 
 void CModelData::drawIbos(bool transparents, const CMaterialSet& materialSet, const CTransform& model)

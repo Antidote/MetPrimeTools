@@ -63,8 +63,11 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -90,6 +93,9 @@
    <addaction name="menu_Animations"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="windowTitle">
     <string>Main Toolbar</string>
    </property>
@@ -109,13 +115,20 @@
    <addaction name="actionDrawCollision"/>
    <addaction name="actionWireframe"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+  </widget>
   <widget class="QDockWidget" name="infoDockWidget">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="features">
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="windowTitle">
-    <string>Info</string>
+    <string>&amp;Info</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>

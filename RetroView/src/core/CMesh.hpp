@@ -10,6 +10,11 @@
 
 struct SVertexDescriptor
 {
+    SVertexDescriptor()
+    {
+        memset(texCoord, 0, sizeof(texCoord));
+    }
+
     atUint16 position;
     atUint16 normal;
     atUint16 clr[2];
