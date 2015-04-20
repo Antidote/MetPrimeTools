@@ -13,6 +13,9 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="acceptDrops">
    <bool>true</bool>
   </property>
@@ -33,7 +36,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::ClickFocus</enum>
    </property>
    <layout class="QGridLayout" name="gridLayout_4">
     <property name="leftMargin">

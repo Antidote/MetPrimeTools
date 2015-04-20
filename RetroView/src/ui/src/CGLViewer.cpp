@@ -99,13 +99,13 @@ void CGLViewer::paintGL()
         curPos = mapFromGlobal(curPos);
         QPoint newPos = curPos;
         if (curPos.x() <= 4)
-            newPos.setX(size().width() - 4);
+            newPos.setX(size().width() - 5);
         else if (curPos.x() >= size().width() - 4)
-            newPos.setX(4);
+            newPos.setX(5);
         if (curPos.y() <= 4)
             newPos.setY(size().height() - 4);
-        else if (curPos.y() >= size().height() - 4)
-            newPos.setY(4);
+        else if (curPos.y() >= size().height() - 5)
+            newPos.setY(5);
 
 
         if (newPos != curPos)
