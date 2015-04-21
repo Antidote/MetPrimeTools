@@ -53,24 +53,46 @@ void drawOutlinedCube(const CVector3f& position, const CColor& mainColor, const 
 {
     static float cubeCoords[] =
     {
+         1.f, -1.f, -1.f,
+         1.f, -1.f,  1.f,
         -1.f, -1.f,  1.f,
         -1.f, -1.f, -1.f,
-        1.f, -1.f, -1.f,
-        1.f, -1.f,  1.f,
+         1.f,  1.f, -1.f,
+         1.f,  1.f,  1.f,
         -1.f,  1.f,  1.f,
-        -1.f,  1.f, -1.f,
-        1.f,  1.f, -1.f,
-        1.f,  1.f,  1.f,
+        -1.f,  1.f, -1.f
     };
 
-    static GLuint cubeIndices[6*5] = {
-        4, 5, 1, 0, 0xFFFFFFFF,
-        5, 6, 2, 1, 0xFFFFFFFF,
-        6, 7, 3, 2, 0xFFFFFFFF,
-        7, 4, 0, 3, 0xFFFFFFFF,
-        0, 1, 2, 3, 0xFFFFFFFF,
-        7, 6, 5, 4, 0xFFFFFFFF,
+    static GLuint cubeIndices[] = {
+         1, 2, 3, 0xFFFFFFFF,
+         7, 6, 5, 0xFFFFFFFF,
+         4, 5, 1, 0xFFFFFFFF,
+         5, 6, 2, 0xFFFFFFFF,
+         2, 6, 7, 0xFFFFFFFF,
+         0, 3, 7, 0xFFFFFFFF,
+         0, 1, 3, 0xFFFFFFFF,
+         4, 7, 5, 0xFFFFFFFF,
+         0, 4, 1, 0xFFFFFFFF,
+         1, 5, 2, 0xFFFFFFFF,
+         3, 2, 7, 0xFFFFFFFF,
+         4, 0, 7, 0xFFFFFFFF
     };
+
+    static GLuint borderIndices[] = {
+         1, 0, 0xFFFFFFFF,
+         2, 1, 0xFFFFFFFF,
+         3, 2, 0xFFFFFFFF,
+         0, 3, 0xFFFFFFFF,
+         7, 4, 0xFFFFFFFF,
+         6, 7, 0xFFFFFFFF,
+         5, 6, 0xFFFFFFFF,
+         4, 5, 0xFFFFFFFF,
+         4, 0, 0xFFFFFFFF,
+         1, 5, 0xFFFFFFFF,
+         2, 6, 0xFFFFFFFF,
+         3, 7, 0xFFFFFFFF
+    };
+
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(0xFFFFFFFF);
 
@@ -82,13 +104,13 @@ void drawOutlinedCube(const CVector3f& position, const CColor& mainColor, const 
     model = model * CTransformFromScaleVector(scale);
     mat.setModel(model);
     mat.bind();
-    static GLuint bufferObjs[2] = {0, 0};
+    static GLuint bufferObjs[3] = {0, 0, 0};
     static GLuint vao = 0;
     if (bufferObjs[0] == 0)
     {
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
-        glGenBuffers(2, bufferObjs);
+        glGenBuffers(3, bufferObjs);
         glBindBuffer(GL_ARRAY_BUFFER, bufferObjs[0]);
         glEnableVertexAttribArray(0);
         glBufferData(GL_ARRAY_BUFFER, sizeof(cubeCoords), cubeCoords, GL_STATIC_DRAW);
@@ -96,33 +118,29 @@ void drawOutlinedCube(const CVector3f& position, const CColor& mainColor, const 
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[2]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(borderIndices), borderIndices, GL_STATIC_DRAW);
     }
 
     glBindVertexArray(vao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
     if (mainColor.a > 0)
     {
         mat.setKonstColor(0, mainColor);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[1]);
+        glDrawElements(GL_TRIANGLE_STRIP, (sizeof(cubeIndices) / sizeof(GLuint)), GL_UNSIGNED_INT, (void*)0);
     }
 
     if (outlineColor.a > 0)
     {
         mat.setKonstColor(0, outlineColor);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glDrawElements(GL_QUADS, sizeof(cubeIndices), GL_UNSIGNED_INT, (void*)0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObjs[2]);
+        glDrawElements(GL_LINE_STRIP, (sizeof(borderIndices) / sizeof(GLuint)), GL_UNSIGNED_INT, (void*)0);
     }
+
     mat.release();
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    if (QSettings().value("wireframe").toBool() && !QSettings().value("drawPoints").toBool())
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    else if (QSettings().value("drawPoints").toBool())
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    else
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 
@@ -306,12 +324,12 @@ atUint64 assetIdFromPath(const std::string& filepath)
     return (atUint64)(-1);
 }
 
-void drawBoundingBox(SBoundingBox bbox)
+void drawBoundingBox(SBoundingBox bbox, const CColor& borderColor)
 {
     glDisable(GL_CULL_FACE);
     CVector3f position = (bbox.m_max + bbox.m_min) *.5f;
     CVector3f scale = (bbox.m_max - bbox.m_min) * .5f;
-    drawOutlinedCube(position, CColor(0, 0, 0, 0), CColor(1.0f, 0.0f, 0.0f), scale);
+    drawOutlinedCube(position, CColor(0, 0, 0, 0), borderColor, scale);
     glEnable(GL_CULL_FACE);
 }
 
@@ -439,7 +457,8 @@ void readPrimitives(CMesh& mesh, CModelData& model, const CMaterial& material, A
                 for (atUint32 iColor = 0; iColor < 2; ++iColor)
                 {
                     readBytes += readAttribute(pFaces[v].clr[iColor], attributes, iColor + 2, reader);
-                    vertex.color[iColor] = model.m_colors[pFaces[v].clr[iColor]];
+                    if (material.hasColor(iColor))
+                        vertex.color[iColor] = model.m_colors[pFaces[v].clr[iColor]];
                 }
 
                 for (atUint32 iUV = 0; iUV < 8; ++iUV)

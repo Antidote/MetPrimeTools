@@ -29,7 +29,8 @@ CGLViewer::CGLViewer(QWidget* parent)
       m_camera(CVector3f(0.0f, 10.0f, 3.0f)),
       m_buttons(Qt::NoButton),
       m_isInitialized(false),
-      m_skyVisible(false)
+      m_skyVisible(false),
+      m_isFlyMode(false)
 {
     QOpenGLWidget::setMouseTracking(true);
     m_instance = this;
@@ -80,42 +81,6 @@ void CGLViewer::paintGL()
     m_currentTime = 1.f * hiresTimeMS();
     m_deltaTime = m_currentTime - m_lastTime;
     m_lastTime = m_currentTime;
-    m_buttons = qApp->mouseButtons();
-    static QPoint lastPos = QCursor::pos();
-    QPoint curPos = QCursor::pos();
-    if (m_buttons != Qt::NoButton && this->hasFocus())
-    {
-        float xoffset = curPos.x() - lastPos.x();
-        float yoffset = lastPos.y() - curPos.y();
-
-
-        if (m_buttons & Qt::LeftButton)
-            m_camera.processMouseMovement(xoffset, yoffset);
-        else if (m_buttons & Qt::MiddleButton)
-            m_camera.processMouseDolly(yoffset);
-        else if (m_buttons & Qt::RightButton)
-            m_camera.processMouseStrafe(xoffset);
-
-        curPos = mapFromGlobal(curPos);
-        QPoint newPos = curPos;
-        if (curPos.x() <= 4)
-            newPos.setX(size().width() - 5);
-        else if (curPos.x() >= size().width() - 4)
-            newPos.setX(5);
-        if (curPos.y() <= 4)
-            newPos.setY(size().height() - 4);
-        else if (curPos.y() >= size().height() - 5)
-            newPos.setY(5);
-
-
-        if (newPos != curPos)
-        {
-            cursor().setPos(mapToGlobal(newPos));
-            curPos = newPos;
-        }
-        curPos = mapToGlobal(curPos);
-    }
-    lastPos = curPos;
 
     updateCamera(m_deltaTime);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -169,6 +134,7 @@ void CGLViewer::paintGL()
 #endif
 
     //drawSky();
+    //drawOutlinedCube(CVector3f(), CColor(), CColor());
 
     if (m_currentRenderable)
     {
@@ -259,6 +225,66 @@ void CGLViewer::updateCamera(float delta)
         m_camera.processKeyboard(CCamera::UP, delta);
     if (km->isKeyPressed(Qt::Key_E))
         m_camera.processKeyboard(CCamera::DOWN, delta);
+    if (km->isKeyPressed(Qt::Key_Shift))
+    {
+        if (km->isKeyPressed(Qt::Key_F))
+        {
+            m_isFlyMode = true;
+            qApp->setOverrideCursor(Qt::BlankCursor);
+        }
+    }
+    if (km->isKeyPressed(Qt::Key_Escape))
+    {
+        m_isFlyMode = false;
+    }
+
+    if (!m_isFlyMode)
+        qApp->setOverrideCursor(Qt::ArrowCursor);
+
+    m_buttons = qApp->mouseButtons();
+    static QPoint lastPos = QCursor::pos();
+    QPoint curPos = QCursor::pos();
+
+    if ((m_buttons != Qt::NoButton && this->hasFocus()) || m_isFlyMode)
+    {
+        float xoffset = curPos.x() - lastPos.x();
+        float yoffset = lastPos.y() - curPos.y();
+
+
+        if (m_buttons & Qt::LeftButton || m_isFlyMode)
+            m_camera.processMouseMovement(xoffset, yoffset);
+        else if (m_buttons & Qt::MiddleButton)
+            m_camera.processMouseDolly(yoffset);
+        else if (m_buttons & Qt::RightButton)
+            m_camera.processMouseStrafe(xoffset);
+
+        curPos = mapFromGlobal(curPos);
+        QPoint newPos = curPos;
+        if (curPos.x() <= 4)
+            newPos.setX(size().width() - 5);
+        else if (curPos.x() >= size().width() - 4)
+            newPos.setX(5);
+        if (curPos.y() <= 4)
+            newPos.setY(size().height() - 4);
+        else if (curPos.y() >= size().height() - 5)
+            newPos.setY(5);
+
+        if (newPos != curPos)
+        {
+            cursor().setPos(mapToGlobal(newPos));
+            curPos = newPos;
+        }
+        curPos = mapToGlobal(curPos);
+    }
+
+    if (m_buttons != Qt::NoButton && m_isFlyMode)
+    {
+        curPos = mapToGlobal(QPoint(width()/2, height()/2));
+        cursor().setPos(curPos);
+        m_isFlyMode = false;
+    }
+
+    lastPos = curPos;
 }
 
 CProjection CGLViewer::projection()

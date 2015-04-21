@@ -12,7 +12,7 @@ void drawWireSphere(float radius, atUint32 longs, atUint32 lats);
 void drawSolidSphere(double radius, atUint32 slices, atUint32 stacks);
 void drawOutlinedCube(const CVector3f& position, const CColor& mainColor, const CColor& outlineColor, const CVector3f& scale = CVector3f(1.0f));
 void drawTexturedCube(atUint32 texture, const CVector3f& position, float alpha, const CVector3f& scale = CVector3f(1.0f));
-void drawBoundingBox(SBoundingBox bbox);
+void drawBoundingBox(SBoundingBox bbox, const CColor& borderColor = CColor(1.0, 0.0, 0.0));
 void GXSetBlendMode(EBlendMode src, EBlendMode dst);
 void drawCone(float width, float height, float offset);
 void drawAxis(const CVector3f& translation, const CVector3f& orientation, float scale, bool disableDepth = true);

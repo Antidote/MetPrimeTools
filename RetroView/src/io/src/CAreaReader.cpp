@@ -475,8 +475,8 @@ void CAreaReader::readMesh(CModelData& model, CAreaFile* ret, Athena::io::Memory
 
         if (ret->m_version == CAreaFile::MetroidPrime2)
         {
-            in.readUint16();
-            in.readUint16();
+            std::cout << std::dec << "MP2 Surface unk1: " << in.readUint16() << std::endl;
+            std::cout << std::dec << "MP2 Surface unk2: " << in.readUint16() << std::endl;
         }
 
         if (extraDataSize > 0)

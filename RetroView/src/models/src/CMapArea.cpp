@@ -31,7 +31,8 @@ void CMapArea::draw()
     if (!m_vboBuilt)
         buildVbo();
 
-    glPrimitiveRestartIndex((atUint16)0xFFFF);
+    glDisable(GL_PRIMITIVE_RESTART);
+    //glPrimitiveRestartIndex((atUint16)0xFFFF);
 
     CMaterial& mat = CMaterialCache::instance()->material(m_materialID);
     if (!mat.bind())

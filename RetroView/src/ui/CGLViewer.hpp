@@ -76,6 +76,7 @@ private:
     Qt::MouseButtons                 m_buttons;
     bool                             m_isInitialized;
     bool                             m_skyVisible;
+    bool                             m_isFlyMode;
     float                            m_lastTime;
     float                            m_currentTime;
     float                            m_deltaTime;

@@ -181,7 +181,7 @@ CMapArea* CMapAreaReader::read()
 
                 if (type != 0)
                 {
-                    primitive.indices.push_back(0xFFFF);
+                    //primitive.indices.push_back(0xFFFF);
                     detail.primitives.push_back(primitive);
                 }
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
@@ -200,7 +200,7 @@ CMapArea* CMapAreaReader::read()
                     border.indices.push_back(idx);
                 }
 
-                border.indices.push_back(0xFFFF);
+                //border.indices.push_back(0xFFFF);
                 detail.borders.push_back(border);
                 base::seek((base::position() + 3) & ~3, Athena::SeekOrigin::Begin);
             }

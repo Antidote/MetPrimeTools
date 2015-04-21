@@ -68,6 +68,7 @@ void CAreaFile::draw()
     else
         m_bspTree.drawArea(*this, false, materialSet, model);
 
+
     for (CScene* scene : m_scriptLayers)
     {
         for (CScriptObject obj : scene->m_objects)
@@ -82,15 +83,17 @@ void CAreaFile::draw()
     if (m_version != MetroidPrime1)
         drawIbos(true, materialSet, model);
     else
-    m_bspTree.drawArea(*this, true, materialSet, model);
+        m_bspTree.drawArea(*this, true, materialSet, model);
 }
 
 void CAreaFile::drawBoundingBox()
 {
-    /*for (const SAABB& aabb : m_aabbs)
+#if 0
+    for (const SAABB& aabb : m_aabbs)
     {
-        ::drawBoundingBox(aabb.aabb);
-    }*/
+        ::drawBoundingBox(aabb.aabb, CColor(0.0, 0.0, 1.0));
+    }
+#endif
 
     ::drawBoundingBox(m_boundingBox);
     for (CModelData& m : m_models)
