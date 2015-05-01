@@ -5,7 +5,6 @@
 #include "core/IRenderableModel.hpp"
 #include "core/GXTypes.hpp"
 #include "core/CMaterial.hpp"
-#include "core/CColor.hpp"
 
 struct SPointOfInterest
 {

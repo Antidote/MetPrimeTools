@@ -1,7 +1,6 @@
 #ifndef IRENDERABLE_HPP
 #define IRENDERABLE_HPP
 #include "core/SBoundingBox.hpp"
-#include "core/CColor.hpp"
 
 #include <string>
 #include <Athena/Types.hpp>
@@ -26,12 +25,7 @@ public:
 
     void setAmbient(float r, float g, float b)
     {
-        CColor clr = {
-            .r = r,
-            .g = g,
-            .b = b,
-            .a = 1.f
-        };
+        CColor clr = {r, g, b, 1.f};
         setAmbient(clr);
     }
 

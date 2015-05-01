@@ -32,6 +32,15 @@ CScriptObject* CScene::objectByTypeName(const std::string& name)
     return nullptr;
 }
 
+CScriptObject* CScene::objectByID(const CUniqueID& id)
+{
+    for (CScriptObject& obj : m_objects)
+        if (obj.id() == id)
+            return &obj;
+
+    return nullptr;
+}
+
 void CScene::nearestSpawnPoint(const CVector3f& pos, CVector3f& targetPos, CVector3f& rot) const
 {
     float minDist = FLT_MAX;
@@ -41,6 +50,13 @@ void CScene::nearestSpawnPoint(const CVector3f& pos, CVector3f& targetPos, CVect
     {
         if (obj.typeName() != "SpawnPoint")
             continue;
+
+        if (obj.isActive() && obj.isDefaultSpawn())
+        {
+            nearestPos = obj.position();
+            rot = obj.rotation();
+            break;
+        }
 
         CVector3f tmp = obj.position() - pos;
         float sqrDist = tmp.lengthSquared();

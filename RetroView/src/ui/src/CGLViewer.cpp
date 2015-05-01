@@ -238,8 +238,8 @@ void CGLViewer::updateCamera(float delta)
         m_isFlyMode = false;
     }
 
-    if (!m_isFlyMode)
-        qApp->setOverrideCursor(Qt::ArrowCursor);
+    if (!m_isFlyMode && qApp->overrideCursor() != nullptr)
+        qApp->restoreOverrideCursor();
 
     m_buttons = qApp->mouseButtons();
     static QPoint lastPos = QCursor::pos();

@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QTimer>
 #include <QSurfaceFormat>
-#include "core/CColor.hpp"
+#include <cpuid.h>
 
 
 #if __APPLE__
@@ -13,16 +13,24 @@ void osx_init();
 
 int main(int argc, char *argv[])
 {
-    atUint32 test = 0xFFFFFFFe;
-    CColor tmp;
-    tmp.fromRGBA32(test);
+
+    unsigned int eax, ebx, ecx, edx;
+    __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+#if __SSE4_1__
+    if (!(ecx & bit_SSE41))
+    {
+        std::cout << "Your system does not support SSE4.1" << std::endl;
+        std::cout << "this version of RetroView cannot continue" << std::endl;
+        return -1;
+    }
+#endif
     QApplication a(argc, argv);
     a.setAttribute(Qt::AA_DontUseNativeMenuBar);
     // initialize settings info so that default QSettings() access works
     a.setWindowIcon(QIcon(":/icons/64x64/apps/retroview.png"));
     a.setOrganizationName("MetPrimeTools");
     a.setApplicationName("RetroView");
-    
+
 #if __APPLE__
     osx_init();
 #endif
@@ -36,7 +44,6 @@ int main(int argc, char *argv[])
 #else
     fmt.setProfile(QSurfaceFormat::CoreProfile);
 #endif
-
     fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     QSurfaceFormat::setDefaultFormat(fmt);
 

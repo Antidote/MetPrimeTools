@@ -2,9 +2,11 @@
 #include "core/CTemplateManager.hpp"
 #include "core/CResourceManager.hpp"
 #include "core/GXCommon.hpp"
+#include "core/CScene.hpp"
 #include "models/CModelFile.hpp"
 #include "generic/CAnimCharacterSet.hpp"
 #include "ui/CGLViewer.hpp"
+
 CScriptObject::CScriptObject()
     : m_objectInitialized(false),
       m_model(nullptr),
@@ -183,6 +185,11 @@ bool CScriptObject::skyEnabled()
     return false;
 }
 
+void CScriptObject::setOffsetRotation(const CVector3f& offset)
+{
+    m_offsetRotation = offset;
+}
+
 std::string CScriptObject::typeName() const
 {
     return m_rootProperty->name();
@@ -190,10 +197,27 @@ std::string CScriptObject::typeName() const
 
 void CScriptObject::draw()
 {
-    if (!m_rootProperty)
+    if (!m_rootProperty || isAreaAttributes())
         return;
 
-    if (m_model == nullptr && !m_objectInitialized)
+    if (m_rootProperty->name() == "ActorRotate")
+    {
+        CVector3Property* rotProp = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
+        if (!rotProp)
+            return;
+        CFloatProperty* timeScaleProp = dynamic_cast<CFloatProperty*>(m_rootProperty->propertyByName("Time Scale"));
+        if (!timeScaleProp)
+            return;
+        float time = secondsMod900();
+        for (SConnectedObject conObj : m_connectedObjects)
+        {
+            CScriptObject* obj = m_parent->objectByID(conObj.target);
+            if (obj)
+                obj->setOffsetRotation(rotProp->value() * (time / timeScaleProp->value()));
+        }
+        return;
+    }
+    else if (m_model == nullptr && !m_objectInitialized)
     {
         CAssetProperty* characterSetProp   = dynamic_cast<CAssetProperty*>(m_rootProperty->propertyByName("AnimationParameters::AnimSet"));
         if (!characterSetProp)
@@ -242,13 +266,14 @@ void CScriptObject::draw()
         if (m_posProperty)
             m_model->setPosition(m_posProperty->value());
         if (m_rotProperty)
-            m_model->setRotation(m_rotProperty->value());
+            m_model->setRotation(m_rotProperty->value() + m_offsetRotation);
         if (m_scaleProperty)
             m_model->setScale(m_scaleProperty->value());
         m_model->updateViewProjectionUniforms(CGLViewer::instance()->view(), CGLViewer::instance()->projection());
         m_model->draw();
         m_model->restoreDefaults();
     }
+    /*
     else
     {
         CVector3f position;
@@ -258,7 +283,25 @@ void CScriptObject::draw()
         if (m_scaleProperty)
             scale = m_scaleProperty->value();
         drawOutlinedCube(position, CColor(0.5, 0.5, 0.5, 0.25), CColor(1.f, 1.f, 0.5), scale);
-    }
+    }*/
+}
+
+bool CScriptObject::isActive()
+{
+    CBoolProperty* property = dynamic_cast<CBoolProperty*>(m_rootProperty->propertyByName("Active"));
+    if (property)
+        return property->value();
+
+    return true;
+}
+
+bool CScriptObject::isDefaultSpawn()
+{
+    CBoolProperty* property = dynamic_cast<CBoolProperty*>(m_rootProperty->propertyByName("Default Spawn"));
+    if (property)
+        return property->value();
+
+    return false;
 }
 
 CVector3f CScriptObject::position()
@@ -274,5 +317,10 @@ CVector3f CScriptObject::rotation()
     if (!m_rotProperty)
         m_rotProperty = dynamic_cast<CVector3Property*>(m_rootProperty->propertyByName("Rotation"));
     return m_rotProperty->value();
+}
+
+CUniqueID CScriptObject::id() const
+{
+    return m_id;
 }
 

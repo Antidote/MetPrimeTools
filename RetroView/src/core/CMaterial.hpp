@@ -9,7 +9,6 @@
 #include <QOpenGLShaderProgram>
 #include <vector>
 #include <QColor>
-#include "core/CColor.hpp"
 #include <MathLib.hpp>
 
 

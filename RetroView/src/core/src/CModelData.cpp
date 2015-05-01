@@ -22,7 +22,7 @@ atUint32 CModelData::exportUVIdx(atUint32 texOff, SVertexDescriptor desc, CMater
     else
         ret = desc.texCoord[0] + texOff;
 
-    if ((mesh.m_uvSource == 1))
+    if (mesh.m_uvSource == 1)
         ret = 1;
 
     return ret;

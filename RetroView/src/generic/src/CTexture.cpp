@@ -26,6 +26,7 @@ IResource* CTexture::loadByData(const atUint8* data, atUint64 length)
         TextureReader reader(data, length);
         tex = reader.read();
         ret = new CTexture(tex);
+        tex->exportPNG("test.png");
     }
     catch(...)
     {

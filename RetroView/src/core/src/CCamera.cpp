@@ -179,12 +179,7 @@ float CCamera::movementSpeed() const
 
 void CCamera::changeSpeed(float delta)
 {
-    m_movementSpeed += 0.045f * delta;
-
-    if (m_movementSpeed > 1.0f)
-        m_movementSpeed = 1.0f;
-    if (m_movementSpeed < 0.0075f)
-        m_movementSpeed = 0.0075f;
+    setMovementSpeed(0.045f * delta);
 }
 
 void CCamera::updateCameraVectors()

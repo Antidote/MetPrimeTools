@@ -16,6 +16,7 @@ public:
     bool isSkyEnabled();
 
     CScriptObject* objectByTypeName(const std::string& name);
+    CScriptObject* objectByID(const CUniqueID& id);
 
     void nearestSpawnPoint(const CVector3f& pos, CVector3f& targetPos, CVector3f& rot) const;
 

@@ -8,20 +8,17 @@ QT       += core gui xml opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #DEFINES += GLEW_STATIC
-#QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE += -Os
-QMAKE_CXXFLAGS += -std=c++11
 
-#QMAKE_CXXFLAGS += -std=c++11 -fopenmp
 mac:QMAKE_LFLAGS += -stdlib=libc++
-#QMAKE_LFLAGS += -fopenmp
 
 # SIMD flags
 gcc:QMAKE_CXXFLAGS += -msse -msse2 -msse3
 msvc:QMAKE_CXXFLAGS += /arch:SSE2
 win32:DEFINES -= WIN64
 
-unix:{
+unix:!macx:{
     CONFIG += link_pkgconfig
     #LIBS += -ltinyxml
 }
@@ -51,7 +48,7 @@ include(../External/libpng/png.pri)
 !mac:include(../External/glew/glew.pri)
 
 TARGET    = retroview
-CONFIG   += console
+CONFIG   += console c++11
 CONFIG   += app_bundle
 
 TEMPLATE = app
@@ -123,7 +120,6 @@ HEADERS += \
     src/core/CScene.hpp \
     src/core/GXCommon.hpp \
     src/core/GXTypes.hpp \
-    src/core/CColor.hpp \
     src/core/IRenderableModel.hpp \
     src/core/IResource.hpp \
     src/core/SBoundingBox.hpp \

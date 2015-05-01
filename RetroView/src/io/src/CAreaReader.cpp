@@ -565,7 +565,10 @@ CScene* CAreaReader::readObjectLayer(Athena::io::MemoryReader& in, EScriptVersio
     CScene* ret = new CScene;
     ret->m_objects.resize(objectCount);
     for (atUint32 i =0; i < objectCount; i++)
+    {
         ret->m_objects[i] = CScriptObject(in, version);
+        ret->m_objects[i].m_parent = ret;
+    }
 
     return ret;
 }
