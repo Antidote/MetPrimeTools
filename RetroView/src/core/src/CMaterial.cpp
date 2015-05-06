@@ -303,7 +303,7 @@ void CMaterial::assignModelMatrix()
         return;
 
     atUint32 modelLoc = m_program->uniformLocation("model");
-    TMatrix4f modelMatrix;
+    CMatrix4f modelMatrix;
     m_model.toMatrix4f(modelMatrix);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, modelMatrix.m[0]);
 }
@@ -314,7 +314,7 @@ void CMaterial::assignViewMatrix()
         return;
 
     atUint32 viewLoc = m_program->uniformLocation("view");
-    TMatrix4f viewMatrix;
+    CMatrix4f viewMatrix;
     m_view.toMatrix4f(viewMatrix);
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, viewMatrix.m[0]);
 }
@@ -413,7 +413,7 @@ bool CMaterial::bind()
         {
             std::string texMtxName = QString("texMtx[%1]").arg(i).toStdString();
             atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
-            TMatrix4f texMatrix;
+            CMatrix4f texMatrix;
             g_texMtx[i].toMatrix4f(texMatrix);
             glUniformMatrix4fv(texMtxLoc, 1, GL_FALSE, texMatrix.m[0]);
         }
@@ -422,7 +422,7 @@ bool CMaterial::bind()
         {
             std::string postMtxName = QString("postMtx[%1]").arg(i).toStdString();
             atUint32 postMtxLoc = m_program->uniformLocation(postMtxName.c_str());
-            TMatrix4f postMatrix;
+            CMatrix4f postMatrix;
             g_postMtx[i].toMatrix4f(postMatrix);
             glUniformMatrix4fv(postMtxLoc, 1, GL_FALSE, postMatrix.m[0]);
         }
@@ -549,7 +549,7 @@ QString CMaterial::vertexSource() const
 
 void CMaterial::assignTexTransformMatrices(atUint32 pass, CTransform& texMtx, CTransform& postMtx)
 {
-    TMatrix4f mtx4;
+    CMatrix4f mtx4;
     std::string texMtxName = QString("texMtx[%1]").arg(pass).toStdString();
     atUint32 texMtxLoc = m_program->uniformLocation(texMtxName.c_str());
     texMtx.toMatrix4f(mtx4);

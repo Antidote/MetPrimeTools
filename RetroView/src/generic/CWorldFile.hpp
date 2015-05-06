@@ -2,8 +2,9 @@
 #define CWORLDFILE_HPP
 
 #include "core/IResource.hpp"
-#include "core/SBoundingBox.hpp"
 #include "generic/CDependencyGroup.hpp"
+
+#include <MathLib.hpp>
 
 struct SMemoryRelay
 {

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "core/CPASDatabase.hpp"
-#include "core/SBoundingBox.hpp"
+#include <MathLib.hpp>
 
 struct SAction
 {

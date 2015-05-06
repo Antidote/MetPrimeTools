@@ -2,8 +2,8 @@
 #define GLVIEWER_HPP
 #include "core/CCamera.hpp"
 #include "core/CKeyboardManager.hpp"
-#include "core/SBoundingBox.hpp"
 
+#include <MathLib.hpp>
 #include <Athena/Global.hpp>
 #include <QOpenGLWidget>
 #include <QTime>

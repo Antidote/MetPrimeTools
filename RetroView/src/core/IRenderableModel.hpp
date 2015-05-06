@@ -1,6 +1,5 @@
 #ifndef IRENDERABLE_HPP
 #define IRENDERABLE_HPP
-#include "core/SBoundingBox.hpp"
 
 #include <string>
 #include <Athena/Types.hpp>

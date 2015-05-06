@@ -4,9 +4,9 @@
 #include "CMaterialSet.hpp"
 #include "CMesh.hpp"
 #include "core/CIndexBuffer.hpp"
-#include "core/SBoundingBox.hpp"
 #include "core/SVertex.hpp"
 
+#include <MathLib.hpp>
 #include <vector>
 #include <fstream>
 #include <unordered_map>

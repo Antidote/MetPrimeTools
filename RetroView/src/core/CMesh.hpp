@@ -1,12 +1,13 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include <Athena/Types.hpp>
-#include <vector>
-#include "SBoundingBox.hpp"
 #include "GXTypes.hpp"
 #include "core/CVertexBuffer.hpp"
 #include "core/CIndexBuffer.hpp"
+
+#include <Athena/Types.hpp>
+#include <vector>
+#include <MathLib.hpp>
 
 struct SVertexDescriptor
 {

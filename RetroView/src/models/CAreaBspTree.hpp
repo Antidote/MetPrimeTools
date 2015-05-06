@@ -2,10 +2,9 @@
 #define CAREABSPTREE_HPP
 
 #include <Athena/Types.hpp>
-#include "core/SBoundingBox.hpp"
 #include "core/CWordBitmap.hpp"
 #include "core/CMaterialSet.hpp"
-#include "core/CFrustum.hpp"
+#include <MathLib.hpp>
 
 class CAreaFile;
 
