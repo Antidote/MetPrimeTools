@@ -137,11 +137,12 @@ bool CResourceManager::canLoad( const std::string& filename)
 
 void CResourceManager::removePak(CPakFile* pak, const std::string& basepath)
 {
+    std::string tmpPath = basepath;
 #if _WIN32
-    Athena::utility::tolower(basepath);
+    Athena::utility::tolower(tmpPath);
 #endif
 
-    std::vector<CPakFile*>& basePathPaks = m_pakFiles[basepath];
+    std::vector<CPakFile*>& basePathPaks = m_pakFiles[tmpPath];
     auto it = std::find(basePathPaks.begin(), basePathPaks.end(), pak);
     if (it == basePathPaks.end())
         return;
@@ -161,7 +162,7 @@ void CResourceManager::removePak(CPakFile* pak, const std::string& basepath)
     delete tmp;
 
     if (basePathPaks.size() == 0)
-        m_pakFiles.erase(m_pakFiles.find(basepath));
+        m_pakFiles.erase(m_pakFiles.find(tmpPath));
 
     if (clearCache)
         clear();

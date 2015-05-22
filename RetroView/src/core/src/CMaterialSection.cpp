@@ -73,7 +73,11 @@ QStringList SPASSCommand::fragmentSource(atUint32 idx)
     if (subCommand == EMaterialCommand::TRAN)
     {
         output << "// TRAN";
-        output << QString("prev = vec4(prev.rgb, 1.0 - texture(texs[%1], texCoord%1.st).r);").arg(idx);
+        if (unknown1 & 0x10)
+            output << QString("prev = vec4(prev.rgb, 1.0 - texture(texs[%1], texCoord%1.st).r);").arg(idx);
+        else
+            output << QString("prev = vec4(prev.rgb, texture(texs[%1], texCoord%1.st).r);").arg(idx);
+
         output << QString("if (punchThrough > 0.5 && prev.a <= .25) discard;");
     }
     else if (subCommand == EMaterialCommand::INCA)

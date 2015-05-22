@@ -122,7 +122,6 @@ HEADERS += \
     src/core/GXTypes.hpp \
     src/core/IRenderableModel.hpp \
     src/core/IResource.hpp \
-    src/core/SBoundingBox.hpp \
     src/core/STEVStage.hpp \
     src/core/CWordBitmap.hpp \
     src/core/CVertexBuffer.hpp \
