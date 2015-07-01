@@ -28,11 +28,11 @@ CMapArea* CMapAreaReader::read()
     {
         atUint32 magic = base::readUint32();
         if (magic != 0xDEADD00D)
-            THROW_INVALID_DATA_EXCEPTION("Not a valid MAPA file got 0x%.8X", magic);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Not a valid MAPA file got 0x%.8X", magic);
         CMapArea::Version version = (CMapArea::Version)base::readUint32();
 
         if (version != CMapArea::Version::MetroidPrime1 && version != CMapArea::Version::MetroidPrime2 && version != CMapArea::Version::MetroidPrime3)
-            THROW_INVALID_DATA_EXCEPTION("Only Metroid Prime 1-3 Minimaps are supported got version %i", (atUint32)version);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Only Metroid Prime 1-3 Minimaps are supported got version %i", (atUint32)version);
 
         ret = new CMapArea;
 

@@ -41,12 +41,12 @@ CStringTable* CStringTableReader::read()
 
         // check again
         if (magic != 0x87654321) // yes, really
-            THROW_INVALID_DATA_EXCEPTION("Invalid StringTable magic, expected 0x87654321 got 0x%.8X", magic);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Invalid StringTable magic, expected 0x87654321 got 0x%.8X", magic);
 
         atUint32 version = base::readUint32();
 
         if (version != 0 && version != 1 && version != 3)
-            THROW_INVALID_DATA_EXCEPTION("Unsupported StringTable version, only Metroid Prime 1 - DKCR are supported");
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Unsupported StringTable version, only Metroid Prime 1 - DKCR are supported");
 
         ret = new CStringTable;
         ret->m_version = version;

@@ -43,11 +43,11 @@ CAreaFile* CAreaReader::read()
     atUint32 version = base::readUint32();
 
     if (magic != 0xDEADBEEF)
-        THROW_INVALID_DATA_EXCEPTION("Not valid MREA file, expected magic 0xDEADBEEF got %.8X\n", magic);
+        THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Not valid MREA file, expected magic 0xDEADBEEF got %.8X\n", magic);
 
     if (version != CAreaFile::MetroidPrimeDemo && version != CAreaFile::MetroidPrime1 && version != CAreaFile::MetroidPrime2
             && version != CAreaFile::MetroidPrime3 && version != CAreaFile::DKCR)
-        THROW_INVALID_DATA_EXCEPTION("Unsupported version, got %i\n", version);
+        THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Unsupported version, got %i\n", version);
 
     CAreaFile* ret = new CAreaFile;
     ret->m_version = (CAreaFile::Version)version;

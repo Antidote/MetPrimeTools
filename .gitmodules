@@ -1,6 +1,6 @@
 [submodule "Athena"]
 	path = Athena
-	url = https://github.com/Antidote/Athena.git
+	url = https://github.com/libAthena/Athena.git
 [submodule "tinyxml2"]
 	path = tinyxml2
 	url = https://github.com/Antidote/tinyxml2.git

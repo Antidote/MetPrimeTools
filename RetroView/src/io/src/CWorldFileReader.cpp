@@ -27,13 +27,13 @@ CWorldFile* CWorldFileReader::read()
     {
         atUint32 magic = base::readUint32();
         if (magic != 0xDEAFBABE) // DCLN also uses this ID so we have to make absolutely sure this is correct
-            THROW_INVALID_DATA_EXCEPTION("Invalid World File magic expected 0xDEAFBABE got 0x%8.X", magic);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Invalid World File magic expected 0xDEAFBABE got 0x%8.X", magic);
 
         CWorldFile::Version version = (CWorldFile::Version)base::readUint32();
 
         if (version != CWorldFile::Version::MetroidPrime1 && version != CWorldFile::Version::MetroidPrime2 &&
                 version != CWorldFile::Version::MetroidPrime3 && version != CWorldFile::Version::DonkeyKongCountryReturns)
-            THROW_INVALID_DATA_EXCEPTION("Invalid World File version expected 0x0D, 0x11, 0x14, 0x19, 0x1B; got 0x%8.X", (atUint32)version);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Invalid World File version expected 0x0D, 0x11, 0x14, 0x19, 0x1B; got 0x%8.X", (atUint32)version);
 
         ret = new CWorldFile();
         const CUniqueID::EIDBits bits = ((version == CWorldFile::Version::MetroidPrime3 || version == CWorldFile::Version::DonkeyKongCountryReturns)

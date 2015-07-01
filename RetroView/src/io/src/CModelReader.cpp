@@ -51,7 +51,7 @@ CModelFile* CModelReader::read()
     }
 
     if (magic != 0xDEADBABE /*&& magic != 0x9381000A*/)
-        THROW_INVALID_DATA_EXCEPTION("Not a valid CMDL magic, expected 0xDEADBABE got 0x%.8X\n", magic);
+        THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Not a valid CMDL magic, expected 0xDEADBABE got 0x%.8X\n", magic);
     atUint32 version;
     if (magic != 0x9381000A)
         version = base::readUint32();
@@ -59,7 +59,7 @@ CModelFile* CModelReader::read()
         version = CModelFile::DKCR;
 
     if (!(version >= CModelFile::MetroidPrime1 && version <= CModelFile::DKCR))
-        THROW_INVALID_DATA_EXCEPTION("Only Metroid Prime 1 to 3 models are supported got v%i\n", version);
+        THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Only Metroid Prime 1 to 3 models are supported got v%i\n", version);
 
     try
     {

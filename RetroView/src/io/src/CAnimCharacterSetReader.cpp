@@ -40,7 +40,7 @@ CAnimCharacterSet* CAnimCharacterSetReader::read()
     }
 
     if (unk1 != 1 || unk2 != 1)
-        THROW_INVALID_DATA_EXCEPTION("Expected unknowns 1 and 2 to be 1, got %i and %i instead", unk1, unk2);
+        THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Expected unknowns 1 and 2 to be 1, got %i and %i instead", unk1, unk2);
 
     try
     {

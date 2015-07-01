@@ -11,9 +11,14 @@ void osx_init();
 }
 #endif
 
+void exceptionHandler(const std::string& file, const std::string& function, int line, const std::string&, ...)
+{
+    std::cout << file << function << line << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
-
+    atSetExceptionHandler(exceptionHandler);
     unsigned int eax, ebx, ecx, edx;
     __get_cpuid(1, &eax, &ebx, &ecx, &edx);
 #if __SSE4_1__

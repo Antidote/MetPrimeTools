@@ -29,12 +29,12 @@ CMapUniverse* CMapUniverseReader::read()
     {
         atUint32 magic = base::readUint32();
         if (magic != 0xABCDEF01)
-            THROW_INVALID_DATA_EXCEPTION("Invalid Map Universe file magic, expected 0xABCDEF01 got %.8X", magic);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Invalid Map Universe file magic, expected 0xABCDEF01 got %.8X", magic);
 
         atUint32 version = base::readUint32();
 
         if (version != 1)
-            THROW_INVALID_DATA_EXCEPTION("Invalid Map Universe file version, expected version 1 got %i", version);
+            THROW_INVALID_DATA_EXCEPTION_RETURN(nullptr, "Invalid Map Universe file version, expected version 1 got %i", version);
 
         ret = new CMapUniverse;
 
